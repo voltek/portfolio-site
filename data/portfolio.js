@@ -326,7 +326,7 @@
       status: { done: "Completed", now: "In progress", next: "Coming up", goal: "Goal" },
       updated: "Updated {updated}"
     },
-    // the case-study pages (copy deck §10.10): the bar, the section titles and the labels every case shares.
+    // the case-study pages (copy deck §10.9): the bar, the section titles and the labels every case shares.
     // A section a case leaves out takes its label out of the bar too.
     case: {
       nav: { overview: "Overview", why: "Why", architecture: "Architecture", decisions: "Decisions", tests: "Tests", ai: "AI", missing: "What’s missing" },

@@ -31,4 +31,3 @@ paths:
 - Never propose a design mainly because it reuses an existing piece: say why it fits best, or that reuse was the reason.
 - Every comp goes out as images and live (skill `screenshots` → *Comparison images*); comps live in `_comps/<topic>/`.
 - On throwaway prototypes, fix detector findings silently; report them only on final builds.
-- The shared preview artifact is republished only when Alan asks (`DECISIONS.md` → *Avance publicado*).
