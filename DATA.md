@@ -59,8 +59,9 @@ never load the original; they load light WebP copies made from it, and the build
    it is missing) and `on` (`"plain"`, `"show"`, `"case"`). Plain shows one, Show up to three, the case study all.
 3. Run `node tools/images.js` (Edge headless, nothing to install). Next to the original it makes `name-240.webp` and
    `name-480.webp` (the pages pick one for the screen) and `name.webp`, the full-size copy for the viewer and the case
-   study. It only remakes copies older than their original; `--all` remakes every one. Commit the copies.
-4. Run `node tools/check-data.js`: it warns if a copy is missing, older than its original or over its budget
+   study. It only remakes the copies whose original changed (its hash is kept in `data/images.lock.json`); `--all` remakes every
+   one. Commit the copies and the lock file.
+4. Run `node tools/check-data.js`: it warns if a copy is missing, made from another version of its original or over its budget
    (240: 20 KB · 480: 50 KB · full: 120 KB, in `lib/images.js`). Then `node tools/build.js`.
 
 ## New demo video (case studies)

@@ -4,12 +4,12 @@
 //   name.webp                       the full-size copy, at most 1080 px wide (the viewer and the case studies)
 // The original (PNG or JPG) stays in assets/ as the source and is not published. The copies are committed; run this
 // after adding or replacing an image (DATA.md → New app screenshots), then node tools/check-data.js.
-// Usage: node tools/images.js            make the copies that are missing or older than their original
+// Usage: node tools/images.js            make the copies that are missing or whose original changed
 //        node tools/images.js --all      remake every copy
 const fs = require("fs"), os = require("os"), path = require("path"), { spawnSync } = require("child_process");
 const root = path.join(__dirname, "..");
 const data = require(path.join(root, "data", "portfolio.js"));
-const { SIZES, FULL, copiesOf, sourcesOf } = require("../lib/images.js");
+const { SIZES, FULL, LOCK, copiesOf, sourcesOf, hashOf } = require("../lib/images.js");
 
 const EDGE = ["C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe", "C:/Program Files/Microsoft/Edge/Application/msedge.exe"]
   .find(f => fs.existsSync(f));
@@ -18,7 +18,9 @@ if (!EDGE) { console.log("Edge not found: the copies are made with Edge headless
 // WebP quality: 0.8 keeps small screenshots' text sharp; the full copy, seen large, holds up at 0.72 for less weight
 const QUALITY = { small: 0.8, full: 0.72 };
 const all = process.argv.includes("--all");
-const mtime = f => fs.existsSync(f) ? fs.statSync(f).mtimeMs : 0;
+const lockFile = path.join(root, LOCK);
+const lock = fs.existsSync(lockFile) ? JSON.parse(fs.readFileSync(lockFile, "utf8")) : {};
+const next = {};
 
 // the page Edge runs: the original goes in as a data URL (a file:// image would taint the canvas), each copy comes
 // back as a data URL inside <pre id="out">, read with --dump-dom. The work runs synchronously on "load", which
@@ -50,9 +52,10 @@ let made = 0, failed = 0;
 for (const src of sourcesOf(data)) {
   const file = path.join(root, src);
   if (!fs.existsSync(file)) { console.log(`  missing original: ${src}`); failed++; continue; }
-  const copies = copiesOf(src);
+  const copies = copiesOf(src), hash = hashOf(file);
   const todo = [...SIZES.map(w => [w, copies[w]]), [FULL, copies.full]]
-    .filter(([, c]) => all || mtime(path.join(root, c)) < mtime(file));
+    .filter(([, c]) => all || lock[src] !== hash || !fs.existsSync(path.join(root, c)));
+  next[src] = hash;
   if (!todo.length) continue;
 
   const type = /\.png$/i.test(src) ? "image/png" : "image/jpeg";
@@ -62,7 +65,7 @@ for (const src of sourcesOf(data)) {
     "file:///" + html.replace(/\\/g, "/")], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
   const json = (r.stdout.match(/<pre id="out">([^<]*)<\/pre>/) || [])[1];
   const res = json ? JSON.parse(json.replace(/&quot;/g, '"').replace(/&amp;/g, "&")) : { error: "no output from Edge" };
-  if (res.error) { console.log(`  failed: ${src} (${res.error})`); failed++; continue; }
+  if (res.error) { console.log(`  failed: ${src} (${res.error})`); failed++; next[src] = lock[src]; continue; }
 
   for (const [w, copy] of todo) {
     fs.writeFileSync(path.join(root, copy), Buffer.from(res[w].split(",")[1], "base64"));
@@ -71,5 +74,7 @@ for (const src of sourcesOf(data)) {
   }
 }
 fs.rmSync(tmp, { recursive: true, force: true });
+for (const k of Object.keys(next)) if (!next[k]) delete next[k];
+fs.writeFileSync(lockFile, JSON.stringify(next, null, 2) + "\n");
 console.log(made ? `${made} copies made` : "every copy is up to date", failed ? `· ${failed} failed` : "");
 process.exit(failed ? 1 : 0);
