@@ -15,6 +15,7 @@ paths:
 - Rules in force: `DESIGN.md`. Each page's world: its brief in `.impeccable/surfaces/`. New pages and prototypes follow
   `DESIGN.md` and `PRODUCT.md` from the start and compute anything time-based from the dates (no hard-coded year).
   Old prototypes are not retrofitted unless Alan asks.
+- `tokens.css` holds tokens by role: `data-world="read"` (Plain, cases, CV) and `"show"`, light and dark (`?theme=`).
 - **Plain and Show move together** (Alan, 10-28): a change to a piece both pages have (Skills and its detail,
   Experience, contact, the bar, shared copy) goes to both in the same session, each in its own world; the report says
   what changed in each. Grep the other page for the same piece before closing. Only Alan naming one page keeps it there.

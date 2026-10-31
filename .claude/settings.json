@@ -8,6 +8,9 @@
       "Bash(git push * -f)",
       "Bash(git push * -f *)",
       "Bash(git commit *--no-verify*)"
+    ],
+    "ask": [
+      "Bash(gh pr merge *)"
     ]
   },
   "hooks": {

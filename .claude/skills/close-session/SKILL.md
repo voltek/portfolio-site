@@ -1,6 +1,6 @@
 ---
 name: close-session
-description: Close a portfolio work session - rewrite the hot state in HANDOFF.md, update standing decisions/facts by range only, commit and push both repos in one call. Use when Alan says the session ends or the block of work is done.
+description: Close a portfolio work session - rewrite the hot state in HANDOFF.md, update standing decisions/facts by range only, commit and push both repos in one call, open the public PR and merge it on Alan's yes. Use when Alan says the session ends or the block of work is done.
 ---
 
 # Close session
@@ -20,13 +20,15 @@ file once.
    Present tense, date, "(Alan)" when he decided. A replaced decision is overwritten; the commit says what changed.
    A plan for a later phase goes to `_private/phases/phase-N.md`. Retired files are `git rm`-ed, with the recovery hash
    in the commit message.
-4. **Git, both repos in one call.** `git status --short` first in each and stage the session's files by name (no
-   scratch or temp copies). Private: `git -C _private commit` with subject `Session <id>: <summary>` and a body of ≤ 6
-   lines (what and why, files removed with their hash), then push. Public: commit on the session's branch
-   (`type(scope): Imperative summary`, body ≤ 6 lines) and push the branch; **ask before opening, merging or deleting a
-   PR**. End both messages with the attribution lines from the system reminder. If a hook fails, fix the cause and
-   commit again; never `--no-verify`.
-5. **Reply to Alan in Spanish**, one short paragraph: what changed, both short hashes, the alerts the hook raised if
+4. **Git, both repos in one call** (`git status --short` in each first; stage the session's files by name, never
+   scratch or temp copies; end every message with the attribution lines from the system reminder):
+   - Private: `git -C _private commit`, subject `Session <id>: <summary>`, body ≤ 6 lines (what and why, files
+     removed with their hash), then push to `main`.
+   - Public (skip if nothing changed): if still on `main`, create `{type}/{kebab-name}` first. Commit
+     (`type(scope): Imperative summary`, body ≤ 6 lines), push the branch, and open the PR if the branch has none:
+     `gh pr create --base main --title "<commit-style title>" --body-file <scratch file>` with *What changed* · *Why*
+     (1–3 sentences each) · *Verification* (what was run or captured), ending with the PR attribution line.
+5. **Reply to Alan**, one short paragraph: what changed, both short hashes, the alerts the hook raised if
    any, and the next session. Then:
    - **Repeated correction?** If Alan corrected the same thing twice this session, say so and propose turning it into a
      rule with a mechanism (a check, a hook, a rule file), not a memory.
@@ -35,6 +37,9 @@ file once.
    - **Model for the next task**, one sentence. **Sonnet** for work that follows a settled plan or format (approved
      decisions, text from approved sources, mechanical edits, captures, closes). **Opus** for open design or
      architecture calls, visual direction, a deep audit, or costly trade-offs; in a mixed session, the hardest step decides.
+6. **Merge** (public PR only): after the reply, run `gh pr merge <n> --merge --delete-branch`, then
+   `git switch main && git pull --ff-only`. The `ask` rule in `.claude/settings.json` stops that command for Alan's
+   explicit yes; if he declines, the PR stays open and the handoff says so.
 
 Local memory holds only what is specific to this machine; rules about working with Alan go to `CLAUDE.md`,
 `.claude/rules/` or a skill.
