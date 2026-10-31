@@ -25,10 +25,10 @@ file once.
      removed with their hash; public changes cited by PR number, `#n`), then push to `main`.
    - Public (skip if nothing changed; `main` only takes PRs): if still on `main`, create the branch first. Commit
      (`type(scope): Imperative summary`, body ≤ 6 lines), push the branch, and open the PR if the branch has none:
-     `gh pr create --base main --title "<commit-style title>" --body-file <scratch file>` with *What changed* · *Why*
-     (1–3 sentences each) · *Verification* (what was run or captured). The PR
-     is squash-merged: its title and body become the one commit on `main` (GitHub appends the co-authors of
-     the branch commits), so keep the body short.
+     `gh pr create --base main --title "<commit-style title>" --body-file <scratch file>`. The PR is squash-merged: its
+     title and body become the one commit on `main` (GitHub appends the co-authors of the branch commits), and the
+     `checks` workflow rejects a body over 6 lines (a bare link does not count). Write what changed and why in 2–3
+     lines, no headings, then one line on what was verified, then the session link.
 5. **Reply to Alan**, one short paragraph: what changed, both short hashes, the alerts the hook raised if
    any, and the next session. Then:
    - **Repeated correction?** If Alan corrected the same thing twice this session, say so and propose turning it into a
