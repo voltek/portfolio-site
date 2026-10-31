@@ -2,7 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "attribution": {
     "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
-    "pr": ""
+    "pr": "",
+    "sessionUrl": false
   },
   "permissions": {
     "deny": [
@@ -11,7 +12,12 @@
       "Bash(git push * -f)",
       "Bash(git push * -f *)",
       "Bash(git push *+*)",
-      "Bash(git commit *--no-verify*)"
+      "Bash(git commit *--no-verify*)",
+      "Bash(git -C * push *--force*)",
+      "Bash(git -C * push * -f)",
+      "Bash(git -C * push * -f *)",
+      "Bash(git -C * push *+*)",
+      "Bash(git -C * commit *--no-verify*)"
     ],
     "ask": [
       "Bash(gh pr merge *)"

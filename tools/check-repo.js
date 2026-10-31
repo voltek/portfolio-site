@@ -23,8 +23,14 @@ if (title != null) {
   if (/[.]$/.test(title)) err("title ends with a period");
 }
 if (body != null) {
-  const lines = body.split(/\r?\n/).filter(l => l.trim() && !/^https?:\/\/\S+$/.test(l.trim()));
-  if (lines.length > 6) err(`body has ${lines.length} lines, the limit is 6 (links alone do not count)`);
+  // three sections in this order, each with text; at most 6 lines of text under them (headings and bare links do not count)
+  const SECTIONS = ["## What changed", "## Why", "## Verification"];
+  const rows = body.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const heads = rows.filter(l => /^#{1,6} /.test(l));
+  if (heads.join("|") !== SECTIONS.join("|")) err(`body headings are "${heads.join(", ")}"; they must be exactly: ${SECTIONS.join(", ")}`);
+  else SECTIONS.forEach((h, i) => { if (rows[rows.indexOf(h) + 1] === SECTIONS[i + 1] || rows.indexOf(h) === rows.length - 1) err(`body section "${h}" is empty`); });
+  const lines = rows.filter(l => !/^#{1,6} /.test(l) && !/^https?:\/\/\S+$/.test(l));
+  if (lines.length > 6) err(`body has ${lines.length} lines of text, the limit is 6 (headings and links alone do not count)`);
 }
 if (branch != null && !new RegExp(`^(${TYPES})/[a-z0-9]+(-[a-z0-9]+)*$`).test(branch)) err(`branch "${branch}" is not {type}/{kebab-name}`);
 

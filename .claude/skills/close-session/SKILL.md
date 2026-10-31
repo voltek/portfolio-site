@@ -31,9 +31,9 @@ already in context (the SessionStart hook injected it): never re-read it, and ne
    - Public (skip if nothing changed; `main` only takes PRs): if still on `main`, create the branch first. Commit
      (`type(scope): Imperative summary`, body ≤ 6 lines), push the branch, and open the PR if the branch has none:
      `gh pr create --base main --title "<commit-style title>" --body-file <scratch file>`. The PR is squash-merged: its
-     title and body become the one commit on `main` (GitHub appends the co-authors of the branch commits), and the
-     `checks` workflow rejects a body over 6 lines (a bare link does not count). Write what changed and why in 2–3
-     lines, no headings, then one line on what was verified, then the session link.
+     title and body become the one commit on `main` (GitHub appends the co-authors of the branch commits). Its body is
+     `## What changed`, `## Why` and `## Verification`, with at most 6 lines of text under them; the `checks` workflow
+     rejects any other shape.
 5. **Reply to Alan**, one short paragraph: what changed, both short hashes, the alerts the hook raised if
    any, and the next session. Then:
    - **Repeated correction?** If Alan corrected the same thing twice this session, say so and propose turning it into a

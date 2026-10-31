@@ -20,7 +20,8 @@ Everything in `CLAUDE.md`, rules, skills and the handoff is paid for in tokens e
   later-phase plans → `_private/phases/`.
 - **State only, no history**: these files say what is true now. When something changes, rewrite the line; never append
   "done", ✅ with a date, "replaced X", "moved from", "renamed", "as of" or session names. Finished work disappears; a
-  superseded decision is overwritten. "(Alan)" may mark who decided; dates and the story live in git. One exception: the handoff's header names the last
-  close (date and session id), so the next session knows which close it is reading.
+  superseded decision is overwritten. "(Alan)" may mark who decided; dates and the story live in git.
+  One exception: the handoff's header names the last close (date and session id), so the next session knows which
+  close it is reading.
 - Limits the SessionStart hook flags: `CLAUDE.md` ≤ 100 lines / 8 KB, `HANDOFF.md` ≤ 60 lines / 4 KB, any
   `_private/handoff` or `phases` file ≤ 30 KB, local memory ≤ 15 entries.
