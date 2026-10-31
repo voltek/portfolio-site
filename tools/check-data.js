@@ -120,8 +120,8 @@ data.skills.forEach((s, i) => {
   if (s.note) tokens(s.note, at);
 });
 
-// case studies: data/cases/<page>.js for each project's links.caseStudy (DECISIONS.md → Pulido de la Ficha and
-// Diagrama: Flujo de datos). Wrong ids and shapes are errors; the size limits of the diagram and the stack are warnings.
+// case studies: data/cases/<page>.js for each project's links.caseStudy (DECISIONS.md → Case page rules and
+// Data-flow diagram). Wrong ids and shapes are errors; the size limits of the diagram and the stack are warnings.
 const { FILE, SECTIONS } = require(path.join(root, "tools", "pages", "case.js"));
 for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   const f = path.join(root, "data", "cases", w.links.caseStudy.replace(/\.html$/, ".js"));

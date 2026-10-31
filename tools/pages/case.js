@@ -1,6 +1,6 @@
 // A case study (modernnotes.html, gamestack.html …): the parts of src/case.html that come from the data. One renderer
 // for every case: the project's entry in data/portfolio.js gives the header, data/cases/<page>.js the body, copy.case
-// the labels. A section the case file leaves out is not drawn and leaves the bar (DECISIONS.md → Pulido de la Ficha).
+// the labels. A section the case file leaves out is not drawn and leaves the bar (DECISIONS.md → Case page rules).
 const IMG = require("../../lib/images.js");
 const { C, esc, text, calcData, head, srcset, ICON } = require("./common.js");
 
@@ -127,7 +127,7 @@ module.exports = (cs, ctx) => {
 
   // back to the left, forward to the right: the next case is the next project with a case study, in the data's order
   const cases = data.work.filter(x => x.links && x.links.caseStudy), nx = cases.length > 1 && cases[(cases.indexOf(w) + 1) % cases.length];
-  // (its look waits for the "Next case" decision with more than two cases: DECISIONS.md → Pulido de la Ficha)
+  // (its look waits for the "Next case" decision with more than two cases: DECISIONS.md → Case page rules)
   const after = `<nav class="after" aria-label="${esc(cp.aria.pager)}">
     <a class="back" href="index.html#${esc(w.id)}">${I.back}<span>${esc(cp.back)}</span></a>
     ${nx ? `<a class="nextc" href="${esc(nx.links.caseStudy)}"><small>${esc(cp.next)}</small><b>${esc(nx.name)}${I.fwd}</b><span>${text(ctx, nx.what.en)}</span></a>` : ""}
