@@ -12,4 +12,5 @@ paths:
   claimed* (grep the heading, read that range).
 - Claim a workflow only if it is actually enabled: AI code review in GameStack is Claude Code's `/code-review` run
   locally before each PR, not a CI workflow.
-- GameStack numbers are not recounted while building: a GitHub Action will keep them from `tools/count-gamestack.sh`.
+- GameStack numbers change only by hand, through `DATA.md` → *New GameStack counts*, when Alan asks (a re-pin); never in
+  passing while building. Phase 10's Action takes this over.

@@ -5,9 +5,9 @@ description: Close a portfolio work session - rewrite the hot state in HANDOFF.m
 
 # Close session
 
-At most **6 tool calls**. The handoff is already in context (the SessionStart hook injected it): never re-read it, and
-never read a whole `DECISIONS.md`, `FACTS.md` or anything in `_private/archive/`. Gather everything first, write each
-file once.
+Batch the close: gather everything first, write each file once, and run both repos' git in one call. The handoff is
+already in context (the SessionStart hook injected it): never re-read it, and never read a whole `DECISIONS.md`,
+`FACTS.md` or anything in `_private/archive/`.
 
 1. **Filter.** Keep only what the site, the CV or the way of working depends on. Side topics (personal tooling,
    security setup, accounts) were answered in chat and go nowhere. Anything reusable found this session (a shared
@@ -23,8 +23,8 @@ file once.
    scratch or temp copies; end every message with the attribution lines from the system reminder):
    - Private: `git -C _private commit`, subject `Session <id>: <summary>`, body ≤ 6 lines (what and why, files
      removed with their hash; public changes cited by PR number, `#n`), then push to `main`.
-   - Review, once per PR and before it is opened (before merging, if it was opened earlier), outside the 6-call
-     budget: if the branch touches JS or the build (`tools/`, `lib/`, `src/*.js`, `data/`), run `/code-review low` on
+   - Review, once per PR and before it is opened (before merging, if it was opened earlier): if the branch touches
+     JS or the build (`tools/`, `lib/`, `src/*.js`, `data/`), run `/code-review low` on
      it and fix what it confirms. The reviewer is always Sonnet, never Opus: in an Opus session, delegate the review
      to a subagent with `model: "sonnet"`. UI changes were already checked with `screenshots`; text and docs rely on
      the `checks` workflow.
