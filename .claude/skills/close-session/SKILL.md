@@ -23,12 +23,17 @@ file once.
    scratch or temp copies; end every message with the attribution lines from the system reminder):
    - Private: `git -C _private commit`, subject `Session <id>: <summary>`, body ≤ 6 lines (what and why, files
      removed with their hash; public changes cited by PR number, `#n`), then push to `main`.
+   - Review, once per PR and before it is opened (before merging, if it was opened earlier), outside the 6-call
+     budget: if the branch touches JS or the build (`tools/`, `lib/`, `src/*.js`, `data/`), run `/code-review low` on
+     it and fix what it confirms. The reviewer is always Sonnet, never Opus: in an Opus session, delegate the review
+     to a subagent with `model: "sonnet"`. UI changes were already checked with `screenshots`; text and docs rely on
+     the `checks` workflow.
    - Public (skip if nothing changed; `main` only takes PRs): if still on `main`, create the branch first. Commit
      (`type(scope): Imperative summary`, body ≤ 6 lines), push the branch, and open the PR if the branch has none:
-     `gh pr create --base main --title "<commit-style title>" --body-file <scratch file>` with *What changed* · *Why*
-     (1–3 sentences each) · *Verification* (what was run or captured). The PR
-     is squash-merged: its title and body become the one commit on `main` (GitHub appends the co-authors of
-     the branch commits), so keep the body short.
+     `gh pr create --base main --title "<commit-style title>" --body-file <scratch file>`. The PR is squash-merged: its
+     title and body become the one commit on `main` (GitHub appends the co-authors of the branch commits), and the
+     `checks` workflow rejects a body over 6 lines (a bare link does not count). Write what changed and why in 2–3
+     lines, no headings, then one line on what was verified, then the session link.
 5. **Reply to Alan**, one short paragraph: what changed, both short hashes, the alerts the hook raised if
    any, and the next session. Then:
    - **Repeated correction?** If Alan corrected the same thing twice this session, say so and propose turning it into a

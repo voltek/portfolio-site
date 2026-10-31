@@ -1,0 +1,35 @@
+# The required check on every pull request into main: data, build, nothing private, title/body/branch format.
+# Free: a public repo's Actions minutes cost nothing.
+name: checks
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Repo rules (private paths, title, body, branch)
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_BRANCH: ${{ github.head_ref }}
+        run: node tools/check-repo.js
+      - name: Data
+        run: node tools/check-data.js
+      - name: Build
+        run: node tools/build.js
