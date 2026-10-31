@@ -8,8 +8,7 @@ background: false
 
 # Screenshots (runs as a forked subagent)
 
-You run in a fork without the main conversation: the task is in the argument below. Capture, look at the images
-yourself with Read, and return **text only**: findings per page and width, JS errors, scores, and the absolute paths
+The task is in the argument below. Capture, look at the images yourself with Read, and return **text only**: findings per page and width, JS errors, scores, and the absolute paths
 of any image the main session should send to Alan. Never paste image contents or long tool output into the result.
 Save images to the scratchpad of the session (or `_comps/<topic>/` for comps).
 
@@ -18,7 +17,7 @@ Task: $ARGUMENTS
 ## Tools (Windows)
 
 The Chrome extension does not connect on this machine: pages are checked with **Edge headless** through `capture.sh`
-(next to this file). In Git Bash, file URLs are `file:///C:/…`, never `/c/…` (the script handles it).
+(next to this file).
 
 ```
 bash .claude/skills/screenshots/capture.sh shot   <page.html> <out.png> [width] [height] [query]
@@ -61,7 +60,7 @@ with `node -e`, never print the JSON). Known: Best practices is 77 everywhere un
   iframes, so capture the whole page and crop it in a small viewer page.
 - Sticky bars and scroll states cannot be captured. For interactive states, make a temporary sibling copy with a script
   that clicks on `load` (top-level `let` and functions are globals), capture it, and delete the copy.
-- Watch for class names reused across sections (`.star` broke cards once) and for `const top` (clashes with `window.top`).
+- A class name reused across sections, or a top-level `const top` (clashes with `window.top`), breaks a page silently.
 
 ## Comparison images for comps
 

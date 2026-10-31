@@ -57,7 +57,7 @@ alternative before building it.
 
 - Commit and PR title: `type(scope): Imperative summary`, ≤ 72 chars. Types: `feat fix refactor docs chore perf ci`.
   Scopes: `plain show case cv data build tokens assets harness repo deploy readme`. Body ≤ 6 lines, only the why.
-- Public repo: work on `{type}/{kebab-name}` branches; `main` changes only through a PR with a merge commit. Claude
-  commits, pushes its branch and opens the PR without asking; **merging needs Alan's explicit yes** (`close-session`).
+- Public repo: branches `{type}/{kebab-name}` (GitHub only lets PRs into `main`). Claude commits, pushes its branch and
+  opens the PR without asking; **merging needs Alan's explicit yes** (`close-session`).
 - Private repo: one commit per session on `main`, `Session <id>: <summary>`; that is the log.
 - Retired files are deleted (`git rm`), not archived; the commit names the hash to recover them from.

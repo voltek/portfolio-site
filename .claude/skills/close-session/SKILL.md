@@ -15,16 +15,15 @@ file once.
 2. **`_private/handoff/HANDOFF.md`**: rewrite it in English, **≤ 4 KB and ≤ 60 lines** (the hook alerts above that):
    date and session id; one line per phase; *Alan owes* (items marked "do not remind" stay but are not mentioned);
    *Next session*: the concrete block, numbered steps, a "Done when:" line and "Model: Opus | Sonnet" with one reason.
-   Nothing historical: no "what we did", no superseded decisions.
+   State only (`.claude/rules/harness.md`): finished items disappear, nothing is marked done.
 3. **Standing changes only** (skip if none): grep the heading in `DECISIONS.md` / `FACTS.md`, read that range, edit.
-   Present tense, date, "(Alan)" when he decided. A replaced decision is overwritten; the commit says what changed.
-   A plan for a later phase goes to `_private/phases/phase-N.md`. Retired files are `git rm`-ed, with the recovery hash
-   in the commit message.
+   Present tense, "(Alan)" when he decided; a replaced decision is overwritten and the commit says what changed. A
+   plan for a later phase goes to `_private/phases/phase-N.md`.
 4. **Git, both repos in one call** (`git status --short` in each first; stage the session's files by name, never
    scratch or temp copies; end every message with the attribution lines from the system reminder):
    - Private: `git -C _private commit`, subject `Session <id>: <summary>`, body ≤ 6 lines (what and why, files
      removed with their hash), then push to `main`.
-   - Public (skip if nothing changed): if still on `main`, create `{type}/{kebab-name}` first. Commit
+   - Public (skip if nothing changed; `main` only takes PRs): if still on `main`, create the branch first. Commit
      (`type(scope): Imperative summary`, body ≤ 6 lines), push the branch, and open the PR if the branch has none:
      `gh pr create --base main --title "<commit-style title>" --body-file <scratch file>` with *What changed* · *Why*
      (1–3 sentences each) · *Verification* (what was run or captured), ending with the PR attribution line.
