@@ -26,8 +26,9 @@ file once.
    - Public (skip if nothing changed; `main` only takes PRs): if still on `main`, create the branch first. Commit
      (`type(scope): Imperative summary`, body ≤ 6 lines), push the branch, and open the PR if the branch has none:
      `gh pr create --base main --title "<commit-style title>" --body-file <scratch file>` with *What changed* · *Why*
-     (1–3 sentences each) · *Verification* (what was run or captured), ending with the PR attribution line. The PR
-     is squash-merged: its title and body become the one commit on `main`, so keep the body short.
+     (1–3 sentences each) · *Verification* (what was run or captured). The PR
+     is squash-merged: its title and body become the one commit on `main` (GitHub appends the co-authors of
+     the branch commits), so keep the body short.
 5. **Reply to Alan**, one short paragraph: what changed, both short hashes, the alerts the hook raised if
    any, and the next session. Then:
    - **Repeated correction?** If Alan corrected the same thing twice this session, say so and propose turning it into a
@@ -37,8 +38,10 @@ file once.
    - **Model for the next task**, one sentence. **Sonnet** for work that follows a settled plan or format (approved
      decisions, text from approved sources, mechanical edits, captures, closes). **Opus** for open design or
      architecture calls, visual direction, a deep audit, or costly trade-offs; in a mixed session, the hardest step decides.
-6. **Merge** (public PR only): after the reply, run `gh pr merge <n> --squash --delete-branch`, then
-   `git switch main && git pull --ff-only`. The `ask` rule in `.claude/settings.json` stops that command for Alan's
+6. **Merge** (public PR only): after the reply, run `gh pr merge <n> --squash --delete-branch` (deletes the local
+   branch; GitHub deletes the remote one), then `git switch main && git pull --ff-only && git fetch --prune` and
+   delete any local branch whose remote is gone (`git branch -vv`, `: gone]`; `-D`, since squash leaves it unmerged
+   to git). The `ask` rule in `.claude/settings.json` stops that command for Alan's
    explicit yes; if he declines, the PR stays open and the handoff says so.
 
 Local memory holds only what is specific to this machine; rules about working with Alan go to `CLAUDE.md`,
