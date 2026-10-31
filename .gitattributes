@@ -1,0 +1,2 @@
+# keep every file byte-for-byte (the impeccable launcher is a shell script and breaks with CRLF)
+* -text

@@ -1,0 +1,12 @@
+# local Claude Code settings and impeccable caches
+.claude/settings.local.json
+.impeccable/hook.cache.json
+# the build output: the GitHub Action builds and deploys it, so it never lives in git
+_site/
+# comps and comparison pages shown to Alan (local and as private artifacts); never published by Pages
+_comps/
+# private workspace: its own private repo, cloned here (see _private/README.md)
+_private/
+# third-party design tooling, installed locally from skills-lock.json; not part of this source
+.claude/skills/impeccable/
+.claude/agents/impeccable-*

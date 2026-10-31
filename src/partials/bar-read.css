@@ -1,0 +1,45 @@
+  /* ---------- the top bar of Plain's world (Plain, the case studies): one copy, included by the build as {{>bar-read.css}}.
+     DESIGN.md, the Bar Menu Rule. A page adds only its own pieces (its .full action's text, its sections). ---------- */
+  /* it stays while the page scrolls: sections, the page's own action and the theme are always one click away */
+  .topbar{position:sticky;top:0;z-index:20;padding:0 16px;background:var(--field);color:var(--on-field);transition:box-shadow var(--t)}
+  .topbar .wrap{width:min(1240px,100%)}
+  .topbar.stuck{box-shadow:var(--bar-shadow)}
+  .topbar.stuck .mast{border-bottom-color:transparent}
+  /* the anchor offset lives only in html's scroll-padding (the bar + 16 px): a scroll-margin on top of it adds up twice */
+  html{scroll-padding-top:84px}
+  .mast{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:68px;padding:14px 0;border-bottom:1px solid var(--field-rule)}
+  .mast .who{font-weight:700;font-size:16px;text-decoration:none;white-space:nowrap}
+  .mast .right{display:flex;align-items:center;gap:24px}
+  .mast nav{display:flex;gap:24px;font-weight:600;font-size:15px}
+  .mast nav a{text-decoration:none;padding:4px 0;border-bottom:2px solid transparent;white-space:nowrap}
+  .mast nav a:hover{border-bottom-color:var(--go)}
+  .mast nav a[aria-current="true"]{border-bottom-color:var(--on-field)}
+  .mast .full{font-weight:700;font-size:15px;text-decoration:none;border:1.5px solid var(--field-rule);border-radius:4px;padding:6px 12px;white-space:nowrap}
+  .mast .full:hover{border-color:var(--go)}
+  .full .short{display:none}
+  .theme{display:inline-grid;place-items:center;flex:none;width:38px;height:38px;border-radius:999px;border:1.5px solid var(--field-rule);background:none;color:var(--on-field);cursor:pointer}
+  .theme:hover{border-color:var(--go)}
+  .theme svg{width:18px;height:18px}
+  .theme .sun,:root[data-theme="dark"] .theme .moon{display:none}
+  :root[data-theme="dark"] .theme .sun{display:block}
+  /* a tap answers at once: no wait to tell it from a double-tap zoom, and quick taps are each a tap */
+  .topbar a,.topbar button{touch-action:manipulation}
+  /* when the sections don't fit the bar, they sit behind a menu button; the script measures the bar and sets .compact,
+     so a longer label or a new section moves the switch on its own */
+  .menu{display:none;border-radius:4px;width:44px}
+  .mast.compact .menu{display:inline-grid}
+  .mast.compact nav{display:none;position:absolute;top:calc(100% - 4px);right:16px;flex-direction:column;align-items:stretch;gap:2px;width:min(240px,calc(100% - 32px));padding:6px;background:var(--field);color:var(--on-field);border:1px solid var(--field-rule);border-radius:6px;box-shadow:0 14px 28px -12px rgba(5,10,30,.65)}
+  .mast.compact nav.open{display:flex}
+  /* each item is the whole row; the current one: the darker field plus a 3 px ink bar on its left edge */
+  .mast.compact nav a{padding:11px 12px;border-bottom:0;border-radius:4px;font-size:16px}
+  .mast.compact nav a:hover{background:var(--field-2)}
+  .mast.compact nav a[aria-current="true"]{background:var(--field-2);box-shadow:inset 3px 0 0 var(--on-field)}
+  @media (max-width:640px){
+    html{scroll-padding-top:70px}
+    .mast{min-height:58px;padding:10px 0}
+    .mast .right{gap:10px}
+    .mast .full{padding:6px 10px;font-size:14px}
+    .full .long{display:none} .full .short{display:inline}
+  }
+  /* the narrowest phones (320 px): the name, the page's action, theme and menu still fit one line */
+  @media (max-width:380px){ .mast .who{font-size:14px} .mast .right{gap:6px} .mast{gap:8px} .mast .full{padding:6px 8px;font-size:13px} .theme{width:36px;height:36px} .menu{width:40px} }

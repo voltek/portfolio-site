@@ -1,0 +1,44 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "tools/pages/plain.js"
+        ],
+        "createdAt": "2026-10-22T04:43:02.457Z",
+        "reason": "Claude: src comes from the srcset() helper interpolated into the template string; the detector cannot see it"
+      },
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "tools/pages/show.js"
+        ],
+        "createdAt": "2026-10-22T04:45:08.127Z",
+        "reason": "Claude: src comes from the srcset() helper interpolated into the template string; the detector cannot see it"
+      },
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          "src/show.html"
+        ],
+        "createdAt": "2026-10-22T04:50:14.514Z",
+        "reason": "Claude: every rule over .05em is a short uppercase label or Bangers display text (kick, credits dt, nav, intertitles), carried verbatim from the approved Show prototype"
+      },
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "tools/pages/case.js"
+        ],
+        "createdAt": "2026-10-28T02:26:05.315Z",
+        "reason": "Claude: src comes from the srcset() helper interpolated into the template string; the detector cannot see it"
+      }
+    ]
+  }
+}

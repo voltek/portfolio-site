@@ -1,0 +1,128 @@
+/* tokens.css: the design tokens of every page, as roles, not colors.
+   A page names its world and its theme on <html>: data-world="read" (Plain and the CV) or "show" (Show),
+   data-theme="light" or "dark" (set before the first paint by the page's own script).
+
+   Roles every world defines, so the shared rules in DESIGN.md hold whatever the palette:
+     --go            the one clickable color (never decoration)
+     --own           purple = own builds          --client   client work, a pale blue in each world
+     --wip --done    status only (in progress, completed)
+     --lv1 --lv2 --lv3 (+ -ink, -line)            Skills levels: Core, Strong, Familiar, one hue in three solid steps
+   Colors painted into an illustration (a prop, an episode's backdrop) stay local to that prop, as tokens on its selector. */
+
+/* ---------- fonts ----------
+   Served from the site (no Google Fonts): the Latin subset of each font, every weight of a variable one in one file. A
+   face downloads only when a page uses it. Licenses (SIL OFL 1.1) next to the files. */
+/* read world: Plain and the CV */
+@font-face{font-family:"Bricolage Grotesque";src:url("assets/fonts/bricolage-grotesque-latin.woff2") format("woff2");font-weight:200 800;font-display:swap}
+@font-face{font-family:"Figtree";src:url("assets/fonts/figtree-latin.woff2") format("woff2");font-weight:300 900;font-display:swap}
+/* show world: Show (Gochi Hand only letters the notepad prop) */
+@font-face{font-family:"Titan One";src:url("assets/fonts/titan-one-latin.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Bangers";src:url("assets/fonts/bangers-latin.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Nunito";src:url("assets/fonts/nunito-latin.woff2") format("woff2");font-weight:200 1000;font-display:swap}
+@font-face{font-family:"Pacifico";src:url("assets/fonts/pacifico-latin.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Gochi Hand";src:url("assets/fonts/gochi-hand-latin.woff2") format("woff2");font-weight:400;font-display:swap}
+
+/* ---------- shared ---------- */
+:root{
+  --wip:#FB923C; --done:#34D399;
+  --own:#4B37B0;
+  /* motion: every transition reads its time from here, so reduced motion switches them all off at once */
+  --t-quick:.15s; --t:.2s; --t-slow:.25s; --t-swap:.3s;
+  --pop:cubic-bezier(.2,1.6,.4,1);
+}
+@media (prefers-reduced-motion:reduce){
+  :root{--t-quick:0s; --t:0s; --t-slow:0s; --t-swap:0s}
+}
+
+/* ---------- Plain (index.html, cv.html) ----------
+   Light: a cobalt field with paper panels. Dark, "Noche azul": the cobalt band dims a little, the paper goes blue-black
+   (it keeps the cool accents apart) and the Now building card rises above it as a lighter surface. */
+:root[data-world="read"]{
+  --field:#1F3FBF; --field-2:#162E8F; --on-field:#F4EFE6; --on-field-2:#BDCBFA; --field-rule:rgba(244,239,230,.3);
+  --go:#FF6F5E; --go-hover:#FF8576; --go-ink:#0E1A4F; --go-line:#FF6F5E; --link:var(--paper-ink);
+  --paper:#F5F6FA; --sheet:#FFFFFF; --sheet-line:transparent; --paper-ink:#141A33; --paper-muted:#4F5672;
+  --rule:#C3C9DC; --head-rule:#141A33; --cell:#E6E9F2;
+  --rule-raised:var(--rule); --cell-raised:var(--cell);   /* inside the raised Now building card */
+  --client:#9FB3F2;
+  --select:#C9D5FB; --select-ink:#141A33;                  /* text selection: a pale blue, never the clickable color */
+  --screen:#0A0A0A;                                         /* the phone frame around a screenshot */
+  --bar-shadow:0 10px 24px -14px rgba(5,10,30,.7);
+  --lift:0 18px 40px -18px rgba(5,10,30,.55);
+  /* level chips: cobalt, pale cobalt, white with a cobalt line */
+  --lv1:#1F3FBF; --lv1-ink:#FFFFFF;
+  --lv2:#D6DFFB; --lv2-ink:var(--paper-ink); --lv2-line:transparent;
+  --lv3:#FFFFFF; --lv3-ink:var(--paper-ink); --lv3-line:#9FB0E6;
+  --focus:var(--paper-ink);                                 /* focus ring on paper; pages swap it to --on-field on the cobalt field */
+  --display:"Bricolage Grotesque",sans-serif; --text:"Figtree",sans-serif;
+}
+:root[data-world="read"][data-theme="dark"]{
+  --field:#1A35A3; --field-2:#122877; --on-field-2:#D5DEFF;
+  --paper:#0A1029; --sheet:#141E46; --sheet-line:rgba(255,255,255,.14); --paper-ink:#E7EAF7; --paper-muted:#B4BCDB;
+  --rule:#323E76; --head-rule:#E7EAF7; --cell:#1C2652;
+  --rule-raised:#3A4782; --cell-raised:#273370;
+  --own:#A99BFF; --client:#4F6AD2;
+  --select:#3653D6; --select-ink:#FFFFFF;
+  --lv1:#6E93FF; --lv1-ink:#0B1022;
+  --lv2:color-mix(in srgb,#3B5BE0 42%,var(--paper));
+  --lv3:color-mix(in srgb,#3B5BE0 14%,var(--paper)); --lv3-line:color-mix(in srgb,#6E93FF 45%,var(--paper));
+  color-scheme:dark;
+}
+
+/* ---------- Show (show.html) ----------
+   A Saturday-morning cartoon: sky and sun, ink outlines with hard offset shadows, white cards, a dark room around the set. */
+:root[data-world="show"]{
+  --ink:#111111; --paper:#FFFFFF; --cream:#FFF8E6;
+  --sky:#2EC4F1; --sun:#FFD23F; --sunset:#FF9B3D;          /* the hero's sunburst, the finale's orange */
+  --go:#EE4266;
+  --client:#C4ECF9;
+  --night:#141414;                                          /* the room around the set: the page background */
+  --on-night:#E8E8E8; --muted:#C9C9C9; --night-rule:#3A3A3A;
+  /* the title card's sky: its two ray colors, the text set straight on it, and the disc the rays pour out of
+     (the sun by day; by night a moon, with craters and stars) */
+  --stage:var(--sky); --stage-ray:var(--sun); --stage-ink:var(--ink);
+  --orb:#FFE27A; --orb-mark:transparent; --stars:0;
+  --band:var(--sun); --band-ink:var(--ink);                 /* the Skills band */
+  --finale:var(--sunset); --ring-a:var(--sun); --ring-b:var(--sunset);   /* the ending and its rings */
+  /* the top bar once it turns solid (always, on phones), and its links */
+  --bar:var(--paper); --bar-ink:var(--ink); --bar-edge:var(--ink);
+  --bar-hover:var(--paper); --bar-hover-line:var(--ink); --bar-now:var(--ink); --bar-now-ink:var(--paper);
+  --next:#BDBDBD; --next-pale:#E9E9E9; --next-ink:#3A3A3A;  /* "coming up" steps of the learning path */
+  --done-pale:#D9F7EA;                                      /* a finished block of the learning path */
+  --pin:#CC3024;                                            /* the "I'm here" map pin (white text on it holds 4.5:1) */
+  --focus:var(--ink);                                       /* focus ring: ink on the light surfaces; the dark room and the night theme swap it to --sun */
+  --sel:var(--ink); --sel-ink:var(--paper);                 /* text selection, the same logic: ink on light surfaces, --sun on dark ones */
+  --veil:rgba(255,255,255,.35); --veil-2:rgba(255,255,255,.5);   /* panels and tracks laid over the sun */
+  --ink-rule:color-mix(in srgb,var(--ink) 30%,transparent);       /* dashed rows */
+  --ink-tick:color-mix(in srgb,var(--ink) 35%,transparent);       /* year ticks */
+  --ink-hair:color-mix(in srgb,var(--ink) 16%,transparent);       /* year columns inside a track */
+  --scrim:rgba(10,10,10,.82);                               /* behind the screenshot viewer */
+  --screen:#000; --screen-empty:#222;                       /* a phone frame, and its screen before the image exists */
+  --drop:0 14px 22px -10px rgba(0,0,0,.75);                 /* a phone held over the TV screen */
+  /* outlines are --ink; offset shadows are solid ink, never blurred */
+  --shadow-s:3px 3px 0 var(--ink); --shadow:4px 4px 0 var(--ink); --shadow-l:5px 5px 0 var(--ink); --shadow-xl:6px 6px 0 var(--ink);
+  --shadow-up:4px 5px 0 var(--ink); --shadow-down:0 0 0 var(--ink);   /* a button on hover and on press */
+  --shadow-lit:#6F7FF0;   /* the offset shadow where ink would vanish (the night theme's bar and dark room only; the day theme keeps ink): the same hard offset, lit from the screen */
+  /* level chips: white with Titan One, sky, cream; all ink-outlined, no shadow (they are not buttons) */
+  --lv1:var(--paper); --lv1-ink:var(--ink); --lv1-line:var(--ink);
+  --lv2:#9EDCF5; --lv2-ink:var(--ink); --lv2-line:var(--ink);    /* a step deeper than client work's pale blue */
+  --lv3:var(--cream); --lv3-ink:var(--ink); --lv3-line:var(--ink);
+  --title:"Titan One",sans-serif; --tag:"Bangers",sans-serif; --text:"Nunito",sans-serif; --script:"Pacifico",cursive;
+}
+/* Dark, "Luna azul": the same program after sundown. The sky goes night blue with faint rays, a moon takes the sun's
+   place, stars come out, the room turns blue-black, and the Skills band and the ending follow the night. Outlines stay
+   ink and the cards stay white: they are the lit things. */
+:root[data-world="show"][data-theme="dark"]{
+  --stage:#172064; --stage-ray:#22308A; --stage-ink:#F4F1E6;
+  --orb:#FFF1C2; --orb-mark:#EBD89A; --stars:1;
+  --night:#0B0E22; --night-rule:#2A3060;
+  --focus:var(--sun); --sel:var(--sun); --sel-ink:var(--ink);
+  --band:#1E2B7A; --band-ink:#F4F1E6;
+  --veil:rgba(255,255,255,.1); --veil-2:rgba(255,255,255,.14);
+  --ink-rule:color-mix(in srgb,#F4F1E6 30%,transparent);
+  --ink-tick:color-mix(in srgb,#F4F1E6 35%,transparent);
+  --ink-hair:color-mix(in srgb,#F4F1E6 16%,transparent);
+  --finale:#22308A; --ring-a:#172064; --ring-b:#22308A;
+  --bar:#131942; --bar-ink:#F4F1E6; --bar-edge:#2B3896;
+  --bar-hover:#22308A; --bar-hover-line:#F4F1E6; --bar-now:#F4F1E6; --bar-now-ink:var(--ink);
+  color-scheme:dark;
+}

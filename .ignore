@@ -1,0 +1,4 @@
+# searches (ripgrep: Grep/Glob) include the private workspace even though git ignores it...
+!_private/
+# ...but skip its frozen files; read them by path when needed
+_private/archive/

@@ -1,0 +1,12 @@
+<section class="contact" id="contact" aria-labelledby="c-h">
+  <div class="wrap">
+    <h2 id="c-h">{{profile.contact.plain}}</h2>
+    <p>{{profile.contact.body}}</p>
+    <div class="ctas">
+      <span class="mail"><a class="btn go" href="mailto:{{profile.email}}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 5h16v10H2z M2 5l8 6 8-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>{{profile.email}}</a><button class="btn line copy" type="button" data-copy="{{profile.email}}" aria-label="{{copy.aria.copyEmail}}"><svg class="cp" viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 7V4.5A1.5 1.5 0 0011.5 3h-7A1.5 1.5 0 003 4.5v7A1.5 1.5 0 004.5 13H7" fill="none" stroke="currentColor" stroke-width="2"/></svg><svg class="ok" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="copied" role="status" data-text="{{copy.cta.copied}}"></span></span>
+      <a class="btn line" href="cv.html"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11M5.5 8.5L10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>{{copy.cta.cv}}</a>
+      <a class="btn line" href="{{profile.links.linkedin}}"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M0 1.15C0 .52.52 0 1.18 0h13.64C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.18 1.15H1.18C.52 16 0 15.48 0 14.85V1.15zM4.94 13.4V6.17H2.54v7.23h2.4zM3.74 5.19c.84 0 1.36-.56 1.36-1.25-.02-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .69.52 1.25 1.33 1.25h.01zM6.27 13.4h2.4V9.36c0-.22.02-.43.08-.58.17-.43.57-.88 1.23-.88.87 0 1.21.66 1.21 1.63v3.87h2.4V9.25c0-2.22-1.18-3.26-2.77-3.26-1.29 0-1.86.72-2.17 1.21h.02V6.17h-2.4c.03.68 0 7.23 0 7.23z"/></svg>LinkedIn</a>
+      <a class="btn line" href="{{profile.links.github}}">{{@githubIcon}}GitHub</a>
+    </div>
+  </div>
+</section>

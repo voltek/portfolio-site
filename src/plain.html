@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en" data-world="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{@head}}
+<script>
+  // theme before first paint: the visitor's saved choice, else the system setting (?theme= forces one, for previews)
+  document.documentElement.classList.add("js"); // the parts that need JS show only with it
+  (() => { let t = null; try { t = localStorage.getItem("ah-theme"); if (t !== "dark" && t !== "light") t = null; } catch (e) {}
+    const q = new URLSearchParams(location.search).get("theme");
+    document.documentElement.dataset.theme = q === "dark" || q === "light" ? q : t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); })();
+</script>
+<link rel="preload" href="assets/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* every color, font and timing comes from tokens.css (world "read"): the field is the brand surface, paper is where
+     reading happens, --go is the one clickable color */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--paper);color:var(--paper-ink);scrollbar-color:var(--field) var(--paper);scroll-behavior:smooth}
+  body{font-family:var(--text);font-size:17px;line-height:1.55;min-height:100vh;caret-color:var(--go);background:var(--paper);color:var(--paper-ink)}
+  ::selection{background:var(--select);color:var(--select-ink)}
+  /* the ring takes --focus from the surface under it: dark ink on paper, cream on the cobalt field (the coral --go is only 2.5:1 on paper) */
+  :focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:3px}
+  .topbar,.field,.contact{--focus:var(--on-field)}
+  .now{--focus:var(--paper-ink)}
+  a{color:inherit}
+  .wrap{width:min(1240px,100% - 32px);margin:0 auto}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .num{font-variant-numeric:tabular-nums}
+  svg{display:block}
+
+  /* ---------- field: masthead, name, now building ---------- */
+{{>bar-read.css}}
+  .field{background:var(--field);color:var(--on-field);padding-bottom:64px}
+
+  .open{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:56px;padding-top:48px;align-items:start}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(56px,7.4vw,96px);line-height:.9;letter-spacing:-.035em;text-wrap:balance}
+  h1 span{display:block;overflow:hidden;padding-bottom:.06em}
+  h1 span i{display:block;font-style:normal;animation:rise .9s cubic-bezier(.16,1,.3,1) both}
+  h1 span:nth-child(2) i{animation-delay:.08s}
+  @keyframes rise{from{transform:translateY(100%)}}
+  .portrait{display:inline-grid;place-items:center;width:.7em;height:.82em;vertical-align:-.05em;margin-left:.1em;object-fit:cover;object-position:50% 18%;border-radius:.07em;border:.025em solid var(--on-field);background:var(--field-2)}
+  b.portrait{font-size:.3em;width:2.33em;height:2.73em;font-family:var(--text)}
+  .role{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;margin-top:26px}
+  .role strong{font-family:var(--display);font-weight:700;font-size:clamp(22px,2.2vw,28px);letter-spacing:-.01em}
+  .status{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;border:1px solid var(--field-rule);border-radius:999px;padding:4px 12px}
+  .status i{width:8px;height:8px;border-radius:50%;background:var(--done);flex:none}
+  .deck{font-size:clamp(18px,1.5vw,21px);line-height:1.5;max-width:44ch;margin-top:18px}
+  .deck em{font-style:normal;background:var(--on-field);color:var(--field);padding:.04em .3em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .stack{list-style:none;margin-top:20px;font-weight:600;font-size:15px;line-height:1.9;color:var(--on-field-2);max-width:56ch}
+  /* the dot goes before each item; the one that starts a line falls outside the clip, so no line ends or starts with it */
+  .stack{display:flex;flex-wrap:wrap;margin-left:-1.6em;clip-path:inset(0 0 0 1.6em)}
+  .stack li{white-space:nowrap}
+  .stack li::before{content:"·";display:inline-block;width:1.6em;text-align:center}
+{{>contact-read.css}}
+  /* now building: the build in progress, read from the data */
+  .now{--rule:var(--rule-raised);--cell:var(--cell-raised);background:var(--sheet);color:var(--paper-ink);border:1px solid var(--sheet-line);border-radius:6px;box-shadow:var(--lift)}
+  .now .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--rule)}
+  .now .bar h2{font-size:14px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--paper-muted)}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;border:1px solid var(--rule);border-radius:999px;padding:3px 11px;white-space:nowrap}
+  .chip i{width:8px;height:8px;border-radius:50%;flex:none}
+  .now .body{padding:20px 20px 22px}
+  .now .top{display:grid;grid-template-columns:84px minmax(0,1fr);gap:18px;align-items:start}
+  .phone{width:84px;aspect-ratio:9/19.5;border-radius:14px;background:var(--screen);padding:3px}
+  .phone img,.phone span{width:100%;height:100%;border-radius:11px;object-fit:cover;object-position:top;display:grid;place-items:center;background:var(--cell);font-size:10px;text-align:center;color:var(--paper-muted);padding:4px}
+  .now h3{font-family:var(--display);font-weight:800;font-size:32px;letter-spacing:-.02em;line-height:1}
+  .now .since{font-size:14px;color:var(--paper-muted);margin-top:4px}
+  .now .lede{font-size:16px;line-height:1.55;margin-top:10px}
+  .proof{list-style:none;margin-top:18px;border-top:1px solid var(--rule)}
+  .proof li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;padding:9px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+  .proof b{font-family:var(--display);font-weight:800;font-size:22px;line-height:1;color:var(--own)}
+  .proof b svg{width:20px;height:20px;color:var(--own);transform:translateY(3px)}
+  .proof span{font-size:15px;line-height:1.4}
+  .proof span strong{font-weight:700}
+  .proof span small{color:var(--paper-muted);font-size:14px}
+  .src{font-size:13px;color:var(--paper-muted);margin-top:12px}
+  .links{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:14px}
+  .now .links{align-items:center;margin-top:18px}
+  .btn.sm{height:44px;padding:0 18px;font-size:15px}
+  .tlink{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:15px;color:var(--link);text-decoration:underline;text-decoration-color:var(--go-line);text-decoration-thickness:2px;text-underline-offset:5px}
+  .tlink:hover{text-decoration-thickness:3px}
+  .tlink svg{width:16px;height:16px}
+
+  /* ---------- paper pages ---------- */
+  section.page{padding:80px 0 0}
+  .head{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:48px;align-items:end;padding-bottom:20px;border-bottom:2px solid var(--head-rule)}
+  .head h2{font-family:var(--display);font-weight:800;font-size:clamp(36px,4.4vw,56px);letter-spacing:-.03em;line-height:1;text-wrap:balance}
+  .head p{font-size:17px;line-height:1.6;color:var(--paper-muted);max-width:62ch}
+  .key{display:flex;flex-wrap:wrap;gap:6px 20px;list-style:none;margin-top:10px;font-size:14px;color:var(--paper-muted)}
+  .key li{display:flex;align-items:center;gap:8px}
+  .key i{width:14px;height:10px;border-radius:2px}
+  h3.group{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--paper-muted);padding:30px 0 10px;border-bottom:1px solid var(--rule)}
+
+  /* next steps: the app roadmap and the learning path behind the harness */
+  .next{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px}
+  .steps{list-style:none}
+  .steps li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rule)}
+  .steps li b{font-weight:600}
+  .steps li small{font-size:13px;font-weight:700;color:var(--paper-muted);text-transform:uppercase;letter-spacing:.05em}
+  .steps li.s-now b{font-weight:700}
+  .mark{width:18px;height:18px;border-radius:50%;border:2px solid var(--client);display:grid;place-items:center}
+  .s-done .mark{border-color:var(--own);background:var(--own);color:var(--sheet)}
+  .s-done .mark svg{width:12px;height:12px}
+  .s-now .mark{border-color:var(--wip);background:radial-gradient(circle,var(--wip) 0 4px,transparent 4.5px)}
+  .s-goal .mark{border-style:dashed}
+  .blocks{list-style:none}
+  .blocks li{display:grid;grid-template-columns:74px minmax(0,1fr) 112px;gap:16px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+  .blocks .tag{font-size:13px;font-weight:700;color:var(--paper-muted);text-transform:uppercase;letter-spacing:.05em}
+  .blocks b{font-weight:700}
+  .blocks p{font-size:15px;color:var(--paper-muted);margin-top:2px}
+  .blocks .st{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;white-space:nowrap}
+  .blocks .st i{width:8px;height:8px;border-radius:50%;flex:none}
+  .note{font-size:14px;color:var(--paper-muted);margin-top:14px;max-width:70ch}
+
+  /* skills: name and length, the years it was used, where */
+  .srow{display:grid;grid-template-columns:minmax(0,3.2fr) minmax(0,4fr) minmax(0,4.8fr);gap:32px;padding:13px 0;border-bottom:1px solid var(--rule);align-items:center}
+  .srow .name b{font-weight:700;display:block}
+  .srow .name span{font-size:14px;color:var(--paper-muted)}
+  .years{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:3px}
+  .years i{height:14px;border-radius:2px;background:var(--cell)}
+  .years i.c{background:var(--client)}
+  .years i.o{background:var(--own)}
+  .years i.oc{background:linear-gradient(90deg,var(--client) 50%,var(--own) 50%)}
+  .years.lbl span{font-size:12px;font-weight:600;color:var(--paper-muted);text-align:center}
+  .where{font-size:15px;line-height:1.45}
+  .where b{font-weight:700;color:var(--own)}
+  .where small{display:block;font-size:14px;color:var(--paper-muted);margin-top:3px}
+
+  /* skills by level: the level is the first read; years and places wait behind the detail toggle.
+     A level is told three ways at once: the row it sits in, the chip's color (one hue in three solid steps; nothing dashed,
+     which reads as "missing") and its size. No legend: the row names are the legend */
+  .tier{display:grid;grid-template-columns:minmax(0,3.2fr) minmax(0,8.8fr);gap:32px;padding:20px 0;border-bottom:1px solid var(--rule);align-items:center}
+  .tlabel h3{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:-.015em;line-height:1.1}
+  .tlabel p{font-size:14px;color:var(--paper-muted);margin-top:4px;line-height:1.4}
+  .t-legacy .tlabel h3{color:var(--paper-muted)}
+  .tier:has(+ .t-legacy){border-bottom:0}
+  .t-legacy{margin-top:24px;border-top:1px solid var(--rule)}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;list-style:none}
+  .chips li{display:inline-flex;align-items:center;min-height:36px;padding:5px 14px;border-radius:4px;font-weight:600;font-size:15px;line-height:1.25}
+  .chips .lv-core{min-height:42px;padding:6px 16px;background:var(--lv1);color:var(--lv1-ink);font-weight:700;font-size:16.5px}
+  .chips .lv-strong{background:var(--lv2);color:var(--lv2-ink);border:1.5px solid var(--lv2-line)}
+  .more{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:6px 0;font:inherit;font-weight:700;font-size:16px;color:var(--link);background:none;border:0;cursor:pointer;text-decoration:underline;text-decoration-color:var(--go-line);text-decoration-thickness:2px;text-underline-offset:5px}
+  .more:hover{text-decoration-thickness:3px}
+  .more svg{width:16px;height:16px;transition:transform var(--t)}
+  .more[aria-expanded="true"] svg{transform:rotate(180deg)}
+  /* the detail's head: the toggle, the key and the year axis. While the rows are on screen it stays under the bar
+     (sticky inside .sk, so it leaves with the last row); its columns are the rows' columns, so the axis sits over the cells */
+  .dhead{position:sticky;top:67px;z-index:10;display:grid;grid-template-columns:minmax(0,3.2fr) minmax(0,4fr) minmax(0,4.8fr);gap:8px 32px;align-items:center;margin-top:22px}
+  /* its paper and its shadow span the screen, not the column (the section clips the overflow sideways; clip keeps sticky) */
+  #skills{overflow-x:clip}
+  .dhead::before{content:"";position:absolute;inset:0 -100vmax;z-index:-1;background:var(--paper);transition:box-shadow var(--t)}
+  .dhead .more{margin-top:0;grid-column:1/-1;justify-self:start}
+  .dkey{display:contents}
+  .dhead .years{grid-column:2;grid-row:1}
+  .dhead .key{grid-column:3;grid-row:1;margin-top:0}
+  .sk.shown .dhead,html:not(.js) .dhead{padding:10px 0 12px}
+  .sk.shown .dhead .more{grid-column:1;grid-row:1}
+  .dhead.stuck::before{box-shadow:var(--bar-shadow)}
+  .more .t-hide,.sk.shown .more .t-see{display:none}
+  .sk.shown .more .t-hide{display:inline}
+  .sk #skill-detail h3.group:first-child{padding-top:18px}
+  @media (max-width:640px){ .tier{grid-template-columns:minmax(0,1fr);gap:12px} }
+
+  /* experience */
+  .job{display:grid;grid-template-columns:minmax(0,2.6fr) minmax(0,3fr) minmax(0,5fr) minmax(0,2.6fr);gap:32px;padding:22px 0;border-bottom:1px solid var(--rule);align-items:start}
+  .when b{display:block;font-weight:700;font-size:15px}
+  .when span{font-size:14px;color:var(--paper-muted)}
+  .job h4{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.01em;line-height:1.15}
+  .job h4 + p{font-size:14px;color:var(--paper-muted);margin-top:4px}
+  .job .chip{margin-top:10px}
+  .job .what{font-size:16px;line-height:1.6}
+  .job ul{list-style:none;margin-top:8px}
+  .job ul li{position:relative;padding-left:18px;font-size:15px;line-height:1.5;margin-top:4px}
+  .job ul li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--client)}
+  .job.own ul li::before{background:var(--own)}
+  .job .tags{font-size:14px;line-height:1.55;color:var(--paper-muted)}
+  .job .links{margin-top:12px}
+  .job.own h4{color:var(--own)}
+  .emp{display:grid;grid-template-columns:minmax(0,2.6fr) minmax(0,10.6fr);gap:32px;padding:22px 0 0;align-items:baseline}
+  .emp h4{font-family:var(--display);font-weight:700;font-size:22px}
+  .emp p{font-size:15px;color:var(--paper-muted)}
+  .edu{display:grid;grid-template-columns:minmax(0,2.6fr) minmax(0,10.6fr);gap:32px;padding:16px 0;border-bottom:1px solid var(--rule)}
+  .edu b{font-weight:700}
+  .edu span{color:var(--paper-muted)}
+
+  .contact{margin-top:88px}
+
+
+  @media (max-width:1060px){
+    .open,.head,.next{grid-template-columns:minmax(0,1fr);gap:28px}
+    .open{gap:36px}
+    .job{grid-template-columns:minmax(0,3fr) minmax(0,7fr);gap:10px 28px}
+    .job .what-c{grid-column:2}
+    .job .tags{grid-column:2}
+    .emp,.edu{grid-template-columns:minmax(0,3fr) minmax(0,7fr);gap:6px 28px}
+    .srow{grid-template-columns:minmax(0,4fr) minmax(0,6fr);gap:8px 28px}
+    .srow .where{grid-column:2}
+    .dhead{grid-template-columns:minmax(0,4fr) minmax(0,6fr);gap:6px 28px}
+    .sk.shown .dhead .more{grid-row:1/3}
+    .dhead .key{grid-column:2;grid-row:1}
+    .dhead .years{grid-column:2;grid-row:2}
+  }
+  @media (max-width:640px){
+    .status{border-radius:14px;line-height:1.35;padding:6px 12px}
+    .job,.emp,.edu,.srow{grid-template-columns:minmax(0,1fr)}
+    .job .what-c,.job .tags,.srow .where{grid-column:1}
+    .dhead{top:57px;grid-template-columns:minmax(0,1fr)}
+    .sk.shown .dhead .more,.dhead .key,.dhead .years{grid-column:1;grid-row:auto}
+    .job{gap:8px}
+    .when{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+    .blocks li{grid-template-columns:minmax(0,1fr) auto;gap:4px 12px}
+    .blocks .tag{grid-column:1/-1}
+    .now .top{grid-template-columns:64px minmax(0,1fr);gap:14px}
+    .phone{width:64px;border-radius:11px}
+    .phone img,.phone span{border-radius:8px}
+  }
+  .status .t > span{white-space:nowrap}  /* the pill breaks between phrases, each line full before the next */
+  /* transitions already drop to 0s through the tokens; what is left is scrolling and keyframes */
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    h1 span i{animation:none}
+  }
+  .chips .lv-familiar{background:var(--lv3);border:1.5px solid var(--lv3-line);color:var(--lv3-ink);font-weight:600;font-size:14.5px}
+  .chips .lv-era{min-height:32px;padding:4px 12px;color:var(--paper-muted);border:1.5px solid color-mix(in srgb,var(--paper-muted) 45%,var(--paper));font-size:14.5px}
+  /* ---------- build (phase 4) ---------- */
+  .skip{position:absolute;left:16px;top:-60px;z-index:30;padding:10px 16px;border-radius:6px;background:var(--sheet);color:var(--paper-ink);font-weight:700;text-decoration:none}
+  .skip:focus{top:12px}
+  .now .top.solo{grid-template-columns:minmax(0,1fr)}
+  html:not(.js) .more{display:none}
+  .js .sk:not(.shown) .dkey,.js .sk:not(.shown) #skill-detail{display:none}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">{{copy.aria.skip}}</a>
+<div class="topbar" id="top">
+  <div class="wrap">
+    <div class="mast">
+      <a class="who" href="#">{{profile.name}}</a>
+      <div class="right">
+        <nav aria-label="{{copy.aria.primary}}" id="nav">{{@nav}}</nav>
+        <a class="full" href="show.html"><span class="long">{{copy.links.toShow.long}}</span><span class="short">{{copy.links.toShow.short}}</span></a>
+        <button class="theme" id="theme" type="button" aria-label="{{copy.aria.toDark}}" data-to-dark="{{copy.aria.toDark}}" data-to-light="{{copy.aria.toLight}}">
+          <svg class="sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.6" fill="currentColor"/><path d="M10 1.5v2.4M10 16.1v2.4M1.5 10h2.4M16.1 10h2.4M4 4l1.7 1.7M14.3 14.3L16 16M4 16l1.7-1.7M14.3 5.7L16 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <svg class="moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 12.6A6.5 6.5 0 017.4 4.5a6.5 6.5 0 108.1 8.1z" fill="currentColor"/></svg>
+        </button>
+        <button class="theme menu" id="menu" type="button" aria-label="{{copy.aria.menu}}" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+<main id="main">
+<header class="field">
+  <div class="wrap">
+    <div class="open">
+      <div>
+        <h1>{{@name}}</h1>
+        <div class="role"><strong>{{profile.title.en}}</strong><span class="status"><i aria-hidden="true"></i><span class="t">{{@status}}</span></span></div>
+        <p class="deck">{{@lede}}</p>
+        <ul class="stack" aria-label="{{copy.aria.stack}}">{{@stack}}</ul>
+        <div class="ctas">
+          <a class="btn go" href="#contact"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3.5h14v10H9.5L5 17v-3.5H3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>{{copy.cta.contact}}</a>
+          <a class="btn line" href="cv.html"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11M5.5 8.5L10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>{{copy.cta.cv}}</a>
+        </div>
+      </div>
+      {{@now}}
+    </div>
+  </div>
+</header>
+
+<section class="page" id="skills" aria-labelledby="skills-h">
+  <div class="wrap">
+    <div class="head"><h2 id="skills-h">{{copy.nav.plain.1}}</h2><p>{{copy.skills.intro}}</p></div>
+    <div class="tiers" id="tiers">{{@tiers}}</div>
+    <div class="sk" id="sk">
+      <div class="dhead" id="dhead">
+        <button class="more" id="more" type="button" aria-expanded="false" aria-controls="skill-key skill-detail"><span class="t-see">{{copy.skills.toggle}}</span><span class="t-hide">{{copy.skills.hide}}</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="dkey" id="skill-key">{{@detailHead}}</div>
+      </div>
+      <div id="skill-detail">{{@detail}}</div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="experience" aria-labelledby="exp-h">
+  <div class="wrap">
+    <div class="head"><h2 id="exp-h">{{copy.experience.heading.plain}}</h2><p>{{@expIntro}}</p></div>
+    <div id="jobs">{{@jobs}}</div>
+    <h3 class="group">{{copy.education.plain}}</h3>
+    {{@education}}
+  </div>
+</section>
+
+{{@next}}
+
+{{>contact-read.html}}
+</main>
+
+<script type="application/json" id="calc-data">{{@calcData}}</script>
+<script src="lib/calc.js"></script>
+<script src="live.js"></script>
+<script>
+  const root = document.documentElement, $ = id => document.getElementById(id);
+  // arriving from the other version starts at the top, even if the viewer kept the scroll of the page it replaced
+  // (the browser's Back button and a #link still restore their own position)
+  (() => {
+    const nav = performance.getEntriesByType("navigation")[0];
+    if (location.hash || (nav && nav.type === "back_forward")) return;
+    const toTop = () => { scrollTo({ top:0, behavior:"instant" }); root.scrollIntoView({ block:"start", behavior:"instant" }); };
+    toTop(); addEventListener("load", toTop);
+  })();
+{{>bar-read.js}}
+
+  // skills detail: hidden until asked for (without JS it stays open, see .js in the CSS)
+  (() => { const more = $("more"), sk = $("sk"), head = $("dhead");
+    // the head casts the bar's shadow only while it is held under the bar (it has moved from its place at the top of .sk)
+    const stuck = () => head.classList.toggle("stuck", head.getBoundingClientRect().top - sk.getBoundingClientRect().top > .5);
+    const set = v => { sk.classList.toggle("shown", v); more.setAttribute("aria-expanded", v); stuck(); };
+    addEventListener("scroll", stuck, { passive:true });
+    // remembered for this tab: back from a case study, it reopens before the browser restores the scroll position.
+    // Hiding keeps the button where it was on screen, so the page returns to it instead of to rows that are gone
+    more.addEventListener("click", () => { const v = !sk.classList.contains("shown"), y = more.getBoundingClientRect().top; set(v);
+      if (!v) { scrollBy({ top:more.getBoundingClientRect().top - y, behavior:"instant" }); stuck(); }
+      try { sessionStorage.setItem("ah-skills", v ? "open" : ""); } catch (e) {} });
+    let kept = false; try { kept = sessionStorage.getItem("ah-skills") === "open"; } catch (e) {}
+    if (kept || new URLSearchParams(location.search).has("open")) set(true); })(); // ?open: starts open, for previews
+
+{{>copy-email.js}}</script>
+</body>
+</html>

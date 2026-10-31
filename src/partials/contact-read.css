@@ -1,0 +1,21 @@
+  /* ---------- the contact of Plain's world (Plain, the case studies, later the CV page): one copy, included by the build
+     as {{>contact-read.css}} with its markup {{>contact-read.html}} and script {{>copy-email.js}}. Its words come from
+     profile in data/portfolio.js. A page adds only its own gap above it. The buttons are the world's buttons. ---------- */
+  .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+  .btn{display:inline-flex;align-items:center;gap:9px;height:50px;padding:0 24px;border-radius:4px;font-weight:700;font-size:16px;text-decoration:none;transition:background-color var(--t),border-color var(--t)}
+  .btn svg{width:18px;height:18px}
+  .btn.go{background:var(--go);color:var(--go-ink)}
+  .btn.go:hover{background:var(--go-hover)}
+  .btn.line{border:1.5px solid var(--on-field);color:var(--on-field)}
+  .btn.line:hover{border-color:var(--go)}
+  /* the address is the mail link; copying is its own button beside it, and "Copied" shows above it for a moment */
+  .mail{position:relative;display:inline-flex;gap:6px}
+  .btn.copy{width:50px;padding:0;justify-content:center;background:none;cursor:pointer}
+  .btn.copy .ok,.btn.copy.done .cp{display:none}
+  .btn.copy.done .ok{display:block}
+  .copied{position:absolute;right:0;bottom:calc(100% + 5px);background:var(--paper);color:var(--paper-ink);border-radius:4px;padding:2px 9px;font-size:14px;font-weight:700;white-space:nowrap}
+  .copied:empty{display:none}
+  .contact{background:var(--field);color:var(--on-field);padding:80px 16px 72px}
+  .contact .wrap{width:min(1240px,100%)}
+  .contact h2{font-family:var(--display);font-weight:800;font-size:clamp(44px,6vw,88px);letter-spacing:-.035em;line-height:.95}
+  .contact p{font-size:19px;margin-top:16px;color:var(--on-field-2);max-width:54ch;line-height:1.55}
