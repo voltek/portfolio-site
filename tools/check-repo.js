@@ -25,11 +25,18 @@ if (title != null) {
 if (body != null) {
   // three sections in this order, each with text; at most 6 lines of text under them (headings and bare links do not count)
   const SECTIONS = ["## What changed", "## Why", "## Verification"];
-  const rows = body.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-  const heads = rows.filter(l => /^#{1,6} /.test(l));
+  let fence = false; // a "# comment" inside a code block is not a heading
+  const rows = body.split(/\r?\n/).map(l => l.trim()).filter(Boolean).map(l => {
+    if (/^(```|~~~)/.test(l)) fence = !fence;
+    return { l, head: !fence && /^#{1,6} /.test(l), link: /^https?:\/\/\S+$/.test(l) };
+  });
+  const heads = rows.filter(r => r.head).map(r => r.l);
   if (heads.join("|") !== SECTIONS.join("|")) err(`body headings are "${heads.join(", ")}"; they must be exactly: ${SECTIONS.join(", ")}`);
-  else SECTIONS.forEach((h, i) => { if (rows[rows.indexOf(h) + 1] === SECTIONS[i + 1] || rows.indexOf(h) === rows.length - 1) err(`body section "${h}" is empty`); });
-  const lines = rows.filter(l => !/^#{1,6} /.test(l) && !/^https?:\/\/\S+$/.test(l));
+  else for (const h of SECTIONS) {
+    const i = rows.findIndex(r => r.head && r.l === h), next = rows.findIndex((r, j) => j > i && r.head);
+    if (!rows.slice(i + 1, next < 0 ? rows.length : next).some(r => !r.link)) err(`body section "${h}" has no text`);
+  }
+  const lines = rows.filter(r => !r.head && !r.link);
   if (lines.length > 6) err(`body has ${lines.length} lines of text, the limit is 6 (headings and links alone do not count)`);
 }
 if (branch != null && !new RegExp(`^(${TYPES})/[a-z0-9]+(-[a-z0-9]+)*$`).test(branch)) err(`branch "${branch}" is not {type}/{kebab-name}`);

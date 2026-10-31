@@ -11,7 +11,7 @@ case "$input" in
   *'"PostToolUse"'*)
     paths=$(printf '%s' "$input" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const j=JSON.parse(s);console.log((j.tool_input&&j.tool_input.file_path)||"")}catch{}})') ;;
   *)
-    paths=$(git -C "$root" status --porcelain 2>/dev/null | cut -c4-) ;;
+    paths=$(git -C "$root" status --porcelain -uall 2>/dev/null | cut -c4-) ;;
 esac
 
 printf '%s\n' "$paths" | tr '\\' '/' | grep -Eq "$ui" || exit 0
