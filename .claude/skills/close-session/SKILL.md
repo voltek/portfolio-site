@@ -40,7 +40,8 @@ file once.
      architecture calls, visual direction, a deep audit, or costly trade-offs; in a mixed session, the hardest step decides.
 6. **Merge** (public PR only): after the reply, run `gh pr merge <n> --squash --delete-branch` (deletes the local
    branch; GitHub deletes the remote one), then `git switch main && git pull --ff-only && git fetch --prune` and
-   `git branch --merged main` to delete any other merged local branch. The `ask` rule in `.claude/settings.json` stops that command for Alan's
+   delete any local branch whose remote is gone (`git branch -vv`, `: gone]`; `-D`, since squash leaves it unmerged
+   to git). The `ask` rule in `.claude/settings.json` stops that command for Alan's
    explicit yes; if he declines, the PR stays open and the handoff says so.
 
 Local memory holds only what is specific to this machine; rules about working with Alan go to `CLAUDE.md`,
