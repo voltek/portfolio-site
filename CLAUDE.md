@@ -60,4 +60,5 @@ alternative before building it.
 - Public repo: branches `{type}/{kebab-name}` (GitHub only lets PRs into `main`). Claude commits, pushes its branch and
   opens the PR without asking; **merging needs Alan's explicit yes** (`close-session`).
 - Private repo: one commit per session on `main`, `Session <id>: <summary>`; that is the log.
+- Attribution is the co-author line only (`.claude/settings.json`): no session link in commits or PRs.
 - Retired files are deleted (`git rm`), not archived; the commit names the hash to recover them from.
