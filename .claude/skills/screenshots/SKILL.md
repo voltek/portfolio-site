@@ -43,7 +43,9 @@ Pages are the built ones: `node tools/build.js` first, then `_site/index.html` (
 
 ## Lighthouse
 
-Run it headless with Kaspersky's requests blocked (Alan does not need to turn Kaspersky off): start
+Run it headless with Kaspersky's requests blocked. Its injected script stays local (the live site never has it), so
+leave its failures out of the scores you judge by and say so; ask Alan to turn the injection off (several manual steps
+for him) only when a result cannot be separated from it. Start
 `node tools/serve.js --port=8181` in the background, set `CHROME_PATH` to Edge's `msedge.exe`, then
 
 ```
@@ -52,7 +54,8 @@ npx -y lighthouse@13.4.1 http://localhost:8181/<page>.html [--preset=desktop] \
 ```
 
 One run at a time, no `#` in the URL. Report the four scores, page weight, LCP, TBT and CLS from the JSON (extract them
-with `node -e`, never print the JSON). Known: Best practices is 77 everywhere until the favicon lands (phase 9).
+with `node -e`, never print the JSON). Known: Best practices is 77 everywhere, from two audits: `errors-in-console`
+(the missing favicon's 404, phase 9) and `is-on-https` (Kaspersky's script, so not the site's).
 
 ## Known limits
 

@@ -5,9 +5,9 @@ description: Close a portfolio work session - rewrite the hot state in HANDOFF.m
 
 # Close session
 
-At most **6 tool calls**. The handoff is already in context (the SessionStart hook injected it): never re-read it, and
-never read a whole `DECISIONS.md`, `FACTS.md` or anything in `_private/archive/`. Gather everything first, write each
-file once.
+Batch the close: gather everything first, write each file once, and run both repos' git in one call. The handoff is
+already in context (the SessionStart hook injected it): never re-read it, and never read a whole `DECISIONS.md`,
+`FACTS.md` or anything in `_private/archive/`.
 
 1. **Filter.** Keep only what the site, the CV or the way of working depends on. Side topics (personal tooling,
    security setup, accounts) were answered in chat and go nowhere. Anything reusable found this session (a shared
@@ -23,17 +23,17 @@ file once.
    scratch or temp copies; end every message with the attribution lines from the system reminder):
    - Private: `git -C _private commit`, subject `Session <id>: <summary>`, body ≤ 6 lines (what and why, files
      removed with their hash; public changes cited by PR number, `#n`), then push to `main`.
-   - Review, once per PR and before it is opened (before merging, if it was opened earlier), outside the 6-call
-     budget: if the branch touches JS or the build (`tools/`, `lib/`, `src/*.js`, `data/`), run `/code-review low` on
+   - Review, once per PR and before it is opened (before merging, if it was opened earlier): if the branch touches
+     JS or the build (`tools/`, `lib/`, `src/*.js`, `data/`), run `/code-review low` on
      it and fix what it confirms. The reviewer is always Sonnet, never Opus: in an Opus session, delegate the review
      to a subagent with `model: "sonnet"`. UI changes were already checked with `screenshots`; text and docs rely on
      the `checks` workflow.
    - Public (skip if nothing changed; `main` only takes PRs): if still on `main`, create the branch first. Commit
      (`type(scope): Imperative summary`, body ≤ 6 lines), push the branch, and open the PR if the branch has none:
      `gh pr create --base main --title "<commit-style title>" --body-file <scratch file>`. The PR is squash-merged: its
-     title and body become the one commit on `main` (GitHub appends the co-authors of the branch commits), and the
-     `checks` workflow rejects a body over 6 lines (a bare link does not count). Write what changed and why in 2–3
-     lines, no headings, then one line on what was verified, then the session link.
+     title and body become the one commit on `main` (GitHub appends the co-authors of the branch commits). Its body is
+     `## What changed`, `## Why` and `## Verification`, with at most 6 lines of text under them; the `checks` workflow
+     rejects any other shape.
 5. **Reply to Alan**, one short paragraph: what changed, both short hashes, the alerts the hook raised if
    any, and the next session. Then:
    - **Repeated correction?** If Alan corrected the same thing twice this session, say so and propose turning it into a

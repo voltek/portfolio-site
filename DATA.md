@@ -12,8 +12,8 @@ node tools/check-data.js --calc   # also prints every computed value, to read be
 node tools/build.js               # writes the pages into _site/ to preview them locally (open _site/index.html)
 ```
 
-Publishing is a push: the GitHub Action runs the check, builds `_site/` and deploys it to Pages (phase 10). The
-generated pages are not in git.
+Publishing becomes a push in phase 10, when an Action will deploy `_site/` to Pages. Today the `checks` workflow only
+runs the check and the build; nothing deploys. The generated pages are not in git.
 
 ## Rules that hold in every recipe
 
@@ -75,7 +75,7 @@ The `video` field lives in the case file (`data/cases/<page>.js`); with it set, 
    personal accounts), the system demo mode on (clean status bar, no notifications), no sound. On the emulator:
    `adb shell screenrecord /sdcard/demo.mp4`, stop with Ctrl+C, then `adb pull /sdcard/demo.mp4 demo-raw.mp4`.
    The raw recording stays out of the repo.
-2. **Compress it with ffmpeg** (installed with winget, 10-26; open a new terminal if `ffmpeg` is not found):
+2. **Compress it with ffmpeg** (installed with winget; open a new terminal if `ffmpeg` is not found):
 
    ```
    ffmpeg -i demo-raw.mp4 -an -vf "scale=-2:960,fps=30" -c:v libx264 -preset slow -crf 28 -pix_fmt yuv420p -movflags +faststart assets/projects/<app>/demo.mp4
@@ -135,4 +135,4 @@ One template (`src/case.html`) and one renderer (`tools/pages/case.js`) draw eve
    pieces, one way back, side inputs into the trunk).
 6. "Next case" is the next project with a case study, in the data's order; the landing card gets `id` by itself, so
    "All work" lands on it.
-7. Check the page (CLAUDE.md → Design): Lighthouse, impeccable `audit`, `polish` and the finish review.
+7. Check the page (`.claude/rules/design.md`): Lighthouse, impeccable `audit`, `polish` and the finish review.

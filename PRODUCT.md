@@ -9,7 +9,7 @@ web
 ## Stack
 
 Plain HTML/CSS/JS, no framework. One build step in plain Node fills the pages from `data/portfolio.js` (see
-`CLAUDE.md` and `DATA.md`). The retired bento site used Tailwind via CDN; the new pages don't.
+`CLAUDE.md` and `DATA.md`).
 
 ## Users
 
@@ -30,12 +30,12 @@ Android first, AI as the differentiator. The subject is Alan: what he is good at
 
 ## Operating Context
 
-A landing page (`index.html`) that a recruiter can scan top to bottom, plus one case-study page per project (`gamestack.html`, `modernnotes.html`) for the reader who audits. The landing ships in two versions (Alan, 2026-10-15): a quick-read version that states the facts plainly for readers who want hard data fast, and a full, expressive version. **Plain is the main door** (Alan, 2026-10-17): recruiters decide in seconds whether to keep reading, and Plain shows role, stack, years and every job at once, while the expressive version puts its experience behind clicks. So Plain is `index.html` and the expressive version (Show) gets its own page, linked prominently from Plain's header as the way to get to know Alan; each channel can link the version that suits it (CV and applications: Plain; LinkedIn or a conversation: either). Each version links to the other from its header; both render from one shared data file, so they can never disagree and a new project is still one data change. The expressive version must still be clear on its own. A downloadable CV (`cv.html`, EN/ES) inherits Plain's sober direction. Hosted on GitHub Pages under a custom domain.
+A landing page (`index.html`) that a recruiter can scan top to bottom, plus one case-study page per project (`gamestack.html`, `modernnotes.html`) for the reader who audits. The landing ships in two versions (Alan, 2026-10-15): a quick-read version that states the facts plainly for readers who want hard data fast, and a full, expressive version. **Plain is the main door** (Alan, 2026-10-17): recruiters decide in seconds whether to keep reading, and Plain shows role, stack, years and every job at once, while the expressive version puts its experience behind clicks. So Plain is `index.html` and the expressive version (Show) gets its own page, linked prominently from Plain's header as the way to get to know Alan; each channel can link the version that suits it (CV and applications: Plain; LinkedIn or a conversation: either). Each version links to the other from its header; both render from one shared data file, so they can never disagree and a new project is still one data change. The expressive version must still be clear on its own. A downloadable CV (a PDF, EN/ES; how it is made is decided in phase 7) inherits Plain's sober direction. Hosted on GitHub Pages under a custom domain.
 
 ## Capabilities and Constraints
 
 - Site copy in English; the CV also ships in Spanish.
-- No build tools, no framework: plain HTML/CSS/JS.
+- No framework and no npm dependencies: plain HTML/CSS/JS, filled by one plain-Node build step.
 - One shared data file (profile, jobs, projects, skills, learning path, roadmap; texts as `{en, es}`) feeds Plain, the expressive version and both CVs. Spans and durations are computed from the dates, never typed. Case-study pages are authored individually. Finishing a project or starting a new one is a data change (status, a new entry, a new case-study page), never a landing redesign.
 - Every public number (ADRs, Skills, PRs, tests) comes from a public repo, carries a date, and links to its source.
 - Phone number appears only in the CV, never on the site.

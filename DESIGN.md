@@ -1,9 +1,9 @@
 ---
 name: Alan Hernández — Portfolio
-description: Visual system in transition. Two worlds are chosen (Plain and Show) but not built yet; this file holds the rules shared by both until the documenter rewrites it from the finished build.
+description: Rules shared by Plain, Show and every page of Plain's world. Each world's palette, faces and material live in its surface brief; the impeccable documenter rewrites this file from the build in phase 8.
 ---
 
-<!-- TRANSITION (updated 2026-10-20): the bento / glass / Aurum-Aqua system is retired (anti-reference; its old DESIGN.md is in the private history, commit df28821). The two chosen worlds are described in their surface briefs (.impeccable/surfaces/index-html.md and show-html.md) and live in the prototypes of record. Re-run /impeccable document once the build is done (phase 8 of the handoff). -->
+<!-- Each world is described in its surface brief (.impeccable/surfaces/index-html.md, show-html.md, case-html.md) and built in src/. Re-run /impeccable document in phase 8 (_private/phases/phase-8-docs.md). The bento / glass / Aurum-Aqua system is an anti-reference (its old DESIGN.md: private commit df28821). -->
 
 # Design System: Alan Hernández — Portfolio
 
@@ -38,7 +38,7 @@ on phones). Never add a `scroll-margin-top` on the sections as well: the two add
 
 ## Components
 
-**Skills by level.** Three levels in words (Core, Strong, Familiar) plus a separate "Legacy codebases" row; a level with no skills is not drawn. Within a level, AI skills go first. The level reads from the row, the color and the chip size: one hue in three solid steps, **never a dashed or dotted outline** (it reads as "I don't have it"), and **no color legend** (the row names are the legend). Never bars, stars, percentages or scores. Years and places sit behind a collapsible detail ("See years and where I used each one"), rounded down ("since 2017 · 7+ yrs", "under 1 yr"); exact dates belong to the CV.
+**Skills by level.** Three levels in words (Core, Strong, Familiar) plus a separate "View-based apps" row; a level with no skills is not drawn. Within a level, AI skills go first. The level reads from the row, the color and the chip size: one hue in three solid steps, **never a dashed or dotted outline** (it reads as "I don't have it"), and **no color legend** (the row names are the legend). Never bars, stars, percentages or scores. Years and places sit behind a collapsible detail ("See years and where I used each one"), rounded down ("since 2017 · 7+ yrs", "under 1 yr"); exact dates belong to the CV.
 
 **The Bar Menu Rule (Plain's world: Plain, the case studies and any new page that inherits it; Alan, 10-27).** Every
 page copies this bar exactly; a new page never redesigns it. Sections inline while they fit; when they don't (measured by
@@ -55,7 +55,7 @@ returns to the exact place on the landing when the visitor came from there, else
 Show has its own bar in its own world. **One copy:** the bar's CSS and script
 are `src/partials/bar-read.css` and `bar-read.js`, included with `{{>name}}`; a page never copies or restyles them.
 
-**The Contact Rule (Plain's world: Plain, the case studies, and the CV page or any new page that ends with contact;
+**The Contact Rule (Plain's world: Plain, the case studies, and any new page that ends with contact;
 Alan, 10-28).** "Let's talk" is one piece, never rebuilt: its markup `src/partials/contact-read.html`, its CSS
 `contact-read.css` (which also carries the world's buttons: `.btn`, `.go`, `.line`, `.copy`, `.ctas`) and its copy script
 `copy-email.js`, each included with `{{>name}}`. Its words come from `profile` in `data/portfolio.js` (`contact.plain`,
