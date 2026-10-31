@@ -7,7 +7,7 @@
 // · A file is "path" under roots.main, "path:15–22" adds its lines, "test:path" takes another root. Every code link
 //   goes to the pinned commit; the page says the commit once, at the end.
 // · A section is drawn only if it is here (why, architecture, decisions, tests, ai, missing): each case keeps the ones
-//   that say something the page has not said yet (DECISIONS.md → Pulido de la Ficha).
+//   that say something the page has not said yet (DECISIONS.md → Case page rules).
 module.exports = {
   id: "mn",
   pin: { commit: "3274436", date: "2026-10-16" },

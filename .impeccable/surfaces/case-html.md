@@ -29,7 +29,7 @@ ORDER: Overview → (Why, only if the case needs it) → Architecture → Key de
 wrong, what is missing → repo, README and the pinned commit, said once → "All work" left, "Next case" right → the
 landing's contact. Each section is optional per case; the bar lists only the sections drawn.
 
-RULES (DECISIONS.md → Pulido de la Ficha; Diagrama: Flujo de datos):
+RULES (DECISIONS.md → Case page rules; Data-flow diagram):
 - Each idea once, in its place; a repeat only when it does another job.
 - No boxes with a colored bar on one side. Purple only for own builds; status colors only for status.
 - The diagram follows the data in one direction: a trunk of ≤ 6 pieces, layers as columns, a mark on the source of
