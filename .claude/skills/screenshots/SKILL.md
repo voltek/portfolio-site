@@ -16,8 +16,11 @@ Task: $ARGUMENTS
 
 ## Tools (Windows)
 
-The Chrome extension does not connect on this machine: pages are checked with **Edge headless** through `capture.sh`
-(next to this file).
+Scripted captures, error checks and Lighthouse use **Edge headless** through `capture.sh` (next to this file). The
+Claude in Chrome extension (`mcp__claude-in-chrome__*`) is for looking at a page in the real Chrome: interaction,
+sticky headers at desktop width. `resize_window` does not give a phone viewport (390 asked, the page saw 1006 px);
+phone widths stay with Edge headless and iframes. It only connects while Chrome is open and logged in to claude.ai. If
+`tabs_context_mcp` says it is not connected: open Chrome, then `/mcp` (reconnect) and `/chrome`.
 
 ```
 bash .claude/skills/screenshots/capture.sh shot   <page.html> <out.png> [width] [height] [query]
