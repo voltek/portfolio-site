@@ -39,8 +39,8 @@ already in context (the SessionStart hook injected it): never re-read it, and ne
    any, and the next session. Then:
    - **Repeated correction?** If Alan corrected the same thing twice this session, say so and propose turning it into a
      rule with a mechanism (a check, a hook, a rule file), not a memory.
-   - **Qué aprender** (≤ 3 lines): what this session teaches about working with Claude Code or about the web, if
-     anything; skip it when there is nothing real.
+   - **Qué aprender** (≤ 3 lines): a web concept the session used that is worth knowing beyond its steps (what it is,
+     why it mattered here). A recap of what was done is not a lesson: with no such concept, leave the section out.
    - **Model for the next task**, one sentence. **Sonnet** for work that follows a settled plan or format (approved
      decisions, text from approved sources, mechanical edits, captures, closes). **Opus** for open design or
      architecture calls, visual direction, a deep audit, or costly trade-offs; in a mixed session, the hardest step decides.
