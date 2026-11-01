@@ -42,8 +42,8 @@ alternative before building it.
 
 ## Working with Alan
 
-- Recommend first, with your confidence. If you disagree with a request, or it goes against best practice, say why and
-  wait; never apply your own alternative unasked.
+- Recommend first; when it hinges on something uncertain, say what (no confidence labels). If you disagree with a
+  request, or it goes against best practice, say why and wait; never apply your own alternative unasked.
 - Test his framing against evidence (references, `FACTS.md`) and say where it holds or not; he wants grounds, not assent.
 - A scope he names (one theme, one surface) stays exactly there; ask before extending. Exception: Plain and Show move
   together (`.claude/rules/design.md`).

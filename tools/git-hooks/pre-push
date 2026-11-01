@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# pre-push: refuse a push whose new commits carry a private value (personal email, phone, salary) in a file or a message.
+# The CI runs only after the branch is public; this runs before. The values live in _private/push-guard.txt (one
+# extended regex per line, case-insensitive, # comments), never in this public repo.
+# On per clone: git config core.hooksPath tools/git-hooks (the SessionStart hook flags it when off).
+list="$(git rev-parse --show-toplevel)/_private/push-guard.txt"
+[ -f "$list" ] || { echo "pre-push: $list is missing; private values were not checked." >&2; exit 0; }
+pats=$(tr -d '\r' < "$list" | grep -v -E '^[[:space:]]*(#|$)')
+[ -n "$pats" ] || exit 0
+zero=0000000000000000000000000000000000000000
+hits=""
+while read -r _ lsha _ rsha; do
+  [ "$lsha" = "$zero" ] && continue                                  # a deleted branch adds nothing
+  # a new branch, or a remote tip this clone lacks: every commit no remote has yet
+  if [ "$rsha" != "$zero" ] && git cat-file -e "$rsha^{commit}" 2>/dev/null; then range=("$rsha..$lsha")
+  else range=("$lsha" --not --remotes); fi
+  # whole messages; diffs (merge resolutions included) without removed lines, so a fix can be pushed
+  hits+=$({ git log --format='%B' "${range[@]}"; git log -p --cc --no-color --format= "${range[@]}" | grep -v '^-'; } |
+    grep -i -E -f <(printf '%s\n' "$pats"))$'\n'
+done
+hits=$(printf '%s' "$hits" | grep -v '^$')
+[ -z "$hits" ] && exit 0
+echo "pre-push: blocked, these lines match _private/push-guard.txt:" >&2
+printf '%s\n' "$hits" | cut -c1-120 >&2
+echo "Remove the value from the commits (amend or rebase), then push again." >&2
+exit 1

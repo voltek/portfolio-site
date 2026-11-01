@@ -17,7 +17,7 @@ paths:
 - Shared pieces of Plain's world live in `src/partials/`: include them, never copy or rebuild them.
 - A page's `body` (not only `html`) carries background, color and the 16 px base: the artifact viewer wraps pages in
   its own `body`.
-- A new page counts as done only after Lighthouse mobile and desktop (skill `screenshots`), impeccable `audit` with the
+- A new page or a redesigned section counts as done only after Lighthouse mobile and desktop (skill `screenshots`), impeccable `audit` with the
   detector, `polish`, and the `impeccable-finish-reviewer` agent. Report scores and findings, also what was not fixed.
 
 ## Deciding visual options with Alan
