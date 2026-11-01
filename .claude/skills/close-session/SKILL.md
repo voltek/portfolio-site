@@ -27,7 +27,8 @@ already in context (the SessionStart hook injected it): never re-read it, and ne
      JS or the build (`tools/`, `lib/`, `src/*.js`, `data/`), run `/code-review low` on
      it and fix what it confirms. The reviewer is always Sonnet, never Opus: in an Opus session, delegate the review
      to a subagent with `model: "sonnet"`. UI changes were already checked with `screenshots`; text and docs rely on
-     the `checks` workflow.
+     the `checks` workflow. If it touches `src/`, `tokens.css` or `assets/` with finished visual work, confirm the
+     `impeccable-finish-reviewer` agent ran on it (`.claude/rules/design.md`); if it did not, the report says why.
    - Public (skip if nothing changed; `main` only takes PRs): if still on `main`, create the branch first. Commit
      (`type(scope): Imperative summary`, body ≤ 6 lines), push the branch, and open the PR if the branch has none:
      `gh pr create --base main --title "<commit-style title>" --body-file <scratch file>`. The PR is squash-merged: its

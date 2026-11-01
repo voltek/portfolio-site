@@ -34,6 +34,10 @@ else
     [ -f "$f" ] && [ "$(size "$f")" -gt 30720 ] && alerts+=("$f is $(( $(size "$f") / 1024 )) KB (> 30 KB): prune or split it.")
   done
 fi
+[ "$(git config core.hooksPath)" = "tools/git-hooks" ] ||
+  alerts+=("The push guard is off: run \`git config core.hooksPath tools/git-hooks\`.")
+[ ! -d "$priv" ] || [ -f "$priv/push-guard.txt" ] ||
+  alerts+=("$priv/push-guard.txt is missing: the push guard checks no private values.")
 if [ -f CLAUDE.md ]; then
   [ "$(lines CLAUDE.md)" -gt 100 ] && alerts+=("CLAUDE.md has $(lines CLAUDE.md) lines (> 100).")
   [ "$(size CLAUDE.md)" -gt 8192 ] && alerts+=("CLAUDE.md is $(( $(size CLAUDE.md) / 1024 )) KB (> 8 KB).")
