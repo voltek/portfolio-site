@@ -11,10 +11,14 @@ zero=0000000000000000000000000000000000000000
 hits=""
 while read -r _ lsha _ rsha; do
   [ "$lsha" = "$zero" ] && continue                                  # a deleted branch adds nothing
-  if [ "$rsha" = "$zero" ]; then range=("$lsha" --not --remotes); else range=("$rsha..$lsha"); fi
-  # messages, added and context lines; removed lines are left out so a fix can be pushed
-  hits+=$(git log -p --no-color --format='%B' "${range[@]}" | grep -v '^-' | grep -i -E -f <(printf '%s\n' "$pats"))
+  # a new branch, or a remote tip this clone lacks: every commit no remote has yet
+  if [ "$rsha" != "$zero" ] && git cat-file -e "$rsha^{commit}" 2>/dev/null; then range=("$rsha..$lsha")
+  else range=("$lsha" --not --remotes); fi
+  # whole messages; diffs (merge resolutions included) without removed lines, so a fix can be pushed
+  hits+=$({ git log --format='%B' "${range[@]}"; git log -p --cc --no-color --format= "${range[@]}" | grep -v '^-'; } |
+    grep -i -E -f <(printf '%s\n' "$pats"))$'\n'
 done
+hits=$(printf '%s' "$hits" | grep -v '^$')
 [ -z "$hits" ] && exit 0
 echo "pre-push: blocked, these lines match _private/push-guard.txt:" >&2
 printf '%s\n' "$hits" | cut -c1-120 >&2
