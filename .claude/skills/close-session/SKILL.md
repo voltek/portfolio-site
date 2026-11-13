@@ -15,12 +15,14 @@ never scratch or temp copies; end every commit message with the attribution line
    piece, a tool workaround) goes to its home (`DESIGN.md`, `.claude/rules/`, a skill) if it is not there yet.
 2. **Public PR** (skip to step 3 if nothing changed; `main` only takes PRs):
    - Review, once per PR and before it is opened (before merging, if it was opened earlier): if the branch touches
-     JS or the build (`tools/`, `lib/`, `src/*.js`, `data/`), run `/code-review <level>` on
-     it and fix what it confirms. The level follows the actual diff: `low` for data, a one-spot fix or a line or two
-     of logic; `medium` for new or changed logic in `tools/`, `lib/` or `src/*.js`; `high` for `tools/build.js`,
-     `lib/calc.js`, `tools/check-data.js` or a refactor across several JS files. The reviewer is always Sonnet, never
-     Opus: in an Opus session, delegate the review to a subagent with `model: "sonnet"`. UI changes were already checked with `screenshots`; text and docs rely on
-     the `checks` workflow. If it touches `src/`, `tokens.css` or `assets/` with finished visual work, confirm the
+     JS, the build or the harness (`tools/`, `lib/`, `src/*.js`, `data/`, `.claude/`), run `/code-review <level>` on
+     it. The level follows the actual diff: `low` for data, skill or rule text, a one-spot fix or a line or two of
+     logic; `medium` for new or changed logic in `tools/`, `lib/`, `src/*.js`, hooks or settings; `high` for
+     `tools/build.js`, `lib/calc.js`, `tools/check-data.js` or a refactor across several JS files. Fix what it
+     confirms; a finding that needs Alan's judgment is not fixed but goes, with a recommendation, in the pre-merge
+     note. The reviewer is always Sonnet, never Opus: in an Opus session, delegate the review to a subagent with
+     `model: "sonnet"`. UI changes were already checked with `screenshots`; other text and docs rely on the `checks`
+     workflow. If it touches `src/`, `tokens.css` or `assets/` with finished visual work, confirm the
      `impeccable-finish-reviewer` agent ran on it (`.claude/rules/design.md`); if it did not, the report says why.
    - If still on `main`, create the branch first. Commit (`type(scope): Imperative summary`, body ≤ 6 lines), push the
      branch, and open the PR if the branch has none: `gh pr create --base main --title "<commit-style title>"
