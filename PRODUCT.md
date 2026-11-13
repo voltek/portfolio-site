@@ -26,7 +26,7 @@ A personal portfolio that helps Alan get hired for senior Android roles. Android
 
 ## Positioning
 
-Android first, AI as the differentiator. The subject is Alan: what he is good at today (modern Android with Kotlin, Jetpack Compose, MVI/MVVM and Clean Architecture, plus AI-assisted development under a documented harness), backed by ten years of shipping Android for banks, telecom and consumer apps. Personal projects are the current evidence, not the identity. Today that evidence is two contrasting builds: GameStack, built with AI agents under a documented harness (CLAUDE.md, Skills, ADRs, a CI gate), and ModernNotes, written entirely by hand with AI used only as a reviewer. Projects will finish and new ones will start; the positioning does not change when they do. The site proves the approach with process and public evidence rather than claims.
+Android first, AI as the differentiator. The subject is Alan: what he is good at today (modern Android with Kotlin, Jetpack Compose, MVI/MVVM and Clean Architecture, plus AI-assisted development under a documented harness), backed by ten years of shipping Android for banks, telecom and consumer apps. Personal projects are the current evidence, not the identity. Today that evidence is two contrasting builds: GameStack, built with AI agents under a documented harness (CLAUDE.md and rules loaded by path, Skills, ADRs, hooks, a capped review loop, CI checks), and ModernNotes, written entirely by hand with AI used only as a reviewer. Projects will finish and new ones will start; the positioning does not change when they do. The site proves the approach with process and public evidence rather than claims.
 
 ## Operating Context
 
@@ -37,7 +37,7 @@ A landing page (`index.html`) that a recruiter can scan top to bottom, plus one 
 - Site copy in English; the CV also ships in Spanish.
 - No framework and no npm dependencies: plain HTML/CSS/JS, filled by one plain-Node build step.
 - One shared data file (profile, jobs, projects, skills, learning path, roadmap; texts as `{en, es}`) feeds Plain, the expressive version and both CVs. Spans and durations are computed from the dates, never typed. Case-study pages are authored individually. Finishing a project or starting a new one is a data change (status, a new entry, a new case-study page), never a landing redesign.
-- Every public number (ADRs, Skills, PRs, tests) comes from a public repo, carries a date, and links to its source.
+- Every claim about a project is checked against its public repo at a pinned commit, carries that date, and links to its source. No counts (ADRs, Skills, PRs): the system is the proof, not the quantity; a measured result appears once, dated.
 - Phone number appears only in the CV, never on the site.
 - Running cost as close to zero as possible (Alan, 2026-10-20): a static site on GitHub Pages, automation only within free tiers, the domain as the only planned expense. Any feature that would add hosting or service costs needs a cheaper alternative or Alan's explicit approval.
 
@@ -54,8 +54,8 @@ A landing page (`index.html`) that a recruiter can scan top to bottom, plus one 
 - Public repos: GameStack (in progress) and ModernNotes (completed), both on https://github.com/voltek.
 - Real experience: Globant (OpenBank Spain, CitiBanamex Mexico), América Móvil/Claro Drive, IRONBIT Digital Experiences, Estrategia Tecnológica.
 - Contact: email hello@alanhernandez.dev (forwards to a private Gmail that is never published); LinkedIn https://www.linkedin.com/in/alan-hernandez-voltek/; GitHub https://github.com/voltek.
-- Modern architecture, verified in the public repos (2026-10-15): MVI + Clean Architecture in GameStack (its CLAUDE.md, `SearchContract.kt`, the `new-viewmodel` Skill); MVVM with unidirectional state (ViewModel + UiState + UiEvent) in ModernNotes. Client work was MVP (IRONBIT, Claro Drive, OpenBank), with Clean Architecture at CitiBanamex. MVI/MVVM are claimed for personal work only.
-- AI-assisted development, verified: GameStack is built with Claude Code agents under a documented harness (CLAUDE.md, Skills, ADRs with "Enforced by", a CI gate, a Human-in-the-Loop principle); ModernNotes used AI only as a reviewer. Spec-Driven Development and context engineering come from Alan's self-directed roadmap, applied in GameStack. Not claimable yet: LLM APIs (Gemini, OpenAI, Anthropic), on-device AI, KMP, Alan's own Hooks.
+- Modern architecture, verified in the public repos (2026-10-15): MVI + Clean Architecture in GameStack (its CLAUDE.md, `SearchContract.kt`, the `write-viewmodel` Skill); MVVM with unidirectional state (ViewModel + UiState + UiEvent) in ModernNotes. Client work was MVP (IRONBIT, Claro Drive, OpenBank), with Clean Architecture at CitiBanamex. MVI/MVVM are claimed for personal work only.
+- AI-assisted development, verified: GameStack is built with Claude Code agents under a documented harness (CLAUDE.md and rules loaded by path, Skills, ADRs with "Enforced by", hooks, a capped review loop, CI checks behind branch protection, a Human-in-the-Loop principle); ModernNotes used AI only as a reviewer. Spec-Driven Development and context engineering come from Alan's self-directed roadmap, applied in GameStack. Not claimable yet: LLM APIs (Gemini, OpenAI, Anthropic), on-device AI, KMP, Alan's own subagents.
 - Learning path: a self-directed roadmap on AI-assisted Android development, built with Claude from the syllabus of DevExpert's "AI Expert" course and kept current with newer tooling. Alan is not enrolled in that course, so the site never names it as a course taken or a credential; it describes the roadmap and points to GameStack as its evidence.
 - No testimonials, benchmarks, pricing, or third-party proof exist. Future work must not fabricate any.
 

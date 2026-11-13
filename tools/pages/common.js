@@ -33,11 +33,11 @@ const calc = {
 };
 
 // A text from the data as HTML: escaped, highlighted, its templates filled. `id` is the entry {lapse} refers to,
-// `counts` and `updated` feed {count:key}, {countsDate} and {updated} (facts, never recomputed).
-const text = (ctx, s, { id, counts, updated, tag } = {}) => md(esc(s), tag)
+// `pin` and `updated` feed {pinDate} and {updated} (facts, never recomputed).
+const text = (ctx, s, { id, pin, updated, tag } = {}) => md(esc(s), tag)
   .replace(/\{careerYears\}/g, () => calc.career(ctx))
   .replace(/\{lapse\}/g, () => calc.lapse(ctx, id))
-  .replace(/\{(countsDate|updated|count:\w+)\}/g, m => C.fill(m, { counts, updated }));
+  .replace(/\{(pinDate|updated)\}/g, m => C.fill(m, { pin, updated }));
 
 // What live.js needs to recompute the marked values: places, employers and skills, without any copy.
 // year: the build year (the last column of a year grid), so the browser knows how many years to add.

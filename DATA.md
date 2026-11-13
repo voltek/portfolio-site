@@ -82,12 +82,10 @@ those changes, run `node tools/og.js` (Edge headless) and commit the PNG; under 
    or add `steps` to a block (they feed Show's harness lane).
 2. Set `learningPath.updated` to today's date: it is shown as a fact and does not move by itself.
 
-## New GameStack counts
+## Re-pin GameStack
 
-Until the phase 10 Action does it: run `tools/count-gamestack.sh`, then write the numbers and `date` + `commit` in
-`counts`; every place that shows them reads from there. Each proof row says where it shows with `on`: the landing keeps
-the three that prove the differentiator, the case study shows them all. A new count is a new key in `counts` plus a
-row. Only what is in the pinned commit gets a row; planned tooling waits in the roadmap.
+When Alan says a project's repo moved, run the `sync-project` skill with its id. Proof rows are `check: true` (no
+counts) and say where they show with `on`; `pin` holds the commit and day the claims were checked.
 
 ## New case study
 

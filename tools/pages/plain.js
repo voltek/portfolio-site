@@ -32,8 +32,8 @@ module.exports = ctx => {
   const nowBox = !live ? "" : `<aside class="now" id="now" aria-labelledby="now-h"><div class="bar"><h2 id="now-h">${esc(cp.nav.plain[0])}</h2>${chip("in-progress")}</div><div class="body">
     <div class="top${plainShot ? "" : " solo"}">${plainShot ? `<div class="phone"><img ${srcset(plainShot.src, 84)} alt="${esc(plainShot.alt || "")}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${esc(plainShot.label)}'}))"></div>` : ""}
     <div><h3>${esc(live.name)}</h3><p class="since num">${esc(cp.experience.kind.project)} · ${esc(cp.experience.since)} ${C.monthYear(live.start)}</p><p class="lede">${text(ctx, (live.lede || live.what).en)}</p></div></div>
-    <ul class="proof">${(live.proof || []).filter(r => r.on.includes("plain")).map(r => `<li><b class="num">${r.check ? `${ICON.check}<span class="sr">${esc(cp.aria.yes)}</span>` : live.counts[r.count]}</b><span><strong>${esc(r.label)}</strong> <small>· ${text(ctx, r.note, { counts: live.counts })}</small></span></li>`).join("")}</ul>
-    ${live.source ? `<p class="src">${text(ctx, live.source, { counts: live.counts })}</p>` : ""}${nowLinks(live.links)}</div></aside>`;
+    <ul class="proof">${(live.proof || []).filter(r => r.on.includes("plain")).map(r => `<li><b class="num">${ICON.check}<span class="sr">${esc(cp.aria.yes)}</span></b><span><strong>${esc(r.label)}</strong> <small>· ${text(ctx, r.note)}</small></span></li>`).join("")}</ul>
+    ${live.source ? `<p class="src">${text(ctx, live.source, { pin: live.pin })}</p>` : ""}${nowLinks(live.links)}</div></aside>`;
 
   // skills: by level (an empty level leaves no row), then the View-based apps row, one quiet look for all (its years
   // and places are in the detail). Within a level, AI skills first, then the data's order; pages: false stays off.
@@ -61,7 +61,7 @@ module.exports = ctx => {
   const detail = groups.map(([id, list]) => `<h3 class="group">${esc(L[id][0])}</h3>
     ${list.map(s => `<div class="srow"><div class="name"><b>${esc(s.name)}</b><span class="num">${calc.skill(ctx, s.i)}</span></div>
       <div class="years" data-years="${s.i}" style="--n:${YEARS.length}" aria-hidden="true">${YEARS.map(y => cell(s, y)).join("")}</div>
-      <p class="where">${where(s)}${s.note ? `<small>${text(ctx, s.note, { counts: (data.work.find(w => w.counts) || {}).counts })}</small>` : ""}</p></div>`).join("")}`).join("");
+      <p class="where">${where(s)}${s.note ? `<small>${text(ctx, s.note)}</small>` : ""}</p></div>`).join("")}`).join("");
 
   // experience, newest first; an employer behind several places gets one heading with its own total
   // a card with a case study carries its id: the case's "All work" lands on it (index.html#mn)
