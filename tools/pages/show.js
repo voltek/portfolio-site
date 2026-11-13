@@ -136,7 +136,7 @@ module.exports = ctx => {
     .filter(([, , list]) => list.length);
   const order = SEASONS.flatMap(([, , list]) => list);
   const seasonOf = w => w.type === "project" ? 2 : 1;
-  // the label on the card and the strip: "América Móvil · Claro Drive", "Globant · CitiBanamex"
+  // the label on the card and the strip: "América Móvil · Claro Drive", "Globant · Citibanamex"
   const co = w => [w.company || (w.employer && data.employers[w.employer].name), w.name].filter(Boolean).join(" · ");
   const plainTitle = w => ((w.show && w.show.title) || [w.name]).join(" ");
   // the calendar years of some places; marked for live.js while one of them is still running

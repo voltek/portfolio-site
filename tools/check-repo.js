@@ -7,8 +7,8 @@ const { execFileSync } = require("child_process");
 const errors = [];
 const err = m => errors.push(m);
 
-// 1) private or third-party paths never enter this repo (the same list as .gitignore)
-const PRIVATE = /^(_private\/|_comps\/|\.claude\/skills\/impeccable\/|\.claude\/agents\/impeccable-|\.claude\/settings\.local\.json$)/;
+// 1) private, third-party or generated paths never enter this repo (the same list as .gitignore)
+const PRIVATE = /^(_private\/|_comps\/|_site\/|\.impeccable\/hook\.cache\.json$|\.claude\/skills\/impeccable\/|\.claude\/agents\/impeccable-|\.claude\/settings\.local\.json$)/;
 const tracked = execFileSync("git", ["ls-files", "-z"], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 }).split("\0").filter(Boolean);
 for (const f of tracked.filter(f => PRIVATE.test(f))) err(`tracked path must stay private: ${f}`);
 

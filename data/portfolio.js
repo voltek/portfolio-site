@@ -135,7 +135,7 @@
     },
     {
       id: "mn", type: "project", name: "ModernNotes", status: "completed",
-      start: "2026-02-26", end: "2026-04-06", // first and last commit
+      start: "2026-02-26", end: "2026-04-06", // first commit and last code commit (the Oct 16 fixes are in the case)
       what: { en: "A notes app written entirely by hand. AI never wrote the code; it guided and audited.", es: "App de notas escrita completamente a mano. La IA nunca escribió el código; lo guió y lo auditó." },
       highlights: [
         { en: "Room as the single source of truth; the UI never reads from the network", es: "Room es la única fuente de verdad y la interfaz nunca lee de la red" },

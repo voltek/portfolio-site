@@ -57,7 +57,7 @@ data.work.forEach((w, i) => {
   if (!w.id) err(`work[${i}]: missing id`); else if (ids.has(w.id)) err(`${at}: duplicate id`); else ids.add(w.id);
   if (!w.name) err(`${at}: missing name`);
   if (!["job", "project"].includes(w.type)) err(`${at}: type must be "job" or "project"`);
-  span(w, at, w.type === "project" || true);
+  span(w, at, true); // an ongoing job has no end either
   if (w.employer && !data.employers[w.employer]) err(`${at}: unknown employer "${w.employer}"`);
   if (w.type === "job") { if (!w.employer) bi(w.role, `${at}.role`); bi(w.studio, `${at}.studio`); }
   if (w.type === "project") {
@@ -96,6 +96,7 @@ data.work.forEach((w, i) => {
     });
     if (lp.blocks.filter(b => b.status === "goal").length > 1) err(`${at}.learningPath: more than one goal`);
   }
+  if (w.roadmap) (w.roadmap.steps || []).forEach(s => { if (!["done", "now", "next"].includes(s[1])) err(`${at}.roadmap: step "${s[0]}" has status "${s[1]}"`); });
 });
 const running = data.work.filter(w => w.status === "in-progress");
 if (!running.length) warn(`no project in progress: "Now building" shows its designed empty state`);
