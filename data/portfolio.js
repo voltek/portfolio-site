@@ -6,7 +6,7 @@
 // · Dates: "2015-08" (a month = its first day) or "2026-07-15" when the day matters. end: null = ongoing.
 // · Texts the CV shows come as { en, es }; es: null = Spanish still to approve (check-data lists them). Texts only the
 //   site shows (it is English) are plain strings.
-// · **…** marks the words a page highlights. {careerYears}, {lapse}, {count:key} and {countsDate} are computed
+// · **…** marks the words a page highlights. {careerYears}, {lapse}, {pinDate} and {updated} are filled
 //   (lib/calc.js); never write a length, a number of years or an episode number by hand.
 // · Approved copy only: every text here passed _private/sources/copy-deck.md.
 (function (root, data) {
@@ -144,6 +144,7 @@
       ],
       stack: ["Kotlin", "Compose", "MVVM", "Room", "Hilt", "Flow"],
       links: { repo: "https://github.com/voltek/ModernNotes", caseStudy: "modernnotes.html" },
+      pin: { date: "2026-10-16", commit: "3274436" }, // the case file's pin; tools/repo-changes.js reads it here
       // on: where each screen appears ("plain", "show", "case"). No screens = the designed empty state.
       shots: [
         { src: "assets/projects/modernnotes/home.png", label: "Home", alt: "ModernNotes list screen titled My notes, with two notes and a sort menu set to Date descendant", on: ["case"] },
@@ -155,8 +156,8 @@
     {
       id: "gs", type: "project", name: "GameStack", status: "in-progress",
       start: "2026-07-15", end: null, // the repo's first commit (the study plan from June does not count as use)
-      lede: { en: "A game backlog app built with AI agents under rules I wrote, using Claude Code. The agents propose; every plan decision waits for my approval.", es: "App para organizar el backlog de videojuegos, hecha con agentes de IA bajo reglas que yo escribí, usando Claude Code. Los agentes proponen; cada decisión de plan espera mi aprobación." },
-      what: { en: "A game backlog app built with AI agents under rules I wrote.", es: "App para organizar el backlog de videojuegos, hecha con agentes de IA bajo reglas que yo escribí." },
+      lede: { en: "A game library app built with AI agents under rules I wrote, using Claude Code. The agents write the code; I review every change.", es: "App de biblioteca de videojuegos hecha con agentes de IA bajo reglas que yo escribí, usando Claude Code. Los agentes escriben el código; yo reviso cada cambio." },
+      what: { en: "A game library app built with AI agents under rules I wrote.", es: "App de biblioteca de videojuegos hecha con agentes de IA bajo reglas que yo escribí." },
       highlights: [
         { en: "Search end to end: four screen states, debounced queries, and a failed refresh that keeps the results", es: "La búsqueda funciona de punta a punta: cuatro estados de pantalla, consultas con debounce y un refresh fallido que conserva los resultados" },
         { en: "IGDB queries in its Apicalypse language, behind Twitch OAuth", es: "Consultas a IGDB en su lenguaje Apicalypse, detrás de OAuth de Twitch" },
@@ -171,20 +172,23 @@
         { src: "assets/projects/gamestack/search_loading.png", label: "Loading", alt: null, on: ["case"] },
         { src: "assets/projects/gamestack/search_no_results.png", label: "No results", alt: null, on: ["case"] }
       ],
-      // Public counts from the repo, with the day they were taken. Written by the phase 10 Action (base:
-      // tools/count-gamestack.sh); until then by hand, and never recounted during the build.
-      counts: { date: "2026-10-20", commit: "144b922", adrs: 24, skills: 14, prs: 32, driftLog: 66 },
-      // "Now building": the proof, in control-loop order (rules, playbooks, the human, the gate, self-correction).
-      // count: a key of counts; check: true where there is nothing to count. on: where each row shows, like the shots
-      // ("plain", "show", "case"); the landing keeps the three that prove the differentiator, the case study has them all (Alan, 10-27).
+      // The commit and day the site's claims were last checked against the repo (DATA.md → Re-pin GameStack).
+      pin: { date: "2026-11-12", commit: "5fb80bc" },
+      // "Now building": the proof, qualitative (no counts: the system is the value, not the quantity). on: where each
+      // row shows, like the shots ("plain", "show", "case"); the landing keeps the three that prove the differentiator,
+      // the case study has them all (Alan, 10-27 and 11-12).
       proof: [
-        { count: "adrs", label: "ADRs", note: "each one states what enforces it", on: ["plain", "show", "case"] },
-        { count: "skills", label: "Skills", note: "the playbooks the agents follow, from a new screen to shipping a branch", on: ["case"] },
-        { check: true, label: "Human in the loop", note: "every plan decision waits for my approval", on: ["plain", "show", "case"] },
-        { check: true, label: "A gate on every PR", note: "an AI code review before I open it, then build, test and lint in CI · {count:prs} PRs so far", on: ["plain", "show", "case"] },
-        { count: "driftLog", label: "Drift log entries", note: "each time the code and the docs disagreed, and how it was fixed", on: ["case"] }
+        { check: true, label: "Decisions that name their enforcement", note: "each ADR states what enforces it: a test, a CI check, a setting, or prose only", on: ["plain", "show", "case"] },
+        { check: true, label: "Human in the loop", note: "what the rules don't settle waits for my approval, and I confirm every review triage and every merge", on: ["plain", "show", "case"] },
+        { check: true, label: "Checks no agent can skip", note: "build, test, lint and commit checks on every PR, behind branch protection that binds me too", on: ["plain", "show", "case"] },
+        { check: true, label: "Rules as mechanisms", note: "the rules that must never break are a hook, a deny rule or a test, not a line of prose", on: ["case"] },
+        { check: true, label: "A capped review loop", note: "local AI review rounds before every PR, capped per branch: real defects per round fell from 3.3 to 2.2 by round 3 (measured once, Nov 2026)", on: ["case"] },
+        { check: true, label: "A context budget", note: "the agents' standing instructions are held under 60 lines by a test, and area rules load only when needed: 31% fewer tokens before any task (measured once, Nov 2026)", on: ["case"] },
+        { check: true, label: "From spec to test", note: "in Search's spec, every scenario names the test that verifies it", on: ["case"] },
+        { check: true, label: "Code and documents in step", note: "the commit that resolves a disagreement between them says which side was fixed", on: ["case"] },
+        { check: true, label: "Skills", note: "one procedure per repeatable task, loaded only when needed: each layer's code and tests, device checks, shipping a branch", on: ["case"] }
       ],
-      source: "Counts from the public repo, {countsDate}",
+      source: "Checked against the public repo, {pinDate}",
       // where the app goes next (status: "done" · "now" · "next"); the pin lands before the first step not done
       roadmap: {
         lane: "App",
@@ -195,16 +199,16 @@
       // stays with this project (and its case study) when another build takes over. Show's harness lane is read from the
       // blocks' steps, then the goal's short name. status: "done" · "now" · "next" · "goal".
       learningPath: {
-        updated: "2026-10-20", // a fact, not a length: the day this path last changed
+        updated: "2026-11-13", // a fact, not a length: the day this path last changed
         lane: "Harness", // Show: the label of its lane under the app's
         intro: "A self-directed path in AI-assisted Android development, updated as the tools change. Each finished block is put to work in GameStack, and the repo shows it.",
         arc: "It goes from **writing every line by hand**, which is ModernNotes, to **directing AI agents under rules I wrote**, which is GameStack.", // Show only
         blocks: [
-          { tag: "Block 1", title: "Fundamentals", status: "done", note: "How LLMs work, research with checked sources, and GameStack's first spec" },
+          { tag: "Block 1", title: "Fundamentals", status: "done", note: "How LLMs work, research with checked sources, and GameStack's first spec, later replaced by a living PRD" },
           { tag: "Block 2", title: "Context engineering", status: "done", note: "Prompting, CLAUDE.md and the first Skills", steps: [["CLAUDE.md", "done"], ["Skills", "done"]] },
           { tag: "Block 3", title: "Spec-Driven Development", status: "done", note: "Specs, a drift checklist, human in the loop and handoffs" },
           { tag: "Extra", title: "Design phase", status: "done", note: "Four screens and their states, designed and documented" },
-          { tag: "Block 4", title: "Claude Code, harness and loop engineering", status: "now", note: "CI gate and ADRs done · now: Hooks · next: a checker loop and subagents", steps: [["CI gate", "done"], ["ADRs", "done"], ["Hooks", "now"], ["Checker loop", "next"], ["Subagents", "next"]] },
+          { tag: "Block 4", title: "Claude Code, harness and loop engineering", status: "now", note: "CI gate, ADRs, hooks and a capped review loop done · next: subagents of my own", steps: [["CI gate", "done"], ["ADRs", "done"], ["Hooks", "done"], ["Review loop", "done"], ["Subagents", "next"]] },
           { tag: "Block 5", title: "Agentic IDEs and other CLIs", status: "next", note: "Hands-on with other agent tools" },
           { tag: "Block 6", title: "AI APIs inside apps", status: "next", note: "AI recommendations in GameStack" },
           { tag: "Block 7", title: "Rapid prototyping", status: "next", note: "From an idea to a clickable prototype, fast" },
@@ -226,14 +230,14 @@
     { name: "Android SDK", level: "core", at: ["gs", "mn", "ob", "cb", "cd", "ir", "et"] },
     { name: "Retrofit · REST APIs", level: "core", at: ["gs", "mn", "ob", "cb", "cd", "ir", "et"], note: "REST APIs at every client job. In GameStack, IGDB queries written in its Apicalypse language" },
     { name: "Git", level: "core", at: ["gs", "mn", "ob", "cb", "cd", "ir", "et"], note: "At every job; in GameStack, pull requests behind branch protection", pages: false },
-    { name: "Agentic engineering · Claude Code", level: "strong", ai: true, at: ["gs"], note: "AI-assisted development with Claude Code agents under rules I wrote: CLAUDE.md, Skills, ADRs, a CI gate and a human in the loop. In ModernNotes, AI never wrote the code" },
-    { name: "Spec-Driven Development", level: "strong", ai: true, at: ["gs"], note: "Specs, a drift checklist and handoffs, from my learning path, applied in GameStack" },
+    { name: "Agentic engineering · Claude Code", level: "strong", ai: true, at: ["gs"], note: "AI-assisted development with Claude Code agents under rules I wrote: CLAUDE.md and rules loaded by path, Skills, ADRs, hooks, a capped review loop, CI checks and a human in the loop. In ModernNotes, AI never wrote the code" },
+    { name: "Spec-Driven Development", level: "strong", ai: true, at: ["gs"], note: "A living PRD and OpenSpec, each scenario naming the test that verifies it, a drift checklist and session checkpoints, from my learning path, applied in GameStack" },
     { name: "Jetpack Compose", level: "strong", at: ["gs", "mn"] },
     { name: "Coroutines", level: "strong", at: ["gs", "mn", "ob"] },
     { name: "Flow", level: "strong", at: ["gs", "mn"] },
     { name: "MVI · MVVM", level: "strong", at: ["gs", "mn"], note: "MVI in GameStack, MVVM in ModernNotes" },
     { name: "Clean Architecture", level: "strong", at: ["gs", "mn", "cb"], note: "Designed by hand in ModernNotes and kept in GameStack; at Citibanamex, inside an existing codebase" },
-    { name: "Architecture decisions · ADRs", level: "strong", at: ["gs"], note: "{count:adrs} ADRs in GameStack, each naming what enforces it" },
+    { name: "Architecture decisions · ADRs", level: "strong", at: ["gs"], note: "Decisions recorded as ADRs in GameStack, each naming what enforces it" },
     { name: "Hilt", level: "strong", at: ["gs", "mn"] },
     { name: "Room", level: "strong", at: ["mn"] },
     { name: "Testing", level: "strong", at: ["gs", "mn", "cb"], note: "JUnit, MockK, Turbine and coroutines-test in both builds, MockWebServer in ModernNotes, Robolectric screen tests in GameStack; unit tests at Citibanamex" },
@@ -243,7 +247,7 @@
     { name: "kotlinx.serialization", level: "strong", at: ["gs", "mn"], pages: false },
     { name: "Coil", level: "strong", at: ["gs"], pages: false },
     { name: "Gradle", level: "strong", at: ["gs", "mn"], note: "Version catalogs and KSP in both builds", pages: false },
-    { name: "CI · GitHub Actions", level: "familiar", at: ["gs"], note: "The gate on every GameStack PR: build, test and lint" },
+    { name: "CI · GitHub Actions", level: "familiar", at: ["gs"], note: "Two required checks on every GameStack PR: build, test and lint; and the commit, title and branch rules" },
     { name: "Code review", level: "familiar", at: ["ob", "cb", "cd"], len: false, note: "Now and then, reviewing teammates' pull requests at Globant (Citibanamex, Openbank) and Claro Drive" },
     { name: "Firebase Analytics · Crashlytics", level: "familiar", at: ["ir"] },
     { name: "Google Maps · Places", level: "familiar", at: ["ir"] },

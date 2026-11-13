@@ -207,10 +207,8 @@ module.exports = ctx => {
       <div><h3>${esc(live.name)}</h3>${chip("in-progress")}
         <p class="lede">${text(ctx, (live.lede || live.what).en)}</p>
         ${live.proof ? `<p class="rec-h">${esc((live.show && live.show.record) || "")}</p>
-        <ul class="ledger">${live.proof.filter(r => r.on.includes("show")).map(r => `<li><span class="k">${esc(r.label)}<small>${text(ctx, r.note, { counts: live.counts })}</small></span><i aria-hidden="true"></i><b>${r.check
-          ? `<svg viewBox="0 0 24 24" width="32" height="32" role="img" aria-label="${esc(cp.aria.yes)}"><path d="M4 13l5 5L20 6" fill="none" style="stroke:var(--sun)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`
-          : live.counts[r.count]}</b></li>`).join("")}</ul>` : ""}
-        ${live.source ? `<p class="source">${text(ctx, live.source, { counts: live.counts })} · <a href="${esc(live.links.repo)}">${esc(live.links.repo.replace(/^https?:\/\//, ""))}</a></p>` : ""}
+        <ul class="ledger">${live.proof.filter(r => r.on.includes("show")).map(r => `<li><span class="k">${esc(r.label)}<small>${text(ctx, r.note)}</small></span><i aria-hidden="true"></i><b><svg viewBox="0 0 24 24" width="32" height="32" role="img" aria-label="${esc(cp.aria.yes)}"><path d="M4 13l5 5L20 6" fill="none" style="stroke:var(--sun)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li>`).join("")}</ul>` : ""}
+        ${live.source ? `<p class="source">${text(ctx, live.source, { pin: live.pin })} · <a href="${esc(live.links.repo)}">${esc(live.links.repo.replace(/^https?:\/\//, ""))}</a></p>` : ""}
         <div class="ctas">${live.links.caseStudy ? `<a class="btn go" href="${esc(live.links.caseStudy)}">${esc(cp.experience.links.caseStudy)}</a>` : ""}<a class="btn alt" href="${esc(live.links.repo)}">${ICON.github}${esc(cp.experience.links.repo)}</a></div></div>
     </div>
   </div>
@@ -259,10 +257,9 @@ module.exports = ctx => {
   const legend = both => `<ul class="legend" aria-label="${esc(cp.aria.legend)}">${(both ? ["own", "client"] : ["client"]).map(k => `<li><i style="background:var(--${k})"></i>${esc(cp.skills.legend[k])}</li>`).join("")}</ul>`;
   const where = s => [...new Set(s.at.map(r => typeof r === "string" ? r : r.id))].map(byId)
     .map(w => w.type === "project" ? `<b>${esc(w.name)}</b>` : esc(w.name)).join(" · ");
-  const counts = (data.work.find(w => w.counts) || {}).counts;
   const row = s => `<div class="trow"><div class="tname"><b>${esc(s.name)}</b><span>${calc.skill(ctx, s.i)}</span></div>
       <div class="track" aria-hidden="true">${"<i></i>".repeat(AX1 - Y0)}${runs(segs(s)).map(bar).join("")}<span class="now-line"></span></div>
-      <p class="twhere">${where(s)}${s.note ? `<span class="tdetail">${text(ctx, s.note, { counts })}</span>` : ""}</p></div>`;
+      <p class="twhere">${where(s)}${s.note ? `<span class="tdetail">${text(ctx, s.note)}</span>` : ""}</p></div>`;
   // the key and the axis sit in the detail's head, held under the bar while the rows scroll; legacy is one more group
   const tlHead = legend(true) + axis;
   const timeline = groups.map(([id, list]) => `<div class="tgroup"><div class="thead"><h3>${esc(L[id][0])}</h3></div>${list.map(row).join("")}</div>`).join("");

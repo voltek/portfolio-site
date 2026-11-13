@@ -1,4 +1,4 @@
-// Checks data/portfolio.js before anything is built or deployed: broken ids, invalid dates, missing texts, public counts
+// Checks data/portfolio.js before anything is built or deployed: broken ids, invalid dates, missing texts, repo pins
 // without a date, screens that do not exist. Errors stop the build (exit 1); warnings list what is pending.
 // Runs locally and in .github/workflows/checks.yml.
 // Usage: node tools/check-data.js            check only
@@ -30,7 +30,7 @@ const bi = (t, where) => {
   if (t.es === undefined) err(`${where}: missing es (use null while pending)`);
   else if (t.es === null) warn(`${where}: Spanish pending`);
 };
-const TOKEN = /\{(careerYears|lapse|countsDate|updated|count:\w+)\}/g;
+const TOKEN = /\{(careerYears|lapse|pinDate|updated)\}/g;
 const tokens = (t, where) => {
   for (const s of [].concat(t && typeof t === "object" ? [t.en, t.es] : t).filter(Boolean)) {
     const left = s.replace(TOKEN, "").match(/\{[^}]*\}/g);
@@ -78,16 +78,13 @@ data.work.forEach((w, i) => {
     if (!s.alt) warn(`${where}: alt text pending`);
     if (!Array.isArray(s.on) || !s.on.every(o => ON.includes(o))) err(`${where}: "on" must list ${ON.join(", ")}`);
   });
-  if (w.counts) {
-    const keys = Object.keys(w.counts).filter(k => !["date", "commit"].includes(k));
-    if (!w.counts.date) err(`${at}.counts: public numbers need the day they were counted`);
-    else date(w.counts.date, `${at}.counts.date`);
-    if (!w.counts.commit) warn(`${at}.counts: no commit to trace the numbers back to`);
-    for (const k of keys) if (!Number.isInteger(w.counts[k])) err(`${at}.counts.${k}: not a whole number`);
-    const used = JSON.stringify([w.proof, w.source, data.skills]).match(/\{count:(\w+)\}|"count":"(\w+)"/g) || [];
-    for (const u of used) { const k = u.replace(/\{count:|\}|"count":|"/g, ""); if (!keys.includes(k)) err(`${at}: count "${k}" is used but not counted`); }
+  if (w.pin) {
+    if (!w.pin.date) err(`${at}.pin: needs the day the claims were checked`);
+    else date(w.pin.date, `${at}.pin.date`);
+    if (!w.pin.commit) err(`${at}.pin: needs the commit the claims were checked at`);
   }
-  (w.proof || []).forEach((r, j) => { if (!r.check && !r.count) err(`${at}.proof[${j}]: needs count or check`);
+  if ((w.proof || w.source) && !w.pin) err(`${at}: proof rows need a pin to trace them back to`);
+  (w.proof || []).forEach((r, j) => { if (r.check !== true) err(`${at}.proof[${j}]: needs check: true`);
     if (!Array.isArray(r.on) || !r.on.every(o => ON.includes(o))) err(`${at}.proof[${j}]: "on" must list ${ON.join(", ")}`); tokens(r.note, `${at}.proof[${j}]`); });
   if (w.learningPath) {
     const lp = w.learningPath;
@@ -199,8 +196,8 @@ if (process.argv.includes("--calc")) {
   for (const [id, e] of Object.entries(data.employers)) console.log(`  ${e.name} · ${C.fill(e.note, { lapse: C.lapse(e.start, e.end, now) })}  (${C.range(e.start, e.end)})`);
   console.log("\nskills");
   for (const s of data.skills) console.log(`  ${s.name.padEnd(36)} ${C.skillSpan(s, data, now)}`);
-  const gs = data.work.find(w => w.counts);
-  if (gs) console.log(`\n${C.fill(gs.source, { counts: gs.counts })}\n${C.fill(data.copy.path.updated, { updated: gs.learningPath.updated })}`);
+  const gs = data.work.find(w => w.learningPath);
+  if (gs) console.log(`\n${C.fill(gs.source, { pin: gs.pin })}\n${C.fill(data.copy.path.updated, { updated: gs.learningPath.updated })}`);
   console.log(`\n${C.fill(data.copy.page.description, { careerYears: years })}`);
 }
 
