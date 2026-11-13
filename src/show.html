@@ -349,7 +349,7 @@
   .feature{display:grid;grid-template-columns:7fr 5fr;gap:48px;align-items:center;margin-top:28px}
   .feature h3{font-family:var(--title);font-weight:400;font-size:clamp(40px,4.6vw,64px);line-height:1}
   .feature .lede{font-size:19px;line-height:1.6;color:var(--on-night);margin-top:14px;max-width:46ch}
-  /* the proof as Cuphead's "The Results!" ledger: the label leads, the count closes the dotted line */
+  /* the proof as Cuphead's "The Results!" ledger: the label leads, a check closes the dotted line */
   .rec-h{margin-top:24px;font-family:var(--tag);font-size:30px;letter-spacing:.05em;color:var(--sun);transform:rotate(-2deg);width:fit-content}
   .ledger{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:13px}
   .ledger li{display:grid;grid-template-columns:auto minmax(18px,1fr) auto;align-items:end;gap:10px}
@@ -390,7 +390,7 @@
   /* plain-words kicker above a show title */
   .kick{font-weight:800;font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);margin-bottom:6px}
 
-  /* skills timeline: one bar per skill on a 2015–2026 axis, colored by where it was used */
+  /* skills timeline: one bar per skill on an axis from the first job to the reading year, colored by where it was used */
   .tl{margin-top:26px}
   /* the detail's head: the toggle, the key and the year axis. While the rows are on screen it stays under the bar (sticky
      inside .sk, so it leaves with the last row); its band spans the screen. From 901 px it is one line in the rows'
@@ -408,8 +408,6 @@
   .legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-weight:700;font-size:14.5px;list-style:none}
   .legend li{display:flex;align-items:center;gap:7px}
   .legend i{width:18px;height:14px;border:2.5px solid var(--ink);border-radius:4px}
-  .legend b{font-weight:800}
-  .legend small{font-size:13px;font-weight:600}
   .tgroup{margin-top:30px}
   .trow,.taxis{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) minmax(0,1fr);column-gap:24px;align-items:center}
   .trow{padding:12px 0;row-gap:6px;border-bottom:2px dashed var(--ink-rule)}
@@ -547,7 +545,6 @@
     .card .prop{grid-column:1;grid-row:auto;max-width:360px;justify-self:center;order:0}
     .card .head{order:-1}
     .card .what,.card .credits,.card .hl,.card .cardlinks,.card .road,.card .credline{order:1}
-    .card .phone{display:none}
   }
   /* the narrowest phones: the menu keeps only its icon so the bar fits (the word stays as its accessible name) */
   @media (max-width:420px){ .menu{width:46px;padding:0;justify-content:center;font-size:0;gap:0} .menu svg{width:20px;height:20px}
@@ -570,7 +567,7 @@
     .screen.tear .card,.screen.tear::after{animation:none}
   }
   /* ---------- skills by level; the one-bar timeline waits behind the detail toggle ---------- */
-  /* a level reads three ways at once: its row, the chip's fill (ink, white, dashed) and its size. No offset shadow: these are not buttons */
+  /* a level reads three ways at once: its row, the chip's fill (one solid step per level, nothing dashed) and its size. No offset shadow: these are not buttons */
   .tiers{margin-top:30px}
   .tier{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:24px;align-items:center;padding:20px 0;border-bottom:2px dashed var(--ink-rule)}
   .tier:first-child{border-top:4px solid var(--ink)}
@@ -902,22 +899,6 @@
     io.observe(fin);
   })();
 
-  // copy the address: the icon turns into a check and "Copied" shows (and is read aloud) for two seconds
-  document.querySelectorAll(".copy").forEach(btn => {
-    const said = btn.nextElementSibling; let t;
-    btn.addEventListener("click", async () => {
-      let ok = false;
-      try { await navigator.clipboard.writeText(btn.dataset.copy); ok = true; } catch (e) {
-        // no clipboard API (an old browser or a file:// page): the old way, through a selected hidden field
-        const f = Object.assign(document.createElement("textarea"), { value: btn.dataset.copy, readOnly: true });
-        f.style.cssText = "position:fixed;opacity:0"; document.body.append(f); f.select();
-        try { ok = document.execCommand("copy"); } catch (e) {} f.remove();
-      }
-      if (!ok) return;
-      btn.classList.add("done"); said.textContent = said.dataset.text;
-      clearTimeout(t); t = setTimeout(() => { btn.classList.remove("done"); said.textContent = ""; }, 2000);
-    });
-  });
-</script>
+{{>copy-email.js}}</script>
 </body>
 </html>

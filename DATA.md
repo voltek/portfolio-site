@@ -74,7 +74,7 @@ those changes, run `node tools/og.js` (Edge headless) and commit the PNG; under 
    one-line `note`. `ai: true` puts it first in its level; `legacy: true` sends it to "View-based apps";
    `pages: false` keeps it for the CV only.
 2. Years come from `at`. To narrow one place, `{ id: "ir", end: "2017-12" }` instead of `"ir"`; `len: false` shows "at
-   OpenBank" instead of a length (a skill used in only part of a job).
+   Openbank" instead of a length (a skill used in only part of a job).
 
 ## New block in the learning path (or a block changes status)
 
