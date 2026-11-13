@@ -14,22 +14,26 @@ never scratch or temp copies; end every commit message with the attribution line
    security setup, accounts) were answered in chat and go nowhere. Anything reusable found this session (a shared
    piece, a tool workaround) goes to its home (`DESIGN.md`, `.claude/rules/`, a skill) if it is not there yet.
 2. **Public PR** (skip to step 3 if nothing changed; `main` only takes PRs):
-   - Review, once per PR and before it is opened (before merging, if it was opened earlier): if the branch touches
-     JS or the build (`tools/`, `lib/`, `src/*.js`, `data/`), run `/code-review low` on
-     it and fix what it confirms. The reviewer is always Sonnet, never Opus: in an Opus session, delegate the review
-     to a subagent with `model: "sonnet"`. UI changes were already checked with `screenshots`; text and docs rely on
-     the `checks` workflow. If it touches `src/`, `tokens.css` or `assets/` with finished visual work, confirm the
-     `impeccable-finish-reviewer` agent ran on it (`.claude/rules/design.md`); if it did not, the report says why.
+   - Review, once per PR and before it is opened (before merging, if it was opened earlier): if the branch touches JS,
+     the build or the harness (`tools/`, `lib/`, `src/*.js`, `data/`, `.claude/`), run `/code-review <level>` on it. The
+     level follows the actual diff: `low` for data, skill or rule text, a one-spot fix or a line or two of logic;
+     `medium` for new or changed logic in `tools/`, `lib/`, `src/*.js`, hooks or settings; `high` for `tools/build.js`,
+     `lib/calc.js`, `tools/check-data.js` or a refactor across several JS files; when two fit, the higher wins. Fix what
+     it confirms; a finding that needs Alan's judgment is not fixed but goes, with a recommendation, in the pre-merge
+     note. The reviewer is always Sonnet, never Opus: in an Opus session, delegate the review to a subagent with `model:
+     "sonnet"`. UI changes were already checked with `screenshots`; other text and docs rely on the `checks` workflow.
+     If it touches `src/`, `tokens.css` or `assets/` with finished visual work, confirm the `impeccable-finish-reviewer`
+     agent ran on it (`.claude/rules/design.md`); if it did not, the report says why.
    - If still on `main`, create the branch first. Commit (`type(scope): Imperative summary`, body ≤ 6 lines), push the
      branch, and open the PR if the branch has none: `gh pr create --base main --title "<commit-style title>"
      --body-file <scratch file>`. The PR is squash-merged: its title and body become the one commit on `main` (GitHub
      appends the co-authors of the branch commits). Its body is `## What changed`, `## Why` and `## Verification`, with
      at most 6 lines of text under them; the `checks` workflow rejects any other shape.
    - Wait for the checks (`gh pr checks <n> --watch`); fix and push until they pass. Tell Alan in two lines what the PR
-     changes and what the review found, then run `gh pr merge <n> --squash --delete-branch`: the `ask` rule in
-     `.claude/settings.json` stops it for his explicit yes. After it, `git switch main && git pull --ff-only && git
-     fetch --prune`, and delete any local branch whose remote is gone (`git branch -vv`, `: gone]`; `-D`, since squash
-     leaves it unmerged to git). If he declines, the PR stays open and the handoff says so.
+     changes and what the review found (with its level and why), then run `gh pr merge <n> --squash --delete-branch`:
+     the `ask` rule in `.claude/settings.json` stops it for his explicit yes. After it, `git switch main && git pull
+     --ff-only && git fetch --prune`, and delete any local branch whose remote is gone (`git branch -vv`, `: gone]`;
+     `-D`, since squash leaves it unmerged to git). If he declines, the PR stays open and the handoff says so.
 3. **`_private/handoff/HANDOFF.md`**: rewrite it in English, **≤ 4 KB and ≤ 60 lines** (the hook alerts above that):
    date and session id; one line per phase; *Alan owes* (items marked "do not remind" stay but are not mentioned);
    *Next session*: the concrete block, numbered steps, a "Done when:" line and "Model: Opus | Sonnet" with one reason.
