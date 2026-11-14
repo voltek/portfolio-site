@@ -17,7 +17,7 @@ if (check.status !== 0) { process.stdout.write(check.stdout); console.log("build
 const summary = check.stdout.trim().split("\n").pop();
 
 // 2) the pages: template + renderer. The CV joins this list when it is built. A case study joins by itself: a project
-// whose links.caseStudy is "x.html" and that has data/cases/x.js (until then its links are only listed as not there yet).
+// whose links.caseStudy is "x.html" and that has data/cases/x.js (until then its links fail the build unless the page is in PENDING, step 5).
 const renderCase = require("./pages/case.js");
 const PAGES = [
   { file: "index.html", template: "src/plain.html", render: require("./pages/plain.js") },
@@ -49,21 +49,28 @@ ${PAGES.map(p => `  <url><loc>${site}${p.file === "index.html" ? "" : p.file}</l
 `);
 fs.writeFileSync(path.join(out, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${site}sitemap.xml\n`);
 
-// 5) every local link and image must exist in _site; a page still to be built (the CV, a case study) is only listed
-const missing = new Set();
+// 5) every local link and image must exist in _site; only a page still to be built (PENDING) is listed, the rest fail
+const PENDING = new Set(["cv.html", "gamestack.html"]);
+const missing = new Set(), broken = new Set();
 for (const p of PAGES) {
   const html = fs.readFileSync(path.join(out, p.file), "utf8");
-  for (const [, ref] of html.matchAll(/(?:href|src)="([^"#?]+)/g))
-    if (!/^([a-z]+:|\/\/)/i.test(ref) && !fs.existsSync(path.join(out, decodeURI(ref)))) missing.add(`${p.file} → ${ref}`);
+  const refs = [...html.matchAll(/(?:href|src)="([^"#?]+)/g)].map(m => m[1])
+    .concat([...html.matchAll(/srcset="([^"]+)"/g)].flatMap(m => m[1].split(",").map(c => c.trim().split(/\s+/)[0])));
+  for (const ref of refs)
+    if (!/^([a-z]+:|\/\/)/i.test(ref) && !fs.existsSync(path.join(out, decodeURI(ref))))
+      (PENDING.has(ref) ? missing : broken).add(`${p.file} → ${ref}`);
   // a link to a place on another built page (a case's "All work" → index.html#mn) needs that id there
   for (const [, ref, id] of html.matchAll(/href="([\w.-]+\.html)#([\w-]+)"/g)) {
     const to = path.join(out, ref);
-    if (fs.existsSync(to) && !fs.readFileSync(to, "utf8").includes(`id="${id}"`)) missing.add(`${p.file} → ${ref}#${id} (no such id)`);
+    if (fs.existsSync(to) && !fs.readFileSync(to, "utf8").match(new RegExp(`\\sid="${id}"`))) broken.add(`${p.file} → ${ref}#${id} (no such id)`);
   }
 }
-if (!fs.existsSync(path.join(out, "assets/og.png"))) missing.add("share image → assets/og.png");
+// an exception only while a page is being made: once built, it must leave PENDING so its links fail like any other
+for (const f of PENDING) if (fs.existsSync(path.join(out, f))) broken.add(`PENDING still lists ${f}, which is built now: remove it`);
+if (!fs.existsSync(path.join(out, "assets/og.png"))) broken.add("share image → assets/og.png");
 
 const kb = f => (fs.statSync(path.join(out, f)).size / 1024).toFixed(1) + " KB";
 console.log(`built _site/ against ${day} · data: ${summary}`);
 for (const p of PAGES) console.log(`  ${p.file.padEnd(16)} ${kb(p.file)}`);
 if (missing.size) console.log(`not there yet (a page or file still to make):\n${[...missing].map(m => `  ${m}`).join("\n")}`);
+if (broken.size) { console.error(`broken (a local link or file that does not exist):\n${[...broken].map(m => `  ${m}`).join("\n")}`); process.exit(1); }

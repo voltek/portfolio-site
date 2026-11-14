@@ -31,8 +31,10 @@ const bi = (t, where) => {
   else if (t.es === null) warn(`${where}: Spanish pending`);
 };
 const TOKEN = /\{(careerYears|lapse|pinDate|updated)\}/g;
-const tokens = (t, where) => {
+// {lapse} is filled only in an employer's note (the entry that holds it); anywhere else it would crash the build
+const tokens = (t, where, lapse = false) => {
   for (const s of [].concat(t && typeof t === "object" ? [t.en, t.es] : t).filter(Boolean)) {
+    if (!lapse && s.includes("{lapse}")) err(`${where}: {lapse} only works in an employer's note`);
     const left = s.replace(TOKEN, "").match(/\{[^}]*\}/g);
     if (left) err(`${where}: unknown template ${left.join(" ")}`);
     if (/\b\d+(\.\d)?\+? (years?|months?|yrs?)\b/.test(s.replace(TOKEN, ""))) warn(`${where}: looks like a length written by hand: "${s}"`);
@@ -47,7 +49,7 @@ span(p.education, "profile.education");
 p.languages.forEach((l, i) => { bi(l.name, `profile.languages[${i}].name`); bi(l.level, `profile.languages[${i}].level`); });
 for (const [k, s] of Object.entries(p.lede)) tokens(s, `profile.lede.${k}`);
 for (const [id, e] of Object.entries(data.employers)) {
-  span(e, `employers.${id}`, true); bi(e.role, `employers.${id}.role`); bi(e.intro, `employers.${id}.intro`); tokens(e.note, `employers.${id}.note`);
+  span(e, `employers.${id}`, true); bi(e.role, `employers.${id}.role`); bi(e.intro, `employers.${id}.intro`); tokens(e.note, `employers.${id}.note`, true);
 }
 
 // work: jobs and projects
@@ -123,7 +125,7 @@ data.skills.forEach((s, i) => {
 const { FILE, SECTIONS } = require(path.join(root, "tools", "pages", "case.js"));
 for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   const f = path.join(root, "data", "cases", w.links.caseStudy.replace(/\.html$/, ".js"));
-  if (!fs.existsSync(f)) { warn(`work.${w.id}: ${w.links.caseStudy} has no data/cases/${path.basename(f)} yet; its links wait`); continue; }
+  if (!fs.existsSync(f)) { warn(`work.${w.id}: ${w.links.caseStudy} has no data/cases/${path.basename(f)} yet; its links wait while it is in PENDING (tools/build.js)`); continue; }
   const cs = require(f), at = `cases/${path.basename(f)}`;
   if (cs.id !== w.id) err(`${at}: id "${cs.id}" is not its project "${w.id}"`);
   if (!cs.pin || !/^[0-9a-f]{7,40}$/.test(cs.pin.commit || "")) err(`${at}: pin.commit missing: every code link goes to that commit`);

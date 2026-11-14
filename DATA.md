@@ -91,8 +91,8 @@ counts) and say where they show with `on`; `pin` holds the commit and day the cl
 
 Every case is drawn by `src/case.html` and `tools/pages/case.js`; nothing is written in HTML.
 
-1. Set `links.caseStudy` to the page's file name (`gamestack.html`); until step 2 exists the build lists the links as
-   "not there yet".
+1. Set `links.caseStudy` to the page's file name (`gamestack.html`); until step 2 exists the build fails on the
+   links unless the page is in `PENDING` (`tools/build.js`), which lists them as "not there yet".
 2. Write `data/cases/<page>.js` (copy `data/cases/modernnotes.js`, which explains its conventions). The header comes
    from the project's entry; the case file holds what only the case says, approved in the copy deck first. With that
    file the page joins the build.

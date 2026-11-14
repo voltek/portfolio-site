@@ -58,7 +58,7 @@ module.exports = {
       { title: "GetNotesUseCase", text: "re-runs the Room query whenever the saved sort order changes.", files: ["domain/notes/usecases/GetNotesUseCase.kt:16"] },
       { title: "The local repository and DAO", text: "answer with a Room `Flow`; Room re-emits when data changes.", files: ["data/notes/local/repositories/NotesRepositoryImpl.kt", "data/notes/local/daos/NoteDao.kt"] },
       { title: "SyncNotesUseCase", text: "fetches remote notes and writes them into Room; the UI sees them through step 4.", files: ["domain/notes/usecases/SyncNotesUseCase.kt"] },
-      { title: "Hilt binds the repository", text: "the app uses for the remote side (today a fake; see “What is missing”).", files: ["di/RepositoryModule.kt:33"] }
+      { title: "Hilt binds the repository", text: "the app uses for the remote side (today a fake; see “What went wrong, what is missing”).", files: ["di/RepositoryModule.kt:33"] }
     ]
   },
 
