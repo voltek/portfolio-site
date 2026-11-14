@@ -65,6 +65,8 @@ for (const p of PAGES) {
     if (fs.existsSync(to) && !fs.readFileSync(to, "utf8").match(new RegExp(`\\sid="${id}"`))) broken.add(`${p.file} → ${ref}#${id} (no such id)`);
   }
 }
+// an exception only while a page is being made: once built, it must leave PENDING so its links fail like any other
+for (const f of PENDING) if (fs.existsSync(path.join(out, f))) broken.add(`PENDING still lists ${f}, which is built now: remove it`);
 if (!fs.existsSync(path.join(out, "assets/og.png"))) broken.add("share image → assets/og.png");
 
 const kb = f => (fs.statSync(path.join(out, f)).size / 1024).toFixed(1) + " KB";
