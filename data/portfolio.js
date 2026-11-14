@@ -31,13 +31,13 @@
     stack: ["Kotlin", "Jetpack Compose", "MVI", "MVVM", "Clean Architecture"],
     aiLine: { en: "AI agents under rules I wrote", es: "agentes de IA bajo reglas que yo escribí" },
     lede: {
-      plain: "I build modern Android apps, and I build them with **AI agents under rules I wrote**, on top of {careerYears}+ years of client apps in banking, telecom and consumer products.",
+      plain: "Senior Android developer with {careerYears}+ years of client apps in banking, telecom and consumer products. In 2026 I wrote a modern Android app by hand; now I build the next one with **AI agents under rules I wrote**.",
       show: "Modern Android and AI-assisted development · {careerYears}+ years in banking, telecom and consumer apps"
     },
     contact: {
       plain: "Let's talk.",
-      show: "So once again, the episode ends… and the next one begins **with your team!**",
-      body: "Looking for Senior Android or Android + AI roles. Available now, for remote work or relocation, based in Mexico City (UTC−6)." //  : the time zone never ends a line alone
+      show: "So once again, the episode ends… and the next one begins with **your team!**",
+      body: "Looking for Senior Android or Android + AI roles. Available now, for remote work or relocation, based in Mexico City (UTC−6): full overlap with US hours and European afternoons." //  : the time zone never sits alone on a line
     },
     education: {
       degree: { en: "Computer Systems Engineering", es: "Ingeniería en Sistemas Computacionales" },
@@ -113,9 +113,9 @@
       studio: { en: "Globant, for Citibanamex", es: null },
       what: { en: "Improvements to the app's CoDi flow, the digital payments system of Mexico's central bank.", es: "Mejoras al flujo de CoDi de la app, el sistema de pagos digitales del banco central de México." },
       highlights: [
-        { en: "Improved QR reading and generation, and implemented extra security steps to a spec", es: "Mejoré la lectura y generación de códigos QR e implementé pasos extra de seguridad según una especificación" },
+        { en: "Improved QR reading and generation, and built the specified security steps natively", es: "Mejoré la lectura y generación de códigos QR y construí de forma nativa los pasos de seguridad especificados" },
         { en: "Worked on payment history and the QR or NFC switch", es: "Trabajé en el historial de pagos y en el cambio entre QR y NFC" },
-        { en: "Clean Architecture codebase with unit tests", es: "Base de código con Clean Architecture y pruebas unitarias" }
+        { en: "Wrote unit tests inside a Clean Architecture codebase", es: "Escribí pruebas unitarias dentro de una base de código con Clean Architecture" }
       ],
       stack: ["Java", "Kotlin", "RxJava", "MVP", "Clean Architecture", "Retrofit"],
       show: { title: ["QUICK RESPONSE"], prop: "qr" }
@@ -127,7 +127,7 @@
       what: { en: "A Spanish bank's app, mostly with the deposits team: a Java codebase from 2018, where new code went into Kotlin.", es: "App de un banco español, sobre todo con el equipo de depósitos: una base de código en Java de 2018, donde el código nuevo se escribía en Kotlin." },
       highlights: [
         { en: "Built the full deposit reinvestment flow", es: "Construí el flujo completo de reinversión de depósitos" },
-        { en: "Worked across most of the app: cards, accounts, user keys, documentation", es: "Trabajé en la mayor parte de la app: tarjetas, cuentas, claves de usuario, documentación" },
+        { en: "Implemented the deposits redesign from its user stories: rates from the API instead of fixed, a wizard cut from 5 steps to 4, preferential renewal rates", es: "Implementé el rediseño de depósitos a partir de sus historias de usuario: tasas desde la API en lugar de fijas, un asistente reducido de 5 pasos a 4 y tasas preferenciales de renovación" },
         { en: "Integrated whole sections built by other teams (profile, notifications) as Kotlin + Compose modules", es: "Integré secciones completas hechas por otros equipos (perfil, notificaciones) como módulos Kotlin + Compose" }
       ],
       stack: ["Kotlin", "Java", "MVP", "Coroutines", "Dagger 2", "Custom Views", "Bitrise"],
@@ -156,8 +156,8 @@
     {
       id: "gs", type: "project", name: "GameStack", status: "in-progress",
       start: "2026-07-15", end: null, // the repo's first commit (the study plan from June does not count as use)
-      lede: { en: "A game library app built with AI agents under rules I wrote, using Claude Code. The agents write the code; I review every change.", es: "App de biblioteca de videojuegos hecha con agentes de IA bajo reglas que yo escribí, usando Claude Code. Los agentes escriben el código; yo reviso cada cambio." },
-      what: { en: "A game library app built with AI agents under rules I wrote.", es: "App de biblioteca de videojuegos hecha con agentes de IA bajo reglas que yo escribí." },
+      lede: { en: "A game library app in Kotlin and Compose, built with AI agents under rules I wrote, using Claude Code. The agents write the code; I review every change.", es: "App de biblioteca de videojuegos hecha con agentes de IA bajo reglas que yo escribí, usando Claude Code. Los agentes escriben el código; yo reviso cada cambio." },
+      what: { en: "An Android app to search video games from IGDB, with game details coming next.", es: "App Android para buscar videojuegos en IGDB; el detalle de cada juego viene después." },
       highlights: [
         { en: "Search end to end: four screen states, debounced queries, and a failed refresh that keeps the results", es: "La búsqueda funciona de punta a punta: cuatro estados de pantalla, consultas con debounce y un refresh fallido que conserva los resultados" },
         { en: "IGDB queries in its Apicalypse language, behind Twitch OAuth", es: "Consultas a IGDB en su lenguaje Apicalypse, detrás de OAuth de Twitch" },
@@ -202,7 +202,7 @@
         updated: "2026-11-13", // a fact, not a length: the day this path last changed
         lane: "Harness", // Show: the label of its lane under the app's
         intro: "A self-directed path in AI-assisted Android development, updated as the tools change. Each finished block is put to work in GameStack, and the repo shows it.",
-        arc: "It goes from **writing every line by hand**, which is ModernNotes, to **directing AI agents under rules I wrote**, which is GameStack.", // Show only
+        arc: "It goes from **writing every line by hand** (ModernNotes) to **directing AI agents** (GameStack).", // Show only
         blocks: [
           { tag: "Block 1", title: "Fundamentals", status: "done", note: "How LLMs work, research with checked sources, and GameStack's first spec, later replaced by a living PRD" },
           { tag: "Block 2", title: "Context engineering", status: "done", note: "Prompting, CLAUDE.md and the first Skills", steps: [["CLAUDE.md", "done"], ["Skills", "done"]] },
@@ -240,7 +240,7 @@
     { name: "Architecture decisions · ADRs", level: "strong", at: ["gs"], note: "Decisions recorded as ADRs in GameStack, each naming what enforces it" },
     { name: "Hilt", level: "strong", at: ["gs", "mn"] },
     { name: "Room", level: "strong", at: ["mn"] },
-    { name: "Testing", level: "strong", at: ["gs", "mn", "cb"], note: "JUnit, MockK, Turbine and coroutines-test in both builds, MockWebServer in ModernNotes, Robolectric screen tests in GameStack; unit tests at Citibanamex" },
+    { name: "Testing", level: "strong", at: ["gs", "mn", "cb"], note: "JUnit, MockK, Turbine and coroutines-test in both builds, MockWebServer in ModernNotes, Robolectric screen tests in GameStack; unit tests at Citibanamex and, now and then, at Openbank" },
     { name: "Compose & Views interop", level: "strong", at: ["ob"], len: false, note: "At Openbank, Compose modules from other teams inside a View-based app" },
     { name: "Navigation Compose", level: "strong", at: ["gs", "mn"], pages: false },
     { name: "Material 3", level: "strong", at: ["gs", "mn"], pages: false },
@@ -248,7 +248,7 @@
     { name: "Coil", level: "strong", at: ["gs"], pages: false },
     { name: "Gradle", level: "strong", at: ["gs", "mn"], note: "Version catalogs and KSP in both builds", pages: false },
     { name: "CI · GitHub Actions", level: "familiar", at: ["gs"], note: "Two required checks on every GameStack PR: build, test and lint; and the commit, title and branch rules" },
-    { name: "Code review", level: "familiar", at: ["ob", "cb", "cd"], len: false, note: "Now and then, reviewing teammates' pull requests at Globant (Citibanamex, Openbank) and Claro Drive" },
+    { name: "Code review", level: "familiar", at: ["gs", "ob", "cb", "cd"], len: false, note: "Every GameStack pull request before it merges; teammates' pull requests now and then at Globant (Citibanamex, Openbank) and Claro Drive" },
     { name: "Firebase Analytics · Crashlytics", level: "familiar", at: ["ir"] },
     { name: "Google Maps · Places", level: "familiar", at: ["ir"] },
     { name: "Robolectric", level: "familiar", at: ["gs"], note: "Screen tests in GameStack", pages: false },
@@ -323,7 +323,7 @@
     next: {
       heading: { plain: "What comes next", show: "Next episodes" },
       groups: { app: "The app", path: "The learning path" }, // Plain
-      intro: "GameStack's roadmap, and the self-directed learning path behind its harness: from writing every line by hand (ModernNotes) to directing AI agents under rules I wrote." // Plain
+      intro: "GameStack's roadmap, and the self-directed learning path behind its harness. Each finished block is put to work in GameStack, and the repo shows it." // Plain
     },
     path: {
       heading: { show: ["Next season · my AI learning path", "Training montage"] },

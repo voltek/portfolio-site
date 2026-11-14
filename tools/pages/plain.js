@@ -89,8 +89,7 @@ module.exports = ctx => {
     <div class="next">${road ? `<div><h3 class="group">${esc(cp.next.groups.app)}</h3><ol class="steps">${[...road.steps, [road.goal, "goal"]].map(([t, s]) =>
       `<li class="s-${s}"><span class="mark">${s === "done" ? ICON.check : ""}</span><b>${esc(t)}</b><small>${esc(STATUS[s][0])}</small></li>`).join("")}</ol></div>` : ""}
     ${path ? `<div><h3 class="group">${esc(cp.next.groups.path)}</h3><ol class="blocks">${path.blocks.map(b =>
-      `<li><span class="tag">${esc(b.tag)}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p></div><span class="st"><i style="background:${STATUS[b.status][1]}" aria-hidden="true"></i>${esc(STATUS[b.status][0])}</span></li>`).join("")}</ol>
-      <p class="note">${text(ctx, path.intro)}</p></div>` : ""}</div>
+      `<li><span class="tag">${esc(b.tag)}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p></div><span class="st"><i style="background:${STATUS[b.status][1]}" aria-hidden="true"></i>${esc(STATUS[b.status][0])}</span></li>`).join("")}</ol></div>` : ""}</div>
   </div>
 </section>`;
 

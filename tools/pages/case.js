@@ -115,7 +115,7 @@ module.exports = (cs, ctx) => {
     ai: () => { const c = cs.ai.contrast, o = c && data.work.find(x => x.id === c.to);
       return `<div class="pair"><span></span><div class="prose">${(cs.ai.body || []).map(x => `<p>${tx(x)}</p>`).join("")}
       ${c ? `<p>${tx(c.text)}</p>${o && o.links.caseStudy ? `<a class="tlink gs" href="${esc(o.links.caseStudy)}">${esc(cp.title.replace("{name}", o.name))}${I.fwd}</a>` : ""}` : ""}</div></div>`; },
-    missing: () => `<ul class="items one">${cs.missing.items.map(g => `<li><b>${tx(g.title)}</b><span>${tx(g.text)}</span>${g.list ? `<ul class="sub">${g.list.map(x => `<li>${tx(x)}</li>`).join("")}</ul>` : ""}${links(g.files)}</li>`).join("")}</ul>`
+    missing: () => `<ul class="items one">${cs.missing.items.map(g => `<li><b>${tx(g.title)}</b><span>${tx(g.text)}</span>${g.list ? `<ul class="sub">${g.list.map(x => `<li>${tx(x)}</li>`).join("")}</ul>` : ""}${links(g.files)}</li>`).join("")}</ul>${cs.missing.outro ? `<p class="outro">${tx(cs.missing.outro)}</p>` : ""}`
   };
   const sections = SECTIONS.slice(1).filter(has).map(id => `<section id="${id}" aria-labelledby="${id}-h">${id === "decisions" ? h(id).replace(/<p>.*<\/p>/, "<span></span>") : h(id)}
     ${body[id]()}

@@ -85,16 +85,17 @@ module.exports = {
   },
 
   missing: {
-    intro: "This project is finished and I don't plan to extend it.",
     items: [
       { title: "There is no real backend.", text: "The remote layer is implemented and tested against MockWebServer, but the app binds a fake that returns two demo notes after a simulated delay, so the loading state can be seen on a device. Swapping in a real API is a one-line change in `RepositoryModule`.", files: ["di/RepositoryModule.kt"] },
       { title: "Deleting a note is not in the UI.", text: "`DeleteNoteUseCase` and `NoteDao.deleteNote` exist and are tested, but no screen calls them." },
-      { title: "Improved after the first version.", text: "On Oct 16, 2026:", list: [
+      { title: "Found in a later AI audit and fixed.", text: "On Oct 16, 2026:", list: [
         "Added a missing `@Body` to `addNote` and `updateNote` in the remote API (`8bb8570`).",
         "Made the remote repositories rethrow `CancellationException` (`8b5eb6d`; its message only mentions a test rename).",
         "Made loading show only while the list is empty (`01fda92`)."
-      ] }
-    ]
+      ] },
+      { title: "What I do differently in GameStack.", text: "Checks on every pull request (ModernNotes has no CI), decisions written down as ADRs when they are made, and commit rules that a check enforces (here, one commit message hid a fix)." }
+    ],
+    outro: "This project is finished and I don't plan to extend it." // closes the section, after the items
   },
 
   footNote: "The repo README says it was drafted with AI from the code and reviewed by me."
