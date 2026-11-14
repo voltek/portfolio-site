@@ -208,7 +208,7 @@ module.exports = ctx => {
         <p class="lede">${text(ctx, (live.lede || live.what).en)}</p>
         ${live.proof ? `<p class="rec-h">${esc((live.show && live.show.record) || "")}</p>
         <ul class="ledger">${live.proof.filter(r => r.on.includes("show")).map(r => `<li><span class="k">${esc(r.label)}<small>${text(ctx, r.note)}</small></span><i aria-hidden="true"></i><b><svg viewBox="0 0 24 24" width="32" height="32" role="img" aria-label="${esc(cp.aria.yes)}"><path d="M4 13l5 5L20 6" fill="none" style="stroke:var(--sun)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li>`).join("")}</ul>` : ""}
-        ${live.source ? `<p class="source">${text(ctx, live.source, { pin: live.pin })} · <a href="${esc(live.links.repo)}">${esc(live.links.repo.replace(/^https?:\/\//, ""))}</a></p>` : ""}
+        ${live.source ? `<p class="source">${text(ctx, live.source, { pin: live.pin })}</p>` : ""}
         <div class="ctas">${live.links.caseStudy ? `<a class="btn go" href="${esc(live.links.caseStudy)}">${esc(cp.experience.links.caseStudy)}</a>` : ""}<a class="btn alt" href="${esc(live.links.repo)}">${ICON.github}${esc(cp.experience.links.repo)}</a></div></div>
     </div>
   </div>
