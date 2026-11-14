@@ -233,7 +233,7 @@
     { name: "Agentic engineering · Claude Code", level: "strong", ai: true, at: ["gs"], note: "AI-assisted development with Claude Code agents under rules I wrote: CLAUDE.md and rules loaded by path, Skills, ADRs, hooks, a capped review loop, CI checks and a human in the loop. In ModernNotes, AI never wrote the code" },
     { name: "Spec-Driven Development", level: "strong", ai: true, at: ["gs"], note: "A living PRD and OpenSpec, each scenario naming the test that verifies it, a drift checklist and session checkpoints, from my learning path, applied in GameStack" },
     { name: "Jetpack Compose", level: "strong", at: ["gs", "mn"] },
-    { name: "Coroutines", level: "strong", at: ["gs", "mn", "ob"] },
+    { name: "Coroutines", level: "strong", at: ["gs", "mn", "ob"], note: "In my own builds, a search where each new query cancels the one running (GameStack) and tests on a test dispatcher in both; at Openbank, simple use inside an existing codebase" },
     { name: "Flow", level: "strong", at: ["gs", "mn"] },
     { name: "MVI · MVVM", level: "strong", at: ["gs", "mn"], note: "MVI in GameStack, MVVM in ModernNotes" },
     { name: "Clean Architecture", level: "strong", at: ["gs", "mn", "cb"], note: "Designed by hand in ModernNotes and kept in GameStack; at Citibanamex, inside an existing codebase" },

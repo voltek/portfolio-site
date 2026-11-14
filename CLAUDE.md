@@ -32,7 +32,8 @@ Keep shell output short: pipe build, detector, Lighthouse and git output through
 - No copy reaches the site without passing `_private/sources/copy-deck.md` with its source and Alan's approval.
 - ModernNotes is "100% hand-written": Claude never writes code in that repo, only guides and audits.
 - Nothing private enters this public repo: phone, salary, personal email, interview notes stay in `_private/`.
-- Everything committed to either repo is in English (the CV also ships in Spanish).
+- Everything committed to either repo is in English (the CV also ships in Spanish), except `_private/sources/`:
+  Alan's answers and inventories stay in Spanish.
 
 ## Cost: the live site must cost as little as possible
 
