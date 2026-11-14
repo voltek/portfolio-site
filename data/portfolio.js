@@ -31,7 +31,7 @@
     stack: ["Kotlin", "Jetpack Compose", "MVI", "MVVM", "Clean Architecture"],
     aiLine: { en: "AI agents under rules I wrote", es: "agentes de IA bajo reglas que yo escribí" },
     lede: {
-      plain: "Senior Android developer with {careerYears}+ years of client apps in banking, telecom and consumer products. In 2026 I wrote a modern Android app entirely by hand; now I build the next one with **AI agents under rules I wrote**.",
+      plain: "Senior Android developer with {careerYears}+ years of client apps in banking, telecom and consumer products. In 2026 I wrote a modern Android app by hand; now I build the next one with **AI agents under rules I wrote**.",
       show: "Modern Android and AI-assisted development · {careerYears}+ years in banking, telecom and consumer apps"
     },
     contact: {
@@ -248,7 +248,7 @@
     { name: "Coil", level: "strong", at: ["gs"], pages: false },
     { name: "Gradle", level: "strong", at: ["gs", "mn"], note: "Version catalogs and KSP in both builds", pages: false },
     { name: "CI · GitHub Actions", level: "familiar", at: ["gs"], note: "Two required checks on every GameStack PR: build, test and lint; and the commit, title and branch rules" },
-    { name: "Code review", level: "familiar", at: ["ob", "cb", "cd"], len: false, note: "Every GameStack pull request before it merges; teammates' pull requests now and then at Globant (Citibanamex, Openbank) and Claro Drive" },
+    { name: "Code review", level: "familiar", at: ["gs", "ob", "cb", "cd"], len: false, note: "Every GameStack pull request before it merges; teammates' pull requests now and then at Globant (Citibanamex, Openbank) and Claro Drive" },
     { name: "Firebase Analytics · Crashlytics", level: "familiar", at: ["ir"] },
     { name: "Google Maps · Places", level: "familiar", at: ["ir"] },
     { name: "Robolectric", level: "familiar", at: ["gs"], note: "Screen tests in GameStack", pages: false },
