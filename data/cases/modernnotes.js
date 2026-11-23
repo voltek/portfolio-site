@@ -81,7 +81,7 @@ module.exports = {
     intro: "AI was used only as an auditor: after each phase I had the finished code reviewed by an AI model, which returned corrections and explanations, never code.",
     body: ["No code-completion assistants were used at any point. This is my declaration, not something git can prove; what the repo does show is the result: the code, the tests and the fixes below."],
     // one plain line to the other case (no box): its link and name come from that project's entry
-    contrast: { text: "GameStack is the opposite experiment: AI agents write the code under rules I wrote.", to: "gs" }
+    contrast: { text: "GameStack is the opposite experiment: AI agents write the code inside a harness I designed.", to: "gs" }
   },
 
   missing: {
