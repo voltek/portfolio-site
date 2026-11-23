@@ -904,8 +904,10 @@
       const ox = (lr.left - box.left) / sx + (lw - 1000 * k) / 2, oy = (lr.top - box.top) / sy + (lh - 460 * k) / 2, arcs = [];
       [[210, 205, 500, 70, 790, 205, .2, .8], [40, 428, 500, 263, 960, 428, .06, .94]].forEach(([x0, y0, cx, cy, x2, y2, t0, t1]) => {
         for (let t = t0; t <= t1 + 1e-9; t += .025) { const u = 1 - t; arcs.push([ox + k * (u * u * x0 + 2 * u * t * cx + t * t * x2), oy + k * (u * u * y0 + 2 * u * t * cy + t * t * y2 - 50)]); } });
-      const rr = 80 * k + P;
+      const rr = 80 * k + P, mr = Math.max(w, h) * .225 + 12;
+      // the moon disc (as .bd-a::before: centred, max(w, h) * .45 across) stays clear of stars
       const free = (x, y, m) => y > 100 + m && y < h - 12 - m && x > m && x < w - m
+        && (x - w / 2) ** 2 + (y - h / 2) ** 2 > (mr + m) ** 2
         && !rects.some(([l, t, r, b]) => x > l - m && x < r + m && y > t - m && y < b + m)
         && !arcs.some(([ax, ay]) => (x - ax) ** 2 + (y - ay) ** 2 < (rr + m) ** 2);
       // how much sky is free, from a coarse grid: the counts follow it (a desktop margin's density)
@@ -914,7 +916,7 @@
         const x = rnd() * w, y = rnd() * h; if (free(x, y, m) && pts.every(([px, py]) => (x - px) ** 2 + (y - py) ** 2 > gap * gap)
           && avoid.every(([px, py]) => (x - px) ** 2 + (y - py) ** 2 > clear * clear)) pts.push([x, y]); } return pts; };
       const rnd = seeded(7);
-      const sparks = scatter(Math.round(open / 17000), 60, 24, rnd), dots = scatter(Math.round(open / 9000), 36, 4, rnd, sparks, 26);
+      const sparks = scatter(Math.round(open / 28000), 60, 24, rnd), dots = scatter(Math.round(open / 16000), 36, 4, rnd, sparks, 26);
       const svg = inner => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">${inner}</svg>`)}")`;
       bd.style.setProperty("--sky-sparks", svg(`<g fill="#FFF3B0" stroke="#111" stroke-width="2.5" stroke-linejoin="round">${sparks.map(([x, y], i) => SPARK([1, .72, .85][i % 3]).replace("%x", x.toFixed(1)).replace("%y", y.toFixed(1))).join("")}</g>`));
       bd.style.setProperty("--sky-dots", svg(`<g fill="#FFF3B0">${dots.map(([x, y], i) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${[3, 2.5, 2][i % 3]}"/>`).join("")}</g>`));
