@@ -1,7 +1,7 @@
 // Show (show.html): the parts of src/show.html that come from the data. Each key fills a {{@key}} of the template.
 // Everything the prototype drew in the browser is drawn here: every episode card (the remote only switches which one
-// shows), the strip, the skills timeline, the title card's rays and color bars.
-const { C, esc, calc, text, calcData, head, srcset, status, ICON } = require("./common.js");
+// shows), the strip, the skills place matrix, the title card's rays and color bars.
+const { C, esc, skillName, calc, matrix, text, calcData, head, srcset, status, ICON } = require("./common.js");
 const IMG = require("../../lib/images.js");
 
 /* ---------- props: one painted object per episode, its title lettered on it (show.prop in the data) ---------- */
@@ -121,7 +121,6 @@ const AI = `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4Q7.5 11 1
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile, ui = cp.experience.showUi;
-  const byId = id => data.work.find(w => w.id === id);
   const live = data.work.find(w => w.status === "in-progress"); // "Now showing"; none = the section and its link leave
   const [first, ...rest] = p.name.split(" ");
   const initials = first[0] + rest.join(" ")[0];
@@ -223,46 +222,36 @@ module.exports = ctx => {
     <ol class="blocks">${path.blocks.map(b => `<li class="${b.status}"><span class="st">${dot(b.status)}${esc(PS[b.status])}</span><span class="no">${esc(b.tag)}</span><h3>${esc(b.title)}</h3>${b.note ? `<p>${esc(b.note)}</p>` : ""}${b.steps ? `<ul class="steps">${b.steps.map(([t, s]) => `<li class="${s}">${dot(s)}${esc(t)}<span class="sr"> (${esc(PS[s])})</span></li>`).join("")}</ul>` : ""}</li>`).join("")}</ol>
     <p class="source">${text(ctx, cp.path.updated, { updated: path.updated })}</p></div></div></section>`;
 
-  /* ---------- skills: the levels, then the timeline behind the toggle ---------- */
+  /* ---------- skills: the levels, then the place matrix behind the toggle ---------- */
   const LV = ["core", "strong", "familiar"], L = cp.skills.levels;
   const indexed = data.skills.map((s, i) => ({ ...s, i }));
   const shown = indexed.filter(s => s.pages !== false);
   const byLevel = lv => shown.filter(s => !s.legacy && s.level === lv).sort((a, b) => !!b.ai - !!a.ai);
   const groups = [...LV.map(lv => [lv, byLevel(lv)]), ["legacy", shown.filter(s => s.legacy)]].filter(([, list]) => list.length);
+  // Core's chips carry their years ("Kotlin 7+ yrs"), the same length the detail shows under the name
   const tiers = groups.map(([id, list]) => `<div class="tier t-${id}"><div class="tlabel"><h3>${esc(L[id][0])}</h3><p>${esc(L[id][1])}</p></div>
-    <ul class="chips">${list.map(s => `<li class="lv-${id === "legacy" ? "era" : s.level}">${esc(s.name)}</li>`).join("")}</ul></div>`).join("");
+    <ul class="chips">${list.map(s => `<li class="lv-${id === "legacy" ? "era" : s.level}">${skillName(s.name)}${(len => id === "core" && len ? ` <small>${len}</small>` : "")(calc.len(ctx, s.i))}</li>`).join("")}</ul></div>`).join("");
 
-  // The timeline places each bar in years (decimals): the container holds where the axis starts (--x0) and ends
-  // (--x1) and the reading day (--now); a bar that is still running ends at var(--now). live.js moves --now and, in a
-  // new year, adds its column, so the HTML of the build day stays right on any later day.
-  const D = d => +C.decimal(d).toFixed(4);
-  const AX0 = Math.min(...data.work.map(w => D(C.parse(w.start)))), Y0 = Math.floor(AX0), Y1 = now.getUTCFullYear(), AX1 = Y1 + 1;
-  const cols = `${(Y0 + 1 - AX0).toFixed(3)}fr repeat(${AX1 - Y0 - 1},1fr)`;
-  const segs = s => s.at.map(r => { const ref = typeof r === "string" ? { id: r } : r, w = byId(ref.id), to = ref.end !== undefined ? ref.end : w.end;
-    return { w, start: ref.start || w.start, end: to, a: D(C.parse(ref.start || w.start)), b: to == null ? null : D(C.parse(to)), own: w.type === "project" }; })
-    .sort((x, y) => x.a - y.a);
-  // places of the same kind that follow each other (a month and a half apart at most) read as one bar with dividers
-  const runs = list => list.reduce((rs, s) => { const r = rs[rs.length - 1];
-    if (r && r.own === s.own && r.b != null && s.a - r.b <= 1.5 / 12) { r.parts.push(s); r.b = s.b; }
-    else rs.push({ a: s.a, b: s.b, own: s.own, parts: [s] });
-    return rs; }, []);
-  const end = b => b == null ? "var(--now)" : b;
-  const label = s => `<em>${esc(s.w.short || s.w.name)}</em>`, tip = s => esc(`${s.w.name} · ${C.range(s.start, s.end)}`);
-  const color = own => own ? "var(--own)" : "var(--client)";
-  const bar = r => r.parts.length === 1
-    ? `<span class="seg${r.own ? " own" : ""}" title="${tip(r.parts[0])}" style="--a:${r.a};--b:${end(r.b)};background:${color(r.own)}">${label(r.parts[0])}</span>`
-    : `<span class="seg run${r.own ? " own" : ""}" style="--a:${r.a};--b:${end(r.b)};background:${color(r.own)}">${r.parts.map((s, i) =>
-      `<span class="part${i ? " div" : ""}" title="${tip(s)}" style="--pa:${s.a};--pb:${i < r.parts.length - 1 ? r.parts[i + 1].a : "var(--b)"}">${label(s)}</span>`).join("")}</span>`;
-  const axis = `<div class="taxis" aria-hidden="true"><ol>${Array.from({ length: AX1 - Y0 }, (_, i) => `<li>’${String((Y0 + i) % 100).padStart(2, "0")}</li>`).join("")}</ol></div>`;
-  const legend = both => `<ul class="legend" aria-label="${esc(cp.aria.legend)}">${(both ? ["own", "client"] : ["client"]).map(k => `<li><i style="background:var(--${k})"></i>${esc(cp.skills.legend[k])}</li>`).join("")}</ul>`;
-  const where = s => [...new Set(s.at.map(r => typeof r === "string" ? r : r.id))].map(byId)
-    .map(w => w.type === "project" ? `<b>${esc(w.name)}</b>` : esc(w.name)).join(" · ");
-  const row = s => `<div class="trow"><div class="tname"><b>${esc(s.name)}</b><span>${calc.skill(ctx, s.i)}</span></div>
-      <div class="track" aria-hidden="true">${"<i></i>".repeat(AX1 - Y0)}${runs(segs(s)).map(bar).join("")}<span class="now-line"></span></div>
-      <p class="twhere">${where(s)}${s.note ? `<span class="tdetail">${text(ctx, s.note)}</span>` : ""}</p></div>`;
-  // the key and the axis sit in the detail's head, held under the bar while the rows scroll; legacy is one more group
-  const tlHead = legend(true) + axis;
-  const timeline = groups.map(([id, list]) => `<div class="tgroup"><div class="thead"><h3>${esc(L[id][0])}</h3></div>${list.map(row).join("")}</div>`).join("");
+  // The detail: the place matrix, in the show's terms. The columns are the places, oldest to newest, under their season
+  // headers (Season 1 · Client work, then Season 2 · Own builds; never episode numbers). A filled dot where the skill
+  // was used, a hollow one where only some of the time; a length under the name only in Core, as on its chips.
+  // On a phone the places become two-letter codes, spelled out in the key line, and the seasons keep only their number.
+  const M = matrix(data), lg = cp.skills.legend, gx = cp.experience.groups;
+  const gap = list => list.map((x, i) => (i === M.jobs.length ? "<b></b>" : "") + x).join("");
+  const code = w => w.id.toUpperCase();
+  const DOT = { on: w => w.type === "project" ? "o" : "c", part: w => w.type === "project" ? "po" : "p" };
+  const seasonHead = (n, label, from, span) => `<b class="season" style="grid-column:${from} / span ${span}"><span class="full">${esc(label)}</span><span class="abbr">${esc(ui.season)} ${n}</span></b>`;
+  // the head held under the bar is the toggle and the column heads; the key scrolls away with the rows' top. The key
+  // and the heads are for the eye: each row tells a screen reader its places in words (M.say)
+  const tlHead = `<div class="cols" aria-hidden="true">${M.jobs.length ? seasonHead(1, gx.clientShow, 1, M.jobs.length) : ""}${M.builds.length ? seasonHead(2, gx.ownShow, M.jobs.length + 2, M.builds.length) : ""}
+    ${gap(M.places.map(w => `<span class="pl"><span class="full">${esc(w.short || w.name)}<small>${calc.years(ctx, w)}</small></span><span class="abbr">${code(w)}</span></span>`))}</div>`;
+  const key = `<div class="mkey" aria-hidden="true"><ul class="legend"><li><i class="c"></i>${esc(lg.client)}</li><li><i class="o"></i>${esc(lg.own)}</li><li><i class="p"></i>${esc(lg.part)}</li></ul>
+    <p class="places">${M.places.map(w => `<span><b>${code(w)}</b> ${esc(w.short || w.name)} ${calc.years(ctx, w)}</span>`).join(" · ")}</p></div>`;
+  const row = (s, core) => { const len = core ? calc.len(ctx, s.i) : "";
+    return `<div class="mrow"><div class="tname"><b>${skillName(s.name)}</b>${len ? `<span>${len}</span>` : ""}<span class="sr">${esc(M.say(s, lg))}</span></div>
+      <div class="dots" aria-hidden="true">${gap(M.state(s).map((x, i) => `<i${x ? ` class="${DOT[x](M.places[i])}"` : ""}></i>`))}</div>
+      ${s.note ? `<p class="tdetail">${text(ctx, s.note)}</p>` : ""}</div>`; };
+  const timeline = key + groups.map(([id, list]) => `<div class="tgroup"><div class="thead"><h3>${esc(L[id][0])}</h3></div>${list.map(s => row(s, id === "core")).join("")}</div>`).join("");
 
   // the sections in the bar, in page order; Now showing leaves with the build in progress
   const nav = [["now", 0], ["skills", 1], ["guide", 2], ["contact", 3]].filter(([id]) => live || id !== "now")
@@ -280,13 +269,13 @@ module.exports = ctx => {
     status: status(p), lede: text(ctx, p.lede.show),
     stack: p.stack.map(s => `<li>${esc(s)}</li>`).join("") + `<li class="ai">${AI}${esc(p.aiLine.en)}</li>`,
     now: nowShowing, tiers, tlHead, timeline,
-    tlStyle: `--x0:${AX0};--x1:${AX1};--now:${D(now)};--cols:${cols}`,
+    matrixCols: `--jobs:${M.jobs.length};--builds:${M.builds.length}`,
     expIntro: text(ctx, cp.experience.intro.show),
     cards, reel, season,
     finale: text(ctx, p.contact.show, { tag: "i" }),
     education: `${esc(ed.degree.en)}, ${esc(ed.school)}, <span style="white-space:nowrap">${esc(ed.start)}–${esc(ed.end)}</span>`,
     languages: p.languages.map(l => `${esc(l.name.en)}, ${esc(l.level.en)}`).join(" · "),
     githubIcon: ICON.github,
-    calcData: calcData(data, Y1)
+    calcData: calcData(data, now.getUTCFullYear())
   };
 };

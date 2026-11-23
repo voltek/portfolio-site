@@ -5,6 +5,7 @@
    Roles every world defines, so the shared rules in DESIGN.md hold whatever the palette:
      --go            the one clickable color (never decoration)
      --own           purple = own builds          --client   client work, a pale blue in each world
+                                                  --client-mark  the same, deep enough for a small mark (3:1)
      --wip --done    status only (in progress, completed)
      --lv1 --lv2 --lv3 (+ -ink, -line)            Skills levels: Core, Strong, Familiar, one hue in three solid steps
    Colors painted into an illustration (a prop, an episode's backdrop) stay local to that prop, as tokens on its selector. */
@@ -44,6 +45,7 @@
   --rule:#C3C9DC; --head-rule:#141A33; --cell:#E6E9F2;
   --rule-raised:var(--rule); --cell-raised:var(--cell);   /* inside the raised Now building card */
   --client:#9FB3F2;
+  --client-mark:#5570D6;                                    /* client work as a small mark that carries meaning (the Skills matrix dots): 3:1 on --cell */
   --select:#C9D5FB; --select-ink:#141A33;                  /* text selection: a pale blue, never the clickable color */
   --screen:#0A0A0A;                                         /* the phone frame around a screenshot */
   --bar-shadow:0 10px 24px -14px rgba(5,10,30,.7);
@@ -60,7 +62,7 @@
   --paper:#0A1029; --sheet:#141E46; --sheet-line:rgba(255,255,255,.14); --paper-ink:#E7EAF7; --paper-muted:#B4BCDB;
   --rule:#323E76; --head-rule:#E7EAF7; --cell:#1C2652;
   --rule-raised:#3A4782; --cell-raised:#273370;
-  --own:#A99BFF; --client:#4F6AD2;
+  --own:#A99BFF; --client:#4F6AD2; --client-mark:#6E8BF0;
   --select:#3653D6; --select-ink:#FFFFFF;
   --lv1:#6E93FF; --lv1-ink:#0B1022;
   --lv2:color-mix(in srgb,#3B5BE0 42%,var(--paper));
@@ -75,7 +77,8 @@
   --sky:#2EC4F1; --sun:#FFD23F; --sunset:#FF9B3D;          /* the hero's sunburst, the finale's orange */
   --go:#EE4266;
   --client:#C4ECF9;
-  --night:#141414;                                          /* the room around the set: the page background */
+  --client-mark:#1A9AD6;                                    /* client work as a small mark that carries meaning (the Skills matrix dots): a deeper sky, 3:1 on the white cells */
+  --night:#141414;                                         /* the room around the set: the page background */
   --on-night:#E8E8E8; --muted:#C9C9C9; --night-rule:#3A3A3A;
   /* the title card's sky: its two ray colors, the text set straight on it, and the disc the rays pour out of
      (the sun by day; by night a moon, with craters and stars) */
@@ -93,8 +96,6 @@
   --sel:var(--ink); --sel-ink:var(--paper);                 /* text selection, the same logic: ink on light surfaces, --sun on dark ones */
   --veil:rgba(255,255,255,.35); --veil-2:rgba(255,255,255,.5);   /* panels and tracks laid over the sun */
   --ink-rule:color-mix(in srgb,var(--ink) 30%,transparent);       /* dashed rows */
-  --ink-tick:color-mix(in srgb,var(--ink) 35%,transparent);       /* year ticks */
-  --ink-hair:color-mix(in srgb,var(--ink) 16%,transparent);       /* year columns inside a track */
   --scrim:rgba(10,10,10,.82);                               /* behind the screenshot viewer */
   --screen:#000; --screen-empty:#222;                       /* a phone frame, and its screen before the image exists */
   --drop:0 14px 22px -10px rgba(0,0,0,.75);                 /* a phone held over the TV screen */
@@ -119,8 +120,6 @@
   --band:#1E2B7A; --band-ink:#F4F1E6;
   --veil:rgba(255,255,255,.1); --veil-2:rgba(255,255,255,.14);
   --ink-rule:color-mix(in srgb,#F4F1E6 30%,transparent);
-  --ink-tick:color-mix(in srgb,#F4F1E6 35%,transparent);
-  --ink-hair:color-mix(in srgb,#F4F1E6 16%,transparent);
   --finale:#22308A; --ring-a:#172064; --ring-b:#22308A;
   --bar:#131942; --bar-ink:#F4F1E6; --bar-edge:#2B3896;
   --bar-hover:#22308A; --bar-hover-line:#F4F1E6; --bar-now:#F4F1E6; --bar-now-ink:var(--ink);

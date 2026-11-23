@@ -222,8 +222,9 @@
   // Skills by level, in Alan's own judgment (words only: never bars, stars or percentages). Within a level, ai: true
   // goes first, then this order. legacy: true goes to the "View-based apps" row, in this order and one look for all.
   // pages: false keeps a skill off Plain and Show (Git, the Compose-era libraries): it stays for the CV. at: where it
-  // was used (ids from work; { id, start, end } narrows one place); its years are computed from there. len: false
-  // names the places instead of a length (a skill used in only part of a job). note: the line in the detail layer.
+  // was used (ids from work; { id, start, end } narrows one place; part: true marks a place where it was used only
+  // some of the time: the matrix's hollow dot, and no years); its years are computed from there. len: false names the
+  // places instead of a length (a skill used in only part of a job). note: the line under its row in the detail.
   skills: [
     { name: "Kotlin", level: "core", at: ["gs", "mn", "ob", "cb", { id: "ir", end: "2017-12" }] }, // none in 2018–19
     { name: "Java", level: "core", at: ["ob", "cb", "cd", "ir", "et"] },
@@ -240,7 +241,7 @@
     { name: "Architecture decisions · ADRs", level: "strong", at: ["gs"], note: "Decisions recorded as ADRs in GameStack, each naming what enforces it" },
     { name: "Hilt", level: "strong", at: ["gs", "mn"] },
     { name: "Room", level: "strong", at: ["mn"] },
-    { name: "Testing", level: "strong", at: ["gs", "mn", "cb"], note: "JUnit, MockK, Turbine and coroutines-test in both builds, MockWebServer in ModernNotes, Robolectric screen tests in GameStack; unit tests at Citibanamex and, now and then, at Openbank" },
+    { name: "Testing", level: "strong", at: ["gs", "mn", "cb", { id: "ob", part: true }], note: "JUnit, MockK, Turbine and coroutines-test in both builds, MockWebServer in ModernNotes, Robolectric screen tests in GameStack; unit tests at Citibanamex and, now and then, at Openbank" },
     { name: "Compose & Views interop", level: "strong", at: ["ob"], len: false, note: "At Openbank, Compose modules from other teams inside a View-based app" },
     { name: "Navigation Compose", level: "strong", at: ["gs", "mn"], pages: false },
     { name: "Material 3", level: "strong", at: ["gs", "mn"], pages: false },
@@ -248,12 +249,12 @@
     { name: "Coil", level: "strong", at: ["gs"], pages: false },
     { name: "Gradle", level: "strong", at: ["gs", "mn"], note: "Version catalogs and KSP in both builds", pages: false },
     { name: "CI · GitHub Actions", level: "familiar", at: ["gs"], note: "Two required checks on every GameStack PR: build, test and lint; and the commit, title and branch rules" },
-    { name: "Code review", level: "familiar", at: ["gs", "ob", "cb", "cd"], len: false, note: "Every GameStack pull request before it merges; teammates' pull requests now and then at Globant (Citibanamex, Openbank) and Claro Drive" },
+    { name: "Code review", level: "familiar", at: ["gs", { id: "ob", part: true }, { id: "cb", part: true }, { id: "cd", part: true }], len: false, note: "Every GameStack pull request before it merges; teammates' pull requests now and then at Globant (Citibanamex, Openbank) and Claro Drive" },
     { name: "Firebase Analytics · Crashlytics", level: "familiar", at: ["ir"] },
     { name: "Google Maps · Places", level: "familiar", at: ["ir"] },
     { name: "Robolectric", level: "familiar", at: ["gs"], note: "Screen tests in GameStack", pages: false },
     { name: "MVP", level: "core", legacy: true, at: ["ob", "cb", "cd", "ir"] },
-    { name: "Dagger 2", level: "core", legacy: true, at: ["ob", "cd"], note: "Also at IRONBIT toward the end. Citibanamex wired its dependencies by hand" },
+    { name: "Dagger 2", level: "core", legacy: true, at: ["ob", "cd", { id: "ir", part: true }], note: "Also at IRONBIT toward the end. Citibanamex wired its dependencies by hand" },
     { name: "RxJava", level: "familiar", legacy: true, at: ["cb", "cd"] },
     { name: "Custom Views", level: "core", legacy: true, at: ["ob"] },
     { name: "SQLite", level: "familiar", legacy: true, at: ["ir", "et"], note: "SQLite by hand for offline catalogs at Estrategia; Realm at IRONBIT" },
@@ -291,16 +292,16 @@
     },
     education: { plain: "Education and languages", show: "Education", languages: "Languages" },
     skills: {
-      intro: "Grouped by how well I know them. The years and the places behind each one are in the detail below.",
+      intro: "Grouped by how well I know them.",
       levels: {
         core: ["Core", "My daily tools, with years in production"],
         strong: ["Strong", "Confident with it, in production or in complete apps"],
         familiar: ["Familiar", "Used in real work, not a main strength"],
         legacy: ["View-based apps", "Patterns and libraries of the apps built before Compose"]
       },
-      toggle: "See years and where I used each one",
+      toggle: "See where I used each one",
       hide: "Hide detail", // the same button while the detail is open, held under the bar
-      legend: { own: "Own builds", client: "Client work" }
+      legend: { own: "Own builds", client: "Client work", part: "Some of the time" }
     },
     experience: {
       heading: { plain: "Experience", show: ["Experience · newest first", "Episode guide"] },

@@ -4,6 +4,8 @@ const C = require("../../lib/calc.js");
 const IMG = require("../../lib/images.js");
 
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+// a skill's name: "Google Maps · Places" never breaks before its dot
+const skillName = s => esc(s).replace(/ · /g, "&nbsp;· ");
 // **…** → the page's highlight (Plain: <em>)
 const md = (s, tag = "em") => s.replace(/\*\*(.+?)\*\*/g, `<${tag}>$1</${tag}>`);
 
@@ -25,11 +27,28 @@ const lapseOf = (ctx, id) => {
 const calc = {
   career: ctx => `<span data-calc="career">${ctx.careerYears}</span>`,
   lapse: (ctx, id) => open(ctx.data, id) ? `<span data-calc="lapse" data-id="${id}">${lapseOf(ctx, id)}</span>` : lapseOf(ctx, id),
-  skill: (ctx, i) => {
-    const s = ctx.data.skills[i], span = C.skillSpan(s, ctx.data, ctx.now);
-    const live = s.len !== false && s.at.some(r => typeof r === "object" ? r.end === undefined && open(ctx.data, r.id) : open(ctx.data, r));
-    return live ? `<span data-calc="skill" data-i="${i}">${span}</span>` : span;
-  }
+  // a skill's length on the pages (C.skillLength: "7+ yrs" or nothing); marked while a place that adds years still runs
+  len: (ctx, i) => {
+    const s = ctx.data.skills[i], v = C.skillLength(s, ctx.data, ctx.now);
+    const live = s.len !== false && s.at.some(r => typeof r === "object" ? !r.part && r.end === undefined && open(ctx.data, r.id) : open(ctx.data, r));
+    return live ? `<span data-calc="skill-len" data-i="${i}">${v}</span>` : v;
+  },
+  // a place's years, short ("’20–26"), for the place matrix's column heads and key line
+  years: (ctx, w) => { const v = C.yearSpanShort([w], ctx.now);
+    return w.end == null ? `<span data-calc="years-short" data-ids="${w.id}">${v}</span>` : v; }
+};
+
+// The Skills detail's place matrix, shared by Plain and Show (each draws it in its own world): the places as columns,
+// client jobs oldest first and then own builds, and per skill how each place used it: "on", "part" (some of the time,
+// the hollow dot) or "". say() is what the dots tell a screen reader, with the legend's words.
+const matrix = data => {
+  const jobs = data.work.filter(w => w.type === "job"), builds = data.work.filter(w => w.type === "project");
+  const places = [...jobs, ...builds];
+  const state = s => places.map(w => { const r = s.at.find(r => (typeof r === "string" ? r : r.id) === w.id); return !r ? "" : r.part ? "part" : "on"; });
+  const say = (s, legend) => { const st = state(s), names = test => places.filter((w, i) => test(w, st[i])).map(w => w.name);
+    return [[legend.client, names((w, x) => x === "on" && w.type === "job")], [legend.own, names((w, x) => x === "on" && w.type === "project")], [legend.part, names((w, x) => x === "part")]]
+      .filter(([, n]) => n.length).map(([k, n]) => `${k}: ${n.join(", ")}.`).join(" "); };
+  return { jobs, builds, places, state, say };
 };
 
 // A text from the data as HTML: escaped, highlighted, its templates filled. `id` is the entry {lapse} refers to,
@@ -114,4 +133,4 @@ const ICON = {
   doc: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2h7l4 4v12H5z M12 2v4h4 M8 10h5M8 13.5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>`
 };
 
-module.exports = { C, esc, md, context, open, lapseOf, calc, text, calcData, head, fillTemplate, srcset, status, ICON };
+module.exports = { C, esc, skillName, md, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };

@@ -49,7 +49,7 @@
   .skip:focus{top:12px}
   /* without JS every card and the skills detail stay in view, and the controls that need JS step aside */
   html:not(.js) .more,html:not(.js) .remote{display:none}
-  .js .tl:not(.shown) .dkey,.js .tl:not(.shown) .tgroup{display:none}
+  .js .tl:not(.shown) .dkey,.js .tl:not(.shown) .mkey,.js .tl:not(.shown) .tgroup{display:none}
   .js #screen .card:not(.on){display:none}
   html:not(.js) #screen .card + .card{border-top:4px solid var(--set-edge)}
   /* looping animations rest while their part of the page is off screen */
@@ -390,56 +390,78 @@
   /* plain-words kicker above a show title */
   .kick{font-weight:800;font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);margin-bottom:6px}
 
-  /* skills timeline: one bar per skill on an axis from the first job to the reading year, colored by where it was used */
+  /* the detail: the place matrix. One column per place, oldest to newest, under its season (the client jobs, a gap, the
+     own builds; --jobs and --builds come from the data, on .tl). A used cell is a lit white box in ink, like the chips: a
+     filled dot where the skill was used, a ring where only some of the time */
   .tl{margin-top:26px}
-  /* the detail's head: the toggle, the key and the year axis. While the rows are on screen it stays under the bar (sticky
-     inside .sk, so it leaves with the last row); its band spans the screen. From 901 px it is one line in the rows'
-     columns: the button over the names, the axis over the tracks, the key over the places */
+  /* the detail's head: the toggle and the column heads under their seasons. While the rows are on screen it stays under
+     the bar (sticky inside .sk, so it leaves with the last row); its band spans the screen */
   .cast{overflow-x:clip}
-  .dhead{position:sticky;top:70px;z-index:10;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 18px}
+  .dhead,.mrow,.mkey{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);column-gap:24px}
+  .dhead{position:sticky;top:70px;z-index:10;align-items:end}
   .dhead::before{content:"";position:absolute;inset:0 -100vmax;z-index:-1;background:var(--band);transition:box-shadow var(--t)}
   .dhead.stuck::before{box-shadow:0 4px 0 var(--ink)}
-  .dhead .more{margin-top:0}
+  .dhead .more{margin-top:0;grid-column:1/-1;justify-self:start}
+  .tl.shown .dhead .more{grid-column:1;grid-row:1}
   .dkey{display:contents}
-  .dhead .taxis{flex:1 0 100%;padding-top:2px}
-  .tl.shown .dhead,html:not(.js) .dhead{padding:12px 0 10px}
+  .dhead .cols{grid-column:2;grid-row:1}
+  .tl.shown .dhead,html:not(.js) .dhead{padding:12px 0}
   .more .t-hide,.tl.shown .more .t-see{display:none}
   .tl.shown .more .t-hide{display:inline}
-  .legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-weight:700;font-size:14.5px;list-style:none}
-  .legend li{display:flex;align-items:center;gap:7px}
-  .legend i{width:18px;height:14px;border:2.5px solid var(--ink);border-radius:4px}
+  .dots,.cols{display:grid;grid-template-columns:repeat(var(--jobs),minmax(0,1fr)) 14px repeat(var(--builds),minmax(0,1fr));column-gap:8px}
+  .cols{row-gap:7px;align-items:end}
+  .cols .season{grid-row:1;padding-bottom:5px;border-bottom:3px solid var(--band-ink);font-family:var(--tag);font-weight:400;font-size:17px;letter-spacing:.05em;line-height:1;white-space:nowrap}
+  .cols .pl,.cols > b:not(.season){grid-row:2}
+  .cols .pl{font-weight:800;font-size:14px;line-height:1.15;text-align:center}
+  .cols small{display:block;font-weight:700;font-size:13px;font-variant-numeric:tabular-nums}
+  .cols .abbr,.places{display:none}
+  .mkey{padding-top:18px}
+  .legend{grid-column:2;display:flex;flex-wrap:wrap;gap:8px 22px;font-weight:700;font-size:14.5px;list-style:none}
+  .legend li{display:flex;align-items:center;gap:8px}
+  /* an empty cell recedes into the band; only a place that used the skill lights up, so the dots stay the figure */
+  .dots i{height:32px;border:2.5px solid var(--ink);border-radius:8px;background:color-mix(in srgb,var(--band-ink) 14%,var(--band));display:grid;place-items:center}
+  .dots i[class]{background:var(--paper)}
+  /* the key's swatches are small cells too, so a dot never sits straight on the band (purple vanishes on the night one) */
+  .legend i{display:grid;place-items:center;width:30px;height:22px;border:2.5px solid var(--ink);border-radius:6px;background:var(--paper)}
+  .dots i::before,.legend i::before{content:"";box-sizing:border-box;width:16px;height:16px;border-radius:50%}
+  .legend i::before{width:13px;height:13px}
+  .dots .c::before,.legend .c::before{background:var(--client-mark);border:2.5px solid var(--ink)}
+  .dots .o::before,.legend .o::before{background:var(--own);border:2.5px solid var(--ink)}
+  .dots .p::before,.legend .p::before{background:var(--paper);border:3.5px solid var(--client-mark)}
+  .dots .po::before{border:3.5px solid var(--own)}
   .tgroup{margin-top:30px}
-  .trow,.taxis{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) minmax(0,1fr);column-gap:24px;align-items:center}
-  .trow{padding:12px 0;row-gap:6px;border-bottom:2px dashed var(--ink-rule)}
-  .trow .tname{grid-row:span 2}
-  .taxis{align-items:end}
-  .run{overflow:hidden}
-  /* bars are placed in years: --a and --b (a part: --pa, --pb) between the axis ends --x0 and --x1, set on .tl with
-     the reading day (--now) that a running bar ends at; live.js moves --now and grows the axis */
-  .part{position:absolute;top:0;bottom:0;left:calc((var(--pa) - var(--a)) / (var(--b) - var(--a)) * 100%);width:calc((var(--pb) - var(--pa)) / (var(--b) - var(--a)) * 100%)}
-  .part.div{border-left:2.5px solid var(--ink)}
-  .part.nolabel em{visibility:hidden}
-  .trow:last-child{border-bottom:0}
+  .mrow{row-gap:6px;padding:10px 0;border-bottom:2px dashed var(--ink-rule);align-items:center}
+  .mrow:last-child{border-bottom:0}
   .tname b{display:block;font-weight:800;font-size:18px;line-height:1.2}
   .tname > span{font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
-  .taxis{padding-top:14px}
-  .taxis ol{grid-column:2;display:grid;grid-template-columns:var(--cols,repeat(var(--years),1fr));list-style:none;font-family:var(--tag);font-size:16px;letter-spacing:.04em}
-  .taxis li{padding-left:4px;border-left:2px solid var(--ink-tick)}
-  /* the first year is only a few months wide: its label keeps its size and ends at the next tick, spilling left if it must */
-  .taxis li:first-child{display:flex;justify-content:flex-end;padding:0 3px 0 0;border-left:0;white-space:nowrap}
-  .track{position:relative;height:28px;display:grid;grid-template-columns:var(--cols,repeat(var(--years),1fr));background:var(--veil-2);border:2.5px solid var(--ink);border-radius:8px}
-  .track > i{border-left:1.5px solid var(--ink-hair)} .track > i:first-child{border-left:0}
-  .seg{position:absolute;top:3px;bottom:3px;min-width:9px;left:calc((var(--a) - var(--x0)) / (var(--x1) - var(--x0)) * 100%);width:calc((var(--b) - var(--a)) / (var(--x1) - var(--x0)) * 100%);border:2.5px solid var(--ink);border-radius:5px}
-  /* the place is written on its bar when it fits; narrower bars rely on the line below */
-  .seg em{position:absolute;inset:0;display:flex;align-items:center;padding:0 7px;font-style:normal;font-weight:800;font-size:12.5px;line-height:1;white-space:nowrap;overflow:hidden;color:var(--ink)}
-  .seg.own em{color:var(--paper)}
-  .seg.nolabel em{visibility:hidden}
   .thead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:6px 18px;padding-bottom:8px;border-bottom:4px solid var(--ink)}
   .thead h3{font-family:var(--title);font-weight:400;font-size:28px;line-height:1.1}
-  .now-line{position:absolute;top:-7px;bottom:-7px;left:calc((var(--now) - var(--x0)) / (var(--x1) - var(--x0)) * 100%);border-left:3px dashed var(--ink)}
-  .twhere{grid-column:2 / -1;font-size:13.5px;font-weight:700;line-height:1.4}
-  .twhere b{font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px}
-  .tdetail{display:block;font-size:13.5px;font-weight:600;margin-top:3px;line-height:1.35}
+  .tdetail{grid-column:2;font-size:13.5px;font-weight:600;line-height:1.35}
+  /* narrower, the places become two-letter codes (spelled out in the key line) and the seasons keep only their number */
+  @media (max-width:1000px){
+    .dhead,.mrow,.mkey{grid-template-columns:minmax(0,1fr) auto}
+    .dots,.cols{grid-template-columns:repeat(var(--jobs),44px) 10px repeat(var(--builds),44px);column-gap:6px}
+    .cols .full{display:none}
+    .cols .abbr{display:block}
+    .cols .season{font-size:14px;letter-spacing:.03em;text-align:center}
+    .cols .pl{font-family:var(--tag);font-weight:400;font-size:15px;letter-spacing:.04em}
+    .tdetail,.legend{grid-column:1/-1}
+    .places{display:block;grid-column:1/-1;margin-top:8px;font-weight:700;font-size:13.5px;line-height:1.6}
+    .places > span{white-space:nowrap}
+    .places b{font-family:var(--tag);font-weight:400;font-size:15px;letter-spacing:.04em}
+  }
+  @media (max-width:640px){
+    .dhead,.mrow,.mkey{column-gap:12px}
+    .dots,.cols{grid-template-columns:repeat(var(--jobs),26px) 6px repeat(var(--builds),26px);column-gap:3px}
+    .cols .season{font-size:13px}
+    .dots i{height:26px;border-width:2px;border-radius:6px}
+    .dots i::before{width:12px;height:12px}
+    .dots .c::before,.dots .o::before{border-width:2px}
+    .dots .p::before,.dots .po::before{border-width:3px}
+    .tname b{font-size:15.5px}
+    .tname > span{font-size:14px}
+    .tl.shown .more{font-size:15px;gap:6px}
+  }
 
   /* ---------- episode guide: TV plus a strip of film ---------- */
   .guide{padding:96px 0 72px;overflow-anchor:none}
@@ -532,9 +554,6 @@
     .badge svg{display:none}
     .onair{position:relative;right:auto;top:auto;width:fit-content;margin:0 auto 12px;transform:rotate(3deg)}
     .feature{grid-template-columns:minmax(0,1fr)}
-    .trow,.taxis{grid-template-columns:minmax(0,1fr);row-gap:8px}
-    .trow .tname{grid-row:auto}
-    .taxis ol,.twhere{grid-column:1;font-size:13px}
     .screen{aspect-ratio:auto}
     .card,.card.feat{position:relative;inset:auto;grid-template-columns:minmax(0,1fr);grid-template-rows:none}
     .card.feat{container-type:normal}
@@ -566,7 +585,7 @@
     .frame[aria-current="true"]{transform:none}
     .screen.tear .card,.screen.tear::after{animation:none}
   }
-  /* ---------- skills by level; the one-bar timeline waits behind the detail toggle ---------- */
+  /* ---------- skills by level; the place matrix waits behind the detail toggle ---------- */
   /* a level reads three ways at once: its row, the chip's fill (one solid step per level, nothing dashed) and its size. No offset shadow: these are not buttons */
   .tiers{margin-top:30px}
   .tier{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:24px;align-items:center;padding:20px 0;border-bottom:2px dashed var(--ink-rule)}
@@ -578,6 +597,7 @@
   .chips{display:flex;flex-wrap:wrap;gap:12px;list-style:none}
   .chips li{display:inline-flex;align-items:center;min-height:40px;padding:4px 15px;border-radius:12px;font-weight:800;font-size:15.5px;line-height:1.2}
   .chips .lv-core{min-height:48px;padding:6px 18px;background:var(--lv1);color:var(--lv1-ink);border:3px solid var(--lv1-line);font-family:var(--title);font-weight:400;font-size:18px;letter-spacing:.01em}
+  .chips .lv-core small{margin-left:8px;font-family:var(--text);font-weight:800;font-size:14px;letter-spacing:0;font-variant-numeric:tabular-nums}
   .chips .lv-strong{background:var(--lv2);color:var(--lv2-ink);border:3px solid var(--lv2-line)}
   .chips .lv-familiar{background:var(--lv3);color:var(--lv3-ink);border:2.5px solid var(--lv3-line);font-weight:700;font-size:15px}
   .chips .lv-era{min-height:36px;padding:4px 13px;color:var(--band-ink);border:2px solid var(--band-ink);font-weight:700;font-size:15px}
@@ -585,17 +605,6 @@
   .more:hover{text-decoration-thickness:5px}
   .more svg{width:18px;height:18px;transition:transform var(--t)}
   .more[aria-expanded="true"] svg{transform:rotate(180deg)}
-  .d1 .seg em{display:none}
-  @media (min-width:901px){
-    .d1 .trow,.d1 .taxis,.d1 .dhead{grid-template-columns:minmax(0,230px) minmax(0,1.5fr) minmax(0,1fr)}
-    .d1.shown .dhead,html:not(.js) .d1 .dhead{display:grid;column-gap:24px}
-    .d1.shown .dhead .more{grid-column:1;grid-row:1}
-    .d1 .dhead .taxis{display:contents}
-    .d1 .dhead .taxis ol{grid-row:1;align-self:end}
-    .d1 .dhead .legend{grid-column:3;grid-row:1}
-    .d1 .trow .tname{grid-row:auto}
-    .d1 .twhere{grid-column:3}
-  }
   @media (max-width:900px){ .tier{grid-template-columns:minmax(0,1fr);gap:12px} }
 </style>
 </head>
@@ -678,7 +687,7 @@
     <h2 class="h2" id="skills-h">{{copy.nav.show.1}}</h2>
     <p class="intro">{{copy.skills.intro}}</p>
     <div class="tiers" id="tiers">{{@tiers}}</div>
-    <div class="tl d1" id="tl" data-tl style="{{@tlStyle}}">
+    <div class="tl" id="tl" style="{{@matrixCols}}">
       <div class="sk" id="sk">
         <div class="dhead" id="dhead">
           <button class="more" id="more" type="button" aria-expanded="false" aria-controls="skill-key v-tl"><span class="t-see">{{copy.skills.toggle}}</span><span class="t-hide">{{copy.skills.hide}}</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -754,7 +763,7 @@
   const more = $("more"), tl = $("tl"), sk = $("sk"), head = $("dhead");
   // the head draws its line only while it is held under the bar (it has moved from its place at the top of .sk)
   const stuck = () => head.classList.toggle("stuck", head.getBoundingClientRect().top - sk.getBoundingClientRect().top > .5);
-  const openDetail = v => { more.setAttribute("aria-expanded", v); tl.classList.toggle("shown", v); if (v) fitLabels(); stuck(); };
+  const openDetail = v => { more.setAttribute("aria-expanded", v); tl.classList.toggle("shown", v); stuck(); };
   addEventListener("scroll", stuck, { passive:true });
   // hiding keeps the button where it was on screen, so the page returns to it instead of to rows that are gone
   more.addEventListener("click", () => { const v = !tl.classList.contains("shown"), y = more.getBoundingClientRect().top; openDetail(v);
@@ -763,8 +772,6 @@
   more.addEventListener("click", () => { try { sessionStorage.setItem("ah-skills-show", tl.classList.contains("shown") ? "open" : ""); } catch (e) {} });
   let kept = false; try { kept = sessionStorage.getItem("ah-skills-show") === "open"; } catch (e) {}
   if (kept || new URLSearchParams(location.search).has("open")) openDetail(true); // ?open: starts open, for previews
-  function fitLabels(){ document.querySelectorAll(".seg:not(.run), .part").forEach(sg => { const em = sg.querySelector("em"); if (em) sg.classList.toggle("nolabel", em.scrollWidth > sg.clientWidth); }); }
-  fitLabels(); addEventListener("resize", fitLabels); document.fonts && document.fonts.ready.then(fitLabels);
 
   /* ---------- episode guide: every card is in the page; the remote and the strip pick the one on screen ---------- */
   const screen = $("screen"), cards = [...screen.querySelectorAll(".card")], frames = [...document.querySelectorAll(".frame")];

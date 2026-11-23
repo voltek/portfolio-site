@@ -1,9 +1,8 @@
 // Plain (index.html): the parts of src/plain.html that come from the data. Each key fills a {{@key}} of the template.
-const { C, esc, calc, text, calcData, head, srcset, status, ICON } = require("./common.js");
+const { C, esc, skillName, calc, matrix, text, calcData, head, srcset, status, ICON } = require("./common.js");
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile;
-  const byId = id => data.work.find(w => w.id === id);
   const live = data.work.find(w => w.status === "in-progress"); // "Now building"; none = the box and "Next" are not drawn
   const plainShot = live && (live.shots || []).find(s => s.on.includes("plain"));
   const path = live && live.learningPath, road = live && live.roadmap;
@@ -42,26 +41,26 @@ module.exports = ctx => {
   const shown = indexed.filter(s => s.pages !== false);
   const byLevel = lv => shown.filter(s => !s.legacy && s.level === lv).sort((a, b) => !!b.ai - !!a.ai);
   const groups = [...LV.map(lv => [lv, byLevel(lv)]), ["legacy", shown.filter(s => s.legacy)]].filter(([, list]) => list.length);
+  // Core's chips carry their years ("Kotlin 7+ yrs"), the same length the detail shows under the name
   const tiers = groups.map(([id, list]) => `<div class="tier t-${id}"><div class="tlabel"><h3>${esc(L[id][0])}</h3><p>${esc(L[id][1])}</p></div>
-    <ul class="chips">${list.map(s => `<li class="lv-${id === "legacy" ? "era" : s.level}">${esc(s.name)}</li>`).join("")}</ul></div>`).join("");
+    <ul class="chips">${list.map(s => `<li class="lv-${id === "legacy" ? "era" : s.level}">${skillName(s.name)}${(len => id === "core" && len ? ` <small class="num">${len}</small>` : "")(calc.len(ctx, s.i))}</li>`).join("")}</ul></div>`).join("");
 
-  // the detail: one small cell per year, filled where the skill was used (own builds, client work or both)
-  const Y0 = Math.min(...data.work.map(w => C.parse(w.start).getUTCFullYear())), Y1 = now.getUTCFullYear();
-  const YEARS = Array.from({ length: Y1 - Y0 + 1 }, (_, i) => Y0 + i);
-  const ranges = s => s.at.map(r => { const ref = typeof r === "string" ? { id: r } : r, w = byId(ref.id);
-    return { w, from: C.parse(ref.start || w.start), to: (e => e == null ? now : C.parse(e))(ref.end !== undefined ? ref.end : w.end) }; });
-  const cell = (s, y) => { const a = C.parse(`${y}`), b = C.parse(`${y + 1}`), hit = ranges(s).filter(r => r.from < b && r.to > a);
-    const own = hit.some(r => r.w.type === "project"), client = hit.some(r => r.w.type === "job");
-    return `<i class="${own && client ? "oc" : own ? "o" : client ? "c" : ""}"${hit.length ? ` title="${y}: ${esc(hit.map(r => r.w.name).join(", "))}"` : ""}></i>`; };
-  const where = s => [...new Set(s.at.map(r => typeof r === "string" ? r : r.id))].map(id => byId(id))
-    .map(w => w.type === "project" ? `<b>${esc(w.name)}</b>` : esc(w.name)).join(" · ");
-  // the detail's head (key and year axis) stays under the bar while the rows scroll; the rows carry no axis of their own
-  const detailHead = `<ul class="key"><li><i style="background:var(--own)"></i>${esc(cp.skills.legend.own)}</li><li><i style="background:var(--client)"></i>${esc(cp.skills.legend.client)}</li></ul>
-    <div class="years lbl num" data-years aria-hidden="true" style="--n:${YEARS.length}">${YEARS.map(y => `<span>’${String(y % 100).padStart(2, "0")}</span>`).join("")}</div>`;
-  const detail = groups.map(([id, list]) => `<h3 class="group">${esc(L[id][0])}</h3>
-    ${list.map(s => `<div class="srow"><div class="name"><b>${esc(s.name)}</b><span class="num">${calc.skill(ctx, s.i)}</span></div>
-      <div class="years" data-years="${s.i}" style="--n:${YEARS.length}" aria-hidden="true">${YEARS.map(y => cell(s, y)).join("")}</div>
-      <p class="where">${where(s)}${s.note ? `<small>${text(ctx, s.note)}</small>` : ""}</p></div>`).join("")}`).join("");
+  // the detail: the place matrix. One column per place, oldest to newest: the client jobs, a gap, then the own builds.
+  // A filled dot where the skill was used, a hollow one where only some of the time; a length under the name only in
+  // Core, the level that promises years, as on its chips (the column heads say when for the rest). On a phone the heads become two-letter codes, spelled out in the key line above.
+  const M = matrix(data), lg = cp.skills.legend;
+  const gap = list => list.map((x, i) => (i === M.jobs.length ? "<b></b>" : "") + x).join("");
+  const code = w => w.id.toUpperCase();
+  const DOT = { on: w => w.type === "project" ? "o" : "c", part: w => w.type === "project" ? "po" : "p" };
+  // the head held under the bar is the toggle and the column heads, one row; the key scrolls away with the rows' top.
+  // The key and the heads are for the eye: each row tells a screen reader its places in words (M.say)
+  const detailHead = `<div class="cols" aria-hidden="true">${gap(M.places.map(w => `<span${w.type === "project" ? ' class="o"' : ""}><span class="full">${esc(w.short || w.name)}<small class="num">${calc.years(ctx, w)}</small></span><span class="abbr">${code(w)}</span></span>`))}</div>`;
+  const key = `<div class="mkey" aria-hidden="true"><ul class="key"><li><i class="c"></i>${esc(lg.client)}</li><li><i class="o"></i>${esc(lg.own)}</li><li><i class="p"></i>${esc(lg.part)}</li></ul>
+    <p class="places">${M.places.map(w => `<span><b>${code(w)}</b> ${esc(w.short || w.name)} <span class="num">${calc.years(ctx, w)}</span></span>`).join(" · ")}</p></div>`;
+  const detail = key + groups.map(([id, list]) => `<h3 class="group">${esc(L[id][0])}</h3>
+    ${list.map(s => { const len = id === "core" ? calc.len(ctx, s.i) : ""; return `<div class="mrow"><div class="name"><b>${skillName(s.name)}</b>${len ? `<span class="num">${len}</span>` : ""}<span class="sr">${esc(M.say(s, lg))}</span></div>
+      <div class="dots" aria-hidden="true">${gap(M.state(s).map((x, i) => `<i${x ? ` class="${DOT[x](M.places[i])}"` : ""}></i>`))}</div>
+      ${s.note ? `<p class="note">${text(ctx, s.note)}</p>` : ""}</div>`; }).join("")}`).join("");
 
   // experience, newest first; an employer behind several places gets one heading with its own total
   // a card with a case study carries its id: the case's "All work" lands on it (index.html#mn)
@@ -100,6 +99,7 @@ module.exports = ctx => {
     stack: p.stack.map(s => `<li>${esc(s)}</li>`).join(" "),
     expIntro: text(ctx, cp.experience.intro.plain),
     githubIcon: ICON.github,
-    calcData: calcData(data, Y1)
+    matrixCols: `--jobs:${M.jobs.length};--builds:${M.builds.length}`,
+    calcData: calcData(data, now.getUTCFullYear())
   };
 };
