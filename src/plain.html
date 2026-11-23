@@ -181,6 +181,8 @@
   /* below 1060 the heads keep their names in fixed columns; below 900 they become two-letter codes, spelled out in the key line */
   @media (max-width:1060px){
     .mrow,.mkey,.dhead{grid-template-columns:minmax(0,1fr) auto;column-gap:28px}
+    /* each row is its own grid: a note in the auto column would widen it and pull that row's dots off the heads */
+    .mrow .note{grid-column:1/-1}
     .dots,.cols{grid-template-columns:repeat(var(--jobs),80px) 10px repeat(var(--builds),80px)}
   }
   @media (max-width:900px){
