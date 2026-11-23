@@ -20,8 +20,11 @@ never scratch or temp copies; end every commit message with the attribution line
      `medium` for new or changed logic in `tools/`, `lib/`, `src/*.js`, hooks or settings; `high` for `tools/build.js`,
      `lib/calc.js`, `tools/check-data.js` or a refactor across several JS files; when two fit, the higher wins. Fix what
      it confirms; a finding that needs Alan's judgment is not fixed but goes, with a recommendation, in the pre-merge
-     note. The reviewer is always Sonnet, never Opus: in an Opus session, delegate the review to a subagent with `model:
-     "sonnet"`. UI changes were already checked with `screenshots`; other text and docs rely on the `checks` workflow.
+     note. The reviewer is always Sonnet, never Opus: delegate it to a general-purpose subagent with `model: "sonnet"`.
+     Its prompt says what changed and the bug classes to look for, and tells it to review the diff itself, then invoke
+     `/code-review <level> <PR or branch>` (the skill forks to the background and only says "launched"), wait for that fork's
+     notification, and report both reviews together. Do not act on the subagent's report before the fork's findings
+     are in it. UI changes were already checked with `screenshots`; other text and docs rely on the `checks` workflow.
      If it touches `src/`, `tokens.css` or `assets/` with finished visual work, confirm the `impeccable-finish-reviewer`
      agent ran on it (`.claude/rules/design.md`); if it did not, the report says why.
    - If still on `main`, create the branch first. Commit (`type(scope): Imperative summary`, body ≤ 6 lines), push the
