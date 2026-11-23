@@ -17,7 +17,9 @@ http.createServer((req, res) => {
   if (!fs.existsSync(file)) { res.writeHead(404, { "content-type": "text/plain" }).end("404"); return; }
   const ext = path.extname(file), type = TYPES[ext] || "application/octet-stream";
   let body = fs.readFileSync(file);
-  const headers = { "content-type": type, "cache-control": "max-age=600" };
+  // no-cache: the browser asks again on every load, so a rebuild shows without a forced reload (Pages itself caches
+  // 10 minutes; Lighthouse measures with an empty cache either way)
+  const headers = { "content-type": type, "cache-control": "no-cache" };
   if (/text|json|xml|svg|javascript/.test(type) && /gzip/.test(req.headers["accept-encoding"] || "")) {
     body = zlib.gzipSync(body); headers["content-encoding"] = "gzip";
   }
