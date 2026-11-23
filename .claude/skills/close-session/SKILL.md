@@ -21,9 +21,9 @@ never scratch or temp copies; end every commit message with the attribution line
      at most 6 lines of text under them; the `checks` workflow rejects any other shape.
    - Review, once per PR, after it is open and before merging: if the branch touches JS, the build or the harness
      (`tools/`, `lib/`, `src/*.js`, `data/`, `.claude/`), run `/code-review <level> <PR number>` yourself,
-     with the session's model (only the level is set). It forks to the background: wait for its findings message
-     before going on; an empty result is not a clean review. The level follows the actual diff: `low` for data, skill or rule text, a one-spot fix or a line
-     or two of logic; `medium` for new or changed logic in `tools/`, `lib/`, `src/*.js`, hooks or settings; `high` for
+     with the session's model (only the level is set). It forks to the background: wait for its notification before
+     going on; the result text is the review, and `(none)` means no findings. The level follows the actual diff:
+     `low` for data, skill or rule text, a one-spot fix or a line or two of logic; `medium` for new or changed logic in `tools/`, `lib/`, `src/*.js`, hooks or settings; `high` for
      `tools/build.js`, `lib/calc.js`, `tools/check-data.js` or a refactor across several JS files; when two fit, the
      higher wins. Fix what it confirms; a finding that needs Alan's judgment is not fixed but goes, with a
      recommendation, in the pre-merge note. UI changes were already checked with `screenshots`; other text and docs
