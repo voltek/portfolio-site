@@ -20,17 +20,14 @@ never scratch or temp copies; end every commit message with the attribution line
      appends the co-authors of the branch commits). Its body is `## What changed`, `## Why` and `## Verification`, with
      at most 6 lines of text under them; the `checks` workflow rejects any other shape.
    - Review, once per PR, after it is open and before merging: if the branch touches JS, the build or the harness
-     (`tools/`, `lib/`, `src/*.js`, `data/`, `.claude/`), run `/code-review <level> <PR number>` (given a branch name
-     it returns empty). The level follows the actual diff: `low` for data, skill or rule text, a one-spot fix or a line
+     (`tools/`, `lib/`, `src/*.js`, `data/`, `.claude/`), run `/code-review <level> <PR number>` yourself,
+     with the session's model (only the level is set). It forks to the background: wait for its findings message
+     before going on; an empty result is not a clean review. The level follows the actual diff: `low` for data, skill or rule text, a one-spot fix or a line
      or two of logic; `medium` for new or changed logic in `tools/`, `lib/`, `src/*.js`, hooks or settings; `high` for
      `tools/build.js`, `lib/calc.js`, `tools/check-data.js` or a refactor across several JS files; when two fit, the
      higher wins. Fix what it confirms; a finding that needs Alan's judgment is not fixed but goes, with a
-     recommendation, in the pre-merge note. The reviewer is always Sonnet, never Opus: in an Opus session, delegate it
-     to a general-purpose subagent with `model: "sonnet"`. Its prompt says what changed and the bug classes to look
-     for, and tells it to review the diff itself, invoke `/code-review` (it forks to the background), wait for that
-     fork's notification, and report both reviews together, the fork's result as findings, "none" or "empty" (empty is
-     not a clean review). UI changes were already checked with `screenshots`; other text and docs rely on the `checks`
-     workflow. If it touches `src/`, `tokens.css` or `assets/` with finished visual work, confirm the
+     recommendation, in the pre-merge note. UI changes were already checked with `screenshots`; other text and docs
+     rely on the `checks` workflow. If it touches `src/`, `tokens.css` or `assets/` with finished visual work, confirm the
      `impeccable-finish-reviewer` agent ran on it (`.claude/rules/design.md`); if it did not, the report says why.
    - Wait for the checks (`gh pr checks <n> --watch`); fix and push until they pass. Tell Alan in two lines what the PR
      changes and what the review found (with its level and why), then run `gh pr merge <n> --squash --delete-branch`:
