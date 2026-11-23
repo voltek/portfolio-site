@@ -151,7 +151,7 @@
   .onair .t > span{white-space:nowrap}
   /* the pill's "·" go before each phrase; the one that starts a line falls outside the clip (as in .stack) */
   .onair .t{display:inline-flex;flex-wrap:wrap;margin-left:-.9em;clip-path:inset(0 0 0 .9em)}
-  .onair .t > span::before{content:"·";display:inline-block;width:.9em;text-align:center}
+  .onair .t > span::before{content:"·";content:"·" / "";display:inline-block;width:.9em;text-align:center}
 
   .below{display:flex;flex-direction:column;align-items:center}
   .lower{margin:4px auto 0;width:fit-content;max-width:100%;background:var(--ink);color:var(--paper);border-radius:14px;padding:14px 26px 16px;transform:rotate(-1.5deg);text-align:center}
@@ -924,7 +924,7 @@
     };
     const clear = () => {
       const f = fin.getBoundingClientRect(), W = fin.clientWidth, H = fin.clientHeight, m = 12;
-      const blocks = [...fin.querySelectorAll(".ring2, .narrator, .bubble, .btn, .endcred")].map(el => { const r = el.getBoundingClientRect(); return [r.left - f.left, r.top - f.top, r.right - f.left, r.bottom - f.top]; });
+      const blocks = [...fin.querySelectorAll(".ring2, .droid-pal, .narrator, .bubble, .btn, .endcred")].map(el => { const r = el.getBoundingClientRect(); return [r.left - f.left, r.top - f.top, r.right - f.left, r.bottom - f.top]; });
       const placed = [];
       const ok = (x, y, a) => x - a > 4 && x + a < W - 4 && y - a > 4 && y + a < H - 4
         && !blocks.some(([l, t, r, b]) => x + a > l - m && x - a < r + m && y + a > t - m && y - a < b + m)
@@ -943,7 +943,9 @@
     // a phone's toolbar showing or hiding changes the height only: the sky stays as it is then
     new ResizeObserver(() => { if (bd.offsetWidth !== lastW) { lastW = bd.offsetWidth; later(); } }).observe(bd);
     new ResizeObserver(later).observe(fin);
-    if (document.fonts) document.fonts.ready.then(later); addEventListener("load", later); run();
+    // text can reflow without a width change: a late web font, or the finale landing (its entrance moves the portrait)
+    if (document.fonts) { document.fonts.ready.then(later); document.fonts.addEventListener("loadingdone", later); }
+    fin.addEventListener("landed", later); addEventListener("load", later); run();
   })();
 
   /* ---------- opening: the set powers on (dot, line, color bars, then the show) ---------- */
@@ -986,6 +988,7 @@
         fin.querySelector(".narrator").animate([{ opacity:0, transform:"translateY(20px) rotate(-1deg)" }, { opacity:1, transform:"rotate(-1deg)" }], { duration:450, delay:1100, fill:"backwards" })
       ];
       setTimeout(() => anims.forEach(a => a.finish()), 2600); // the final frame always lands
+      Promise.all(anims.map(a => a.finished)).then(() => fin.dispatchEvent(new Event("landed")));
     };
     const io = new IntersectionObserver(([en]) => { if (en.isIntersecting){ play(); io.disconnect(); } }, { threshold:.35 });
     io.observe(fin);
