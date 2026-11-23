@@ -206,7 +206,7 @@ if (process.argv.includes("--calc")) {
   for (const w of C.episodes(data)) console.log(`  Episode ${C.episode(data, w.id)} · ${w.name.padEnd(22)} ${C.lapse(w.start, w.end, now).padEnd(16)} ${C.range(w.start, w.end)}  ·  ${C.range(w.start, w.end, "es")}`);
   for (const [id, e] of Object.entries(data.employers)) console.log(`  ${e.name} · ${C.fill(e.note, { lapse: C.lapse(e.start, e.end, now) })}  (${C.range(e.start, e.end)})`);
   console.log("\nskills");
-  for (const s of data.skills) console.log(`  ${s.name.padEnd(36)} ${C.skillSpan(s, data, now).padEnd(30)} pages: ${C.skillLength(s, data, now) || "—"}`);
+  for (const s of data.skills) console.log(`  ${s.name.padEnd(36)} ${C.skillSpan(s, data, now).padEnd(30)} pages: ${s.level === "core" && !s.legacy && s.pages !== false && C.skillLength(s, data, now) || "—"}`);
   const gs = data.work.find(w => w.learningPath);
   if (gs) console.log(`\n${C.fill(gs.source, { pin: gs.pin })}\n${C.fill(data.copy.path.updated, { updated: gs.learningPath.updated })}`);
   console.log(`\n${C.fill(data.copy.page.description, { careerYears: years })}`);

@@ -287,7 +287,7 @@
     // home: Show's name link reads "Alan Hernández, back to top", the visible name and then this
     aria: {
       primary: "Primary", menu: "Menu", toLight: "Switch to light mode", toDark: "Switch to dark mode",
-      home: "back to top", stack: "Current stack", legend: "Bar colors", copyEmail: "Copy email address",
+      home: "back to top", stack: "Current stack", copyEmail: "Copy email address",
       episodes: "All episodes, newest first", viewLarger: "View larger: ", close: "Close",
       skip: "Skip to content", yes: "Yes"
     },
