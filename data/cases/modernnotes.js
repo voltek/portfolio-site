@@ -93,7 +93,7 @@ module.exports = {
         "Made the remote repositories rethrow `CancellationException` (`8b5eb6d`; its message only mentions a test rename).",
         "Made loading show only while the list is empty (`01fda92`)."
       ] },
-      { title: "What I do differently in GameStack.", text: "Checks on every pull request (ModernNotes has no CI), decisions written down as ADRs when they are made, and commit rules that a check enforces (here, one commit message hid a fix)." }
+      { title: "What I do differently in GameStack.", text: "Checks on every pull request (ModernNotes has no CI), decisions written down as ADRs when they are made, and commit rules that a check enforces (in ModernNotes, one commit message hid a fix)." }
     ],
     outro: "This project is finished and I don't plan to extend it." // closes the section, after the items
   },

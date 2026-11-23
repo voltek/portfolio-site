@@ -29,9 +29,9 @@
     // the phone lives only in the CV Alan sends himself, never in this public file (phase 7)
     photo: { src: "assets/alan.jpg", alt: "Portrait of Alan Hernández" },
     stack: ["Kotlin", "Jetpack Compose", "MVI", "MVVM", "Clean Architecture"],
-    aiLine: { en: "AI agents under rules I wrote", es: "agentes de IA bajo reglas que yo escribí" },
+    aiLine: { en: "AI agents inside a harness I designed", es: "agentes de IA dentro de un harness que yo diseñé" },
     lede: {
-      plain: "Senior Android developer with {careerYears}+ years of client apps in banking, telecom and consumer products. In 2026 I wrote a modern Android app by hand; now I build the next one with **AI agents under rules I wrote**.",
+      plain: "{careerYears}+ years of Android client apps in banking, telecom and consumer products. In 2026 I wrote a modern Android app by hand; now I build the next one with **AI agents inside a harness I designed**: rules and checks they can't skip.",
       show: "Modern Android and AI-assisted development · {careerYears}+ years in banking, telecom and consumer apps"
     },
     contact: {
@@ -156,7 +156,7 @@
     {
       id: "gs", type: "project", name: "GameStack", status: "in-progress",
       start: "2026-07-15", end: null, // the repo's first commit (the study plan from June does not count as use)
-      lede: { en: "A game library app in Kotlin and Compose, built with AI agents under rules I wrote, using Claude Code. The agents write the code; I review every change.", es: "App de biblioteca de videojuegos hecha con agentes de IA bajo reglas que yo escribí, usando Claude Code. Los agentes escriben el código; yo reviso cada cambio." },
+      lede: { en: "A game library app in Kotlin and Compose, built with AI agents inside a harness I designed, using Claude Code. The agents write the code; I review every change.", es: "App de biblioteca de videojuegos hecha con agentes de IA dentro de un harness que yo diseñé, usando Claude Code. Los agentes escriben el código; yo reviso cada cambio." },
       what: { en: "An Android app to search video games from IGDB, with game details coming next.", es: "App Android para buscar videojuegos en IGDB; el detalle de cada juego viene después." },
       highlights: [
         { en: "Search end to end: four screen states, debounced queries, and a failed refresh that keeps the results", es: "La búsqueda funciona de punta a punta: cuatro estados de pantalla, consultas con debounce y un refresh fallido que conserva los resultados" },
@@ -212,7 +212,7 @@
           { tag: "Block 5", title: "Agentic IDEs and other CLIs", status: "next", note: "Hands-on with other agent tools" },
           { tag: "Block 6", title: "AI APIs inside apps", status: "next", note: "AI recommendations in GameStack" },
           { tag: "Block 7", title: "Rapid prototyping", status: "next", note: "From an idea to a clickable prototype, fast" },
-          { tag: "Block 8", title: "Capstone: my own harness and loop", short: "My own harness and loop", status: "goal", note: "Where the whole path leads" }
+          { tag: "Block 8", title: "Capstone: my own harness and loop", short: "My own harness", status: "goal", note: "Where the whole path leads" }
         ]
       },
       show: { title: ["RULES OF", "THE GAME"], prop: "marquee", record: "The record so far!" }
@@ -269,7 +269,7 @@
         show: "Alan Hernández · Senior Android Developer · Animated version",
         cv: "Alan Hernández · CV"
       },
-      description: "Senior Android Developer in Mexico City: {careerYears}+ years of client apps in banking, telecom and consumer products, now building with AI agents under rules I wrote."
+      description: "Senior Android Developer in Mexico City: {careerYears}+ years of client apps in banking, telecom and consumer products, now building with AI agents inside a harness I designed."
     },
     nav: {
       plain: ["Now building", "Skills", "Experience", "Next", "Contact"],
@@ -313,10 +313,10 @@
       groups: { own: "Own builds", client: "Client work", ownShow: "Season 2 · Own builds", clientShow: "Season 1 · Client work" },
       showUi: { newer: "Newer", playAll: "Play all", pause: "Pause", older: "Older", next: "Next episodes", here: "I'm here", goal: "Goal", inProduction: "in production",
         // the episode card: "Episode 6 · Season 2", "ALAN in" (the first name, then starIn), its credits;
-        // a lane's stops say "Now: Hooks" / "Next: Game Detail"; nowKick sits over "Now showing"
+        // nowKick sits over "Now showing"
         episode: "Episode", season: "Season", starIn: "in", about: "about", at: "at", highlights: "Episode highlights",
         credits: { studio: "Studio", dates: "Dates", total: "Total", featuring: "Featuring" },
-        stopNow: "Now", stopNext: "Next", nowKick: "What I'm building now" },
+        nowKick: "What I'm building now" },
       kind: { project: "Own build", "in-progress": "In progress", completed: "Completed" },
       since: "since", // Plain, Now building: "Own build · since Jul 2026"
       links: { caseStudy: "Case study", repo: "GitHub repo" },

@@ -2,7 +2,9 @@
      as {{>contact-read.css}} with its markup {{>contact-read.html}} and script {{>copy-email.js}}. Its words come from
      profile in data/portfolio.js. A page adds only its own gap above it. The buttons are the world's buttons. ---------- */
   .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
-  .btn{display:inline-flex;align-items:center;gap:9px;height:50px;padding:0 24px;border-radius:4px;font-weight:700;font-size:16px;text-decoration:none;transition:background-color var(--t),border-color var(--t)}
+  .btn{display:inline-flex;align-items:center;gap:9px;height:50px;padding:0 24px;border-radius:4px;font-weight:700;font-size:16px;text-decoration:none;transition:background-color var(--t),border-color var(--t),transform var(--t),box-shadow var(--t)}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px -8px rgba(5,10,30,.6)}
+  .btn:active{transform:none;box-shadow:none}
   .btn svg{width:18px;height:18px}
   .btn.go{background:var(--go);color:var(--go-ink)}
   .btn.go:hover{background:var(--go-hover)}
