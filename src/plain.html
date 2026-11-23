@@ -120,6 +120,8 @@
   .mrow .note{grid-column:2;font-size:14px;line-height:1.45;color:var(--paper-muted);max-width:78ch}
   .dots,.cols{display:grid;grid-template-columns:repeat(var(--jobs),minmax(0,1fr)) 10px repeat(var(--builds),minmax(0,1fr));column-gap:6px}
   .dots i{height:26px;border-radius:4px;background:var(--cell);display:grid;place-items:center}
+  /* on light paper the cell's fill alone barely shows (1.1:1): the rows' own rule outlines it; a darker fill would cost the dot its 3:1 */
+  :root:not([data-theme="dark"]) .dots i{border:1px solid var(--rule)}
   .dots i::before,.key i{content:"";box-sizing:border-box;width:12px;height:12px;border-radius:50%}
   .dots .c::before,.key .c{background:var(--client-mark)}
   .dots .o::before,.key .o{background:var(--own)}
