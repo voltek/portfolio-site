@@ -539,7 +539,8 @@
     .quick .long{display:none} .quick .short{display:inline}
     /* phones: a fixed 42px circle instead of the name (the hero already shows it); AH turns into the photo once the hero photo scrolls away */
     .mark{position:relative;flex:none;width:42px;height:42px}
-    .mark .nm{display:none}
+    /* the name leaves the eye, not the link's name: the link stays "Alan Hernández, back to top" under the initials */
+    .mark .nm{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
     .mark .mono{display:grid;place-items:center;position:absolute;inset:0;border-radius:50%;border:3px solid var(--ink);background:var(--sun);color:var(--ink);font-family:var(--title);font-weight:400;font-size:15px;transition:transform var(--t-swap) var(--pop)}
     .mark img,.mark i{position:absolute;inset:0;width:42px;margin:0;border-width:3px}
     .face-on .mark .mono{transform:scale(0)}
@@ -621,7 +622,7 @@
 </svg>
 
 <nav class="top" id="top" aria-label="{{copy.aria.primary}}"><div class="wrap">
-  <a class="mark" href="#" aria-label="{{copy.aria.home}}"><b class="mono" aria-hidden="true">{{@initials}}</b>{{@markPhoto}}<span class="nm">{{profile.name}}</span></a>
+  <a class="mark" href="#"><b class="mono" aria-hidden="true">{{@initials}}</b>{{@markPhoto}}<span class="nm">{{profile.name}}</span><span class="sr">, {{copy.aria.home}}</span></a>
   <div class="links" id="links">{{@nav}}</div>
   <a class="quick" href="index.html"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 2h8l4 4v12H4z M12 2v4h4 M7 10h6 M7 13h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg><span class="long">{{copy.links.toPlain.long}}</span><span class="short">{{copy.links.toPlain.short}}</span></a>
   <button class="theme" id="theme" type="button" aria-label="{{copy.aria.toDark}}" data-to-dark="{{copy.aria.toDark}}" data-to-light="{{copy.aria.toLight}}">

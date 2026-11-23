@@ -86,6 +86,14 @@
   /* ---------- paper pages ---------- */
   section.page{padding:80px 0 0}
   .head{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:48px;align-items:end;padding-bottom:20px;border-bottom:2px solid var(--head-rule)}
+  /* a section's intro starts where its rows' text starts: the chips in Skills, each job's description in Experience
+     (the same four columns as .job; "Experience" needs the first two to fit) */
+  @media (min-width:1061px){
+    #skills .head{grid-template-columns:minmax(0,3.2fr) minmax(0,8.8fr);gap:32px}
+    #experience .head{grid-template-columns:minmax(0,2.6fr) minmax(0,3fr) minmax(0,5fr) minmax(0,2.6fr);gap:32px}
+    #experience .head h2{grid-column:1/3}
+    #experience .head p{grid-column:3/-1}
+  }
   .head h2{font-family:var(--display);font-weight:800;font-size:clamp(36px,4.4vw,56px);letter-spacing:-.03em;line-height:1;text-wrap:balance}
   .head p{font-size:17px;line-height:1.6;color:var(--paper-muted);max-width:62ch}
   h3.group{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--paper-muted);padding:30px 0 10px;border-bottom:1px solid var(--rule)}
