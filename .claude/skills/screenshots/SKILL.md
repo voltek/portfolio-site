@@ -62,6 +62,8 @@ with `node -e`, never print the JSON). Known: Best practices is 77 everywhere, f
 
 ## Known limits
 
+- When measuring the DOM, Edge headless lays a page out 30 px narrower than its window: to measure at W px, open a
+  window of W+30 px. A capture (`shot`) uses the full window width.
 - A long page: raise the height (e.g. 1440×4000) rather than scrolling; `#anchor` URLs come out black, also inside
   iframes, so capture the whole page and crop it in a small viewer page.
 - Sticky bars and scroll states cannot be captured. For interactive states, make a temporary sibling copy with a script
