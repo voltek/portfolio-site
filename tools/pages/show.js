@@ -230,7 +230,7 @@ module.exports = ctx => {
   const groups = [...LV.map(lv => [lv, byLevel(lv)]), ["legacy", shown.filter(s => s.legacy)]].filter(([, list]) => list.length);
   // Core's chips carry their years ("Kotlin 7+ yrs"), the same length the detail shows under the name
   const tiers = groups.map(([id, list]) => `<div class="tier t-${id}"><div class="tlabel"><h3>${esc(L[id][0])}</h3><p>${esc(L[id][1])}</p></div>
-    <ul class="chips">${list.map(s => `<li class="lv-${id === "legacy" ? "era" : s.level}">${skillName(s.name)}${id === "core" && C.skillLength(s, data, now) ? ` <small>${calc.len(ctx, s.i)}</small>` : ""}</li>`).join("")}</ul></div>`).join("");
+    <ul class="chips">${list.map(s => `<li class="lv-${id === "legacy" ? "era" : s.level}">${skillName(s.name)}${(len => id === "core" && len ? ` <small>${len}</small>` : "")(calc.len(ctx, s.i))}</li>`).join("")}</ul></div>`).join("");
 
   // The detail: the place matrix, in the show's terms. The columns are the places, oldest to newest, under their season
   // headers (Season 1 · Client work, then Season 2 · Own builds; never episode numbers). A filled dot where the skill

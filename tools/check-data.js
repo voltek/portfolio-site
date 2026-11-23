@@ -57,6 +57,8 @@ const ids = new Set(), STATUS = ["in-progress", "completed"], ON = ["plain", "sh
 data.work.forEach((w, i) => {
   const at = `work.${w.id || i}`;
   if (!w.id) err(`work[${i}]: missing id`); else if (ids.has(w.id)) err(`${at}: duplicate id`); else ids.add(w.id);
+  // the Skills matrix shows each place as its id in capitals on phones ("OB"), spelled out in the key line
+  if (w.id && !/^[a-z]{2}$/.test(w.id)) err(`${at}: id must be two lowercase letters (the matrix's phone code)`);
   if (!w.name) err(`${at}: missing name`);
   if (!["job", "project"].includes(w.type)) err(`${at}: type must be "job" or "project"`);
   span(w, at, true); // an ongoing job has no end either

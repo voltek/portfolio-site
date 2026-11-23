@@ -43,7 +43,7 @@ module.exports = ctx => {
   const groups = [...LV.map(lv => [lv, byLevel(lv)]), ["legacy", shown.filter(s => s.legacy)]].filter(([, list]) => list.length);
   // Core's chips carry their years ("Kotlin 7+ yrs"), the same length the detail shows under the name
   const tiers = groups.map(([id, list]) => `<div class="tier t-${id}"><div class="tlabel"><h3>${esc(L[id][0])}</h3><p>${esc(L[id][1])}</p></div>
-    <ul class="chips">${list.map(s => `<li class="lv-${id === "legacy" ? "era" : s.level}">${skillName(s.name)}${id === "core" && C.skillLength(s, data, now) ? ` <small class="num">${calc.len(ctx, s.i)}</small>` : ""}</li>`).join("")}</ul></div>`).join("");
+    <ul class="chips">${list.map(s => `<li class="lv-${id === "legacy" ? "era" : s.level}">${skillName(s.name)}${(len => id === "core" && len ? ` <small class="num">${len}</small>` : "")(calc.len(ctx, s.i))}</li>`).join("")}</ul></div>`).join("");
 
   // the detail: the place matrix. One column per place, oldest to newest: the client jobs, a gap, then the own builds.
   // A filled dot where the skill was used, a hollow one where only some of the time; a length under the name only in
