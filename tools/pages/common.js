@@ -120,11 +120,12 @@ const srcset = (src, size) => {
   return `src="${esc(c[240])}" srcset="${IMG.SIZES.map(w => `${esc(c[w])} ${w}w`).join(", ")}" sizes="${typeof size === "number" ? `${size}px` : size}"`;
 };
 
-// "Open to work · Mexico City (UTC−6) · …": it breaks between its phrases, never inside one. After the time zone goes
+// "Open to work · Mexico City (UTC−6) · …": it breaks between its phrases, never inside one; the "·" are drawn by the
+// pages' CSS before each phrase and clipped at the start of a line, so no line starts or ends with one. After the time zone goes
 // an empty, hidden clock phrase that live.js fills with the local time (the build's time would be wrong by reading time).
 const status = p => { const phrases = p.status.split(" · ");
-  const clock = p.timeZone ? ` <span class="clock" data-tz="${esc(p.timeZone)}" hidden><time></time> ·</span>` : "";
-  return phrases.map((s, i) => `<span>${esc(s).replace(/(\(UTC[^)]*\))/, '<span class="tz">$1</span>')}${i < phrases.length - 1 ? " ·" : ""}</span>${/\(UTC/.test(s) && i < phrases.length - 1 ? clock : ""}`).join(" "); };
+  const clock = p.timeZone ? ` <span class="clock" data-tz="${esc(p.timeZone)}" hidden><time></time></span>` : "";
+  return phrases.map((s, i) => `<span>${esc(s).replace(/(\(UTC[^)]*\))/, '<span class="tz">$1</span>')}</span>${/\(UTC/.test(s) && i < phrases.length - 1 ? clock : ""}`).join(" "); };
 
 // Icons more than one page draws
 const ICON = {

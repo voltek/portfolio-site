@@ -48,7 +48,7 @@
   .status{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;border:1px solid var(--field-rule);border-radius:999px;padding:4px 12px}
   .status i{width:8px;height:8px;border-radius:50%;background:var(--done);flex:none}
   .deck{font-size:clamp(18px,1.5vw,21px);line-height:1.5;max-width:44ch;margin-top:18px}
-  .deck em{font-style:normal;background:var(--on-field);color:var(--field);padding:.04em .3em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .deck em{white-space:nowrap;font-style:normal;background:var(--on-field);color:var(--field);padding:.04em .1em .04em .2em;margin-left:-.2em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
   .stack{list-style:none;margin-top:20px;font-weight:600;font-size:15px;line-height:1.9;color:var(--on-field-2);max-width:56ch}
   /* the dot goes before each item; the one that starts a line falls outside the clip, so no line ends or starts with it */
   .stack{display:flex;flex-wrap:wrap;margin-left:-1.6em;clip-path:inset(0 0 0 1.6em)}
@@ -69,10 +69,10 @@
   .now .since{font-size:14px;color:var(--paper-muted);margin-top:4px}
   .now .lede{font-size:16px;line-height:1.55;margin-top:10px}
   .proof{list-style:none;margin-top:18px;border-top:1px solid var(--rule)}
-  .proof li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;padding:9px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+  .proof li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--rule);align-items:baseline}
   .proof b{font-family:var(--display);font-weight:800;font-size:22px;line-height:1;color:var(--own)}
   .proof b svg{width:20px;height:20px;color:var(--own);transform:translateY(3px)}
-  .proof span{font-size:15px;line-height:1.4}
+  .proof span{font-size:15px;line-height:1.4;text-wrap:pretty}
   .proof span strong{font-weight:700}
   .proof span small{color:var(--paper-muted);font-size:14px}
   .src{font-size:13px;color:var(--paper-muted);margin-top:12px}
@@ -248,6 +248,9 @@
     .phone img,.phone span{border-radius:8px}
   }
   .status .t > span{white-space:nowrap}  /* the pill breaks between phrases, each line full before the next */
+  /* the pill's "·" go before each phrase; the one that starts a line falls outside the clip (as in .stack) */
+  .status .t{display:inline-flex;flex-wrap:wrap;margin-left:-.9em;clip-path:inset(0 0 0 .9em)}
+  .status .t > span::before{content:"·";content:"·" / "";display:inline-block;width:.9em;text-align:center}
   /* transitions already drop to 0s through the tokens; what is left is scrolling and keyframes */
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}

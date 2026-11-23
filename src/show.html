@@ -86,15 +86,17 @@
   .bd-a{background:var(--stage);container-type:size}
   /* by night: stars over the sky, and craters on the moon (its disc is .225 of the larger side, from the rays' slice) */
   .bd-a::after{content:"";position:absolute;inset:0;opacity:var(--stars);-webkit-mask-image:linear-gradient(transparent 72px,#000 96px);mask-image:linear-gradient(transparent 72px,#000 96px);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='360'%3E%3Cg fill='%23FFF3B0'%3E%3Ccircle cx='210' cy='30' r='3'/%3E%3Ccircle cx='400' cy='60' r='2.5'/%3E%3Ccircle cx='90' cy='190' r='2.5'/%3E%3Ccircle cx='350' cy='200' r='3'/%3E%3Ccircle cx='500' cy='140' r='2'/%3E%3Ccircle cx='250' cy='330' r='2.5'/%3E%3C/g%3E%3C/svg%3E") 0 0/520px 360px}
-  /* on phones the stars stay in one row at the top: a tile that repeats downward drops them under the text */
+  /* without the script the stars are these tiles; with it (.placed) each star is drawn whole in free sky, never on the text */
   /* the four-point sparkles are their own layer: on a wide screen they live in the margins either side of the text column (a sparkle peeking out from
      behind a chip or a button looked like a mistake), while the far-away dots above stay everywhere */
   .bd-a .sparks{position:absolute;inset:0;opacity:var(--stars);
     -webkit-mask-image:linear-gradient(transparent 72px,#000 96px),linear-gradient(90deg,#000 calc(50% - 480px),transparent calc(50% - 450px),transparent calc(50% + 450px),#000 calc(50% + 480px));
     -webkit-mask-composite:source-in;mask-image:linear-gradient(transparent 72px,#000 96px),linear-gradient(90deg,#000 calc(50% - 480px),transparent calc(50% - 450px),transparent calc(50% + 450px),#000 calc(50% + 480px));mask-composite:intersect;
     background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='300'%3E%3Cg fill='%23FFF3B0' stroke='%23111' stroke-width='2.5' stroke-linejoin='round'%3E%3Cpath d='M50 36l5 14 14 5-14 5-5 14-5-14-14-5 14-5z'/%3E%3Cpath d='M255 120l4 10 10 4-10 4-4 10-4-10-10-4 10-4z'/%3E%3Cpath d='M120 215l4 10 10 4-10 4-4 10-4-10-10-4 10-4z'/%3E%3Cpath d='M298 238l6 16 16 6-16 6-6 16-6-16-16-6 16-6z'/%3E%3C/g%3E%3C/svg%3E") 0 0/340px 300px}
-  /* on phones the column fills the width, so the sparkles keep to one row at the top like the dots, and the margin mask steps aside */
+  /* on phones (tiles, no script) the stars stay in one row at the top, where the text is not; the margin mask steps aside */
   @media (max-width:900px){ .bd-a::after,.bd-a .sparks{background-repeat:repeat-x} .bd-a .sparks{-webkit-mask-image:linear-gradient(transparent 72px,#000 96px);mask-image:linear-gradient(transparent 72px,#000 96px)} }
+  .bd-a.placed::after{background:var(--sky-dots) 0 0/100% 100% no-repeat}
+  .bd-a.placed .sparks{background:var(--sky-sparks) 0 0/100% 100% no-repeat;-webkit-mask-image:linear-gradient(transparent 72px,#000 96px);mask-image:linear-gradient(transparent 72px,#000 96px)}
   .bd-a::before{content:"";position:absolute;left:50%;top:50%;z-index:1;width:calc(max(100cqw,100cqh) * .45);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
     background:radial-gradient(circle at 26% 30%,var(--orb-mark) 0 7%,transparent 7.5%),radial-gradient(circle at 70% 22%,var(--orb-mark) 0 5%,transparent 5.5%),radial-gradient(circle at 80% 62%,var(--orb-mark) 0 9%,transparent 9.5%),radial-gradient(circle at 18% 72%,var(--orb-mark) 0 5%,transparent 5.5%),radial-gradient(circle at 46% 86%,var(--orb-mark) 0 4%,transparent 4.5%)}
   .orb{fill:var(--orb)}
@@ -147,6 +149,9 @@
   .onair i{flex:none;width:11px;height:11px;border-radius:50%;background:var(--done);border:2px solid var(--ink)}
   /* the line breaks between its parts, never inside one, and each line fills before the next (balanced lines left the pill wider than its text) */
   .onair .t > span{white-space:nowrap}
+  /* the pill's "·" go before each phrase; the one that starts a line falls outside the clip (as in .stack) */
+  .onair .t{display:inline-flex;flex-wrap:wrap;margin-left:-.9em;clip-path:inset(0 0 0 .9em)}
+  .onair .t > span::before{content:"·";content:"·" / "";display:inline-block;width:.9em;text-align:center}
 
   .below{display:flex;flex-direction:column;align-items:center}
   .lower{margin:4px auto 0;width:fit-content;max-width:100%;background:var(--ink);color:var(--paper);border-radius:14px;padding:14px 26px 16px;transform:rotate(-1.5deg);text-align:center}
@@ -171,7 +176,7 @@
   .copied{position:absolute;right:-6px;bottom:calc(100% + 10px);transform:rotate(-3deg);background:var(--sun);color:var(--ink);border:3px solid var(--ink);border-radius:10px;padding:3px 11px;font-weight:800;font-size:15px;white-space:nowrap}
   .copied:empty{display:none}
   /* the address and its copy button stay on one line down to a 360 px phone (360 px wide at full size) */
-  @media (max-width:420px){ .mail{width:min(100%,328px)} .mail .btn.go{flex:1;justify-content:center;padding:0 14px;gap:8px;font-size:15px} }
+  @media (max-width:560px){ .mail{width:min(100%,328px)} .mail .btn.go{flex:1;justify-content:center;padding:0 14px;gap:8px;font-size:15px} }
   .tease{display:inline-flex;align-items:center;gap:10px;margin-top:18px;font-weight:800;font-size:16px;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px}
   .tease i{width:11px;height:11px;border-radius:50%;background:var(--wip);border:2px solid var(--ink)}
   .tease:hover{text-decoration-color:var(--go)}
@@ -230,11 +235,12 @@
     .card .hl li{font-size:16px;padding:4px 12px 4px 6px}
     .card .cardlinks{grid-column:1 / -1;grid-row:4}
     /* GameStack's card: the roadmap takes the full width under the title block */
-    .card.vr{grid-template-rows:auto auto auto auto;row-gap:10px}
+    .card.vr{grid-template-rows:auto auto auto auto auto;row-gap:10px}
     .card.vr .what{font-size:18px}
     .card.vr .credline{grid-column:1;grid-row:3}
+    .card.vr .featline{grid-column:1 / -1;grid-row:4}
     .card.vr .prop{grid-row:1 / span 2;max-height:220px}
-    .card.vr .road{grid-column:1 / -1;grid-row:4}
+    .card.vr .road{grid-column:1 / -1;grid-row:5}
     .card.vr .cardlinks{grid-column:2;grid-row:3;justify-self:end;align-self:center}
   }
 
@@ -257,6 +263,10 @@
   .pin{position:absolute;top:50%;left:var(--x);width:30px;margin:-46px 0 0 -15px;z-index:2}
   .pin svg{display:block}
   .pin b{position:absolute;left:28px;top:-2px;white-space:nowrap;background:var(--pin);color:var(--paper);border:2.5px solid var(--ink);border-radius:7px;padding:2px 7px 1px;font-family:var(--tag);font-weight:400;font-size:15px;letter-spacing:.05em;transform:rotate(-4deg)}
+  /* a tight line (many steps): the pin's label goes to its left, clear of the goal */
+  .rl.tight .pin b{left:auto;right:26px}
+  .featline{font-weight:700;font-size:15px;line-height:1.4}
+  .featline b{font-weight:800;font-size:12px;letter-spacing:.11em;text-transform:uppercase;margin-right:6px}
   @container (max-width:860px){
     .rl{display:block;height:auto;padding:0;margin-top:14px}
     .rl > b{display:block;margin-bottom:30px}
@@ -267,7 +277,7 @@
     .stop.goal svg{left:-34px;bottom:-2px}
     .stop.goal em{top:50%;bottom:auto;left:34px;right:auto;transform:translateY(-50%);text-align:left}
     .pin{left:-34px;top:var(--x);margin:-34px 0 0 -15px}
-    .pin b{left:50%;top:-22px;transform:translateX(-50%) rotate(-4deg)}
+    .pin b,.rl.tight .pin b{left:50%;right:auto;top:-22px;transform:translateX(-50%) rotate(-4deg)}
   }
   @container (min-width:520px) and (max-width:860px){
     .lanes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px}
@@ -352,9 +362,10 @@
   /* the proof as Cuphead's "The Results!" ledger: the label leads, a check closes the dotted line */
   .rec-h{margin-top:24px;font-family:var(--tag);font-size:30px;letter-spacing:.05em;color:var(--sun);transform:rotate(-2deg);width:fit-content}
   .ledger{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:13px}
-  .ledger li{display:grid;grid-template-columns:auto minmax(18px,1fr) auto;align-items:end;gap:10px}
-  .ledger .k{font-weight:800;font-size:17px;line-height:1.3;max-width:31ch}
-  .ledger .k small{display:block;font-weight:600;font-size:15px;color:var(--muted)}
+  .ledger li{display:grid;grid-template-columns:auto minmax(24px,1fr) auto;align-items:end;gap:10px}
+  .ledger li{row-gap:2px}
+  .ledger .k{font-weight:800;font-size:17px;line-height:1.3}
+  .ledger small{grid-column:1 / -1;font-weight:600;font-size:15px;line-height:1.4;color:var(--muted);max-width:56ch;text-wrap:pretty}
   .ledger i{border-bottom:5px dotted var(--sun);margin-bottom:8px}
   .ledger b{font-family:var(--tag);font-weight:400;font-size:36px;letter-spacing:.04em;color:var(--sun);line-height:1;min-width:40px;text-align:right}
   .ledger svg{display:inline-block}
@@ -513,13 +524,14 @@
   .ring2 img,.ring2 span{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 18%;display:grid;place-items:center;background:var(--sun);font-family:var(--title);font-size:52px}
   .whoosh{position:absolute;right:88%;top:46%;width:150px}
   .spark{position:absolute;width:44px;z-index:-1}
+  .spark.out{display:none}
   .narrator{margin:26px auto 0;max-width:780px;background:var(--ink);color:var(--paper);border-radius:16px;padding:14px 22px 12px;font-family:var(--tag);font-weight:400;font-size:clamp(28px,3.6vw,44px);letter-spacing:.04em;line-height:1.3;transform:rotate(-1deg)}
   .narrator i{font-style:normal;color:var(--sun)}
   .finale .bubble{display:inline-block;margin-top:20px;background:var(--paper);border:4px solid var(--ink);border-radius:18px;padding:12px 20px;font-weight:800;font-size:18px;line-height:1.45;max-width:620px;text-wrap:pretty}
   .finale .ctas{margin-top:22px}
   /* the contact action alone on top; the CV and the profiles below, one size, so the ending reads as two clean rows */
   .finale .ctas.rest{margin-top:16px}
-  @media (max-width:420px){
+  @media (max-width:560px){
     .finale .ctas.rest{display:grid;grid-template-columns:1fr 1fr;width:min(100%,328px);margin-inline:auto}
     .finale .ctas.rest .btn{justify-content:center;padding:0 12px}
     .finale .ctas.rest .btn:first-child{grid-column:1 / -1}
@@ -553,8 +565,13 @@
     .whoosh{display:none}
     .badge{position:relative;left:auto;top:auto;margin:0 auto 6px;display:block}
     .badge svg{display:none}
-    .onair{position:relative;right:auto;top:auto;width:fit-content;margin:0 auto 12px;transform:rotate(3deg)}
-    .feature{grid-template-columns:minmax(0,1fr)}
+    .onair{position:relative;right:auto;top:auto;width:fit-content;margin:0 auto clamp(24px,4vw,36px);transform:rotate(3deg)}
+    .feature{grid-template-columns:minmax(0,1fr);gap:0}
+    .feature > div:last-child{display:contents}
+    .feature h3,.feature > div > .chip,.feature .lede{order:-1}
+    .feature > div > .chip{justify-self:start}
+    .feature > div:first-child{margin-top:8px}
+    .feature .rec-h,.feature .ledger,.feature .source,.feature .ctas{order:1}
     .screen{aspect-ratio:auto}
     .card,.card.feat{position:relative;inset:auto;grid-template-columns:minmax(0,1fr);grid-template-rows:none}
     .card.feat{container-type:normal}
@@ -564,7 +581,7 @@
     .shot .lbl{white-space:normal;text-align:center;font-size:11.5px;line-height:1.2}
     .card .prop{grid-column:1;grid-row:auto;max-width:360px;justify-self:center;order:0}
     .card .head{order:-1}
-    .card .what,.card .credits,.card .hl,.card .cardlinks,.card .road,.card .credline{order:1}
+    .card .what,.card .credits,.card .hl,.card .cardlinks,.card .road,.card .credline,.card .featline{order:1}
   }
   /* the narrowest phones: the menu keeps only its icon so the bar fits (the word stays as its accessible name) */
   @media (max-width:420px){ .menu{width:46px;padding:0;justify-content:center;font-size:0;gap:0} .menu svg{width:20px;height:20px}
@@ -821,11 +838,18 @@
   const bar = $("top"), links = $("links"), menu = $("menu");
   const solid = () => bar.classList.toggle("solid", scrollY > 40);
   addEventListener("scroll", solid, { passive:true }); solid();
-  // opening the menu moves the focus to its first link; tabbing out of the bar closes it
-  menu.addEventListener("click", () => { const open = links.classList.toggle("open"); menu.setAttribute("aria-expanded", open); if (open) links.querySelector("a").focus({ preventScroll:true }); });
-  bar.addEventListener("focusout", e => { if (links.classList.contains("open") && e.relatedTarget && !bar.contains(e.relatedTarget)){ links.classList.remove("open"); menu.setAttribute("aria-expanded", "false"); } });
-  links.addEventListener("click", e => { if (e.target.closest("a")){ links.classList.remove("open"); menu.setAttribute("aria-expanded", "false"); } });
-  addEventListener("keydown", e => { if (e.key === "Escape" && links.classList.contains("open")){ links.classList.remove("open"); menu.setAttribute("aria-expanded", "false"); menu.focus({ preventScroll:true }); } });
+  // opening the menu moves the focus to its first link; like Plain's, it closes with a link, Esc, a tap outside the bar,
+  // focus leaving the bar, or the page scrolling on
+  let openedAt = 0;
+  const isOpen = () => links.classList.contains("open");
+  const shut = back => { links.classList.remove("open"); menu.setAttribute("aria-expanded", "false"); if (back) menu.focus({ preventScroll:true }); };
+  menu.addEventListener("click", () => { if (isOpen()) return shut(false);
+    links.classList.add("open"); menu.setAttribute("aria-expanded", "true"); openedAt = scrollY; links.querySelector("a").focus({ preventScroll:true }); });
+  bar.addEventListener("focusout", e => { if (isOpen() && e.relatedTarget && !bar.contains(e.relatedTarget)) shut(false); });
+  links.addEventListener("click", e => { if (e.target.closest("a")) shut(false); });
+  addEventListener("keydown", e => { if (e.key === "Escape" && isOpen()) shut(true); });
+  addEventListener("pointerdown", e => { if (isOpen() && !bar.contains(e.target)) shut(false); });
+  addEventListener("scroll", () => { if (isOpen() && Math.abs(scrollY - openedAt) > 24) shut(false); }, { passive:true });
   const spy = new IntersectionObserver(entries => entries.forEach(en => {
     if (!en.isIntersecting) return;
     links.querySelectorAll("a").forEach(a => a.setAttribute("aria-current", a.getAttribute("href") === "#" + en.target.id));
@@ -860,6 +884,68 @@
     // coming back with Back (the page is restored from memory) or changing the theme in another tab: follow the saved choice
     const follow = () => { if (forced) return; try { const t = localStorage.getItem("ah-theme"); if (t === "dark" || t === "light") set(t, false); } catch (e) {} };
     addEventListener("pageshow", e => { if (e.persisted) follow(); }); addEventListener("storage", e => { if (e.key === "ah-theme") follow(); });
+  })();
+
+  /* ---------- stars in free sky: each one drawn whole where no text is, at every width ---------- */
+  // The hero's stars are placed, not tiled: a seeded scatter keeps the ones clear of every block of text (with room
+  // around it), anywhere in the sky, so every width gets the same density of stars. Contact's stars that would touch a block move to
+  // the nearest free spot. Layout units throughout: the opening animation scales the title card.
+  (() => {
+    const bd = document.querySelector(".bd-a"), title = $("show"), fin = $("contact");
+    const seeded = n => () => { n = n + 0x6D2B79F5 | 0; let t = Math.imul(n ^ n >>> 15, 1 | n); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    const SPARK = s => `<path transform="translate(%x %y) scale(${s})" d="M0-19l5 14 14 5-14 5-5 14-5-14-14-5 14-5z"/>`;
+    const sky = () => {
+      const box = bd.getBoundingClientRect(), w = bd.offsetWidth, h = bd.offsetHeight; if (!w || !h) return;
+      const sx = box.width / w, sy = box.height / h, P = 20;
+      const rects = [...title.querySelectorAll(".badge .ring, .onair, .lower, .stack li, .ctas .btn")].map(el => { const r = el.getBoundingClientRect();
+        return [(r.left - box.left) / sx - P, (r.top - box.top) / sy - P, (r.right - box.left) / sx + P, (r.bottom - box.top) / sy + P]; });
+      // the name: points along each arched line (the logo's viewBox is 1000 x 460, centred and fitted), with a radius
+      const logo = title.querySelector("h1 svg"), lr = logo.getBoundingClientRect(), lw = lr.width / sx, lh = lr.height / sy, k = Math.min(lw / 1000, lh / 460);
+      const ox = (lr.left - box.left) / sx + (lw - 1000 * k) / 2, oy = (lr.top - box.top) / sy + (lh - 460 * k) / 2, arcs = [];
+      [[210, 205, 500, 70, 790, 205, .2, .8], [40, 428, 500, 263, 960, 428, .06, .94]].forEach(([x0, y0, cx, cy, x2, y2, t0, t1]) => {
+        for (let t = t0; t <= t1 + 1e-9; t += .025) { const u = 1 - t; arcs.push([ox + k * (u * u * x0 + 2 * u * t * cx + t * t * x2), oy + k * (u * u * y0 + 2 * u * t * cy + t * t * y2 - 50)]); } });
+      const rr = 80 * k + P, mr = Math.max(w, h) * .225 + 12;
+      // the moon disc (as .bd-a::before: centred, max(w, h) * .45 across) stays clear of stars
+      const free = (x, y, m) => y > 100 + m && y < h - 12 - m && x > m && x < w - m
+        && (x - w / 2) ** 2 + (y - h / 2) ** 2 > (mr + m) ** 2
+        && !rects.some(([l, t, r, b]) => x > l - m && x < r + m && y > t - m && y < b + m)
+        && !arcs.some(([ax, ay]) => (x - ax) ** 2 + (y - ay) ** 2 < (rr + m) ** 2);
+      // how much sky is free, from a coarse grid: the counts follow it (a desktop margin's density)
+      let open = 0; for (let x = 10; x < w; x += 20) for (let y = 10; y < h; y += 20) if (free(x, y, 0)) open += 400;
+      const scatter = (count, gap, m, rnd, avoid = [], clear = 0) => { const pts = []; for (let i = 0; i < count * 40 && pts.length < count; i++) {
+        const x = rnd() * w, y = rnd() * h; if (free(x, y, m) && pts.every(([px, py]) => (x - px) ** 2 + (y - py) ** 2 > gap * gap)
+          && avoid.every(([px, py]) => (x - px) ** 2 + (y - py) ** 2 > clear * clear)) pts.push([x, y]); } return pts; };
+      const rnd = seeded(7);
+      const sparks = scatter(Math.round(open / 28000), 60, 24, rnd), dots = scatter(Math.round(open / 16000), 36, 4, rnd, sparks, 26);
+      const svg = inner => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">${inner}</svg>`)}")`;
+      bd.style.setProperty("--sky-sparks", svg(`<g fill="#FFF3B0" stroke="#111" stroke-width="2.5" stroke-linejoin="round">${sparks.map(([x, y], i) => SPARK([1, .72, .85][i % 3]).replace("%x", x.toFixed(1)).replace("%y", y.toFixed(1))).join("")}</g>`));
+      bd.style.setProperty("--sky-dots", svg(`<g fill="#FFF3B0">${dots.map(([x, y], i) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${[3, 2.5, 2][i % 3]}"/>`).join("")}</g>`));
+      bd.classList.add("placed");
+    };
+    const clear = () => {
+      const f = fin.getBoundingClientRect(), W = fin.clientWidth, H = fin.clientHeight, m = 12;
+      const blocks = [...fin.querySelectorAll(".ring2, .droid-pal, .narrator, .bubble, .btn, .endcred")].map(el => { const r = el.getBoundingClientRect(); return [r.left - f.left, r.top - f.top, r.right - f.left, r.bottom - f.top]; });
+      const placed = [];
+      const ok = (x, y, a) => x - a > 4 && x + a < W - 4 && y - a > 4 && y + a < H - 4
+        && !blocks.some(([l, t, r, b]) => x + a > l - m && x - a < r + m && y + a > t - m && y - a < b + m)
+        && placed.every(([px, py]) => (x - px) ** 2 + (y - py) ** 2 > (4 * a) ** 2);
+      fin.querySelectorAll(".spark").forEach(sp => {
+        sp.dataset.l ??= sp.style.left; sp.dataset.t ??= sp.style.top;
+        const a = parseFloat(getComputedStyle(sp).width) / 2, x0 = parseFloat(sp.dataset.l) / 100 * W + a, y0 = parseFloat(sp.dataset.t) / 100 * H + a;
+        let spot = ok(x0, y0, a) ? [x0, y0] : null;
+        for (let d = 12; !spot && d <= 320; d += 12) for (let q = 0; q < 24 && !spot; q++) { const x = x0 + d * Math.cos(q * Math.PI / 12), y = y0 + d * Math.sin(q * Math.PI / 12); if (ok(x, y, a)) spot = [x, y]; }
+        sp.classList.toggle("out", !spot);
+        if (spot) { placed.push(spot); sp.style.left = `${spot[0] - a}px`; sp.style.top = `${spot[1] - a}px`; }
+      });
+    };
+    const run = () => { sky(); clear(); };
+    let queued = false, lastW = 0; const later = () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; run(); }); } };
+    // a phone's toolbar showing or hiding changes the height only: the sky stays as it is then
+    new ResizeObserver(() => { if (bd.offsetWidth !== lastW) { lastW = bd.offsetWidth; later(); } }).observe(bd);
+    new ResizeObserver(later).observe(fin);
+    // text can reflow without a width change: a late web font, or the finale landing (its entrance moves the portrait)
+    if (document.fonts) { document.fonts.ready.then(later); document.fonts.addEventListener("loadingdone", later); }
+    fin.addEventListener("landed", later); addEventListener("load", later); run();
   })();
 
   /* ---------- opening: the set powers on (dot, line, color bars, then the show) ---------- */
@@ -902,6 +988,7 @@
         fin.querySelector(".narrator").animate([{ opacity:0, transform:"translateY(20px) rotate(-1deg)" }, { opacity:1, transform:"rotate(-1deg)" }], { duration:450, delay:1100, fill:"backwards" })
       ];
       setTimeout(() => anims.forEach(a => a.finish()), 2600); // the final frame always lands
+      Promise.all(anims.map(a => a.finished)).then(() => fin.dispatchEvent(new Event("landed")));
     };
     const io = new IntersectionObserver(([en]) => { if (en.isIntersecting){ play(); io.disconnect(); } }, { threshold:.35 });
     io.observe(fin);

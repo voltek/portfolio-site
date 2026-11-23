@@ -162,6 +162,7 @@ module.exports = ctx => {
     if (w.roadmap) return `${head}${propSVG(w)}
       <p class="what">${text(ctx, w.what.en)}</p>
       <p class="credline">${esc(studio)} · ${dates}</p>
+      <p class="featline"><b>${esc(ui.credits.featuring)}</b> ${esc(w.stack.join(" · "))}</p>
       ${road(w)}
       ${cardlinks(w.links)}`;
     const cr = ui.credits;
@@ -173,14 +174,13 @@ module.exports = ctx => {
   };
 
   // next episodes, as Cuphead's progress line: every step is a point, the goal is the last one (a flag), and the pin
-  // sits halfway between the last finished step and the first one that isn't
+  // sits halfway between the last finished step and the first one that isn't; past five steps the line is "tight"
   const PS = cp.path.status;
   const lane = (label, steps, goal) => {
     const n = steps.length, k = steps.findIndex(s => s[1] !== "done"), x = i => +(i / n * 100).toFixed(3);
     const here = k < 0 ? 100 : k === 0 ? 0 : (x(k - 1) + x(k)) / 2;
-    const say = (t, s, i) => i === k ? `${s === "now" ? ui.stopNow : ui.stopNext}: ${t}` : t;
-    return `<div class="rl"><b>${esc(label)}</b><div class="rline" style="--n:${n};--f:${here}%" role="img" aria-label="${esc(`${label}: ${steps.map(([t, s]) => `${t} (${PS[s].toLowerCase()})`).join(", ")}. ${ui.goal}: ${goal}`)}">
-      <span class="rfill"></span>${steps.map(([t, s], i) => `<span class="stop${s === "done" ? " ok" : i === k ? " at" : ""}" style="--x:${x(i)}%"><em>${esc(say(t, s, i))}</em></span>`).join("")}
+    return `<div class="rl${n > 5 ? " tight" : ""}"><b>${esc(label)}</b><div class="rline" style="--n:${n};--f:${here}%" role="img" aria-label="${esc(`${label}: ${steps.map(([t, s]) => `${t} (${PS[s].toLowerCase()})`).join(", ")}. ${ui.goal}: ${goal}`)}">
+      <span class="rfill"></span>${steps.map(([t, s], i) => `<span class="stop${s === "done" ? " ok" : i === k ? " at" : ""}" style="--x:${x(i)}%"><em>${esc(t)}</em></span>`).join("")}
       <span class="stop goal" style="--x:100%">${FLAG}<em><small>${esc(ui.goal)}</small>${esc(goal)}</em></span><span class="pin" style="--x:${here}%">${PIN}<b>${esc(ui.here)}</b></span></div></div>`;
   };
   const road = w => {
@@ -206,7 +206,7 @@ module.exports = ctx => {
       <div><h3>${esc(live.name)}</h3>${chip("in-progress")}
         <p class="lede">${text(ctx, (live.lede || live.what).en)}</p>
         ${live.proof ? `<p class="rec-h">${esc((live.show && live.show.record) || "")}</p>
-        <ul class="ledger">${live.proof.filter(r => r.on.includes("show")).map(r => `<li><span class="k">${esc(r.label)}<small>${text(ctx, r.note)}</small></span><i aria-hidden="true"></i><b><svg viewBox="0 0 24 24" width="32" height="32" role="img" aria-label="${esc(cp.aria.yes)}"><path d="M4 13l5 5L20 6" fill="none" style="stroke:var(--sun)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li>`).join("")}</ul>` : ""}
+        <ul class="ledger">${live.proof.filter(r => r.on.includes("show")).map(r => `<li><span class="k">${esc(r.label)}</span><i aria-hidden="true"></i><b><svg viewBox="0 0 24 24" width="32" height="32" role="img" aria-label="${esc(cp.aria.yes)}"><path d="M4 13l5 5L20 6" fill="none" style="stroke:var(--sun)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></b><small>${text(ctx, r.note)}</small></li>`).join("")}</ul>` : ""}
         ${live.source ? `<p class="source">${text(ctx, live.source, { pin: live.pin })}</p>` : ""}
         <div class="ctas">${live.links.caseStudy ? `<a class="btn go" href="${esc(live.links.caseStudy)}">${esc(cp.experience.links.caseStudy)}</a>` : ""}<a class="btn alt" href="${esc(live.links.repo)}">${ICON.github}${esc(cp.experience.links.repo)}</a></div></div>
     </div>
