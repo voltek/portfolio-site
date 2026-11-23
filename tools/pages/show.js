@@ -234,7 +234,7 @@ module.exports = ctx => {
 
   // The detail: the place matrix, in the show's terms. The columns are the places, oldest to newest, under their season
   // headers (Season 1 · Client work, then Season 2 · Own builds; never episode numbers). A filled dot where the skill
-  // was used, a hollow one where only some of the time; the length under the name only when client work gives one.
+  // was used, a hollow one where only some of the time; a length under the name only in Core, as on its chips.
   // On a phone the places become two-letter codes, spelled out in the key line, and the seasons keep only their number.
   const M = matrix(data), lg = cp.skills.legend, gx = cp.experience.groups;
   const gap = list => list.map((x, i) => (i === M.jobs.length ? "<b></b>" : "") + x).join("");
@@ -247,11 +247,11 @@ module.exports = ctx => {
     ${gap(M.places.map(w => `<span class="pl"><span class="full">${esc(w.short || w.name)}<small>${calc.years(ctx, w)}</small></span><span class="abbr">${code(w)}</span></span>`))}</div>`;
   const key = `<div class="mkey" aria-hidden="true"><ul class="legend"><li><i class="c"></i>${esc(lg.client)}</li><li><i class="o"></i>${esc(lg.own)}</li><li><i class="p"></i>${esc(lg.part)}</li></ul>
     <p class="places">${M.places.map(w => `<span><b>${code(w)}</b> ${esc(w.short || w.name)} ${calc.years(ctx, w)}</span>`).join(" · ")}</p></div>`;
-  const row = s => { const len = calc.len(ctx, s.i);
+  const row = (s, core) => { const len = core ? calc.len(ctx, s.i) : "";
     return `<div class="mrow"><div class="tname"><b>${skillName(s.name)}</b>${len ? `<span>${len}</span>` : ""}<span class="sr">${esc(M.say(s, lg))}</span></div>
       <div class="dots" aria-hidden="true">${gap(M.state(s).map((x, i) => `<i${x ? ` class="${DOT[x](M.places[i])}"` : ""}></i>`))}</div>
       ${s.note ? `<p class="tdetail">${text(ctx, s.note)}</p>` : ""}</div>`; };
-  const timeline = key + groups.map(([id, list]) => `<div class="tgroup"><div class="thead"><h3>${esc(L[id][0])}</h3></div>${list.map(row).join("")}</div>`).join("");
+  const timeline = key + groups.map(([id, list]) => `<div class="tgroup"><div class="thead"><h3>${esc(L[id][0])}</h3></div>${list.map(s => row(s, id === "core")).join("")}</div>`).join("");
 
   // the sections in the bar, in page order; Now showing leaves with the build in progress
   const nav = [["now", 0], ["skills", 1], ["guide", 2], ["contact", 3]].filter(([id]) => live || id !== "now")

@@ -76,7 +76,7 @@ those changes, run `node tools/og.js` (Edge headless) and commit the PNG; under 
 2. Years come from `at`. To narrow one place, `{ id: "ir", end: "2017-12" }` instead of `"ir"`; `{ id: "ob", part: true }`
    is a place where it was used only some of the time (the matrix's hollow dot, no years); `len: false` keeps the
    length off the pages and names the places in the CV (a skill used in only part of a job). The pages show a length
-   only when client work alone gives a year or more (`node tools/check-data.js --calc` lists them).
+   only for Core (chips and matrix rows), and there only when client work alone gives a year or more (`node tools/check-data.js --calc` lists them).
 
 ## New block in the learning path (or a block changes status)
 

@@ -46,8 +46,8 @@ module.exports = ctx => {
     <ul class="chips">${list.map(s => `<li class="lv-${id === "legacy" ? "era" : s.level}">${skillName(s.name)}${id === "core" && C.skillLength(s, data, now) ? ` <small class="num">${calc.len(ctx, s.i)}</small>` : ""}</li>`).join("")}</ul></div>`).join("");
 
   // the detail: the place matrix. One column per place, oldest to newest: the client jobs, a gap, then the own builds.
-  // A filled dot where the skill was used, a hollow one where only some of the time; the length under the name only
-  // when client work gives one. On a phone the heads become two-letter codes, spelled out in the key line above.
+  // A filled dot where the skill was used, a hollow one where only some of the time; a length under the name only in
+  // Core, the level that promises years, as on its chips (the column heads say when for the rest). On a phone the heads become two-letter codes, spelled out in the key line above.
   const M = matrix(data), lg = cp.skills.legend;
   const gap = list => list.map((x, i) => (i === M.jobs.length ? "<b></b>" : "") + x).join("");
   const code = w => w.id.toUpperCase();
@@ -58,7 +58,7 @@ module.exports = ctx => {
   const key = `<div class="mkey" aria-hidden="true"><ul class="key"><li><i class="c"></i>${esc(lg.client)}</li><li><i class="o"></i>${esc(lg.own)}</li><li><i class="p"></i>${esc(lg.part)}</li></ul>
     <p class="places">${M.places.map(w => `<span><b>${code(w)}</b> ${esc(w.short || w.name)} <span class="num">${calc.years(ctx, w)}</span></span>`).join(" · ")}</p></div>`;
   const detail = key + groups.map(([id, list]) => `<h3 class="group">${esc(L[id][0])}</h3>
-    ${list.map(s => { const len = calc.len(ctx, s.i); return `<div class="mrow"><div class="name"><b>${skillName(s.name)}</b>${len ? `<span class="num">${len}</span>` : ""}<span class="sr">${esc(M.say(s, lg))}</span></div>
+    ${list.map(s => { const len = id === "core" ? calc.len(ctx, s.i) : ""; return `<div class="mrow"><div class="name"><b>${skillName(s.name)}</b>${len ? `<span class="num">${len}</span>` : ""}<span class="sr">${esc(M.say(s, lg))}</span></div>
       <div class="dots" aria-hidden="true">${gap(M.state(s).map((x, i) => `<i${x ? ` class="${DOT[x](M.places[i])}"` : ""}></i>`))}</div>
       ${s.note ? `<p class="note">${text(ctx, s.note)}</p>` : ""}</div>`; }).join("")}`).join("");
 
