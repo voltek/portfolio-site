@@ -55,6 +55,8 @@
   .stack li{white-space:nowrap}
   .stack li::before{content:"·";display:inline-block;width:1.6em;text-align:center}
 {{>contact-read.css}}
+  /* the hero's two buttons share a line on a phone */
+  @media (max-width:420px){ .open .ctas .btn{padding:0 14px} }
   /* now building: the build in progress, read from the data */
   .now{--rule:var(--rule-raised);--cell:var(--cell-raised);background:var(--sheet);color:var(--paper-ink);border:1px solid var(--sheet-line);border-radius:6px;box-shadow:var(--lift)}
   .now .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--rule)}
