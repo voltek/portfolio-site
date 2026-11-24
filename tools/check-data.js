@@ -83,6 +83,7 @@ data.work.forEach((w, i) => {
   if (!Array.isArray(w.highlights) || w.highlights.length !== 3) err(`${at}: exactly three highlights per card`);
   else w.highlights.forEach((h, j) => { bi(h, `${at}.highlights[${j}]`); tokens(h, `${at}.highlights[${j}]`); });
   if (!Array.isArray(w.stack) || !w.stack.length) err(`${at}: missing stack`);
+  else if (w.stack.length > (w.type === "job" ? 9 : 12)) warn(`${at}.stack: ${w.stack.length} tags, more than 9 for a job or 12 for a project no longer scans`);
   if (!w.show || !w.show.title) warn(`${at}: no Show title card`);
   (w.shots || []).forEach((s, j) => {
     const where = `${at}.shots[${j}]`;
@@ -91,8 +92,9 @@ data.work.forEach((w, i) => {
     if (!s.alt) warn(`${where}: alt text pending`);
     if (!Array.isArray(s.on) || !s.on.every(o => ON.includes(o))) err(`${where}: "on" must list ${ON.join(", ")}`);
   });
-  if (w.cv) { if (w.cv.note) bi(w.cv.note, `${at}.cv.note`); (w.cv.more || []).forEach((t, j) => bi(t, `${at}.cv.more[${j}]`)); }
-  if (w.type === "job" && w.employer && !(w.cv && w.cv.note)) err(`${at}.cv.note: the CV shows it beside a client's name`);
+  if (w.note) { bi(w.note, `${at}.note`); tokens(w.note, `${at}.note`); }
+  if (w.cv) { (w.cv.more || []).forEach((t, j) => bi(t, `${at}.cv.more[${j}]`)); }
+  if (w.type === "job" && w.employer && !w.note) err(`${at}.note: Plain and the CV say what the client is with it`);
   if (w.pin) {
     if (!w.pin.date) err(`${at}.pin: needs the day the claims were checked`);
     else date(w.pin.date, `${at}.pin.date`);
@@ -222,7 +224,7 @@ if (process.argv.includes("--calc")) {
   console.log(`Computed against ${day}\n\ncareer: ${years}+ years`);
   console.log("\nepisodes and lengths");
   for (const w of C.episodes(data)) console.log(`  Episode ${C.episode(data, w.id)} · ${w.name.padEnd(22)} ${C.lapse(w.start, w.end, now).padEnd(16)} ${C.range(w.start, w.end)}  ·  ${C.range(w.start, w.end, "es")}`);
-  for (const [id, e] of Object.entries(data.employers)) console.log(`  ${e.name} · ${C.fill(e.note, { lapse: C.lapse(e.start, e.end, now) })}  (${C.range(e.start, e.end)})`);
+  for (const [id, e] of Object.entries(data.employers)) console.log(`  ${e.name} · ${C.fill(e.note.split("**").join(""), { lapse: C.lapse(e.start, e.end, now) })}  (${C.range(e.start, e.end)})`);
   console.log("\nskills");
   for (const s of data.skills.filter(s => s.at.length)) console.log(`  ${s.name.padEnd(36)} ${C.skillSpan(s, data, now).padEnd(30)} pages: ${s.level === "core" && !s.legacy && s.pages !== false && C.skillLength(s, data, now) || "—"}`);
   const gs = data.work.find(w => w.learningPath);

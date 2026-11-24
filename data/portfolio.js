@@ -57,14 +57,15 @@
       role: { en: "Senior Android Developer", es: "Senior Android Developer" },
       place: { en: "Mexico City", es: "Ciudad de México" }, // CV
       intro: { en: "Android developer on two banking clients.", es: "Desarrollador Android en dos clientes bancarios." },
-      note: "{lapse} in total, across the two clients below" // Plain, under the employer's name, above its two clients
+      note: "**{lapse} in total**, across the two clients below" // Plain, under the employer's name, above its two clients
     }
   },
 
   // Jobs and projects, oldest first: this order is also the episode order (Show numbers them from it).
   // type: "job" (client work, Season 1) · "project" (own build, Season 2; status "in-progress" | "completed").
   // highlights: three per card, always (a fourth dilutes the scan; what does not fit goes to the CV).
-  // cv: what only the CV adds: more (bullets after the highlights) and note (beside a client's name under its employer).
+  // note: what a client of an employer is, under its name (Plain) or beside it (CV); Show says studio instead.
+  // cv: what only the CV adds: more (bullets after the highlights).
   // show: the Show episode's title card and its prop (an unknown prop falls back to the generic one).
   work: [
     {
@@ -78,7 +79,7 @@
         { en: "Started an offline ticketing pilot from scratch: SQLite catalogs and Bluetooth printing (Zebra SDK)", es: "Inicié desde cero un piloto de boletas sin conexión: catálogos en SQLite e impresión por Bluetooth (SDK de Zebra)" },
         { en: "Worked on a board game app's redesign: refactors, new animations and AdMob ads", es: "Trabajé en el rediseño de una app de juego de mesa: refactors, animaciones nuevas y anuncios de AdMob" }
       ],
-      stack: ["Java", "SQLite", "REST", "Bluetooth printing"],
+      stack: ["Java", "SQLite", "REST APIs", "Bluetooth printing", "AdMob"],
       show: { title: ["FIRST", "TICKET"], prop: "ticket" }
     },
     {
@@ -92,7 +93,7 @@
         { en: "Currency, weather and nearby places screens", es: "Pantallas de divisas, clima y lugares cercanos" },
         { en: "Kotlin in production in 2017, the year Google made it official for Android", es: "Kotlin en producción en 2017, el año en que Google lo hizo oficial para Android" }
       ],
-      stack: ["Java", "Kotlin", "Google Maps", "Places", "Firebase"],
+      stack: ["Java", "Kotlin", "Google Maps", "Places", "Firebase Analytics", "Crashlytics", "Retrofit", "Realm", "MVP"],
       cv: { more: [{ en: "Minor work on KidZania's visitor and kiosk apps", es: "Trabajo menor en las apps de visitantes y de kiosco de KidZania" }] },
       show: { title: ["Bon", "Voyage"], prop: "suitcase" }
     },
@@ -107,36 +108,36 @@
         { en: "Compressed photos so large images no longer ran out of memory", es: "Comprimí las fotos para que las imágenes grandes dejaran de agotar la memoria" },
         { en: "File sharing by email or link, with editable permissions", es: "Compartir archivos por correo o enlace, con permisos editables" }
       ],
-      stack: ["Java", "MVP", "RxJava", "Dagger 2", "Glide", "EventBus"],
+      stack: ["Java", "RxJava", "Dagger 2", "Glide", "EventBus", "Retrofit", "MVP"],
       show: { title: ["PAPER", "CHASE"], prop: "scanner" }
     },
     {
       id: "cb", type: "job", name: "Citibanamex", employer: "globant",
       start: "2020-02", end: "2020-08",
       studio: { en: "Globant, for Citibanamex", es: "Globant, para Citibanamex" },
+      note: { en: "A Mexican bank, then part of Citigroup", es: "Banco mexicano, entonces parte de Citigroup" },
       what: { en: "Improvements to the app's CoDi flow, the digital payments system of Mexico's central bank.", es: "Mejoras al flujo de CoDi de la app, el sistema de pagos digitales del banco central de México." },
       highlights: [
         { en: "Improved QR reading and generation, and built the specified security steps natively", es: "Mejoré la lectura y generación de códigos QR y construí de forma nativa los pasos de seguridad especificados" },
         { en: "Worked on payment history and the QR or NFC switch", es: "Trabajé en el historial de pagos y en el cambio entre QR y NFC" },
         { en: "Wrote unit tests inside a Clean Architecture codebase", es: "Escribí pruebas unitarias dentro de una base de código con Clean Architecture" }
       ],
-      stack: ["Java", "Kotlin", "RxJava", "MVP", "Clean Architecture", "Retrofit"],
-      cv: { note: { en: "A Mexican bank, then part of Citigroup", es: "Banco mexicano, entonces parte de Citigroup" } },
+      stack: ["Java", "Kotlin", "RxJava", "Retrofit", "MVP", "Clean Architecture", "Unit testing"],
       show: { title: ["QUICK RESPONSE"], prop: "qr" }
     },
     {
       id: "ob", type: "job", name: "Openbank", employer: "globant",
       start: "2020-08", end: "2026-02",
       studio: { en: "Globant, for Openbank (Spain)", es: "Globant, para Openbank (España)" },
-      what: { en: "A Spanish bank's app, mostly with the deposits team: a Java codebase from 2018, where new code went into Kotlin.", es: "App de un banco español, sobre todo con el equipo de depósitos: una base de código en Java de 2018, donde el código nuevo se escribía en Kotlin." },
+      note: { en: "Santander Group's digital bank · Spain", es: "Banco digital del Grupo Santander · España" },
+      what: { en: "The bank's Android app, mostly with the deposits team: a Java codebase from 2018, where new code went into Kotlin.", es: "App Android del banco, sobre todo con el equipo de depósitos: una base de código en Java de 2018, donde el código nuevo se escribía en Kotlin." },
       highlights: [
         { en: "Built the full deposit reinvestment flow", es: "Construí el flujo completo de reinversión de depósitos" },
         { en: "Implemented the deposits redesign from its user stories: rates from the API instead of fixed, a wizard cut from 5 steps to 4, preferential renewal rates", es: "Implementé el rediseño de depósitos a partir de sus historias de usuario: tasas desde la API en lugar de fijas, un asistente reducido de 5 pasos a 4 y tasas preferenciales de renovación" },
         { en: "Integrated whole sections built by other teams (profile, notifications) as Kotlin + Compose modules", es: "Integré secciones completas hechas por otros equipos (perfil, notificaciones) como módulos Kotlin + Compose" }
       ],
-      stack: ["Kotlin", "Java", "MVP", "Coroutines", "Dagger 2", "Custom Views", "Bitrise"],
+      stack: ["Kotlin", "Java", "Custom Views", "Compose & Views interop", "Coroutines", "Dagger 2", "Retrofit", "MVP"],
       cv: {
-        note: { en: "Santander Group's digital bank · Spain", es: "Banco digital del Grupo Santander · España" },
         more: [
           { en: "Worked across most of the app (cards, accounts, keys and contracts) and unified its PDF contract viewer", es: "Trabajé en la mayor parte de la app (tarjetas, cuentas, claves y contratos) y unifiqué su visor de contratos en PDF" },
           { en: "Built custom views, such as the renewal detail on each deposit in the list, which changed color depending on the deposit", es: "Construí custom views, como el detalle de renovación de cada depósito en la lista, que cambiaba de color según el depósito" },
@@ -154,7 +155,7 @@
         { en: "13 unit test classes and a DAO test", es: "13 clases de pruebas unitarias y una prueba del DAO" },
         { en: "Sort order saved with DataStore and applied in the database query", es: "El orden se guarda con DataStore y se aplica en la consulta a la base de datos" }
       ],
-      stack: ["Kotlin", "Compose", "MVVM", "Room", "Hilt", "Flow"],
+      stack: ["Kotlin", "Compose", "Coroutines", "Flow", "Hilt", "Room", "DataStore", "Retrofit", "MVVM", "Clean Architecture", "JUnit", "MockK"],
       links: { repo: "https://github.com/voltek/ModernNotes", caseStudy: "modernnotes.html" },
       pin: { date: "2026-10-16", commit: "3274436" }, // the case file's pin; tools/repo-changes.js reads it here
       // on: where each screen appears ("plain", "show", "case"). No screens = the designed empty state.
@@ -175,7 +176,7 @@
         { en: "IGDB queries in its Apicalypse language, behind Twitch OAuth", es: "Consultas a IGDB en su lenguaje Apicalypse, detrás de OAuth de Twitch" },
         { en: "MVI with Clean Architecture; screen tests with Robolectric", es: "MVI con Clean Architecture; pruebas de pantalla con Robolectric" }
       ],
-      stack: ["Kotlin", "Compose", "MVI", "Clean Architecture", "AI agents"],
+      stack: ["Kotlin", "Compose", "Coroutines", "Flow", "Hilt", "Retrofit", "MVI", "Clean Architecture", "JUnit", "MockK", "GitHub Actions", "Claude Code agents"],
       links: { repo: "https://github.com/voltek/GameStack", caseStudy: "gamestack.html" },
       shots: [
         { src: "assets/projects/gamestack/search.png", label: "Search", alt: "GameStack search screen, empty state", on: ["show", "case"] },
@@ -254,6 +255,7 @@
     { name: "Hilt", level: "strong", at: ["gs", "mn"] },
     { name: "Gradle", level: "strong", at: ["gs", "mn"], note: "Version catalogs and KSP in both builds", pages: false },
     { name: "Room", level: "strong", at: ["mn"] },
+    { name: "DataStore", level: "strong", at: ["mn"] },
     { name: "Material 3", level: "strong", at: ["gs", "mn"], pages: false },
     { name: "Clean Architecture", level: "strong", at: ["gs", "mn", "cb"], note: "Designed by hand in ModernNotes and kept in GameStack; at Citibanamex, inside an existing codebase" },
     { name: "Navigation Compose", level: "strong", at: ["gs", "mn"], pages: false },
@@ -274,7 +276,7 @@
     { name: "Robolectric", level: "familiar", at: ["gs"], note: "Screen tests in GameStack", pages: false },
     { name: "Dagger 2", level: "core", legacy: true, at: ["ob", "cd", { id: "ir", part: true }], note: "Also at IRONBIT toward the end. Citibanamex wired its dependencies by hand" },
     { name: "RxJava", level: "familiar", legacy: true, at: ["cb", "cd"] },
-    { name: "SQLite", level: "familiar", legacy: true, at: ["ir", "et"], note: "SQLite by hand for offline catalogs at Estrategia; Realm at IRONBIT" },
+    { name: "SQLite · Realm", level: "familiar", legacy: true, at: ["ir", "et"], note: "SQLite by hand for offline catalogs at Estrategia; Realm at IRONBIT" },
     { name: "MVP", level: "core", legacy: true, at: ["ob", "cb", "cd", "ir"] },
     { name: "Custom Views", level: "core", legacy: true, at: ["ob"] },
     { name: "Glide", level: "familiar", legacy: true, at: ["cd"] }
@@ -307,7 +309,7 @@
       "AI code review loops": "Ciclos de code review con IA",
       "Using subagents and MCP servers": "Uso de subagents y servidores MCP",
       "Code review": "Revisión de código", "Architecture decisions · ADRs": "Decisiones de arquitectura · ADRs", "Compose & Views interop": "Interoperabilidad Compose y Views",
-      "Bluetooth printing": "Impresión por Bluetooth", "AI agents": "Agentes de IA"
+      "Bluetooth printing": "Impresión por Bluetooth", "Claude Code agents": "Agentes de Claude Code", "Unit testing": "Pruebas unitarias"
     },
     how: [
       { en: "In Globant's evaluations, the client valued features delivered with few bugs, because I covered the scenarios before handing them over, and clear communication with the team and with them.", es: "En las evaluaciones de Globant, el cliente valoró que entregara funciones con pocos bugs, porque cubría los escenarios antes de entregarlas, y la comunicación clara con el equipo y con ellos." },

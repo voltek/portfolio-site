@@ -1,5 +1,5 @@
 // Plain (index.html): the parts of src/plain.html that come from the data. Each key fills a {{@key}} of the template.
-const { C, esc, skillName, skillRows, calc, matrix, text, calcData, head, srcset, status, ICON, cvMenu } = require("./common.js");
+const { C, esc, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu } = require("./common.js");
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile;
@@ -58,20 +58,24 @@ module.exports = ctx => {
       <div class="dots" aria-hidden="true">${gap(M.state(s).map((x, i) => `<i${x ? ` class="${DOT[x](M.places[i])}"` : ""}></i>`))}</div>
       ${s.note ? `<p class="note">${text(ctx, s.note)}</p>` : ""}</div>`; }).join("")}`).join("");
 
-  // experience, newest first; an employer behind several places gets one heading with its own total
+  // experience, newest first; an employer behind several places is one block: its heading with its own total, and its
+  // clients on one line under it (h5), each saying what the client is instead of repeating the employer
   // a card with a case study carries its id: the case's "All work" lands on it (index.html#mn)
-  const card = w => `<article class="job${w.type === "project" ? " own" : ""}"${w.links && w.links.caseStudy ? ` id="${esc(w.id)}"` : ""}><div class="when"><b class="num">${C.range(w.start, w.end)}</b><span>${calc.lapse(ctx, w.id)}</span></div>
-      <div><h4>${esc(w.name)}</h4><p>${esc(w.type === "project" ? cp.experience.kind.project : w.studio.en)}</p>${w.type === "project" ? chip(w.status) : ""}</div>
+  const sub = w => w.type === "project" ? cp.experience.kind.project : (w.employer ? w.note : w.studio).en;
+  const card = (w, h = "h4") => `<article class="job${w.type === "project" ? " own" : ""}${w.employer ? " client" : ""}"${w.links && w.links.caseStudy ? ` id="${esc(w.id)}"` : ""}><div class="when"><b class="num">${C.range(w.start, w.end)}</b><span>${calc.lapse(ctx, w.id)}</span></div>
+      <div><${h}>${esc(w.name)}</${h}><p>${text(ctx, sub(w))}</p>${w.type === "project" ? chip(w.status) : ""}</div>
       <div class="what-c"><p class="what">${text(ctx, w.what.en)}</p><ul>${w.highlights.map(h => `<li>${text(ctx, h.en)}</li>`).join("")}</ul>${w.links ? links(w.links) : ""}</div>
-      <p class="tags">${esc(w.stack.join(" · "))}</p></article>`;
-  const newest = data.work.slice().reverse(), seen = new Set();
+      <p class="tags">${stackHtml(w.stack)}</p></article>`;
+  const newest = data.work.slice().reverse();
   const jobs = [[cp.experience.groups.own, newest.filter(w => w.type === "project")], [cp.experience.groups.client, newest.filter(w => w.type === "job")]]
-    .filter(([, list]) => list.length).map(([h, list]) => `<h3 class="group">${esc(h)}</h3>` + list.map(w => {
-      let emp = "";
-      if (w.employer && !seen.has(w.employer)) { seen.add(w.employer); const e = data.employers[w.employer];
-        emp = `<div class="emp"><b class="num">${C.range(e.start, e.end)}</b><div><h4>${esc(e.name)}</h4><p>${text(ctx, e.note, { id: w.employer })}</p></div></div>`; }
-      return emp + card(w);
-    }).join("")).join("");
+    .filter(([, list]) => list.length).map(([h, list]) => { const seen = new Set(); return `<h3 class="group">${esc(h)}</h3>` + list.map(w => {
+      if (!w.employer) return card(w);
+      if (seen.has(w.employer)) return "";
+      seen.add(w.employer);
+      const e = data.employers[w.employer];
+      return `<div class="employer"><div class="emp"><div class="when"><b class="num">${C.range(e.start, e.end)}</b></div><div class="emp-c"><h4>${esc(e.name)}</h4><p>${text(ctx, e.note, { id: w.employer, tag: "b" })}</p></div></div>
+      ${list.filter(x => x.employer === w.employer).map(x => card(x, "h5")).join("")}</div>`;
+    }).join(""); }).join("");
 
   const ed = p.education, langs = p.languages.map(l => `${esc(l.name.en)}, ${esc(l.level.en)}`).join(" · ");
   const education = `<div class="edu"><b>${esc(ed.start)}–${esc(ed.end)}</b><p>${esc(ed.degree.en)}, ${esc(ed.school)}</p></div>

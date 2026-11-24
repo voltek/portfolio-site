@@ -1,5 +1,5 @@
 // The CV's body, one language at a time, from data/portfolio.js (its own copy is data.cv; copy deck §11). tools/cv.js prints it.
-const { C, esc, skillName, skillRows, md: mark } = require("./common.js");
+const { C, esc, skillName, skillRows, md: mark, stackLine } = require("./common.js");
 
 const bare = u => u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 const link = (href, label = bare(href)) => `<a href="${esc(href)}">${esc(label)}</a>`;
@@ -38,7 +38,7 @@ module.exports = ({ data, now, careerYears }, lang, { phone, fullName } = {}) =>
   <header><h3>${esc(w.name)}</h3> <span class="sub">${sub}</span> ${when(w)}</header>
   <p class="what">${md(t(w.lede || w.what))}</p>
   ${bullets([...w.highlights.map(t), ...extra])}
-  <p class="stack">${w.stack.map(s => esc(term(s))).join(" · ")}</p>
+  <p class="stack">${esc(stackLine(w.stack.map(term)))}</p>
 </article>`;
   const newest = data.work.slice().reverse();
 
@@ -47,7 +47,7 @@ module.exports = ({ data, now, careerYears }, lang, { phone, fullName } = {}) =>
     (w.proof || []).filter(r => r.es).map(r => lang === "es" ? r.es : r).map(r => C.fill(`**${r.label}**: ${r.note}`, { careerYears, pin: w.pin, updated: w.learningPath && w.learningPath.updated }))));
 
   // newest first; an employer's clients go together under its line
-  const job = w => entry(w, "client", esc(w.employer ? t(w.cv.note) : `${t(w.studio)} · ${t(w.role)}`), (w.cv && w.cv.more || []).map(t));
+  const job = w => entry(w, "client", esc(w.employer ? t(w.note) : `${t(w.studio)} · ${t(w.role)}`), (w.cv && w.cv.more || []).map(t));
   const jobs = newest.filter(w => w.type === "job"), done = new Set();
   const experience = jobs.map(w => {
     if (!w.employer) return job(w);

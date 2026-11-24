@@ -6,6 +6,10 @@ const IMG = require("../../lib/images.js");
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 // a skill's name: "Google Maps · Places" never breaks before its dot
 const skillName = s => esc(s).replace(/ · /g, "&nbsp;· ");
+// a stack in one line, plain text (the CV: an ATS reads it) or HTML for the pages, where no name breaks in two and no line
+// starts with "·"
+const stackLine = list => list.join(" · ");
+const stackHtml = list => list.map((t, i) => `<span class="nb">${esc(t)}${i < list.length - 1 ? " ·" : ""}</span>`).join(" ");
 // **…** → the page's highlight (Plain: <em>)
 const md = (s, tag = "em") => s.replace(/\*\*(.+?)\*\*/g, `<${tag}>$1</${tag}>`);
 
@@ -149,4 +153,4 @@ const cvMenu = (ctx, cls, stroke) => { const cta = ctx.data.copy.cta;
   return `<details class="cv"><summary class="btn ${cls}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11M5.5 8.5L10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/></svg>${esc(cta.cv)}<svg class="caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><span class="cvmenu">${
     Object.entries(CV_FILES).map(([lang, f]) => `<a href="${f}" download target="_blank" rel="noopener" type="application/pdf" hreflang="${lang}"><span lang="${lang}">${esc(cta.cvIn[lang])}</span> <small>${esc(cta.cvKind)}</small></a>`).join("")}</span></details>`; };
 
-module.exports = { CV_FILES, cvMenu, C, esc, skillName, skillRows, md, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };
+module.exports = { CV_FILES, cvMenu, C, esc, skillName, skillRows, md, stackLine, stackHtml, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };
