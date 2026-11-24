@@ -348,10 +348,10 @@
     },
     education: { plain: "Education and languages", show: "Education", languages: "Languages" },
     skills: {
-      intro: "Grouped by how well I know them.",
+      intro: "Grouped by how well I know them, with AI and XML Views in rows of their own.",
       levels: {
-        core: ["Core", "My daily tools, with years of use"],
-        strong: ["Strong", "Confident with it, in production or in complete apps"],
+        core: ["Core", "My foundation, with years of use"],
+        strong: ["Strong", "Confident with it, in client apps or in my own builds"],
         ai: ["AI-assisted development", "Strong, with Claude Code agents in GameStack"], // the row of every ai: true skill
         familiar: ["Familiar", "Used in real work, not a main strength"],
         legacy: ["Apps with XML Views", "Patterns and libraries of the apps built before Compose"]
