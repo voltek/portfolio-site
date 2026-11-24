@@ -5,7 +5,7 @@ const bare = u => u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 const link = (href, label = bare(href)) => `<a href="${esc(href)}">${esc(label)}</a>`;
 const DOT = '<span class="sep"> · </span>';
 
-module.exports = ({ data, now, careerYears }, lang, { phone } = {}) => {
+module.exports = ({ data, now, careerYears }, lang, { phone, fullName } = {}) => {
   // a Spanish text still pending (es: null; check-data lists it) goes out in English, never as "null"
   const p = data.profile, cv = data.cv, t = o => o[lang] == null ? o.en : o[lang];
   const fill = s => C.fill(s, { careerYears });
@@ -18,7 +18,7 @@ module.exports = ({ data, now, careerYears }, lang, { phone } = {}) => {
   const contact = [link(`mailto:${p.email}`, p.email), phone && link(`tel:${phone.replace(/[^+\d]/g, "")}`, phone), link(p.links.linkedin), link(p.links.github), cv.siteLink && link(p.links.site)].filter(Boolean).join(DOT);
   const top = `<header class="top">
   <div>
-    <h1>${esc(p.name)}</h1>
+    <h1>${esc(lang === "es" && fullName || p.name)}</h1>
     <p class="title">${esc(t(p.title))}</p>
     <p class="meta">${md(t(cv.status))}</p>
     <p class="meta">${contact}</p>

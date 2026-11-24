@@ -1,7 +1,8 @@
 // Prints the CV (src/cv.html + tools/pages/cv.js) as two PDFs, English and Spanish, with a headless Edge or Chrome. Free and
 // local; tools/build.js calls it, so the PDFs in _site/ always carry the day's numbers.
-// Usage: node tools/cv.js            the site's PDFs, into _site/ (no phone)
-//        node tools/cv.js --phone    the ones Alan sends, with the phone in _private/cv/phone.txt, into _private/cv/
+// Usage: node tools/cv.js            the site's PDFs, into _site/
+//        --phone · --full-name       the ones Alan sends, into _private/cv/: with the phone, and with his full name on the
+//                                    Spanish one (Alan); read from _private/cv/phone.txt and name.txt, never from the data
 //        --out=DIR                  writes them into DIR instead
 //        --check                     also reads each PDF back with pdftotext, as an applicant tracker would
 const fs = require("fs"), os = require("os"), path = require("path"), { spawnSync } = require("child_process");
@@ -15,7 +16,7 @@ const BROWSER = [process.env.CHROME_PATH, "C:/Program Files (x86)/Microsoft/Edge
   "/usr/bin/google-chrome", "/usr/bin/chromium"].find(f => f && fs.existsSync(f));
 
 // Prints both languages into `out` and returns [{ lang, file, pages, kb }]; throws when one does not print.
-const printCv = (out, { now = new Date(), phone } = {}) => {
+const printCv = (out, { now = new Date(), phone, fullName } = {}) => {
   if (!BROWSER) throw new Error("no Edge or Chrome to print the CV with (set CHROME_PATH)");
   const tpl = fs.readFileSync(path.join(root, "src", "cv.html"), "utf8"), ctx = context(data, now);
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "cv-"));
@@ -23,7 +24,7 @@ const printCv = (out, { now = new Date(), phone } = {}) => {
     return Object.entries(FILES).map(([lang, name]) => {
       const html = path.join(tmp, `${lang}.html`), pdf = path.join(out, name);
       const base = "file:///" + root.replace(/\\/g, "/").replace(/^\//, "") + "/";
-      fs.writeFileSync(html, fillTemplate(tpl, data, { ...render(ctx, lang, { phone }), base }, `cv ${lang}`));
+      fs.writeFileSync(html, fillTemplate(tpl, data, { ...render(ctx, lang, { phone, fullName }), base }, `cv ${lang}`));
       fs.rmSync(pdf, { force: true });
       const r = spawnSync(BROWSER, ["--headless=new", "--disable-gpu", "--allow-file-access-from-files", ...(process.env.CI ? ["--no-sandbox"] : []),
         `--user-data-dir=${path.join(tmp, "profile")}`, "--no-pdf-header-footer", `--print-to-pdf=${pdf}`, "file:///" + html.replace(/\\/g, "/").replace(/^\//, "")], { encoding: "utf8", timeout: 60000 });
@@ -55,13 +56,15 @@ const readBack = (pdf, lang) => {
 module.exports = { printCv };
 
 if (require.main === module) {
-  const withPhone = process.argv.includes("--phone"), to = process.argv.find(a => a.startsWith("--out="));
-  const out = to ? path.resolve(to.slice(6)) : path.join(root, withPhone ? "_private/cv" : "_site");
-  const phoneFile = path.join(root, "_private", "cv", "phone.txt");
-  if (withPhone && !fs.existsSync(phoneFile)) { console.error(`write the phone in ${phoneFile} first (one line)`); process.exit(1); }
+  const own = (flag, file) => { if (!process.argv.includes(flag)) return undefined;
+    const f = path.join(root, "_private", "cv", file), v = fs.existsSync(f) ? fs.readFileSync(f, "utf8").replace(/^\uFEFF/, "").trim() : "";
+    if (!v) { console.error(`${flag}: write it in ${f} first (one line)`); process.exit(1); }
+    return v; };
+  const phone = own("--phone", "phone.txt"), fullName = own("--full-name", "name.txt"), to = process.argv.find(a => a.startsWith("--out="));
+  const out = to ? path.resolve(to.slice(6)) : path.join(root, phone || fullName ? "_private/cv" : "_site");
   fs.mkdirSync(out, { recursive: true });
   let failed = false;
-  for (const f of printCv(out, { phone: withPhone ? fs.readFileSync(phoneFile, "utf8").trim() : undefined })) {
+  for (const f of printCv(out, { phone, fullName })) {
     const bad = process.argv.includes("--check") ? readBack(path.join(out, f.file), f.lang) : null;
     console.log(`${path.join(out, f.file)}  ${f.pages} pages · ${f.kb} KB${bad ? (bad.length ? "" : " · reads in order") : ""}`);
     if (f.long) console.log(`  warn  ${f.long}`);
