@@ -265,8 +265,7 @@
     { name: "Agentic engineering · Claude Code", level: "strong", ai: true, at: ["gs"], note: "Claude Code agents build inside a harness I designed, with a human in the loop: I confirm every review triage and every merge. In ModernNotes, AI never wrote the code" },
     { name: "Spec-Driven Development", cv: "Spec-Driven Development (OpenSpec)", level: "strong", ai: true, at: ["gs"], note: "A living PRD and OpenSpec, each scenario naming the test that verifies it, a drift checklist and session checkpoints, from my learning path, applied in GameStack" },
     { name: "AI code review loops", level: "strong", ai: true, at: ["gs"], note: "Capped review rounds per branch, every finding triaged in a table I confirm, then one Codex round on the pull request" },
-    { name: "Harness engineering", cv: "Harness engineering (hooks, permissions, CI gates)", level: "strong", ai: true, at: ["gs"], note: "CLAUDE.md and rules loaded by path, Skills, hooks, permissions and two required CI checks" },
-    { name: "Context engineering", cv: "Context engineering (CLAUDE.md, path-scoped rules, Agent Skills)", level: "strong", ai: true, at: ["gs"], pages: false },
+    { name: "Harness engineering", cv: "Harness engineering (CLAUDE.md, path-scoped rules, Agent Skills, hooks, permissions, CI gates)", level: "strong", ai: true, at: ["gs"], note: "CLAUDE.md and rules loaded by path, Skills, hooks, permissions and two required CI checks" },
     { name: "Using subagents and MCP servers", level: "familiar", ai: true, at: [], pages: false }, // used, none built: never without "using"
     { name: "CI · GitHub Actions", level: "familiar", at: ["gs"], note: "Two required checks on every GameStack PR: build, test and lint; and the commit, title and branch rules" },
     { name: "Code review", level: "familiar", at: ["gs", { id: "ob", part: true }, { id: "cb", part: true }, { id: "cd", part: true }], len: false, note: "Every GameStack pull request before it merges; teammates' pull requests now and then at Globant (Citibanamex, Openbank) and Claro Drive" },
@@ -304,7 +303,7 @@
     kind: { project: { en: "Own build", es: "Proyecto propio" }, "in-progress": { en: "In progress", es: "En curso" }, completed: { en: "Completed", es: "Completado" } },
     // skill and stack names that change in Spanish; every other one is written alike (technical terms stay in English, Alan)
     terms: {
-      "Harness engineering (hooks, permissions, CI gates)": "Harness engineering (hooks, permisos, controles de CI)",
+      "Harness engineering (CLAUDE.md, path-scoped rules, Agent Skills, hooks, permissions, CI gates)": "Harness engineering (CLAUDE.md, path-scoped rules, Agent Skills, hooks, permisos, controles de CI)",
       "AI code review loops": "Ciclos de code review con IA",
       "Using subagents and MCP servers": "Uso de subagents y servidores MCP",
       "Code review": "Revisión de código", "Architecture decisions · ADRs": "Decisiones de arquitectura · ADRs", "Compose & Views interop": "Interoperabilidad Compose y Views",
