@@ -298,7 +298,7 @@
       how: { en: "How I work", es: "Cómo trabajo" }, education: { en: "Education", es: "Educación" }, languages: { en: "Languages", es: "Idiomas" }
     },
     levels: {
-      core: { en: "Core", es: "Principales" }, coreNote: { en: "years in production", es: "años en producción" }, strong: { en: "Strong", es: "Sólidas" },
+      core: { en: "Core", es: "Principales" }, coreNote: { en: "years of use", es: "años de uso" }, strong: { en: "Strong", es: "Sólidas" },
       ai: { en: "AI-assisted development", es: "Desarrollo asistido por IA" }, familiar: { en: "Familiar", es: "Familiares" },
       legacy: { en: "Apps with XML Views", es: "Apps con vistas XML" }
     },
@@ -352,7 +352,7 @@
     skills: {
       intro: "Grouped by how well I know them.",
       levels: {
-        core: ["Core", "My daily tools, with years in production"],
+        core: ["Core", "My daily tools, with years of use"],
         strong: ["Strong", "Confident with it, in production or in complete apps"],
         familiar: ["Familiar", "Used in real work, not a main strength"],
         legacy: ["Apps with XML Views", "Patterns and libraries of the apps built before Compose"]

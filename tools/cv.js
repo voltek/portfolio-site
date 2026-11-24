@@ -2,6 +2,7 @@
 // local; tools/build.js calls it, so the PDFs in _site/ always carry the day's numbers.
 // Usage: node tools/cv.js            the site's PDFs, into _site/ (no phone)
 //        node tools/cv.js --phone    the ones Alan sends, with the phone in _private/cv/phone.txt, into _private/cv/
+//        --out=DIR                  writes them into DIR instead
 //        --check                     also reads each PDF back with pdftotext, as an applicant tracker would
 const fs = require("fs"), os = require("os"), path = require("path"), { spawnSync } = require("child_process");
 const root = path.join(__dirname, "..");
@@ -54,7 +55,8 @@ const readBack = (pdf, lang) => {
 module.exports = { printCv };
 
 if (require.main === module) {
-  const withPhone = process.argv.includes("--phone"), out = path.join(root, withPhone ? "_private/cv" : "_site");
+  const withPhone = process.argv.includes("--phone"), to = process.argv.find(a => a.startsWith("--out="));
+  const out = to ? path.resolve(to.slice(6)) : path.join(root, withPhone ? "_private/cv" : "_site");
   const phoneFile = path.join(root, "_private", "cv", "phone.txt");
   if (withPhone && !fs.existsSync(phoneFile)) { console.error(`write the phone in ${phoneFile} first (one line)`); process.exit(1); }
   fs.mkdirSync(out, { recursive: true });

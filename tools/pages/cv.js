@@ -15,7 +15,7 @@ module.exports = ({ data, now, careerYears }, lang, { phone } = {}) => {
   const when = o => `<span class="when">${C.range(month(o.start), month(o.end), lang)}</span>`;
   const bullets = list => `<ul>${list.map(b => `<li>${md(b)}</li>`).join("")}</ul>`;
 
-  const contact = [link(`mailto:${p.email}`, p.email), phone && esc(phone), link(p.links.linkedin), link(p.links.github), cv.siteLink && link(p.links.site)].filter(Boolean).join(DOT);
+  const contact = [link(`mailto:${p.email}`, p.email), phone && link(`tel:${phone.replace(/[^+\d]/g, "")}`, phone), link(p.links.linkedin), link(p.links.github), cv.siteLink && link(p.links.site)].filter(Boolean).join(DOT);
   const top = `<header class="top">
   <div>
     <h1>${esc(p.name)}</h1>
