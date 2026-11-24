@@ -35,7 +35,7 @@
   :root{--t-quick:0s; --t:0s; --t-slow:0s; --t-swap:0s}
 }
 
-/* ---------- Plain (index.html, cv.html) ----------
+/* ---------- Plain (index.html) and the CV (src/cv.html) ----------
    Light: a cobalt field with paper panels. Dark, "Noche azul": the cobalt band dims a little, the paper goes blue-black
    (it keeps the cool accents apart) and the Now building card rises above it as a lighter surface. */
 :root[data-world="read"]{

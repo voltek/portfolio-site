@@ -134,4 +134,12 @@ const ICON = {
   doc: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2h7l4 4v12H5z M12 2v4h4 M8 10h5M8 13.5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>`
 };
 
-module.exports = { C, esc, skillName, md, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };
+// The CV's two PDFs (tools/cv.js prints them) and the button that asks for the language: a menu of its own (details), drawn
+// by each page in its world; src/partials/cv-menu.js closes it. download saves the file and leaves the reader where they
+// are; a browser that ignores it (some in-app ones) opens a new tab instead.
+const CV_FILES = { en: "alan-hernandez-cv.pdf", es: "alan-hernandez-cv-es.pdf" };
+const cvMenu = (ctx, cls, stroke) => { const cta = ctx.data.copy.cta;
+  return `<details class="cv"><summary class="btn ${cls}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11M5.5 8.5L10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/></svg>${esc(cta.cv)}<svg class="caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><span class="cvmenu">${
+    Object.entries(CV_FILES).map(([lang, f]) => `<a href="${f}" download target="_blank" rel="noopener" type="application/pdf" hreflang="${lang}"><span lang="${lang}">${esc(cta.cvIn[lang])}</span> <small>${esc(cta.cvKind)}</small></a>`).join("")}</span></details>`; };
+
+module.exports = { CV_FILES, cvMenu, C, esc, skillName, md, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };

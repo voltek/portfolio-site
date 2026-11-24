@@ -2,7 +2,7 @@
 version: 1
 slug: "index-html"
 primary_target: "index.html"
-related_targets: ["cv.html", "show.html"]
+related_targets: ["show.html"]
 ---
 
 # Surface brief: landing (`index.html`, Plain)

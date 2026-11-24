@@ -13,6 +13,17 @@
   .btn.go:hover{background:var(--go-hover)}
   .btn.line{border:1.5px solid var(--on-field);color:var(--on-field)}
   .btn.line:hover{border-color:var(--go)}
+  /* "Download CV" asks for the language: a small menu under the button (over it in the contact, the page's end) */
+  .cv{position:relative;display:inline-block}
+  .cv summary{list-style:none;cursor:pointer}
+  .cv summary::-webkit-details-marker{display:none}
+  .btn .caret{width:12px;height:12px;transition:transform var(--t)}
+  .cv[open] .caret{transform:rotate(180deg)}
+  .cvmenu{position:absolute;z-index:20;left:0;top:calc(100% + 6px);min-width:100%;display:grid;padding:6px;border-radius:4px;border:1px solid var(--sheet-line);background:var(--sheet);color:var(--paper-ink);box-shadow:var(--lift);--focus:var(--paper-ink)}
+  .cvmenu a{display:flex;justify-content:space-between;align-items:baseline;gap:18px;line-height:44px;padding:0 14px;border-radius:3px;font-weight:700;font-size:16px;text-decoration:none;color:inherit}
+  .cvmenu a:hover{background:var(--cell);text-decoration:underline;text-decoration-color:var(--go-line);text-decoration-thickness:2px;text-underline-offset:5px}
+  .cvmenu small{font-weight:600;font-size:13px;color:var(--paper-muted)}
+  .contact .cvmenu{top:auto;bottom:calc(100% + 6px)}
   /* the address is the mail link; copying is its own button beside it, and "Copied" shows above it for a moment */
   .mail{position:relative;display:inline-flex;gap:6px}
   .btn.copy{width:50px;padding:0;justify-content:center;background:none;cursor:pointer}

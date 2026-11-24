@@ -7,6 +7,7 @@ const fs = require("fs"), path = require("path"), { spawnSync } = require("child
 const root = path.join(__dirname, ".."), out = path.join(root, "_site");
 const data = require(path.join(root, "data", "portfolio.js"));
 const { C, context, fillTemplate } = require("./pages/common.js");
+const { printCv } = require("./cv.js");
 
 const arg = k => (process.argv.find(a => a.startsWith(`--${k}=`)) || "").split("=")[1];
 const now = arg("today") ? C.parse(arg("today")) : new Date();
@@ -16,7 +17,7 @@ const check = spawnSync(process.execPath, [path.join(__dirname, "check-data.js")
 if (check.status !== 0) { process.stdout.write(check.stdout); console.log("build stopped: fix the data errors above"); process.exit(1); }
 const summary = check.stdout.trim().split("\n").pop();
 
-// 2) the pages: template + renderer. The CV joins this list when it is built. A case study joins by itself: a project
+// 2) the pages: template + renderer. The CV is not a page: step 4b prints it. A case study joins by itself: a project
 // whose links.caseStudy is "x.html" and that has data/cases/x.js (until then its links fail the build unless the page is in PENDING, step 5).
 const renderCase = require("./pages/case.js");
 const PAGES = [
@@ -49,8 +50,11 @@ ${PAGES.map(p => `  <url><loc>${site}${p.file === "index.html" ? "" : p.file}</l
 `);
 fs.writeFileSync(path.join(out, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${site}sitemap.xml\n`);
 
+// 4b) the CV, printed as two PDFs (tools/cv.js)
+const cvs = printCv(out, { now });
+
 // 5) every local link and image must exist in _site; only a page still to be built (PENDING) is listed, the rest fail
-const PENDING = new Set(["cv.html", "gamestack.html"]);
+const PENDING = new Set(["gamestack.html"]);
 const missing = new Set(), broken = new Set();
 for (const p of PAGES) {
   const html = fs.readFileSync(path.join(out, p.file), "utf8");
@@ -72,5 +76,6 @@ if (!fs.existsSync(path.join(out, "assets/og.png"))) broken.add("share image →
 const kb = f => (fs.statSync(path.join(out, f)).size / 1024).toFixed(1) + " KB";
 console.log(`built _site/ against ${day} · data: ${summary}`);
 for (const p of PAGES) console.log(`  ${p.file.padEnd(16)} ${kb(p.file)}`);
+for (const f of cvs) console.log(`  ${f.file.padEnd(24)} ${f.pages} pages · ${f.kb} KB${f.long ? `  warn: ${f.long}` : ""}`);
 if (missing.size) console.log(`not there yet (a page or file still to make):\n${[...missing].map(m => `  ${m}`).join("\n")}`);
 if (broken.size) { console.error(`broken (a local link or file that does not exist):\n${[...broken].map(m => `  ${m}`).join("\n")}`); process.exit(1); }

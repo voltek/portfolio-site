@@ -71,8 +71,9 @@ those changes, run `node tools/og.js` (Edge headless) and commit the PNG; under 
 ## New skill
 
 1. Add it to `skills` with `name`, `level` (`core` · `strong` · `familiar`), `at` (where it was used) and, if useful, a
-   one-line `note`. `ai: true` puts it first in its level; `legacy: true` sends it to "View-based apps";
-   `pages: false` keeps it for the CV only.
+   one-line `note`. `ai: true` puts it first in its level; `legacy: true` sends it to "Apps with XML Views";
+   `pages: false` keeps it for the CV only (with `at: []` if no place stands behind it); `cv` is its name there when it
+   says more. A name that changes in Spanish goes in `cv.terms`.
 2. Years come from `at`. To narrow one place, `{ id: "ir", end: "2017-12" }` instead of `"ir"`; `{ id: "ob", part: true }`
    is a place where it was used only some of the time (the matrix's hollow dot, no years); `len: false` keeps the
    length off the pages and names the places in the CV (a skill used in only part of a job). The pages show a length

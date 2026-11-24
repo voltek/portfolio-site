@@ -1,5 +1,5 @@
 // Plain (index.html): the parts of src/plain.html that come from the data. Each key fills a {{@key}} of the template.
-const { C, esc, skillName, calc, matrix, text, calcData, head, srcset, status, ICON } = require("./common.js");
+const { C, esc, skillName, calc, matrix, text, calcData, head, srcset, status, ICON, cvMenu } = require("./common.js");
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile;
@@ -34,7 +34,7 @@ module.exports = ctx => {
     <ul class="proof">${(live.proof || []).filter(r => r.on.includes("plain")).map(r => `<li><b class="num">${ICON.check}<span class="sr">${esc(cp.aria.yes)}</span></b><span><strong>${esc(r.label)}</strong> <small>· ${text(ctx, r.note)}</small></span></li>`).join("")}</ul>
     ${live.source ? `<p class="src">${text(ctx, live.source, { pin: live.pin })}</p>` : ""}${nowLinks(live.links)}</div></aside>`;
 
-  // skills: by level (an empty level leaves no row), then the View-based apps row, one quiet look for all (its years
+  // skills: by level (an empty level leaves no row), then the XML Views row, one quiet look for all (its years
   // and places are in the detail). Within a level, AI skills first, then the data's order; pages: false stays off.
   const LV = ["core", "strong", "familiar"], L = cp.skills.levels;
   const indexed = data.skills.map((s, i) => ({ ...s, i }));
@@ -98,7 +98,7 @@ module.exports = ctx => {
     lede: text(ctx, p.lede.plain),
     stack: p.stack.map(s => `<li>${esc(s)}</li>`).join(" "),
     expIntro: text(ctx, cp.experience.intro.plain),
-    githubIcon: ICON.github,
+    githubIcon: ICON.github, cvMenu: cvMenu(ctx, "line", 2),
     matrixCols: `--jobs:${M.jobs.length};--builds:${M.builds.length}`,
     calcData: calcData(data, now.getUTCFullYear())
   };
