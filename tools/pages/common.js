@@ -7,8 +7,9 @@ const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(
 // a skill's name: "Google Maps · Places" never breaks before its dot
 const skillName = s => esc(s).replace(/ · /g, "&nbsp;· ");
 // **…** → the page's highlight (Plain: <em>)
-// a stack in one line; the no-break space keeps every "·" at the end of a line, never at the start of the next
-const stackLine = list => list.join(" · ");
+// a stack in one line: no line starts with "·" and, on the pages, no name breaks in two. The CV keeps plain spaces inside
+// the names, so an ATS that reads the PDF matches "Clean Architecture"
+const stackLine = (list, pages) => (pages ? list.map(t => t.replace(/ /g, " ")) : list).join(" · ");
 const md = (s, tag = "em") => s.replace(/\*\*(.+?)\*\*/g, `<${tag}>$1</${tag}>`);
 
 // The context of one build: the data, the build day and what is computed once from both.

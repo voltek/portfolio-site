@@ -162,13 +162,13 @@ module.exports = ctx => {
     if (w.roadmap) return `${head}${propSVG(w)}
       <p class="what">${text(ctx, w.what.en)}</p>
       <p class="credline">${esc(studio)} · ${dates}</p>
-      <p class="featline"><b>${esc(ui.credits.featuring)}</b> ${esc(stackLine(w.stack))}</p>
+      <p class="featline"><b>${esc(ui.credits.featuring)}</b> ${esc(stackLine(w.stack, true))}</p>
       ${road(w)}
       ${cardlinks(w.links)}`;
     const cr = ui.credits;
     return `${head}${propSVG(w)}
       <p class="what">${text(ctx, w.what.en)}</p>
-      <dl class="credits"><dt>${esc(cr.studio)}</dt><dd>${esc(studio)}</dd><dt>${esc(cr.dates)}</dt><dd>${dates}</dd>${emp ? `<dt>${esc(cr.total)}</dt><dd>${calc.lapse(ctx, w.employer)} ${esc(ui.at)} ${esc(emp.name)} (${C.range(emp.start, emp.end)})</dd>` : ""}<dt>${esc(cr.featuring)}</dt><dd>${esc(stackLine(w.stack))}</dd></dl>
+      <dl class="credits"><dt>${esc(cr.studio)}</dt><dd>${esc(studio)}</dd><dt>${esc(cr.dates)}</dt><dd>${dates}</dd>${emp ? `<dt>${esc(cr.total)}</dt><dd>${calc.lapse(ctx, w.employer)} ${esc(ui.at)} ${esc(emp.name)} (${C.range(emp.start, emp.end)})</dd>` : ""}<dt>${esc(cr.featuring)}</dt><dd>${esc(stackLine(w.stack, true))}</dd></dl>
       <div class="hl"><p class="hl-h">${esc(ui.highlights)}</p><ul class="stars">${w.highlights.map(h => `<li>${STAR}${text(ctx, h.en)}</li>`).join("")}</ul></div>
       ${cardlinks(w.links)}`;
   };

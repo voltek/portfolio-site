@@ -65,7 +65,7 @@ module.exports = ctx => {
   const card = (w, h = "h4") => `<article class="job${w.type === "project" ? " own" : ""}${w.employer ? " client" : ""}"${w.links && w.links.caseStudy ? ` id="${esc(w.id)}"` : ""}><div class="when"><b class="num">${C.range(w.start, w.end)}</b><span>${calc.lapse(ctx, w.id)}</span></div>
       <div><${h}>${esc(w.name)}</${h}><p>${esc(sub(w))}</p>${w.type === "project" ? chip(w.status) : ""}</div>
       <div class="what-c"><p class="what">${text(ctx, w.what.en)}</p><ul>${w.highlights.map(h => `<li>${text(ctx, h.en)}</li>`).join("")}</ul>${w.links ? links(w.links) : ""}</div>
-      <p class="tags">${esc(stackLine(w.stack))}</p></article>`;
+      <p class="tags">${esc(stackLine(w.stack, true))}</p></article>`;
   const newest = data.work.slice().reverse(), seen = new Set();
   const jobs = [[cp.experience.groups.own, newest.filter(w => w.type === "project")], [cp.experience.groups.client, newest.filter(w => w.type === "job")]]
     .filter(([, list]) => list.length).map(([h, list]) => `<h3 class="group">${esc(h)}</h3>` + list.map(w => {

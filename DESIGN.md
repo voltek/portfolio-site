@@ -40,6 +40,10 @@ on phones). Never add a `scroll-margin-top` on the sections as well: the two add
 
 **Skills by level.** Three levels in words (Core, Strong, Familiar) plus two rows of their own, "AI-assisted development" after Strong (its line says the level, its chips wear Strong's color) and "Apps with XML Views" last; a row with no skills is not drawn. Each row is ordered by what Android openings ask for most. The level reads from the row, the color and the chip size: one hue in three solid steps, **never a dashed or dotted outline** (it reads as "I don't have it"), and **no color legend** (the row names are the legend). Never bars, stars, percentages or scores. Only Core's chips carry years ("Kotlin 7+ yrs", rounded down). Where each skill was used sits behind a collapsible detail ("See where I used each one"): a place matrix, one row per skill and one column per place oldest to newest (client jobs, a gap, own builds), a filled dot where it was used and a hollow one for "some of the time"; a length under the name only in Core, as on its chips; no years axis, no bars; two-letter codes with a key line on phones. Show draws it under its season headers. Exact dates belong to the CV.
 
+**The Employer Block (Plain).** An employer with several clients is one block: its name larger than theirs, the tenure in
+bold ink, and one `--client-mark` line in the dates column with a dot at the employer and at each client, ending at the
+last one. Names share one column; under a client goes what it is (`note`), never the employer again. No panel behind it.
+
 **The Bar Menu Rule (Plain's world: Plain, the case studies and any new page that inherits it; Alan, 10-27).** Every
 page copies this bar exactly; a new page never redesigns it. Sections inline while they fit; when they don't (measured by
 the script, not a fixed width), they go behind a menu button. The open menu is a panel on the field color; each item
