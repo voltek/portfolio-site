@@ -1,7 +1,7 @@
 // Show (show.html): the parts of src/show.html that come from the data. Each key fills a {{@key}} of the template.
 // Everything the prototype drew in the browser is drawn here: every episode card (the remote only switches which one
 // shows), the strip, the skills place matrix, the title card's rays and color bars.
-const { C, esc, skillName, calc, matrix, text, calcData, head, srcset, status, ICON } = require("./common.js");
+const { C, esc, skillName, calc, matrix, text, calcData, head, srcset, status, ICON, cvMenu } = require("./common.js");
 const IMG = require("../../lib/images.js");
 
 /* ---------- props: one painted object per episode, its title lettered on it (show.prop in the data) ---------- */
@@ -275,7 +275,7 @@ module.exports = ctx => {
     finale: text(ctx, p.contact.show, { tag: "i" }),
     education: `${esc(ed.degree.en)}, ${esc(ed.school)}, <span style="white-space:nowrap">${esc(ed.start)}–${esc(ed.end)}</span>`,
     languages: p.languages.map(l => `${esc(l.name.en)}, ${esc(l.level.en)}`).join(" · "),
-    githubIcon: ICON.github,
+    githubIcon: ICON.github, cvMenu: cvMenu(ctx, "alt", 2.4),
     calcData: calcData(data, now.getUTCFullYear())
   };
 };

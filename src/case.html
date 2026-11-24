@@ -307,6 +307,7 @@
     lb.addEventListener("close", () => { const b = st.querySelector('.shot[data-i="' + cur + '"]'); if (b) setTimeout(() => b.focus({ preventScroll:true })); });
     lb.addEventListener("click", e => { if (e.target === lb) lb.close(); }); })();
 
-{{>copy-email.js}}</script>
+{{>copy-email.js}}
+{{>cv-menu.js}}</script>
 </body>
 </html>

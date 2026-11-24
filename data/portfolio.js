@@ -45,7 +45,7 @@
       start: "2013", end: "2016" // no degree status, on the site or the CV
     },
     languages: [
-      { name: { en: "Spanish", es: "Español" }, level: { en: "native", es: null } },
+      { name: { en: "Spanish", es: "Español" }, level: { en: "native", es: "nativo" } },
       { name: { en: "English", es: "Inglés" }, level: { en: "B2", es: "B2" } }
     ]
   },
@@ -55,6 +55,7 @@
     globant: {
       name: "Globant", start: "2020-02", end: "2026-05-21",
       role: { en: "Senior Android Developer", es: "Senior Android Developer" },
+      place: { en: "Mexico City", es: "Ciudad de México" }, // CV
       intro: { en: "Android developer on two banking clients.", es: "Desarrollador Android en dos clientes bancarios." },
       note: "{lapse} in total, across the two clients below" // Plain, under the employer's name, above its two clients
     }
@@ -63,12 +64,13 @@
   // Jobs and projects, oldest first: this order is also the episode order (Show numbers them from it).
   // type: "job" (client work, Season 1) · "project" (own build, Season 2; status "in-progress" | "completed").
   // highlights: three per card, always (a fourth dilutes the scan; what does not fit goes to the CV).
+  // cv: what only the CV adds: more (bullets after the highlights) and note (beside a client's name under its employer).
   // show: the Show episode's title card and its prop (an unknown prop falls back to the generic one).
   work: [
     {
       id: "et", type: "job", name: "Estrategia Tecnológica", short: "Estrategia",
       start: "2015-08", end: "2017-01",
-      studio: { en: "A software consultancy", es: null },
+      studio: { en: "A software consultancy", es: "Una consultora de software" },
       role: { en: "Android Developer", es: "Desarrollador Android" },
       what: { en: "My first Android role: apps for a consultancy's clients.", es: "Mi primer puesto como desarrollador Android: apps para los clientes de una consultora." },
       highlights: [
@@ -82,7 +84,7 @@
     {
       id: "ir", type: "job", name: "IRONBIT",
       start: "2017-01", end: "2018-02",
-      studio: { en: "A digital agency", es: null },
+      studio: { en: "A digital agency", es: "Una agencia digital" },
       role: { en: "Android Developer", es: "Desarrollador Android" },
       what: { en: "Apps for the agency's clients, in Java and early Kotlin.", es: "Apps para los clientes de la agencia, en Java y Kotlin temprano." },
       highlights: [
@@ -91,12 +93,13 @@
         { en: "Kotlin in production in 2017, the year Google made it official for Android", es: "Kotlin en producción en 2017, el año en que Google lo hizo oficial para Android" }
       ],
       stack: ["Java", "Kotlin", "Google Maps", "Places", "Firebase"],
+      cv: { more: [{ en: "Minor work on KidZania's visitor and kiosk apps", es: "Trabajo menor en las apps de visitantes y de kiosco de KidZania" }] },
       show: { title: ["Bon", "Voyage"], prop: "suitcase" }
     },
     {
       id: "cd", type: "job", name: "Claro Drive", company: "América Móvil",
       start: "2018-02", end: "2020-02",
-      studio: { en: "América Móvil, for Claro Drive", es: null },
+      studio: { en: "América Móvil, for Claro Drive", es: "América Móvil, para Claro Drive" },
       role: { en: "Android Developer", es: "Desarrollador Android" },
       what: { en: "A telecom's cloud storage app for its subscribers: new features and bug fixes across the app, with the Scanner as my main area.", es: "App de almacenamiento en la nube de una empresa de telecomunicaciones para sus suscriptores. Funciones nuevas y corrección de errores en toda la app, con el Scanner como mi área principal." },
       highlights: [
@@ -110,7 +113,7 @@
     {
       id: "cb", type: "job", name: "Citibanamex", employer: "globant",
       start: "2020-02", end: "2020-08",
-      studio: { en: "Globant, for Citibanamex", es: null },
+      studio: { en: "Globant, for Citibanamex", es: "Globant, para Citibanamex" },
       what: { en: "Improvements to the app's CoDi flow, the digital payments system of Mexico's central bank.", es: "Mejoras al flujo de CoDi de la app, el sistema de pagos digitales del banco central de México." },
       highlights: [
         { en: "Improved QR reading and generation, and built the specified security steps natively", es: "Mejoré la lectura y generación de códigos QR y construí de forma nativa los pasos de seguridad especificados" },
@@ -118,12 +121,13 @@
         { en: "Wrote unit tests inside a Clean Architecture codebase", es: "Escribí pruebas unitarias dentro de una base de código con Clean Architecture" }
       ],
       stack: ["Java", "Kotlin", "RxJava", "MVP", "Clean Architecture", "Retrofit"],
+      cv: { note: { en: "A Mexican bank, then part of Citigroup", es: "Banco mexicano, entonces parte de Citigroup" } },
       show: { title: ["QUICK RESPONSE"], prop: "qr" }
     },
     {
       id: "ob", type: "job", name: "Openbank", employer: "globant",
       start: "2020-08", end: "2026-02",
-      studio: { en: "Globant, for Openbank (Spain)", es: null },
+      studio: { en: "Globant, for Openbank (Spain)", es: "Globant, para Openbank (España)" },
       what: { en: "A Spanish bank's app, mostly with the deposits team: a Java codebase from 2018, where new code went into Kotlin.", es: "App de un banco español, sobre todo con el equipo de depósitos: una base de código en Java de 2018, donde el código nuevo se escribía en Kotlin." },
       highlights: [
         { en: "Built the full deposit reinvestment flow", es: "Construí el flujo completo de reinversión de depósitos" },
@@ -131,12 +135,20 @@
         { en: "Integrated whole sections built by other teams (profile, notifications) as Kotlin + Compose modules", es: "Integré secciones completas hechas por otros equipos (perfil, notificaciones) como módulos Kotlin + Compose" }
       ],
       stack: ["Kotlin", "Java", "MVP", "Coroutines", "Dagger 2", "Custom Views", "Bitrise"],
+      cv: {
+        note: { en: "Santander Group's digital bank · Spain", es: "Banco digital del Grupo Santander · España" },
+        more: [
+          { en: "Worked across most of the app (cards, accounts, keys and contracts) and unified its PDF contract viewer", es: "Trabajé en la mayor parte de la app (tarjetas, cuentas, claves y contratos) y unifiqué su visor de contratos en PDF" },
+          { en: "Built custom views, such as the renewal detail on each deposit in the list, which changed color depending on the deposit", es: "Construí custom views, como el detalle de renovación de cada depósito en la lista, que cambiaba de color según el depósito" },
+          { en: "Replaced legacy AsyncTask code with coroutines in the sections I worked on", es: "Reemplacé código legacy con AsyncTask por coroutines en las secciones en las que trabajé" }
+        ]
+      },
       show: { title: ["Compound", "Interest"], prop: "cert" }
     },
     {
       id: "mn", type: "project", name: "ModernNotes", status: "completed",
       start: "2026-02-26", end: "2026-04-06", // first commit and last code commit (the Oct 16 fixes are in the case)
-      what: { en: "A notes app written entirely by hand. AI never wrote the code; it guided and audited.", es: "App de notas escrita completamente a mano. La IA nunca escribió el código; lo guió y lo auditó." },
+      what: { en: "A notes app written entirely by hand. AI never wrote the code; it guided and audited.", es: "App de notas escrita completamente a mano. La IA nunca escribió el código; lo guio y lo auditó." },
       highlights: [
         { en: "Room as the single source of truth; the UI never reads from the network", es: "Room es la única fuente de verdad y la interfaz nunca lee de la red" },
         { en: "13 unit test classes and a DAO test", es: "13 clases de pruebas unitarias y una prueba del DAO" },
@@ -156,7 +168,7 @@
     {
       id: "gs", type: "project", name: "GameStack", status: "in-progress",
       start: "2026-07-15", end: null, // the repo's first commit (the study plan from June does not count as use)
-      lede: { en: "A game library app in Kotlin and Compose, built with AI agents inside a harness I designed, using Claude Code. The agents write the code; I review every change.", es: "App de biblioteca de videojuegos hecha con agentes de IA dentro de un harness que yo diseñé, usando Claude Code. Los agentes escriben el código; yo reviso cada cambio." },
+      lede: { en: "A game library app in Kotlin and Compose, built with AI agents inside a harness I designed, using Claude Code. The agents write the code; I review every change.", es: "App de biblioteca de videojuegos en Kotlin y Compose, hecha con agentes de IA dentro de un harness que yo diseñé, usando Claude Code. Los agentes escriben el código; yo reviso cada cambio." },
       what: { en: "An Android app to search video games from IGDB, with game details coming next.", es: "App Android para buscar videojuegos en IGDB; el detalle de cada juego viene después." },
       highlights: [
         { en: "Search end to end: four screen states, debounced queries, and a failed refresh that keeps the results", es: "La búsqueda funciona de punta a punta: cuatro estados de pantalla, consultas con debounce y un refresh fallido que conserva los resultados" },
@@ -176,11 +188,14 @@
       pin: { date: "2026-11-12", commit: "5fb80bc" },
       // "Now building": the proof, qualitative (no counts: the system is the value, not the quantity). on: where each
       // row shows, like the shots ("plain", "show", "case"); the landing keeps the three that prove the differentiator,
-      // the case study has them all (Alan, 10-27 and 11-12).
+      // the case study has them all (Alan, 10-27 and 11-12). es: the row in Spanish; the CV draws the rows that have it.
       proof: [
-        { check: true, label: "Decisions that name their enforcement", note: "each ADR states what enforces it: a test, a CI check, a setting, or prose only", on: ["plain", "show", "case"] },
-        { check: true, label: "Human in the loop", note: "what the rules don't settle waits for my approval, and I confirm every review triage and every merge", on: ["plain", "show", "case"] },
-        { check: true, label: "Checks no agent can skip", note: "build, test, lint and commit checks on every PR, behind branch protection that binds me too", on: ["plain", "show", "case"] },
+        { check: true, label: "Decisions that name their enforcement", note: "each ADR states what enforces it: a test, a CI check, a setting, or prose only", on: ["plain", "show", "case"],
+          es: { label: "Decisiones que dicen qué las hace cumplir", note: "cada ADR indica si lo hace un test, un check de CI, una configuración o solo texto" } },
+        { check: true, label: "Human in the loop", note: "what the rules don't settle waits for my approval, and I confirm every review triage and every merge", on: ["plain", "show", "case"],
+          es: { label: "Human in the loop", note: "lo que las reglas no resuelven espera mi aprobación, y yo confirmo cada triage de revisión y cada merge" } },
+        { check: true, label: "Checks no agent can skip", note: "build, test, lint and commit checks on every PR, behind branch protection that binds me too", on: ["plain", "show", "case"],
+          es: { label: "Controles que ningún agente puede saltarse", note: "build, tests, lint y reglas de commit en cada PR, tras una protección de rama que también me obliga a mí" } },
         { check: true, label: "Rules as mechanisms", note: "the rules that must never break are a hook, a deny rule or a test, not a line of prose", on: ["case"] },
         { check: true, label: "A capped review loop", note: "local AI review rounds before every PR, capped per branch: real defects per round fell from 3.3 to 2.2 by round 3 (measured once, Nov 2026)", on: ["case"] },
         { check: true, label: "A context budget", note: "the agents' standing instructions are held under 60 lines by a test, and area rules load only when needed: 31% fewer tokens before any task (measured once, Nov 2026)", on: ["case"] },
@@ -220,7 +235,7 @@
   ],
 
   // Skills by level, in Alan's own judgment (words only: never bars, stars or percentages). Within a level, ai: true
-  // goes first, then this order. legacy: true goes to the "View-based apps" row, in this order and one look for all.
+  // goes first, then this order. cv: the name on the CV, when it says more there. legacy: true goes to the "Apps with XML Views" row, in this order and one look for all.
   // pages: false keeps a skill off Plain and Show (Git, the Compose-era libraries): it stays for the CV. at: where it
   // was used (ids from work; { id, start, end } narrows one place; part: true marks a place where it was used only
   // some of the time: the matrix's hollow dot, and no years); its years are computed from there. len: false names the
@@ -230,9 +245,14 @@
     { name: "Java", level: "core", at: ["ob", "cb", "cd", "ir", "et"] },
     { name: "Android SDK", level: "core", at: ["gs", "mn", "ob", "cb", "cd", "ir", "et"] },
     { name: "Retrofit · REST APIs", level: "core", at: ["gs", "mn", "ob", "cb", "cd", "ir", "et"], note: "REST APIs at every client job. In GameStack, IGDB queries written in its Apicalypse language" },
-    { name: "Git", level: "core", at: ["gs", "mn", "ob", "cb", "cd", "ir", "et"], note: "At every job; in GameStack, pull requests behind branch protection", pages: false },
     { name: "Agentic engineering · Claude Code", level: "strong", ai: true, at: ["gs"], note: "AI-assisted development with Claude Code agents inside a harness I designed: CLAUDE.md and rules loaded by path, Skills, ADRs, hooks, a capped review loop, CI checks and a human in the loop. In ModernNotes, AI never wrote the code" },
-    { name: "Spec-Driven Development", level: "strong", ai: true, at: ["gs"], note: "A living PRD and OpenSpec, each scenario naming the test that verifies it, a drift checklist and session checkpoints, from my learning path, applied in GameStack" },
+    { name: "Spec-Driven Development", cv: "Spec-Driven Development (OpenSpec)", level: "strong", ai: true, at: ["gs"], note: "A living PRD and OpenSpec, each scenario naming the test that verifies it, a drift checklist and session checkpoints, from my learning path, applied in GameStack" },
+    { name: "Context engineering", cv: "Context engineering (CLAUDE.md, path-scoped rules, Agent Skills)", level: "strong", ai: true, at: ["gs"], pages: false },
+    { name: "Harness engineering", cv: "Harness engineering (hooks, permissions, CI gates)", level: "strong", ai: true, at: ["gs"], pages: false },
+    { name: "AI code review loops", level: "strong", ai: true, at: ["gs"], pages: false },
+    { name: "Human in the loop", level: "strong", ai: true, at: ["gs"], pages: false },
+    { name: "Prompt engineering", level: "strong", ai: true, at: ["gs"], pages: false },
+    { name: "Subagents and MCP (as a user)", level: "familiar", ai: true, at: [], pages: false }, // used, none built: never without "as a user"
     { name: "Jetpack Compose", level: "strong", at: ["gs", "mn"] },
     { name: "Coroutines", level: "strong", at: ["gs", "mn", "ob"], note: "In my own builds, a search where each new query cancels the one running (GameStack) and tests on a test dispatcher in both; at Openbank, simple use inside an existing codebase" },
     { name: "Flow", level: "strong", at: ["gs", "mn"] },
@@ -241,18 +261,19 @@
     { name: "Architecture decisions · ADRs", level: "strong", at: ["gs"], note: "Decisions recorded as ADRs in GameStack, each naming what enforces it" },
     { name: "Hilt", level: "strong", at: ["gs", "mn"] },
     { name: "Room", level: "strong", at: ["mn"] },
-    { name: "Testing", level: "strong", at: ["gs", "mn", "cb", { id: "ob", part: true }], note: "JUnit, MockK, Turbine and coroutines-test in both builds, MockWebServer in ModernNotes, Robolectric screen tests in GameStack; unit tests at Citibanamex and, now and then, at Openbank" },
-    { name: "Compose & Views interop", level: "strong", at: ["ob"], len: false, note: "At Openbank, Compose modules from other teams inside a View-based app" },
+    { name: "Testing", cv: "Testing (JUnit, MockK, Turbine)", level: "strong", at: ["gs", "mn", "cb", { id: "ob", part: true }], note: "JUnit, MockK, Turbine and coroutines-test in both builds, MockWebServer in ModernNotes, Robolectric screen tests in GameStack; unit tests at Citibanamex and, now and then, at Openbank" },
+    { name: "Compose & Views interop", level: "strong", at: ["ob"], len: false, note: "At Openbank, Compose modules from other teams inside an app with XML Views" },
     { name: "Navigation Compose", level: "strong", at: ["gs", "mn"], pages: false },
     { name: "Material 3", level: "strong", at: ["gs", "mn"], pages: false },
     { name: "kotlinx.serialization", level: "strong", at: ["gs", "mn"], pages: false },
     { name: "Coil", level: "strong", at: ["gs"], pages: false },
     { name: "Gradle", level: "strong", at: ["gs", "mn"], note: "Version catalogs and KSP in both builds", pages: false },
+    { name: "Git", level: "strong", at: ["gs", "mn", "ob", "cb", "cd", "ir", "et"], note: "At every job; in GameStack, pull requests behind branch protection", pages: false },
     { name: "CI · GitHub Actions", level: "familiar", at: ["gs"], note: "Two required checks on every GameStack PR: build, test and lint; and the commit, title and branch rules" },
     { name: "Code review", level: "familiar", at: ["gs", { id: "ob", part: true }, { id: "cb", part: true }, { id: "cd", part: true }], len: false, note: "Every GameStack pull request before it merges; teammates' pull requests now and then at Globant (Citibanamex, Openbank) and Claro Drive" },
+    { name: "Robolectric", level: "familiar", at: ["gs"], note: "Screen tests in GameStack", pages: false },
     { name: "Firebase Analytics · Crashlytics", level: "familiar", at: ["ir"] },
     { name: "Google Maps · Places", level: "familiar", at: ["ir"] },
-    { name: "Robolectric", level: "familiar", at: ["gs"], note: "Screen tests in GameStack", pages: false },
     { name: "MVP", level: "core", legacy: true, at: ["ob", "cb", "cd", "ir"] },
     { name: "Dagger 2", level: "core", legacy: true, at: ["ob", "cd", { id: "ir", part: true }], note: "Also at IRONBIT toward the end. Citibanamex wired its dependencies by hand" },
     { name: "RxJava", level: "familiar", legacy: true, at: ["cb", "cd"] },
@@ -260,6 +281,42 @@
     { name: "SQLite", level: "familiar", legacy: true, at: ["ir", "et"], note: "SQLite by hand for offline catalogs at Estrategia; Realm at IRONBIT" },
     { name: "Glide", level: "familiar", legacy: true, at: ["cd"] }
   ],
+
+  // The CV's own copy (copy deck §11), both languages; the rest of it is read from the entries above.
+  // siteLink: the site's address joins the contact line at launch, not before.
+  cv: {
+    siteLink: false,
+    photo: ["es"], // the languages whose CV carries the photo
+    status: { en: "Mexico City (UTC−6) · Remote or relocation · Available now", es: "Ciudad de México (UTC−6) · Remoto o reubicación · Disponible de inmediato" },
+    overlap: { en: "Flexible by up to 3 hours to overlap with European afternoons; full overlap with US hours.", es: "Flexible hasta 3 horas para coincidir con las tardes de Europa; coincidencia total con el horario de EE. UU." },
+    summary: {
+      en: "Android developer with {careerYears}+ years of client apps in banking, telecom and consumer products, in Java and Kotlin. In 2026 I wrote a modern Android app by hand; now I build the next one with **AI agents inside a harness I designed**: rules and checks they can't skip. Looking for Senior Android or Android + AI roles.",
+      es: "Desarrollador Android con {careerYears}+ años en apps para clientes de banca, telecomunicaciones y consumo, en Java y Kotlin. En 2026 escribí a mano una app Android moderna; ahora construyo la siguiente con **agentes de IA dentro de un harness que yo diseñé**: reglas y controles que no pueden saltarse. Busco puestos de Senior Android o Android + IA."
+    },
+    h: {
+      skills: { en: "Skills", es: "Habilidades" }, projects: { en: "Own projects", es: "Proyectos propios" }, experience: { en: "Experience", es: "Experiencia" },
+      how: { en: "How I work", es: "Cómo trabajo" }, education: { en: "Education", es: "Educación" }, languages: { en: "Languages", es: "Idiomas" }
+    },
+    levels: {
+      core: { en: "Core", es: "Principales" }, coreNote: { en: "years of use", es: "años de uso" }, strong: { en: "Strong", es: "Sólidas" },
+      ai: { en: "AI-assisted development", es: "Desarrollo asistido por IA" }, familiar: { en: "Familiar", es: "Familiares" },
+      legacy: { en: "Apps with XML Views", es: "Apps con vistas XML" }
+    },
+    kind: { project: { en: "Own build", es: "Proyecto propio" }, "in-progress": { en: "In progress", es: "En curso" }, completed: { en: "Completed", es: "Completado" } },
+    // skill and stack names that change in Spanish; every other one is written alike (technical terms stay in English, Alan)
+    terms: {
+      "Harness engineering (hooks, permissions, CI gates)": "Harness engineering (hooks, permisos, controles de CI)",
+      "AI code review loops": "Ciclos de code review con IA",
+      "Subagents and MCP (as a user)": "Subagents y MCP (como usuario)",
+      "Code review": "Revisión de código", "Architecture decisions · ADRs": "Decisiones de arquitectura · ADRs", "Compose & Views interop": "Interoperabilidad Compose y Views",
+      "Bluetooth printing": "Impresión por Bluetooth", "AI agents": "Agentes de IA"
+    },
+    how: [
+      { en: "In Globant's evaluations, the client valued features delivered with few bugs, because I covered the scenarios before handing them over, and clear communication with the team and with them.", es: "En las evaluaciones de Globant, el cliente valoró que entregara funciones con pocos bugs, porque cubría los escenarios antes de entregarlas, y la comunicación clara con el equipo y con ellos." },
+      { en: "Remote work across countries at Openbank: teams spread between Spain and Latin America, and in the last one I was the only member outside Spain. Close work with the product owner and analysts, adapting to last-minute changes.", es: "Trabajo remoto entre países en Openbank: equipos repartidos entre España y Latinoamérica, y en el último yo era el único fuera de España. Trabajo cercano con el product owner y los analistas, adaptándome a cambios de último minuto." },
+      { en: "I review my own process and fix it before adding features: in GameStack I paused product work for a cycle that rewrote the product requirements, set up Spec-Driven Development with OpenSpec and tightened the harness, applying my self-directed AI learning path.", es: "Reviso mi propio proceso y lo corrijo antes de sumar funciones: en GameStack pausé el producto durante un ciclo que reescribió los requisitos del producto, dejó listo el Spec-Driven Development con OpenSpec y ajustó el harness, aplicando mi ruta de aprendizaje de IA autodirigida." }
+    ]
+  },
 
   // Page copy that is not about one entry (copy-deck sections 1 and 5–8). Site only, so English strings.
   copy: {
@@ -279,7 +336,7 @@
       toShow: { long: "Play the animated version", short: "Animated" },
       toPlain: { long: "Read the plain version", short: "Plain" }
     },
-    cta: { contact: "Get in touch", cv: "Download CV", copied: "Copied" },
+    cta: { contact: "Get in touch", cv: "Download CV", cvIn: { en: "English", es: "Español" }, cvKind: "PDF", copied: "Copied" },
     footer: {
       // CC BY 3.0 requires this credit wherever the Android robot appears
       showCredit: "The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License."
@@ -295,10 +352,10 @@
     skills: {
       intro: "Grouped by how well I know them.",
       levels: {
-        core: ["Core", "My daily tools, with years in production"],
+        core: ["Core", "My daily tools, with years of use"],
         strong: ["Strong", "Confident with it, in production or in complete apps"],
         familiar: ["Familiar", "Used in real work, not a main strength"],
-        legacy: ["View-based apps", "Patterns and libraries of the apps built before Compose"]
+        legacy: ["Apps with XML Views", "Patterns and libraries of the apps built before Compose"]
       },
       toggle: "See where I used each one",
       hide: "Hide detail", // the same button while the detail is open, held under the bar

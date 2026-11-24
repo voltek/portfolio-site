@@ -55,6 +55,8 @@
   .stack li{white-space:nowrap}
   .stack li::before{content:"·";display:inline-block;width:1.6em;text-align:center}
 {{>contact-read.css}}
+  /* the hero's two buttons share a line on a phone */
+  @media (max-width:420px){ .open .ctas .btn{padding:0 14px} }
   /* now building: the build in progress, read from the data */
   .now{--rule:var(--rule-raised);--cell:var(--cell-raised);background:var(--sheet);color:var(--paper-ink);border:1px solid var(--sheet-line);border-radius:6px;box-shadow:var(--lift)}
   .now .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--rule)}
@@ -295,7 +297,7 @@
         <ul class="stack" aria-label="{{copy.aria.stack}}">{{@stack}}</ul>
         <div class="ctas">
           <a class="btn go" href="#contact"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3.5h14v10H9.5L5 17v-3.5H3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>{{copy.cta.contact}}</a>
-          <a class="btn line" href="cv.html"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11M5.5 8.5L10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>{{copy.cta.cv}}</a>
+          {{@cvMenu}}
         </div>
       </div>
       {{@now}}
@@ -360,6 +362,7 @@
     let kept = false; try { kept = sessionStorage.getItem("ah-skills") === "open"; } catch (e) {}
     if (kept || new URLSearchParams(location.search).has("open")) set(true); })(); // ?open: starts open, for previews
 
-{{>copy-email.js}}</script>
+{{>copy-email.js}}
+{{>cv-menu.js}}</script>
 </body>
 </html>

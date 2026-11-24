@@ -1,0 +1,68 @@
+<!doctype html>
+<!-- The CV as it is printed (tools/cv.js makes the PDFs); it is not a page of the site. -->
+<html lang="{{@lang}}" data-world="read" data-theme="light">
+<head>
+<meta charset="utf-8">
+<base href="{{@base}}">
+<title>{{copy.page.title.cv}}</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  @page{size:Letter;margin:.45in .55in .4in}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:#fff}
+  body{font-family:var(--text);font-size:9.3pt;line-height:1.33;color:var(--paper-ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  a{color:inherit;text-decoration:underline;text-decoration-color:var(--go);text-decoration-thickness:1pt;text-underline-offset:2pt}
+  h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.01em}
+  ul{padding-left:11pt}
+  li{margin:1pt 0}
+  li::marker,.sep{color:var(--paper-muted)}
+
+  .top{display:flex;justify-content:space-between;gap:24pt;border-top:5pt solid var(--field);padding-top:12pt;margin-bottom:10pt}
+  .top img{width:68pt;height:80pt;object-fit:cover;object-position:50% 18%;border-radius:4pt}
+  h1{font-size:28pt;line-height:1;font-weight:800;letter-spacing:-.025em;color:var(--field)}
+  .title{font-family:var(--display);font-size:13pt;font-weight:600;margin:3pt 0 5pt}
+  .meta{font-size:9pt;color:var(--paper-muted)}
+  .summary{margin-bottom:3pt}
+  .overlap{color:var(--paper-muted);font-size:9pt}
+
+  section{margin-top:11pt}
+  h2{color:var(--paper-ink);border-bottom:1.25pt solid var(--head-rule);text-transform:uppercase;letter-spacing:.06em;font-size:9.6pt;margin-bottom:5pt;padding-bottom:2pt}
+
+  /* two columns of whole blocks, each label above its own list (Alan): a column of labels made applicant trackers
+     (checked with pdftotext) read every label first */
+  .skills{columns:2;column-gap:24pt}
+  .lv{margin-bottom:4pt}
+  .lv h3{font-family:var(--text);font-size:8.6pt;text-transform:uppercase;letter-spacing:.05em;color:var(--field)}
+  .lv-legacy h3{color:var(--paper-muted)}
+  .lvsub{font-weight:400;text-transform:none;letter-spacing:0;color:var(--paper-muted)}
+  .yr{color:var(--paper-muted);font-size:8.8pt}
+
+  .entry,.employer{margin-bottom:8pt}
+  .entry header,.emp{display:flex;align-items:baseline;gap:6pt}
+  .entry h3,.emp h3{font-size:10.5pt}
+  .sub{color:var(--paper-muted);font-size:9pt}
+  .sub::before{content:"";display:inline-block;width:6pt;height:6pt;border-radius:50%;background:var(--client-mark);margin-right:4pt;vertical-align:.5pt}
+  .own h3{color:var(--own)}
+  .own .sub::before{background:var(--own)}
+  .when{margin-left:auto;font-size:9pt;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .what{margin:1pt 0 2pt}
+  .stack{font-size:8.6pt;color:var(--paper-muted);margin-top:2pt}
+  .employer{margin-top:0}
+  .emp{margin-bottom:4pt}
+  .employer .entry{padding-left:10pt;border-left:.75pt solid var(--client)}
+  .employer .entry h3{font-size:10pt}
+  .employer .entry .sub::before{display:none}
+  .how li{margin-bottom:2pt}
+  .last{display:flex;gap:28pt}
+  .last section:first-child{flex:2.6}
+  .last section{flex:1}
+
+  .entry header,.emp,h2,.what{break-after:avoid}
+  .entry header,.emp,.what,li,.stack,.lv,.last section{break-inside:avoid}
+  .stack{break-before:avoid}
+</style>
+</head>
+<body>
+{{@body}}
+</body>
+</html>

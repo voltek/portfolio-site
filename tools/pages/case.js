@@ -2,7 +2,7 @@
 // for every case: the project's entry in data/portfolio.js gives the header, data/cases/<page>.js the body, copy.case
 // the labels. A section the case file leaves out is not drawn and leaves the bar (DECISIONS.md → Case page rules).
 const IMG = require("../../lib/images.js");
-const { C, esc, text, calcData, head, srcset, ICON } = require("./common.js");
+const { C, esc, text, calcData, head, srcset, ICON, cvMenu } = require("./common.js");
 
 const I = {
   back: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -139,7 +139,7 @@ module.exports = (cs, ctx) => {
     flat: strip ? "" : " flat", // no screens: the field closes without the room the strip straddles
     // a case still running has a length that grows: the browser recomputes it (live.js), as on the landing
     live: w.end == null ? `<script type="application/json" id="calc-data">${calcData(data, ctx.now.getUTCFullYear())}</script>\n<script src="lib/calc.js"></script>\n<script src="live.js"></script>` : "",
-    githubIcon: ICON.github
+    githubIcon: ICON.github, cvMenu: cvMenu(ctx, "line", 2)
   };
 };
 Object.assign(module.exports, { FILE, SECTIONS }); // check-data holds the case files to the same reading

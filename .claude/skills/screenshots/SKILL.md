@@ -30,7 +30,7 @@ bash .claude/skills/screenshots/capture.sh errors <page.html> [query]
 ## Standard pass after a change
 
 Pages are the built ones: `node tools/build.js` first, then `_site/index.html` (Plain), `_site/show.html` (Show) and
-`_site/<case>.html`. The CV has no page yet.
+`_site/<case>.html`. The CV is two PDFs, not a page: `node tools/cv.js --check` prints them and reads them back.
 
 1. `errors` on every page touched.
 2. `shot` at **1440×900** and at **500×1000** (Edge headless never goes below a 504 px viewport, so 500 stands in for
