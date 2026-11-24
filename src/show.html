@@ -845,6 +845,7 @@
   $("older").addEventListener("click", () => { pause(false); go(pos + 1); });
   frames.forEach(f => f.addEventListener("click", () => { pause(false); go(+f.dataset.k); }));
 
+{{>current-section.js}}
   /* ---------- top bar: solid once you leave the title card, menu on phones, current section ---------- */
   const bar = $("top"), links = $("links"), menu = $("menu");
   const solid = () => bar.classList.toggle("solid", scrollY > 40);
@@ -861,11 +862,7 @@
   addEventListener("keydown", e => { if (e.key === "Escape" && isOpen()) shut(true); });
   addEventListener("pointerdown", e => { if (isOpen() && !bar.contains(e.target)) shut(false); });
   addEventListener("scroll", () => { if (isOpen() && Math.abs(scrollY - openedAt) > 24) shut(false); }, { passive:true });
-  const spy = new IntersectionObserver(entries => entries.forEach(en => {
-    if (!en.isIntersecting) return;
-    links.querySelectorAll("a").forEach(a => a.setAttribute("aria-current", a.getAttribute("href") === "#" + en.target.id));
-  }), { rootMargin:"-45% 0px -50% 0px" });
-  links.querySelectorAll("a").forEach(a => { const s = $(a.getAttribute("href").slice(1)); if (s) spy.observe(s); });
+  currentSection(links);
   new IntersectionObserver(([en]) => bar.classList.toggle("face-on", !en.isIntersecting), { rootMargin:"-70px 0px 0px 0px" }).observe(document.querySelector(".badge"));
 
   // looping animations rest while their part of the page is off screen

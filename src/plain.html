@@ -346,6 +346,7 @@
     const toTop = () => { scrollTo({ top:0, behavior:"instant" }); root.scrollIntoView({ block:"start", behavior:"instant" }); };
     toTop(); addEventListener("load", toTop);
   })();
+{{>current-section.js}}
 {{>bar-read.js}}
 
   // skills detail: hidden until asked for (without JS it stays open, see .js in the CSS)

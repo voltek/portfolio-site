@@ -53,7 +53,8 @@ the bar stays marked until the visitor scrolls by hand. A page's own always-visi
 study: "Contact") stays outside the menu. The name is the home link and looks the same everywhere; on a case study it
 returns to the exact place on the landing when the visitor came from there, else to the landing's top (Alan, 10-28).
 Show has its own bar in its own world. **One copy:** the bar's CSS and script
-are `src/partials/bar-read.css` and `bar-read.js`, included with `{{>name}}`; a page never copies or restyles them.
+are `src/partials/bar-read.css` and `bar-read.js`, included with `{{>name}}`; a page never copies or restyles them. Which
+section the bar marks is `current-section.js`, one copy for Show's bar too: the last whose top passed under the bar.
 
 **The Contact Rule (Plain's world: Plain, the case studies, and any new page that ends with contact;
 Alan, 10-28).** "Let's talk" is one piece, never rebuilt: its markup `src/partials/contact-read.html`, its CSS
