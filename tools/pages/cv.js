@@ -1,5 +1,5 @@
 // The CV's body, one language at a time, from data/portfolio.js (its own copy is data.cv; copy deck §11). tools/cv.js prints it.
-const { C, esc, skillName, md: mark } = require("./common.js");
+const { C, esc, skillName, skillRows, md: mark } = require("./common.js");
 
 const bare = u => u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 const link = (href, label = bare(href)) => `<a href="${esc(href)}">${esc(label)}</a>`;
@@ -27,10 +27,8 @@ module.exports = ({ data, now, careerYears }, lang, { phone, fullName } = {}) =>
 <p class="summary">${md(t(cv.summary))}</p>
 <p class="overlap">${md(t(cv.overlap))}</p>`;
 
-  // the pages' levels, with the AI skills in a row of their own (Alan); years only for Core, as on the pages
-  const of = level => data.skills.filter(s => !s.legacy && !s.ai && s.level === level);
-  const rows = { core: of("core"), strong: of("strong"), ai: data.skills.filter(s => s.ai), familiar: of("familiar"), legacy: data.skills.filter(s => s.legacy) };
-  const skills = Object.entries(rows).filter(([, list]) => list.length).map(([k, list]) => {
+  // the pages' rows, with the CV-only skills; years only for Core, as on the pages
+  const skills = skillRows(data.skills).map(([k, list]) => {
     const items = list.map(s => { const y = k === "core" && C.skillLength(s, data, now, lang);
       return `${skillName(term(s.cv || s.name))}${y ? ` <span class="yr">${y}</span>` : ""}`; });
     return `<div class="lv lv-${k}"><h3>${esc(t(cv.levels[k]))}${k === "core" ? ` <span class="lvsub">(${esc(t(cv.levels.coreNote))})</span>` : ""}</h3> <p>${items.join(", ")}</p></div>`;

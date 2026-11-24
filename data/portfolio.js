@@ -234,8 +234,9 @@
     }
   ],
 
-  // Skills by level, in Alan's own judgment (words only: never bars, stars or percentages). Within a level, ai: true
-  // goes first, then this order. cv: the name on the CV, when it says more there. legacy: true goes to the "Apps with XML Views" row, in this order and one look for all.
+  // Skills by level, in Alan's own judgment (words only: never bars, stars or percentages). Each row keeps this
+  // order, what Android openings ask for most first, with a few set by hand (Flow by Coroutines, RxJava over SQLite,
+  // Git and MCP last): Alan approved it, do not re-sort. ai: true goes to the "AI-assisted development" row. cv: the name on the CV, when it says more there. legacy: true goes to the "Apps with XML Views" row, in this order and one look for all.
   // pages: false keeps a skill off Plain and Show (Git, the Compose-era libraries): it stays for the CV. at: where it
   // was used (ids from work; { id, start, end } narrows one place; part: true marks a place where it was used only
   // some of the time: the matrix's hollow dot, and no years); its years are computed from there. len: false names the
@@ -245,40 +246,37 @@
     { name: "Java", level: "core", at: ["ob", "cb", "cd", "ir", "et"] },
     { name: "Android SDK", level: "core", at: ["gs", "mn", "ob", "cb", "cd", "ir", "et"] },
     { name: "Retrofit · REST APIs", level: "core", at: ["gs", "mn", "ob", "cb", "cd", "ir", "et"], note: "REST APIs at every client job. In GameStack, IGDB queries written in its Apicalypse language" },
-    { name: "Agentic engineering · Claude Code", level: "strong", ai: true, at: ["gs"], note: "AI-assisted development with Claude Code agents inside a harness I designed: CLAUDE.md and rules loaded by path, Skills, ADRs, hooks, a capped review loop, CI checks and a human in the loop. In ModernNotes, AI never wrote the code" },
-    { name: "Spec-Driven Development", cv: "Spec-Driven Development (OpenSpec)", level: "strong", ai: true, at: ["gs"], note: "A living PRD and OpenSpec, each scenario naming the test that verifies it, a drift checklist and session checkpoints, from my learning path, applied in GameStack" },
-    { name: "Context engineering", cv: "Context engineering (CLAUDE.md, path-scoped rules, Agent Skills)", level: "strong", ai: true, at: ["gs"], pages: false },
-    { name: "Harness engineering", cv: "Harness engineering (hooks, permissions, CI gates)", level: "strong", ai: true, at: ["gs"], pages: false },
-    { name: "AI code review loops", level: "strong", ai: true, at: ["gs"], pages: false },
-    { name: "Human in the loop", level: "strong", ai: true, at: ["gs"], pages: false },
-    { name: "Prompt engineering", level: "strong", ai: true, at: ["gs"], pages: false },
-    { name: "Subagents and MCP (as a user)", level: "familiar", ai: true, at: [], pages: false }, // used, none built: never without "as a user"
     { name: "Jetpack Compose", level: "strong", at: ["gs", "mn"] },
     { name: "Coroutines", level: "strong", at: ["gs", "mn", "ob"], note: "In my own builds, a search where each new query cancels the one running (GameStack) and tests on a test dispatcher in both; at Openbank, simple use inside an existing codebase" },
     { name: "Flow", level: "strong", at: ["gs", "mn"] },
     { name: "MVI · MVVM", level: "strong", at: ["gs", "mn"], note: "MVI in GameStack, MVVM in ModernNotes" },
-    { name: "Clean Architecture", level: "strong", at: ["gs", "mn", "cb"], note: "Designed by hand in ModernNotes and kept in GameStack; at Citibanamex, inside an existing codebase" },
-    { name: "Architecture decisions · ADRs", level: "strong", at: ["gs"], note: "Decisions recorded as ADRs in GameStack, each naming what enforces it" },
-    { name: "Hilt", level: "strong", at: ["gs", "mn"] },
-    { name: "Room", level: "strong", at: ["mn"] },
     { name: "Testing", cv: "Testing (JUnit, MockK, Turbine)", level: "strong", at: ["gs", "mn", "cb", { id: "ob", part: true }], note: "JUnit, MockK, Turbine and coroutines-test in both builds, MockWebServer in ModernNotes, Robolectric screen tests in GameStack; unit tests at Citibanamex and, now and then, at Openbank" },
-    { name: "Compose & Views interop", level: "strong", at: ["ob"], len: false, note: "At Openbank, Compose modules from other teams inside an app with XML Views" },
-    { name: "Navigation Compose", level: "strong", at: ["gs", "mn"], pages: false },
+    { name: "Hilt", level: "strong", at: ["gs", "mn"] },
+    { name: "Gradle", level: "strong", at: ["gs", "mn"], note: "Version catalogs and KSP in both builds", pages: false },
+    { name: "Room", level: "strong", at: ["mn"] },
     { name: "Material 3", level: "strong", at: ["gs", "mn"], pages: false },
+    { name: "Clean Architecture", level: "strong", at: ["gs", "mn", "cb"], note: "Designed by hand in ModernNotes and kept in GameStack; at Citibanamex, inside an existing codebase" },
+    { name: "Navigation Compose", level: "strong", at: ["gs", "mn"], pages: false },
+    { name: "Compose & Views interop", level: "strong", at: ["ob"], len: false, note: "At Openbank, Compose modules from other teams inside an app with XML Views" },
+    { name: "Architecture decisions · ADRs", level: "strong", at: ["gs"], note: "Decisions recorded as ADRs in GameStack, each naming what enforces it" },
     { name: "kotlinx.serialization", level: "strong", at: ["gs", "mn"], pages: false },
     { name: "Coil", level: "strong", at: ["gs"], pages: false },
-    { name: "Gradle", level: "strong", at: ["gs", "mn"], note: "Version catalogs and KSP in both builds", pages: false },
     { name: "Git", level: "strong", at: ["gs", "mn", "ob", "cb", "cd", "ir", "et"], note: "At every job; in GameStack, pull requests behind branch protection", pages: false },
+    { name: "Agentic engineering · Claude Code", level: "strong", ai: true, at: ["gs"], note: "Claude Code agents build inside a harness I designed, with a human in the loop: I confirm every review triage and every merge. In ModernNotes, AI never wrote the code" },
+    { name: "Spec-Driven Development", cv: "Spec-Driven Development (OpenSpec)", level: "strong", ai: true, at: ["gs"], note: "A living PRD and OpenSpec, each scenario naming the test that verifies it, a drift checklist and session checkpoints, from my learning path, applied in GameStack" },
+    { name: "AI code review loops", level: "strong", ai: true, at: ["gs"], note: "Capped review rounds per branch, every finding triaged in a table I confirm, then one Codex round on the pull request" },
+    { name: "Harness engineering", cv: "Harness engineering (CLAUDE.md, path-scoped rules, Agent Skills, hooks, permissions, CI gates)", level: "strong", ai: true, at: ["gs"], note: "CLAUDE.md and rules loaded by path, Skills, hooks, permissions and two required CI checks" },
+    { name: "Using subagents and MCP servers", level: "familiar", ai: true, at: [], pages: false }, // used, none built: never without "using"
     { name: "CI · GitHub Actions", level: "familiar", at: ["gs"], note: "Two required checks on every GameStack PR: build, test and lint; and the commit, title and branch rules" },
     { name: "Code review", level: "familiar", at: ["gs", { id: "ob", part: true }, { id: "cb", part: true }, { id: "cd", part: true }], len: false, note: "Every GameStack pull request before it merges; teammates' pull requests now and then at Globant (Citibanamex, Openbank) and Claro Drive" },
-    { name: "Robolectric", level: "familiar", at: ["gs"], note: "Screen tests in GameStack", pages: false },
     { name: "Firebase Analytics · Crashlytics", level: "familiar", at: ["ir"] },
     { name: "Google Maps · Places", level: "familiar", at: ["ir"] },
-    { name: "MVP", level: "core", legacy: true, at: ["ob", "cb", "cd", "ir"] },
+    { name: "Robolectric", level: "familiar", at: ["gs"], note: "Screen tests in GameStack", pages: false },
     { name: "Dagger 2", level: "core", legacy: true, at: ["ob", "cd", { id: "ir", part: true }], note: "Also at IRONBIT toward the end. Citibanamex wired its dependencies by hand" },
     { name: "RxJava", level: "familiar", legacy: true, at: ["cb", "cd"] },
-    { name: "Custom Views", level: "core", legacy: true, at: ["ob"] },
     { name: "SQLite", level: "familiar", legacy: true, at: ["ir", "et"], note: "SQLite by hand for offline catalogs at Estrategia; Realm at IRONBIT" },
+    { name: "MVP", level: "core", legacy: true, at: ["ob", "cb", "cd", "ir"] },
+    { name: "Custom Views", level: "core", legacy: true, at: ["ob"] },
     { name: "Glide", level: "familiar", legacy: true, at: ["cd"] }
   ],
 
@@ -305,9 +303,9 @@
     kind: { project: { en: "Own build", es: "Proyecto propio" }, "in-progress": { en: "In progress", es: "En curso" }, completed: { en: "Completed", es: "Completado" } },
     // skill and stack names that change in Spanish; every other one is written alike (technical terms stay in English, Alan)
     terms: {
-      "Harness engineering (hooks, permissions, CI gates)": "Harness engineering (hooks, permisos, controles de CI)",
+      "Harness engineering (CLAUDE.md, path-scoped rules, Agent Skills, hooks, permissions, CI gates)": "Harness engineering (CLAUDE.md, path-scoped rules, Agent Skills, hooks, permisos, controles de CI)",
       "AI code review loops": "Ciclos de code review con IA",
-      "Subagents and MCP (as a user)": "Subagents y MCP (como usuario)",
+      "Using subagents and MCP servers": "Uso de subagents y servidores MCP",
       "Code review": "Revisión de código", "Architecture decisions · ADRs": "Decisiones de arquitectura · ADRs", "Compose & Views interop": "Interoperabilidad Compose y Views",
       "Bluetooth printing": "Impresión por Bluetooth", "AI agents": "Agentes de IA"
     },
@@ -350,11 +348,12 @@
     },
     education: { plain: "Education and languages", show: "Education", languages: "Languages" },
     skills: {
-      intro: "Grouped by how well I know them.",
+      intro: "Grouped by how well I know them, with AI and XML Views in rows of their own.",
       levels: {
-        core: ["Core", "My daily tools, with years of use"],
-        strong: ["Strong", "Confident with it, in production or in complete apps"],
-        familiar: ["Familiar", "Used in real work, not a main strength"],
+        core: ["Core", "My foundation, with years of use"],
+        strong: ["Strong", "Confident with it, in client apps or in my own builds"],
+        ai: ["AI-assisted development", "Strong, with Claude Code agents in GameStack"], // the row of every ai: true skill
+        familiar: ["Familiar", "Working knowledge, from hands-on use"],
         legacy: ["Apps with XML Views", "Patterns and libraries of the apps built before Compose"]
       },
       toggle: "See where I used each one",

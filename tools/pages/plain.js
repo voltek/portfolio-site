@@ -1,5 +1,5 @@
 // Plain (index.html): the parts of src/plain.html that come from the data. Each key fills a {{@key}} of the template.
-const { C, esc, skillName, calc, matrix, text, calcData, head, srcset, status, ICON, cvMenu } = require("./common.js");
+const { C, esc, skillName, skillRows, calc, matrix, text, calcData, head, srcset, status, ICON, cvMenu } = require("./common.js");
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile;
@@ -34,13 +34,9 @@ module.exports = ctx => {
     <ul class="proof">${(live.proof || []).filter(r => r.on.includes("plain")).map(r => `<li><b class="num">${ICON.check}<span class="sr">${esc(cp.aria.yes)}</span></b><span><strong>${esc(r.label)}</strong> <small>· ${text(ctx, r.note)}</small></span></li>`).join("")}</ul>
     ${live.source ? `<p class="src">${text(ctx, live.source, { pin: live.pin })}</p>` : ""}${nowLinks(live.links)}</div></aside>`;
 
-  // skills: by level (an empty level leaves no row), then the XML Views row, one quiet look for all (its years
-  // and places are in the detail). Within a level, AI skills first, then the data's order; pages: false stays off.
-  const LV = ["core", "strong", "familiar"], L = cp.skills.levels;
-  const indexed = data.skills.map((s, i) => ({ ...s, i }));
-  const shown = indexed.filter(s => s.pages !== false);
-  const byLevel = lv => shown.filter(s => !s.legacy && s.level === lv).sort((a, b) => !!b.ai - !!a.ai);
-  const groups = [...LV.map(lv => [lv, byLevel(lv)]), ["legacy", shown.filter(s => s.legacy)]].filter(([, list]) => list.length);
+  // skills: the rows of skillRows (common.js); the XML Views row has one quiet look for all (its years and places
+  // are in the detail). pages: false stays off.
+  const L = cp.skills.levels, groups = skillRows(data.skills.map((s, i) => ({ ...s, i })).filter(s => s.pages !== false));
   // Core's chips carry their years ("Kotlin 7+ yrs"), the same length the detail shows under the name
   const tiers = groups.map(([id, list]) => `<div class="tier t-${id}"><div class="tlabel"><h3>${esc(L[id][0])}</h3><p>${esc(L[id][1])}</p></div>
     <ul class="chips">${list.map(s => `<li class="lv-${id === "legacy" ? "era" : s.level}">${skillName(s.name)}${(len => id === "core" && len ? ` <small class="num">${len}</small>` : "")(calc.len(ctx, s.i))}</li>`).join("")}</ul></div>`).join("");
