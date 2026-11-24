@@ -24,7 +24,7 @@ module.exports = {
   // libraries in `libs`, checked in the build at the pin. Order: language and UI, async, DI, data, network,
   // architecture, tests. check-data holds each tag to that.
   stack: ["Kotlin", "Jetpack Compose", "Material 3", "Coroutines", "Flow", "Hilt", "Room", "DataStore", "Retrofit", "Clean Architecture", "MVVM", "JUnit", "MockK", "Turbine", "MockWebServer"],
-  libs: ["DataStore", "JUnit", "MockK", "Turbine", "MockWebServer"],
+  libs: ["JUnit", "MockK", "Turbine", "MockWebServer"],
   video: null, // { src, poster, alt } once recorded (DATA.md → New demo video); it goes first among the screens
   shotsFoot: "Real screens from the emulator.",
 

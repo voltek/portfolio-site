@@ -255,6 +255,7 @@
     { name: "Hilt", level: "strong", at: ["gs", "mn"] },
     { name: "Gradle", level: "strong", at: ["gs", "mn"], note: "Version catalogs and KSP in both builds", pages: false },
     { name: "Room", level: "strong", at: ["mn"] },
+    { name: "DataStore", level: "strong", at: ["mn"] },
     { name: "Material 3", level: "strong", at: ["gs", "mn"], pages: false },
     { name: "Clean Architecture", level: "strong", at: ["gs", "mn", "cb"], note: "Designed by hand in ModernNotes and kept in GameStack; at Citibanamex, inside an existing codebase" },
     { name: "Navigation Compose", level: "strong", at: ["gs", "mn"], pages: false },
@@ -275,7 +276,7 @@
     { name: "Robolectric", level: "familiar", at: ["gs"], note: "Screen tests in GameStack", pages: false },
     { name: "Dagger 2", level: "core", legacy: true, at: ["ob", "cd", { id: "ir", part: true }], note: "Also at IRONBIT toward the end. Citibanamex wired its dependencies by hand" },
     { name: "RxJava", level: "familiar", legacy: true, at: ["cb", "cd"] },
-    { name: "SQLite", level: "familiar", legacy: true, at: ["ir", "et"], note: "SQLite by hand for offline catalogs at Estrategia; Realm at IRONBIT" },
+    { name: "SQLite · Realm", level: "familiar", legacy: true, at: ["ir", "et"], note: "SQLite by hand for offline catalogs at Estrategia; Realm at IRONBIT" },
     { name: "MVP", level: "core", legacy: true, at: ["ob", "cb", "cd", "ir"] },
     { name: "Custom Views", level: "core", legacy: true, at: ["ob"] },
     { name: "Glide", level: "familiar", legacy: true, at: ["cd"] }
