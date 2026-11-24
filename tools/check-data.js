@@ -83,6 +83,7 @@ data.work.forEach((w, i) => {
   if (!Array.isArray(w.highlights) || w.highlights.length !== 3) err(`${at}: exactly three highlights per card`);
   else w.highlights.forEach((h, j) => { bi(h, `${at}.highlights[${j}]`); tokens(h, `${at}.highlights[${j}]`); });
   if (!Array.isArray(w.stack) || !w.stack.length) err(`${at}: missing stack`);
+  else if (w.stack.length > (w.type === "job" ? 9 : 12)) warn(`${at}.stack: ${w.stack.length} tags, more than 9 for a job or 12 for a project no longer scans`);
   if (!w.show || !w.show.title) warn(`${at}: no Show title card`);
   (w.shots || []).forEach((s, j) => {
     const where = `${at}.shots[${j}]`;

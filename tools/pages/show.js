@@ -1,7 +1,7 @@
 // Show (show.html): the parts of src/show.html that come from the data. Each key fills a {{@key}} of the template.
 // Everything the prototype drew in the browser is drawn here: every episode card (the remote only switches which one
 // shows), the strip, the skills place matrix, the title card's rays and color bars.
-const { C, esc, skillName, skillRows, calc, matrix, text, calcData, head, srcset, status, ICON, cvMenu } = require("./common.js");
+const { C, esc, skillName, skillRows, calc, matrix, text, calcData, stackLine, head, srcset, status, ICON, cvMenu } = require("./common.js");
 const IMG = require("../../lib/images.js");
 
 /* ---------- props: one painted object per episode, its title lettered on it (show.prop in the data) ---------- */
@@ -162,13 +162,13 @@ module.exports = ctx => {
     if (w.roadmap) return `${head}${propSVG(w)}
       <p class="what">${text(ctx, w.what.en)}</p>
       <p class="credline">${esc(studio)} · ${dates}</p>
-      <p class="featline"><b>${esc(ui.credits.featuring)}</b> ${esc(w.stack.join(" · "))}</p>
+      <p class="featline"><b>${esc(ui.credits.featuring)}</b> ${esc(stackLine(w.stack))}</p>
       ${road(w)}
       ${cardlinks(w.links)}`;
     const cr = ui.credits;
     return `${head}${propSVG(w)}
       <p class="what">${text(ctx, w.what.en)}</p>
-      <dl class="credits"><dt>${esc(cr.studio)}</dt><dd>${esc(studio)}</dd><dt>${esc(cr.dates)}</dt><dd>${dates}</dd>${emp ? `<dt>${esc(cr.total)}</dt><dd>${calc.lapse(ctx, w.employer)} ${esc(ui.at)} ${esc(emp.name)} (${C.range(emp.start, emp.end)})</dd>` : ""}<dt>${esc(cr.featuring)}</dt><dd>${esc(w.stack.join(" · "))}</dd></dl>
+      <dl class="credits"><dt>${esc(cr.studio)}</dt><dd>${esc(studio)}</dd><dt>${esc(cr.dates)}</dt><dd>${dates}</dd>${emp ? `<dt>${esc(cr.total)}</dt><dd>${calc.lapse(ctx, w.employer)} ${esc(ui.at)} ${esc(emp.name)} (${C.range(emp.start, emp.end)})</dd>` : ""}<dt>${esc(cr.featuring)}</dt><dd>${esc(stackLine(w.stack))}</dd></dl>
       <div class="hl"><p class="hl-h">${esc(ui.highlights)}</p><ul class="stars">${w.highlights.map(h => `<li>${STAR}${text(ctx, h.en)}</li>`).join("")}</ul></div>
       ${cardlinks(w.links)}`;
   };

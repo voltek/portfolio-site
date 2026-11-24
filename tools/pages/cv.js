@@ -1,5 +1,5 @@
 // The CV's body, one language at a time, from data/portfolio.js (its own copy is data.cv; copy deck §11). tools/cv.js prints it.
-const { C, esc, skillName, skillRows, md: mark } = require("./common.js");
+const { C, esc, skillName, skillRows, md: mark, stackLine } = require("./common.js");
 
 const bare = u => u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 const link = (href, label = bare(href)) => `<a href="${esc(href)}">${esc(label)}</a>`;
@@ -38,7 +38,7 @@ module.exports = ({ data, now, careerYears }, lang, { phone, fullName } = {}) =>
   <header><h3>${esc(w.name)}</h3> <span class="sub">${sub}</span> ${when(w)}</header>
   <p class="what">${md(t(w.lede || w.what))}</p>
   ${bullets([...w.highlights.map(t), ...extra])}
-  <p class="stack">${w.stack.map(s => esc(term(s))).join(" · ")}</p>
+  <p class="stack">${esc(stackLine(w.stack.map(term)))}</p>
 </article>`;
   const newest = data.work.slice().reverse();
 
