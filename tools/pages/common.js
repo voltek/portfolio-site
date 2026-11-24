@@ -42,7 +42,7 @@ const calc = {
 // after Strong and the XML Views era last. An empty row is left out; each keeps the data's order.
 const skillRows = list => {
   const level = lv => list.filter(s => !s.legacy && !s.ai && s.level === lv);
-  return [["core", level("core")], ["strong", level("strong")], ["ai", list.filter(s => s.ai)], ["familiar", level("familiar")], ["legacy", list.filter(s => s.legacy)]].filter(([, l]) => l.length);
+  return [["core", level("core")], ["strong", level("strong")], ["ai", list.filter(s => s.ai && !s.legacy)], ["familiar", level("familiar")], ["legacy", list.filter(s => s.legacy)]].filter(([, l]) => l.length);
 };
 
 // The Skills detail's place matrix, shared by Plain and Show (each draws it in its own world): the places as columns,

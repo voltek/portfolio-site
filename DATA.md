@@ -74,9 +74,10 @@ those changes, run `node tools/og.js` (Edge headless) and commit the PNG; under 
 
 1. Add it to `skills`, in its row by how often Android openings ask for it, with `name`, `level` (`core` · `strong` ·
    `familiar`), `at` (where it was used) and, if useful, a one-line `note`. `ai: true` sends it to the "AI-assisted
-   development" row (strong, if the pages show it); `legacy: true` sends it to "Apps with XML Views"; `pages: false`
-   keeps it for the CV only (with `at: []` if no place stands behind it); `cv` is its name there when it says more. A
-   name that changes in Spanish goes in `cv.terms`.
+   development" row (strong, if the pages show it; its line, `copy.skills.levels.ai`, names the project behind it);
+   `legacy: true` sends it to "Apps with XML Views"; `pages: false` keeps it for the CV only (with `at: []` if no
+   place stands behind it); `cv` is its name there when it says more. A name that changes in Spanish goes in
+   `cv.terms`.
 2. Years come from `at`. To narrow one place, `{ id: "ir", end: "2017-12" }` instead of `"ir"`; `{ id: "ob", part: true }`
    is a place where it was used only some of the time (the matrix's hollow dot, no years); `len: false` keeps the
    length off the pages (a skill used in only part of a job). The pages show a length

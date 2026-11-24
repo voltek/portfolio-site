@@ -235,7 +235,8 @@
   ],
 
   // Skills by level, in Alan's own judgment (words only: never bars, stars or percentages). Each row keeps this
-  // order, what Android openings ask for most first. ai: true goes to the "AI-assisted development" row. cv: the name on the CV, when it says more there. legacy: true goes to the "Apps with XML Views" row, in this order and one look for all.
+  // order, what Android openings ask for most first, with a few set by hand (Flow by Coroutines, RxJava over SQLite,
+  // Git and MCP last): Alan approved it, do not re-sort. ai: true goes to the "AI-assisted development" row. cv: the name on the CV, when it says more there. legacy: true goes to the "Apps with XML Views" row, in this order and one look for all.
   // pages: false keeps a skill off Plain and Show (Git, the Compose-era libraries): it stays for the CV. at: where it
   // was used (ids from work; { id, start, end } narrows one place; part: true marks a place where it was used only
   // some of the time: the matrix's hollow dot, and no years); its years are computed from there. len: false names the
