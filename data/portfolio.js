@@ -353,7 +353,7 @@
         core: ["Core", "My foundation, with years of use"],
         strong: ["Strong", "Confident with it, in client apps or in my own builds"],
         ai: ["AI-assisted development", "Strong, with Claude Code agents in GameStack"], // the row of every ai: true skill
-        familiar: ["Familiar", "Used in real work, not a main strength"],
+        familiar: ["Familiar", "Working knowledge, from hands-on use"],
         legacy: ["Apps with XML Views", "Patterns and libraries of the apps built before Compose"]
       },
       toggle: "See where I used each one",
