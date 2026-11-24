@@ -207,8 +207,8 @@
   .job{display:grid;grid-template-columns:minmax(0,2.6fr) minmax(0,3fr) minmax(0,5fr) minmax(0,2.6fr);gap:32px;padding:22px 0;border-bottom:1px solid var(--rule);align-items:start}
   .when b{display:block;font-weight:700;font-size:15px}
   .when span{font-size:14px;color:var(--paper-muted)}
-  .job h4{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.01em;line-height:1.15}
-  .job h4 + p{font-size:14px;color:var(--paper-muted);margin-top:4px}
+  .job :is(h4,h5){font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.01em;line-height:1.15}
+  .job :is(h4,h5) + p{font-size:14px;color:var(--paper-muted);margin-top:4px}
   .job .chip{margin-top:10px}
   .job .what{font-size:16px;line-height:1.6}
   .job ul{list-style:none;margin-top:8px}
@@ -218,9 +218,24 @@
   .job .tags{font-size:14px;line-height:1.55;color:var(--paper-muted)}
   .job .links{margin-top:12px}
   .job.own h4{color:var(--own)}
-  .emp{display:grid;grid-template-columns:minmax(0,2.6fr) minmax(0,10.6fr);gap:32px;padding:22px 0 0;align-items:baseline}
-  .emp h4{font-family:var(--display);font-weight:700;font-size:22px}
-  .emp p{font-size:15px;color:var(--paper-muted)}
+  /* an employer and its clients: one line in the dates column, a dot at each. --in: the line's room; --mid: the height
+     of a dot's center, on its dates; --d: its diameter. The rule between clients starts after the line */
+  .employer{--in:28px}
+  .emp{display:grid;grid-template-columns:minmax(0,2.6fr) minmax(0,3fr) minmax(0,5fr) minmax(0,2.6fr);gap:32px;padding:22px 0 18px;align-items:baseline;--mid:43px;--d:16px}
+  .emp-c{grid-column:2/-1}
+  .emp h4{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.02em;line-height:1.1}
+  .emp p{font-size:16px;margin-top:4px;color:var(--paper-muted);text-wrap:balance}
+  .emp p b{font-weight:700;font-size:18px;color:var(--paper-ink)}
+  .emp .when b{line-height:34px}
+  .job.client{border-bottom:0;--mid:34px;--d:10px}
+  .emp,.client{position:relative}
+  .employer .when{padding-left:var(--in);white-space:nowrap}
+  .client::after{content:"";position:absolute;bottom:0;left:var(--in);right:0;height:1px;background:var(--rule)}
+  .client:last-child::after{left:0}
+  .emp::before,.client::before{content:"";position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--client-mark)}
+  .emp::before{top:var(--mid)}
+  .client:last-child::before{bottom:auto;height:var(--mid)}
+  .employer .when::before{content:"";position:absolute;left:calc(8px - var(--d)/2);top:calc(var(--mid) - var(--d)/2);width:var(--d);height:var(--d);border-radius:50%;background:var(--client-mark);box-shadow:0 0 0 4px var(--paper)}
   .edu{display:grid;grid-template-columns:minmax(0,2.6fr) minmax(0,10.6fr);gap:32px;padding:16px 0;border-bottom:1px solid var(--rule)}
   .edu b{font-weight:700}
 
@@ -234,11 +249,18 @@
     .job .what-c{grid-column:2}
     .job .tags{grid-column:2}
     .emp,.edu{grid-template-columns:minmax(0,3fr) minmax(0,7fr);gap:6px 28px}
+    .emp-c{grid-column:2}
   }
+  @media (max-width:760px){ .employer{--in:20px} }
   @media (max-width:640px){
     .status{border-radius:14px;line-height:1.35;padding:6px 12px}
     .job,.emp,.edu{grid-template-columns:minmax(0,1fr)}
-    .job .what-c,.job .tags{grid-column:1}
+    .job .what-c,.job .tags,.emp-c{grid-column:1}
+    .employer{--in:28px}
+    .emp,.client{padding-left:var(--in)}
+    .employer .when{padding-left:0}
+    .emp{--mid:34px}
+    .emp .when b{line-height:1.5}
     .dhead{top:57px}
     .sk.shown .dhead .more{font-size:15px;gap:6px}
     .job{gap:8px}

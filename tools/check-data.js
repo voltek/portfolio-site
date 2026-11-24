@@ -91,8 +91,9 @@ data.work.forEach((w, i) => {
     if (!s.alt) warn(`${where}: alt text pending`);
     if (!Array.isArray(s.on) || !s.on.every(o => ON.includes(o))) err(`${where}: "on" must list ${ON.join(", ")}`);
   });
-  if (w.cv) { if (w.cv.note) bi(w.cv.note, `${at}.cv.note`); (w.cv.more || []).forEach((t, j) => bi(t, `${at}.cv.more[${j}]`)); }
-  if (w.type === "job" && w.employer && !(w.cv && w.cv.note)) err(`${at}.cv.note: the CV shows it beside a client's name`);
+  if (w.note) bi(w.note, `${at}.note`);
+  if (w.cv) { (w.cv.more || []).forEach((t, j) => bi(t, `${at}.cv.more[${j}]`)); }
+  if (w.type === "job" && w.employer && !w.note) err(`${at}.note: Plain and the CV say what the client is with it`);
   if (w.pin) {
     if (!w.pin.date) err(`${at}.pin: needs the day the claims were checked`);
     else date(w.pin.date, `${at}.pin.date`);

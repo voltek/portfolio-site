@@ -57,14 +57,15 @@
       role: { en: "Senior Android Developer", es: "Senior Android Developer" },
       place: { en: "Mexico City", es: "Ciudad de México" }, // CV
       intro: { en: "Android developer on two banking clients.", es: "Desarrollador Android en dos clientes bancarios." },
-      note: "{lapse} in total, across the two clients below" // Plain, under the employer's name, above its two clients
+      note: "**{lapse} in total**, across the two clients below" // Plain, under the employer's name, above its two clients
     }
   },
 
   // Jobs and projects, oldest first: this order is also the episode order (Show numbers them from it).
   // type: "job" (client work, Season 1) · "project" (own build, Season 2; status "in-progress" | "completed").
   // highlights: three per card, always (a fourth dilutes the scan; what does not fit goes to the CV).
-  // cv: what only the CV adds: more (bullets after the highlights) and note (beside a client's name under its employer).
+  // note: what a client of an employer is, under its name (Plain) or beside it (CV); Show says studio instead.
+  // cv: what only the CV adds: more (bullets after the highlights).
   // show: the Show episode's title card and its prop (an unknown prop falls back to the generic one).
   work: [
     {
@@ -114,6 +115,7 @@
       id: "cb", type: "job", name: "Citibanamex", employer: "globant",
       start: "2020-02", end: "2020-08",
       studio: { en: "Globant, for Citibanamex", es: "Globant, para Citibanamex" },
+      note: { en: "A Mexican bank, then part of Citigroup", es: "Banco mexicano, entonces parte de Citigroup" },
       what: { en: "Improvements to the app's CoDi flow, the digital payments system of Mexico's central bank.", es: "Mejoras al flujo de CoDi de la app, el sistema de pagos digitales del banco central de México." },
       highlights: [
         { en: "Improved QR reading and generation, and built the specified security steps natively", es: "Mejoré la lectura y generación de códigos QR y construí de forma nativa los pasos de seguridad especificados" },
@@ -121,14 +123,14 @@
         { en: "Wrote unit tests inside a Clean Architecture codebase", es: "Escribí pruebas unitarias dentro de una base de código con Clean Architecture" }
       ],
       stack: ["Java", "Kotlin", "RxJava", "MVP", "Clean Architecture", "Retrofit"],
-      cv: { note: { en: "A Mexican bank, then part of Citigroup", es: "Banco mexicano, entonces parte de Citigroup" } },
       show: { title: ["QUICK RESPONSE"], prop: "qr" }
     },
     {
       id: "ob", type: "job", name: "Openbank", employer: "globant",
       start: "2020-08", end: "2026-02",
       studio: { en: "Globant, for Openbank (Spain)", es: "Globant, para Openbank (España)" },
-      what: { en: "A Spanish bank's app, mostly with the deposits team: a Java codebase from 2018, where new code went into Kotlin.", es: "App de un banco español, sobre todo con el equipo de depósitos: una base de código en Java de 2018, donde el código nuevo se escribía en Kotlin." },
+      note: { en: "Santander Group's digital bank · Spain", es: "Banco digital del Grupo Santander · España" },
+      what: { en: "The bank's Android app, mostly with the deposits team: a Java codebase from 2018, where new code went into Kotlin.", es: "App Android del banco, sobre todo con el equipo de depósitos: una base de código en Java de 2018, donde el código nuevo se escribía en Kotlin." },
       highlights: [
         { en: "Built the full deposit reinvestment flow", es: "Construí el flujo completo de reinversión de depósitos" },
         { en: "Implemented the deposits redesign from its user stories: rates from the API instead of fixed, a wizard cut from 5 steps to 4, preferential renewal rates", es: "Implementé el rediseño de depósitos a partir de sus historias de usuario: tasas desde la API en lugar de fijas, un asistente reducido de 5 pasos a 4 y tasas preferenciales de renovación" },
@@ -136,7 +138,6 @@
       ],
       stack: ["Kotlin", "Java", "MVP", "Coroutines", "Dagger 2", "Custom Views", "Bitrise"],
       cv: {
-        note: { en: "Santander Group's digital bank · Spain", es: "Banco digital del Grupo Santander · España" },
         more: [
           { en: "Worked across most of the app (cards, accounts, keys and contracts) and unified its PDF contract viewer", es: "Trabajé en la mayor parte de la app (tarjetas, cuentas, claves y contratos) y unifiqué su visor de contratos en PDF" },
           { en: "Built custom views, such as the renewal detail on each deposit in the list, which changed color depending on the deposit", es: "Construí custom views, como el detalle de renovación de cada depósito en la lista, que cambiaba de color según el depósito" },
