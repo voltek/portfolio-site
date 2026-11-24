@@ -1,13 +1,15 @@
 // The CV's body, one language at a time, from data/portfolio.js (its own copy is data.cv; copy deck §11). tools/cv.js prints it.
 const { C, esc, skillName, md: mark } = require("./common.js");
 
-const md = s => mark(esc(s), "strong");
 const bare = u => u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 const link = (href, label = bare(href)) => `<a href="${esc(href)}">${esc(label)}</a>`;
 const DOT = '<span class="sep"> · </span>';
 
 module.exports = ({ data, now, careerYears }, lang, { phone } = {}) => {
-  const p = data.profile, cv = data.cv, t = o => o[lang];
+  // a Spanish text still pending (es: null; check-data lists it) goes out in English, never as "null"
+  const p = data.profile, cv = data.cv, t = o => o[lang] == null ? o.en : o[lang];
+  const fill = s => C.fill(s, { careerYears });
+  const md = s => mark(esc(fill(s)), "strong");
   const term = s => lang === "es" && cv.terms[s] || s;
   const month = s => s == null ? null : s.slice(0, 7);
   const when = o => `<span class="when">${C.range(month(o.start), month(o.end), lang)}</span>`;
@@ -18,12 +20,12 @@ module.exports = ({ data, now, careerYears }, lang, { phone } = {}) => {
   <div>
     <h1>${esc(p.name)}</h1>
     <p class="title">${esc(t(p.title))}</p>
-    <p class="meta">${esc(t(cv.status))}</p>
+    <p class="meta">${md(t(cv.status))}</p>
     <p class="meta">${contact}</p>
   </div>${cv.photo.includes(lang) ? `\n  <img src="${esc(p.photo.src)}" alt="">` : ""}
 </header>
-<p class="summary">${md(C.fill(t(cv.summary), { careerYears }))}</p>
-<p class="overlap">${esc(t(cv.overlap))}</p>`;
+<p class="summary">${md(t(cv.summary))}</p>
+<p class="overlap">${md(t(cv.overlap))}</p>`;
 
   // the pages' levels, with the AI skills in a row of their own (Alan); years only for Core, as on the pages
   const of = level => data.skills.filter(s => !s.legacy && !s.ai && s.level === level);
@@ -43,8 +45,8 @@ module.exports = ({ data, now, careerYears }, lang, { phone } = {}) => {
   const newest = data.work.slice().reverse();
 
   const projects = newest.filter(w => w.type === "project").map(w => entry(w, "own",
-    `${esc(t(cv.kind.project))} · ${esc(t(cv.kind[w.status]))}${DOT}${link(w.links.repo)}`,
-    (w.proof || []).filter(r => r.es).map(r => lang === "es" ? r.es : r).map(r => `**${r.label}**: ${r.note}`)));
+    `${esc(t(cv.kind.project))} · ${esc(t(cv.kind[w.status]))}${w.links && w.links.repo ? DOT + link(w.links.repo) : ""}`,
+    (w.proof || []).filter(r => r.es).map(r => lang === "es" ? r.es : r).map(r => C.fill(`**${r.label}**: ${r.note}`, { careerYears, pin: w.pin, updated: w.learningPath && w.learningPath.updated }))));
 
   // newest first; an employer's clients go together under its line
   const job = w => entry(w, "client", esc(w.employer ? t(w.cv.note) : `${t(w.studio)} · ${t(w.role)}`), (w.cv && w.cv.more || []).map(t));

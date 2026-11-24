@@ -79,6 +79,7 @@ data.work.forEach((w, i) => {
     if (!w.links || !w.links.repo) warn(`${at}: no repo link`);
   }
   bi(w.what, `${at}.what`);
+  if (w.lede) bi(w.lede, `${at}.lede`);
   if (!Array.isArray(w.highlights) || w.highlights.length !== 3) err(`${at}: exactly three highlights per card`);
   else w.highlights.forEach((h, j) => { bi(h, `${at}.highlights[${j}]`); tokens(h, `${at}.highlights[${j}]`); });
   if (!Array.isArray(w.stack) || !w.stack.length) err(`${at}: missing stack`);

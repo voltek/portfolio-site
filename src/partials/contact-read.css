@@ -1,5 +1,5 @@
-  /* ---------- the contact of Plain's world (Plain, the case studies, later the CV page): one copy, included by the build
-     as {{>contact-read.css}} with its markup {{>contact-read.html}} and script {{>copy-email.js}}. Its words come from
+  /* ---------- the contact of Plain's world (Plain and the case studies): one copy, included by the build
+     as {{>contact-read.css}} with its markup {{>contact-read.html}} and scripts {{>copy-email.js}} and {{>cv-menu.js}}. Its words come from
      profile in data/portfolio.js. A page adds only its own gap above it. The buttons are the world's buttons. ---------- */
   .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
   .btn{display:inline-flex;align-items:center;gap:9px;height:50px;padding:0 24px;border-radius:4px;font-weight:700;font-size:16px;text-decoration:none;transition:background-color var(--t),border-color var(--t),transform var(--t),box-shadow var(--t)}

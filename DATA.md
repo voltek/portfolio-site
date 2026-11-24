@@ -9,7 +9,8 @@ numbers and "Now building" are computed (`lib/calc.js`); never type them. After 
 - **Three highlights per card.** What does not fit goes to the CV.
 - **Dates:** `"2026-07"` (counts from the month's first day) or `"2026-07-15"`; `end: null` while ongoing. `work` stays
   oldest first: that order is the episode order.
-- **Texts the CV shows are `{ en, es }`.** `es: null` means the Spanish still needs approval.
+- **Texts the CV shows are `{ en, es }`.** `es: null` means the Spanish still needs approval (until then the
+  Spanish CV shows the English).
 
 ## I finished a project
 
@@ -27,7 +28,8 @@ its length and its skills' years follow.
 ## New job
 
 1. Add a `work` entry in date order with `type: "job"`, `start`, `end: null`, `studio`, `role` (or `employer` if it is a
-   client of an employer listed in `employers`), `what`, three `highlights`, `stack`, `show`.
+   client of an employer listed in `employers`), `what`, three `highlights`, `stack`, `show`. A client of an employer also needs `cv.note`
+   (what the company is, beside its name on the CV), and a new employer its `place`.
 2. Add its id to the `at` of the skills used there.
 3. `profile.status` (open to work) does not change by itself: update it through the copy deck if Alan stops looking.
 
@@ -76,7 +78,7 @@ those changes, run `node tools/og.js` (Edge headless) and commit the PNG; under 
    says more. A name that changes in Spanish goes in `cv.terms`.
 2. Years come from `at`. To narrow one place, `{ id: "ir", end: "2017-12" }` instead of `"ir"`; `{ id: "ob", part: true }`
    is a place where it was used only some of the time (the matrix's hollow dot, no years); `len: false` keeps the
-   length off the pages and names the places in the CV (a skill used in only part of a job). The pages show a length
+   length off the pages (a skill used in only part of a job). The pages show a length
    only for Core (chips and matrix rows), and there only when client work alone gives a year or more (`node tools/check-data.js --calc` lists them).
 
 ## New block in the learning path (or a block changes status)

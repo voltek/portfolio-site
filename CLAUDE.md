@@ -7,7 +7,8 @@ Portfolio of Alan Hernández (Senior Android Developer) for technical recruiters
 `data/portfolio.js` into `_site/`; dated numbers come from `lib/calc.js`, never hard-coded.
 
 - **Plain** (`index.html` from `src/plain.html`): the quick read and main door. **Show** (`show.html`): the expressive one.
-- Case studies: `data/cases/<case>.js` → `<case>.html` through `src/case.html`. The CV has no design yet (phase 7).
+- Case studies: `data/cases/<case>.js` → `<case>.html` through `src/case.html`. The CV is two PDFs (EN, ES) that the
+  build prints from `src/cv.html` with `tools/cv.js` (`--check` reads them back; `--phone` makes the ones Alan sends).
 
 ```sh
 node tools/build.js        # runs tools/check-data.js first, then src/ + data → _site/

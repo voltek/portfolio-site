@@ -26,17 +26,20 @@ const printCv = (out, { now = new Date(), phone } = {}) => {
       fs.rmSync(pdf, { force: true });
       const r = spawnSync(BROWSER, ["--headless=new", "--disable-gpu", "--allow-file-access-from-files", ...(process.env.CI ? ["--no-sandbox"] : []),
         `--user-data-dir=${path.join(tmp, "profile")}`, "--no-pdf-header-footer", `--print-to-pdf=${pdf}`, "file:///" + html.replace(/\\/g, "/").replace(/^\//, "")], { encoding: "utf8", timeout: 60000 });
-      if (!fs.existsSync(pdf)) throw new Error(`${name} did not print: ${(r.error || r.stderr || "").toString().split("\n").pop()}`);
-      const bytes = fs.readFileSync(pdf), pages = (bytes.toString("latin1").match(/\/Type\s*\/Page\b/g) || []).length;
+      const bytes = fs.existsSync(pdf) ? fs.readFileSync(pdf) : Buffer.alloc(0), pages = (bytes.toString("latin1").match(/\/Type\s*\/Page\b/g) || []).length;
+      if (r.error || r.status !== 0 || !pages) throw new Error(`${name} did not print: ${String(r.error || r.stderr || `exit ${r.status}`).trim().split("\n").pop()}`);
       return { lang, file: name, pages, kb: Math.round(bytes.length / 1024), long: pages > MAX_PAGES ? `${pages} pages, the target is ${MAX_PAGES}: shorten the oldest jobs first` : "" };
     });
-  } finally { fs.rmSync(tmp, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); }
+  } finally {
+    // the browser may still hold its profile for a moment: a folder left in the temp directory must not fail the build
+    try { fs.rmSync(tmp, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch { }
+  }
 };
 
 // What an applicant tracker would read: every section in order, and every Skills label right before its own list.
 const readBack = (pdf, lang) => {
   const r = spawnSync("pdftotext", ["-enc", "UTF-8", pdf, "-"], { encoding: "utf8" });
-  if (r.error) return ["pdftotext not found: not checked"];
+  if (r.error) return ["pdftotext not found: install it (Git for Windows has it) or run this from Git Bash"];
   const flat = s => s.replace(/\s+/g, " ").toUpperCase(), text = flat(r.stdout), bad = [], cv = data.cv;
   let from = 0;
   const next = (s, what) => { const i = text.indexOf(flat(s), from); if (i < 0) bad.push(`${what}: "${s}" missing or out of order`); else from = i; };
