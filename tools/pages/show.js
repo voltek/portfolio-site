@@ -1,7 +1,7 @@
 // Show (show.html): the parts of src/show.html that come from the data. Each key fills a {{@key}} of the template.
 // Everything the prototype drew in the browser is drawn here: every episode card (the remote only switches which one
 // shows), the strip, the skills place matrix, the title card's rays and color bars.
-const { C, esc, skillName, calc, matrix, text, calcData, head, srcset, status, ICON, cvMenu } = require("./common.js");
+const { C, esc, skillName, skillRows, calc, matrix, text, calcData, head, srcset, status, ICON, cvMenu } = require("./common.js");
 const IMG = require("../../lib/images.js");
 
 /* ---------- props: one painted object per episode, its title lettered on it (show.prop in the data) ---------- */
@@ -223,11 +223,7 @@ module.exports = ctx => {
     <p class="source">${text(ctx, cp.path.updated, { updated: path.updated })}</p></div></div></section>`;
 
   /* ---------- skills: the levels, then the place matrix behind the toggle ---------- */
-  const LV = ["core", "strong", "familiar"], L = cp.skills.levels;
-  const indexed = data.skills.map((s, i) => ({ ...s, i }));
-  const shown = indexed.filter(s => s.pages !== false);
-  const byLevel = lv => shown.filter(s => !s.legacy && s.level === lv).sort((a, b) => !!b.ai - !!a.ai);
-  const groups = [...LV.map(lv => [lv, byLevel(lv)]), ["legacy", shown.filter(s => s.legacy)]].filter(([, list]) => list.length);
+  const L = cp.skills.levels, groups = skillRows(data.skills.map((s, i) => ({ ...s, i })).filter(s => s.pages !== false));
   // Core's chips carry their years ("Kotlin 7+ yrs"), the same length the detail shows under the name
   const tiers = groups.map(([id, list]) => `<div class="tier t-${id}"><div class="tlabel"><h3>${esc(L[id][0])}</h3><p>${esc(L[id][1])}</p></div>
     <ul class="chips">${list.map(s => `<li class="lv-${id === "legacy" ? "era" : s.level}">${skillName(s.name)}${(len => id === "core" && len ? ` <small>${len}</small>` : "")(calc.len(ctx, s.i))}</li>`).join("")}</ul></div>`).join("");

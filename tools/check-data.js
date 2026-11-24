@@ -119,11 +119,13 @@ const sorted = data.work.every((w, i, a) => !i || C.parse(a[i - 1].start) <= C.p
 if (!sorted) err("work: keep it oldest first (it is the episode order)");
 
 // skills
-const LEVELS = Object.keys(data.copy.skills.levels).filter(l => l !== "legacy"), names = new Set();
+const LEVELS = Object.keys(data.copy.skills.levels).filter(l => l !== "legacy" && l !== "ai"), names = new Set();
 data.skills.forEach((s, i) => {
   const at = `skills.${s.name || i}`;
   if (!s.name) err(`skills[${i}]: missing name`); else if (names.has(s.name)) err(`${at}: duplicate`); else names.add(s.name);
   if (!LEVELS.includes(s.level)) err(`${at}: level must be ${LEVELS.join(", ")}`);
+  // the AI row says its level once, in its line
+  if (s.ai && s.pages !== false && s.level !== "strong") err(`${at}: an AI skill on the pages is strong, as its row says`);
   // a CV-only skill may name no place (it draws no matrix row)
   if (Array.isArray(s.at) && !s.at.length && s.pages === false) return;
   if (!Array.isArray(s.at) || !s.at.length) return err(`${at}: "at" lists no place`);
