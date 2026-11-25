@@ -23,13 +23,21 @@ const span = (o, where, openEnd) => {
   if (a && b && b < a) err(`${where}: ends before it starts`);
   if (a && a > now) warn(`${where}: starts after today`);
 };
-// a CV text: { en, es }; es null = Spanish pending
+// a text the CV shows: always { en, es }
 const bi = (t, where) => {
   if (t == null || typeof t !== "object") return err(`${where}: expected { en, es }`);
   if (!t.en) err(`${where}: missing en`);
-  if (t.es === undefined) err(`${where}: missing es (use null while pending)`);
-  else if (t.es === null) warn(`${where}: Spanish pending`);
 };
+// an { en } anywhere, the CV's or the site's, says its Spanish too; es null = pending
+const both = (o, where) => {
+  if (!o || typeof o !== "object") return;
+  if (typeof o.en === "string") {
+    if (o.es === null) warn(`${where}: Spanish pending`);
+    else if (!o.es) err(`${where}: missing es (use null while pending)`);
+  }
+  for (const [k, v] of Object.entries(o)) both(v, where ? `${where}.${k}` : k);
+};
+both(data, "");
 const TOKEN = /\{(careerYears|lapse|pinDate|updated)\}/g;
 // {lapse} is filled only in an employer's note (the entry that holds it); anywhere else it would crash the build
 const tokens = (t, where, lapse = false) => {
@@ -49,7 +57,7 @@ span(p.education, "profile.education");
 p.languages.forEach((l, i) => { bi(l.name, `profile.languages[${i}].name`); bi(l.level, `profile.languages[${i}].level`); });
 for (const [k, s] of Object.entries(p.lede)) tokens(s, `profile.lede.${k}`);
 for (const [id, e] of Object.entries(data.employers)) {
-  span(e, `employers.${id}`, true); bi(e.role, `employers.${id}.role`); bi(e.intro, `employers.${id}.intro`); bi(e.place, `employers.${id}.place`); tokens(e.note, `employers.${id}.note`, true);
+  span(e, `employers.${id}`, true); bi(e.role, `employers.${id}.role`); bi(e.place, `employers.${id}.place`); tokens(e.note, `employers.${id}.note`, true);
 }
 
 // the CV's own copy
@@ -57,8 +65,8 @@ const cv = data.cv;
 for (const k of ["status", "overlap", "summary"]) { bi(cv[k], `cv.${k}`); tokens(cv[k], `cv.${k}`); }
 for (const g of ["h", "levels", "kind"]) for (const [k, t] of Object.entries(cv[g])) bi(t, `cv.${g}.${k}`);
 cv.how.forEach((t, i) => { bi(t, `cv.how[${i}]`); tokens(t, `cv.how[${i}]`); });
-const named = new Set([...data.skills.map(s => s.cv || s.name), ...data.work.flatMap(w => w.stack)]);
-for (const k of Object.keys(cv.terms)) if (!named.has(k)) err(`cv.terms: "${k}" is no skill or stack name`);
+const named = new Set([...data.skills.map(s => s.cv || s.name), ...data.work.flatMap(w => [w.name, ...w.stack])]);
+for (const k of Object.keys(cv.terms)) if (!named.has(k)) err(`cv.terms: "${k}" is no skill, stack or place name`);
 
 // work: jobs and projects
 const ids = new Set(), STATUS = ["in-progress", "completed"], ON = ["plain", "show", "case"];
@@ -94,14 +102,14 @@ data.work.forEach((w, i) => {
   });
   if (w.note) { bi(w.note, `${at}.note`); tokens(w.note, `${at}.note`); }
   if (w.cv) { (w.cv.more || []).forEach((t, j) => bi(t, `${at}.cv.more[${j}]`)); }
-  if (w.type === "job" && w.employer && !w.note) err(`${at}.note: Plain and the CV say what the client is with it`);
+  if (w.type === "job" && w.employer && !w.note) err(`${at}.note: Plain and the CV say what the place is with it`);
   if (w.pin) {
     if (!w.pin.date) err(`${at}.pin: needs the day the claims were checked`);
     else date(w.pin.date, `${at}.pin.date`);
     if (!w.pin.commit) err(`${at}.pin: needs the commit the claims were checked at`);
   }
   if ((w.proof || w.source) && !w.pin) err(`${at}: proof rows need a pin to trace them back to`);
-  (w.proof || []).forEach((r, j) => { if (r.es && !(r.es.label && r.es.note)) err(`${at}.proof[${j}].es: needs label and note`); if (r.check !== true) err(`${at}.proof[${j}]: needs check: true`);
+  (w.proof || []).forEach((r, j) => { if (typeof r.label !== "string" || typeof r.note !== "string") err(`${at}.proof[${j}]: label and note are plain strings; their Spanish goes in es: { label, note }`); if (r.es && !(r.es.label && r.es.note)) err(`${at}.proof[${j}].es: needs label and note`); if (r.check !== true) err(`${at}.proof[${j}]: needs check: true`);
     if (!Array.isArray(r.on) || !r.on.every(o => ON.includes(o))) err(`${at}.proof[${j}]: "on" must list ${ON.join(", ")}`); tokens(r.note, `${at}.proof[${j}]`); });
   if (w.learningPath) {
     const lp = w.learningPath;
@@ -155,6 +163,7 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   const f = path.join(root, "data", "cases", w.links.caseStudy.replace(/\.html$/, ".js"));
   if (!fs.existsSync(f)) { warn(`work.${w.id}: ${w.links.caseStudy} has no data/cases/${path.basename(f)} yet; its links wait while it is in PENDING (tools/build.js)`); continue; }
   const cs = require(f), at = `cases/${path.basename(f)}`;
+  both(cs, at);
   if (cs.id !== w.id) err(`${at}: id "${cs.id}" is not its project "${w.id}"`);
   if (!cs.pin || !/^[0-9a-f]{7,40}$/.test(cs.pin.commit || "")) err(`${at}: pin.commit missing: every code link goes to that commit`);
   else date(cs.pin.date, `${at}.pin.date`);
@@ -224,7 +233,7 @@ if (process.argv.includes("--calc")) {
   console.log(`Computed against ${day}\n\ncareer: ${years}+ years`);
   console.log("\nepisodes and lengths");
   for (const w of C.episodes(data)) console.log(`  Episode ${C.episode(data, w.id)} · ${w.name.padEnd(22)} ${C.lapse(w.start, w.end, now).padEnd(16)} ${C.range(w.start, w.end)}  ·  ${C.range(w.start, w.end, "es")}`);
-  for (const [id, e] of Object.entries(data.employers)) console.log(`  ${e.name} · ${C.fill(e.note.split("**").join(""), { lapse: C.lapse(e.start, e.end, now) })}  (${C.range(e.start, e.end)})`);
+  for (const [id, e] of Object.entries(data.employers)) console.log(`  ${e.name} · ${C.fill((e.note.en || e.note).split("**").join(""), { lapse: C.lapse(e.start, e.end, now) })}  (${C.range(e.start, e.end)})`);
   console.log("\nskills");
   for (const s of data.skills.filter(s => s.at.length)) console.log(`  ${s.name.padEnd(36)} ${C.skillSpan(s, data, now).padEnd(30)} pages: ${s.level === "core" && !s.legacy && s.pages !== false && C.skillLength(s, data, now) || "—"}`);
   const gs = data.work.find(w => w.learningPath);

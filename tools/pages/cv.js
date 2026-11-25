@@ -35,7 +35,7 @@ module.exports = ({ data, now, careerYears }, lang, { phone, fullName } = {}) =>
   }).join("\n");
 
   const entry = (w, kind, sub, extra = []) => `<article class="entry ${kind}">
-  <header><h3>${esc(w.name)}</h3> <span class="sub">${sub}</span> ${when(w)}</header>
+  <header><h3>${esc(term(w.name))}</h3> <span class="sub">${sub}</span> ${when(w)}</header>
   <p class="what">${md(t(w.lede || w.what))}</p>
   ${bullets([...w.highlights.map(t), ...extra])}
   <p class="stack">${esc(stackLine(w.stack.map(term)))}</p>
@@ -46,7 +46,7 @@ module.exports = ({ data, now, careerYears }, lang, { phone, fullName } = {}) =>
     `${esc(t(cv.kind.project))} · ${esc(t(cv.kind[w.status]))}${w.links && w.links.repo ? DOT + link(w.links.repo) : ""}`,
     (w.proof || []).filter(r => r.es).map(r => lang === "es" ? r.es : r).map(r => C.fill(`**${r.label}**: ${r.note}`, { careerYears, pin: w.pin, updated: w.learningPath && w.learningPath.updated }))));
 
-  // newest first; an employer's clients go together under its line
+  // newest first; an employer's places go together under its line
   const job = w => entry(w, "client", esc(w.employer ? t(w.note) : `${t(w.studio)} · ${t(w.role)}`), (w.cv && w.cv.more || []).map(t));
   const jobs = newest.filter(w => w.type === "job"), done = new Set();
   const experience = jobs.map(w => {
