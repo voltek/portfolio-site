@@ -121,7 +121,7 @@ data.work.forEach((w, i) => {
     });
     if (lp.blocks.filter(b => b.status === "goal").length > 1) err(`${at}.learningPath: more than one goal`);
   }
-  if (w.roadmap) (w.roadmap.steps || []).forEach(s => { if (!["done", "now", "next"].includes(s[1])) err(`${at}.roadmap: step "${s[0]}" has status "${s[1]}"`); });
+  if (w.roadmap) (w.roadmap.steps || []).forEach(s => { if (!["done", "now", "designed", "next"].includes(s[1])) err(`${at}.roadmap: step "${s[0].en || s[0]}" has status "${s[1]}"`); });
 });
 const running = data.work.filter(w => w.status === "in-progress");
 if (!running.length) warn(`no project in progress: "Now building" shows its designed empty state`);
@@ -158,7 +158,7 @@ data.skills.forEach((s, i) => {
 
 // case studies: data/cases/<page>.js for each project's links.caseStudy (DECISIONS.md → Case page rules and
 // Data-flow diagram). Wrong ids and shapes are errors; the size limits of the diagram and the stack are warnings.
-const { FILE, SECTIONS } = require(path.join(root, "tools", "pages", "case.js"));
+const { FILE, ELSEWHERE, SECTIONS } = require(path.join(root, "tools", "pages", "case.js"));
 for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   const f = path.join(root, "data", "cases", w.links.caseStudy.replace(/\.html$/, ".js"));
   if (!fs.existsSync(f)) { warn(`work.${w.id}: ${w.links.caseStudy} has no data/cases/${path.basename(f)} yet; its links wait while it is in PENDING (tools/build.js)`); continue; }
@@ -173,8 +173,8 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   const A = cs.architecture || {}, F = A.flow;
   const refs = [cs.readme, ...(A.walk || []).flatMap(s => s.files || []), ...(cs.decisions || []).flatMap(d => d.files || []),
     ...((cs.tests || {}).items || []).flatMap(t => t.files || []), ...((cs.missing || {}).items || []).flatMap(g => g.files || []),
-    ...(F ? F.pieces.map(p => p.file) : [])].filter(Boolean);
-  for (const r of refs) { const m = String(r).match(FILE); if (!m || !((m[1] || "main") in (cs.roots || {}))) err(`${at}: file "${r}" names no root of roots`); }
+    ...(F ? F.pieces.map(p => p.file) : []), ...(w.proof || []).flatMap(r => r.files || [])].filter(Boolean);
+  for (const r of refs) { if (ELSEWHERE.test(r)) continue; const m = String(r).match(FILE); if (!m || m[2].includes(":") || !((m[1] || "main") in (cs.roots || {}))) err(`${at}: file "${r}" names no root of roots`); }
   // the stack tags: Skills used at this project (same name, or the part of a compound name that applies), plus libs
   const parts = data.skills.filter(s => s.at.some(r => (typeof r === "string" ? r : r.id) === w.id)).flatMap(s => [s.name, ...s.name.split(" · ")]);
   const libs = cs.libs || [];
@@ -200,6 +200,17 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
     else { [F.back.from, F.back.to].forEach(id => { if (!F.trunk.includes(id)) err(`${at}.flow.back: "${id}" is not on the trunk`); });
       if (!F.back.say || !F.back.down) err(`${at}.flow.back: needs say (across) and down (the phone's line)`); }
   }
+  // the AI section's strip: at most 8 stages and 3 actors, each stage with someone in it
+  if (cs.ai && cs.ai.stages) {
+    const who = (cs.ai.actors || []).map(a => a.id);
+    if (!who.length) err(`${at}.ai: stages need actors`);
+    if (cs.ai.stages.length > 8) warn(`${at}.ai: ${cs.ai.stages.length} stages, more than 8`);
+    if (who.length > 3) warn(`${at}.ai: ${who.length} actors, more than 3`);
+    cs.ai.stages.forEach((s, i) => { if (!who.some(id => s[id])) err(`${at}.ai.stages[${i}]: no actor does anything`);
+      for (const k of Object.keys(s)) if (!["name", "note", ...who].includes(k)) err(`${at}.ai.stages[${i}]: "${k}" is not an actor`); });
+  }
+  if (cs.ai && cs.ai.controls && !(w.proof || []).some(r => r.on.includes("case") && r.files)) err(`${at}.ai.controls: no proof row goes on the case with its files`);
+  if (cs.next && !w.roadmap && !w.learningPath) err(`${at}.next: the project has no roadmap or learning path to draw`);
   if (cs.ai && cs.ai.contrast && !ids.has(cs.ai.contrast.to)) err(`${at}.ai.contrast: unknown project "${cs.ai.contrast.to}"`);
   if (cs.video) for (const k of ["src", "poster", "alt"]) { if (!cs.video[k]) err(`${at}.video: missing ${k}`); else if (k !== "alt" && !fs.existsSync(path.join(root, cs.video[k]))) err(`${at}.video: ${cs.video[k]} not found`); }
 }

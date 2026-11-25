@@ -94,7 +94,7 @@ those changes, run `node tools/og.js` (Edge headless) and commit the PNG; under 
 ## Re-pin GameStack
 
 When Alan says a project's repo moved, run the `sync-project` skill with its id. Proof rows are `check: true` (no
-counts) and say where they show with `on`; `pin` holds the commit and day the claims were checked.
+counts), say where they show with `on` (the CV takes Plain's) and name their evidence in `files`; `pin` holds the commit and day the claims were checked.
 
 ## New case study
 
@@ -107,8 +107,11 @@ Every case is drawn by `src/case.html` and `tools/pages/case.js`; nothing is wri
    file the page joins the build.
 3. Sections are optional: leave one out (`why`, `ai` …) and it leaves the page and the bar. Keep each idea once.
 4. `pin` is the commit every code link points to, and its date. A file is `"path"` under `roots.main`, `"path:15–22"`
-   with its lines, `"test:path"` under another root.
+   with its lines, `"test:path"` under another root. `"pr:209"`, `"issue:159"` and `"commit:a00cf8c"` open that on GitHub;
+   a path that ends in `/` opens the folder; a decision record under the `adr` root shows its number.
 5. `stack` takes the Skills used at the project (same names; of "MVI · MVVM", the part that applies) plus the libraries
    named in `libs`; `check-data` checks the tags and the diagram's limits.
-6. "Next case" is the next project with a case study, in the data's order.
-7. Check the page (`.claude/rules/design.md`): Lighthouse, impeccable `audit`, `polish` and the finish review.
+6. `ai.stages` is the strip by actor (at most 8 stages, 3 `actors`), `ai.controls: true` adds the project's proof rows,
+   and `next` draws its `roadmap` (status `designed` = an approved mockup) and `learningPath`.
+7. "Next case" is the next project with a case study, in the data's order.
+8. Check the page (`.claude/rules/design.md`): Lighthouse, impeccable `audit`, `polish` and the finish review.

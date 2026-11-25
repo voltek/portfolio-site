@@ -44,6 +44,9 @@ const calc = {
     return w.end == null ? `<span data-calc="years-short" data-ids="${w.id}">${v}</span>` : v; }
 };
 
+// A roadmap step's status on the landing: "designed" is drawn as "next" there; only the case tells them apart.
+const landingStatus = s => s === "designed" ? "next" : s;
+
 // The Skills rows in reading order, on Plain, Show and the CV: the levels, with the AI skills in a row of their own
 // after Strong and the XML Views era last. An empty row is left out; each keeps the data's order.
 const skillRows = list => {
@@ -161,4 +164,4 @@ const cvMenu = (ctx, cls, stroke) => { const cta = ctx.data.copy.cta;
   return `<details class="cv"><summary class="btn ${cls}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11M5.5 8.5L10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/></svg>${esc(cta.cv)}<svg class="caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><span class="cvmenu">${
     Object.entries(CV_FILES).map(([lang, f]) => `<a href="${f}" download target="_blank" rel="noopener" type="application/pdf" hreflang="${lang}"><span lang="${lang}">${esc(cta.cvIn[lang])}</span> <small>${esc(cta.cvKind)}</small></a>`).join("")}</span></details>`; };
 
-module.exports = { CV_FILES, cvMenu, C, en, esc, skillName, skillRows, md, stackLine, stackHtml, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };
+module.exports = { CV_FILES, cvMenu, C, en, esc, landingStatus, skillName, skillRows, md, stackLine, stackHtml, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };

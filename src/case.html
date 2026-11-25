@@ -80,7 +80,7 @@
   .sbtn:disabled{opacity:.4;cursor:default}
   .sbtn svg{width:18px;height:18px}
   .prev{left:-6px}.next{right:-6px}
-  .shotnote{text-align:center;font-size:14px;color:var(--paper-muted);margin-top:4px}
+  .shotnote{text-align:center;padding-inline:16px;font-size:14px;color:var(--paper-muted);margin-top:4px}
   /* the viewer: a dark veil in both themes, so its ink is fixed cream */
   .lb{margin:auto;border:0;background:none;max-width:min(440px,92vw);max-height:96vh;overflow:visible}
   .lb::backdrop{background:rgba(5,10,30,.82)}
@@ -102,8 +102,8 @@
   @media (hover:none){ .hash{opacity:.5} }
   .head p{font-size:18px;line-height:1.6;max-width:62ch}
   .files{display:inline-flex;flex-wrap:wrap;gap:4px 16px;vertical-align:baseline}
-  .fl{display:inline-flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:var(--link);text-decoration:underline;text-decoration-color:var(--go-line);text-decoration-thickness:2px;text-underline-offset:4px;overflow-wrap:anywhere}
-  .fl svg{width:15px;height:15px;flex:none;color:var(--paper-muted)}
+  .fl{display:inline-flex;align-items:flex-start;gap:5px;font-size:14px;font-weight:600;color:var(--link);text-decoration:underline;text-decoration-color:var(--go-line);text-decoration-thickness:2px;text-underline-offset:4px;overflow-wrap:anywhere}
+  .fl svg{width:15px;height:15px;flex:none;margin-top:4px;color:var(--paper-muted)}
   .fl:hover{text-decoration-thickness:3px}
 
   /* ---------- the architecture: the data's way to the screen; diagram tokens checked at ≥ 3:1 in both themes ---------- */
@@ -155,13 +155,65 @@
   .items{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px}
   .items > li{padding:22px 0;border-bottom:1px solid var(--rule);display:grid;gap:10px;align-content:start}
   .items.one{grid-template-columns:minmax(0,1fr)}
+  .items.ctl{grid-template-columns:repeat(3,minmax(0,1fr))}
   /* the measure: Figtree's "0" is wide, so 58ch is about 80 characters a line */
   .items.one li > span,.items.one .sub{max-width:58ch}
   .sub{display:grid;gap:6px;padding-left:1.2em}
   .items b{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.01em;line-height:1.2}
+  .items.ctl b{font-size:18px}
+  .items.ctl p{max-width:58ch}
+  .dr span,.act p,.items p,.items span,.nextc span{text-wrap:pretty}
   .prose p{max-width:58ch;padding:22px 0 0}
   .outro{max-width:58ch;padding-top:22px;font-size:18px;line-height:1.6} /* what's missing: its closing line */
   .prose .gs{color:var(--link);margin-top:12px}
+  .prose.end{margin-top:22px}
+  .sub-h{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.01em;margin-top:40px}
+
+  /* ---------- how AI was used: the stages as columns, one lane per actor. Who acts is said by the lane and by its name;
+     the fill only repeats it: cobalt for my decisions, pale blue for the agents, an outline for what runs by itself */
+  .stages{--me:#1F3FBF;--me-ink:#FFFFFF;--ai:#C3D1FB;--ai-ink:var(--paper-ink);--auto-line:#4F5672;--lane:var(--cell);--head:var(--rule);display:grid;grid-template-columns:126px minmax(0,1fr);grid-template-rows:auto repeat(var(--rows),auto);row-gap:6px;margin-top:18px}
+  :root[data-theme="dark"] .stages{--me:#8FA8FF;--me-ink:#0A1029;--ai:#2C3A86;--auto-line:#A3AEDB;--lane:#161F47;--head:#323E76}
+  .lane{grid-column:1/-1;display:flex;align-items:center;padding:0 8px 0 14px;background:var(--lane);border-radius:8px}
+  .lane b{width:108px;font-family:var(--display);font-weight:800;font-size:17px;line-height:1.15;letter-spacing:-.01em}
+  .stages ol{grid-column:2;grid-row:1/-1;display:grid;grid-template-rows:subgrid;list-style:none;position:relative;column-gap:6px;padding-right:6px}
+  .stages li{grid-row:1/-1;display:grid;grid-template-rows:subgrid;grid-template-columns:minmax(0,1fr)}
+  /* each stage is an arrow into the next one */
+  .st{--tip:12px;grid-row:1;display:flex;flex-direction:column;justify-content:center;min-height:48px;padding:6px 8px 6px calc(var(--tip) + 8px);margin-right:calc(-1*var(--tip) + 2px);background:var(--head);color:var(--paper-ink);line-height:1.15;clip-path:polygon(0 0,calc(100% - var(--tip)) 0,100% 50%,calc(100% - var(--tip)) 100%,0 100%,var(--tip) 50%)}
+  li:first-child > .st{clip-path:polygon(0 0,calc(100% - var(--tip)) 0,100% 50%,calc(100% - var(--tip)) 100%,0 100%);padding-left:12px}
+  li:last-child > .st{margin-right:0;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,var(--tip) 50%)}
+  .st b{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:-.01em}
+  .st small{font-size:12px;font-weight:600;padding-right:8px}
+  .act{margin:6px 0;padding:9px 10px;border-radius:5px;font-size:14px;line-height:1.35;font-weight:600;border:2px solid transparent;overflow-wrap:break-word}
+  .act > b{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .act p::first-letter,.ctl p::first-letter{text-transform:uppercase}
+  .a-me{background:var(--me);color:var(--me-ink)}
+  .a-ai{background:var(--ai);color:var(--ai-ink)}
+  /* an outline with no fill: the diagram's filled box is the one that is a link */
+  .a-auto{padding:10px 11px;border-width:1px;border-color:var(--auto-line)}
+
+  /* ---------- what comes next: the app's roadmap and the learning path, as Plain draws them ---------- */
+  .nx{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px}
+  h3.group{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--paper-muted);padding:30px 0 10px;border-bottom:1px solid var(--rule)}
+  .steps,.blocks{list-style:none}
+  .steps li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rule)}
+  .steps li b{font-weight:600}
+  .steps li small{font-size:13px;font-weight:700;color:var(--paper-muted);text-transform:uppercase;letter-spacing:.05em}
+  .steps li.s-now b{font-weight:700}
+  .mark{width:18px;height:18px;border-radius:50%;border:2px solid var(--client-mark);display:grid;place-items:center}
+  .s-done .mark{border-color:var(--own);background:var(--own);color:var(--sheet)}
+  .s-done .mark svg{width:12px;height:12px}
+  .s-now .mark{border-color:var(--wip);background:radial-gradient(circle,var(--wip) 0 4px,transparent 4.5px)}
+  .s-designed .mark{border-color:var(--own);background:linear-gradient(90deg,var(--own) 50%,transparent 50%)}
+  .s-goal .mark{border-style:dashed}
+  #next-h{white-space:nowrap}
+  .nxnote,.nxline{margin-top:16px;font-size:15px;line-height:1.5;max-width:58ch}
+  .nxnote{color:var(--paper-muted)}
+  .blocks li{display:grid;grid-template-columns:74px minmax(0,1fr) 112px;gap:16px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+  .blocks .tag{font-size:13px;font-weight:700;color:var(--paper-muted);text-transform:uppercase;letter-spacing:.05em}
+  .blocks b{font-weight:700}
+  .blocks p{font-size:15px;color:var(--paper-muted);margin-top:2px}
+  .blocks .bst{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;white-space:nowrap}
+  .bst i{width:8px;height:8px;border-radius:50%;flex:none}
   .source{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);display:grid;gap:8px;font-size:15px;color:var(--paper-muted)}
   .source .links{margin-top:0}
   .source .tlink{color:var(--link)}
@@ -181,7 +233,9 @@
   .after .back:hover{text-decoration-thickness:4px}
   .after .back svg{width:26px;height:26px}
 {{>contact-read.css}}
-  @media (max-width:1240px){ .flow{--fe-w:80px} .fn{margin:0 6px;padding:10px} .fn b{font-size:14.5px} .fe{margin:0 -6px} }
+  @media (max-width:1240px){ .flow{--fe-w:80px} .fn{margin:0 6px;padding:10px} .fn b{font-size:14.5px} .fe{margin:0 -6px}
+    .stages{grid-template-columns:100px minmax(0,1fr)} .lane{padding-left:8px} .lane b{width:92px;font-size:15px} .stages ol{column-gap:4px}
+    .st{--tip:9px;padding-right:2px} .st b{font-size:14px} .act{padding:8px 7px;font-size:13px} .a-auto{padding:9px 8px} }
   @media (max-width:1060px){
     .dr{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px 28px}
     /* the header row leaves the screen but stays for screen readers, so each cell keeps its column; the label drawn
@@ -206,11 +260,26 @@
     .vflow .dn{width:3px;height:30px;background:var(--r-line);position:relative;flex:none}
     .vflow .dn::after{content:"";position:absolute;bottom:-6px;left:-5px;border:6.5px solid transparent;border-top:8px solid var(--r-line);border-bottom:0}
     .vflow .vb{color:var(--paper-muted)}
+    /* the stages one under another, each act with its actor's name in the lane's fill */
+    .stages{display:block;margin-top:8px}
+    .lane{display:none}
+    .stages ol{display:block;padding:0}
+    .stages li{display:grid;grid-template-rows:none;gap:8px;padding:16px 0;border-bottom:1px solid var(--rule)}
+    .stages .st,.stages li:first-child > .st,.stages li:last-child > .st{display:block;min-height:0;margin:0;padding:0;background:none;color:inherit;clip-path:none}
+    .st b{font-size:17px}
+    .st small{font-size:14px;color:var(--paper-muted)}
+    .act{grid-row:auto !important;display:grid;grid-template-columns:112px minmax(0,1fr);gap:12px;align-items:baseline;margin:0;padding:0;border:0;background:none;color:inherit;font-size:15.5px;font-weight:400;line-height:1.45}
+    .act > b{position:static;width:auto;height:auto;overflow:visible;clip-path:none;justify-self:start;padding:2px 9px;border:2px solid transparent;border-radius:5px;font-size:13.5px;font-weight:700}
+    .a-me > b{background:var(--me);color:var(--me-ink)}
+    .a-ai > b{background:var(--ai);color:var(--ai-ink)}
+    .a-auto{padding:0;border:0}
+    .a-auto > b{border-color:var(--auto-line)}
+    .act > p{max-width:58ch}
   }
   @media (max-width:900px){
-    .open,.head,.pair{grid-template-columns:minmax(0,1fr);gap:24px}
-    .items{grid-template-columns:minmax(0,1fr)}
-    .pair > span:empty{display:none}
+    .open,.head,.pair,.nx{grid-template-columns:minmax(0,1fr);gap:24px}
+    .items,.items.ctl{grid-template-columns:minmax(0,1fr)}
+    .pair > span:empty,.head > span:empty{display:none}
     .walk ol{columns:1}
     .lbx{right:0;top:-52px}
     .lbp{left:8px}.lbf{right:8px}
@@ -231,6 +300,11 @@
   }
   @media (max-width:640px){
     main > .wrap > section{padding-top:72px}
+    /* the block's number goes under its status, never as a label over the title */
+    .blocks li{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr;gap:4px 12px}
+    .blocks li > div{grid-column:1;grid-row:1/3}
+    .blocks .bst{grid-column:2;grid-row:1}
+    .blocks .tag{grid-column:2;grid-row:2;justify-self:end;align-self:start}
   }
   @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} .shot:hover{transform:none} }
 </style>

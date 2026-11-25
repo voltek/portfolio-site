@@ -54,7 +54,7 @@ fs.writeFileSync(path.join(out, "robots.txt"), `User-agent: *\nAllow: /\n\nSitem
 const cvs = printCv(out, { now });
 
 // 5) every local link and image must exist in _site; only a page still to be built (PENDING) is listed, the rest fail
-const PENDING = new Set(["gamestack.html"]);
+const PENDING = new Set([]);
 const missing = new Set(), broken = new Set();
 for (const p of PAGES) {
   const html = fs.readFileSync(path.join(out, p.file), "utf8");

@@ -9,7 +9,8 @@ related_targets: ["gamestack.html", "index.html"]
 
 **Scope and mode:** one page per own build, for the reader who audits. Same world as Plain (`index-html.md`): it
 inherits the landing's tokens (`data-world="read"`), its bar and its contact section, and adds nothing of its own beyond
-the pieces a case needs (the screens strip, the data-flow diagram, the decisions table). Approved comp: the **Ficha**
+the pieces a case needs (the screens strip, the data-flow diagram, the decisions table, the strip of stages by actor, the roadmap with the
+learning path). Approved comp: the **Ficha**
 (`_comps/caso-modernnotes/ficha.html`, Alan 2026-10-27).
 
 **Audience and job:** a hiring manager or senior engineer checks that the landing's claims hold. Every claim on the page
@@ -26,7 +27,7 @@ length, "Own build"), the lede, the role, repo and README links. Right: the rais
 highlights with purple checks, then the "Stack" tags). The phone screens straddle the field's edge.
 
 ORDER: Overview → (Why, only if the case needs it) → Architecture → Key decisions → Tests → (How AI was used) → What went
-wrong, what is missing → repo, README and the pinned commit, said once → "All work" left, "Next case" right → the
+wrong, what is missing → (What comes next) → repo, README and the pinned commit, said once → "All work" left, "Next case" right → the
 landing's contact. Each section is optional per case; the bar lists only the sections drawn.
 
 RULES (DECISIONS.md → Case page rules; Data-flow diagram):

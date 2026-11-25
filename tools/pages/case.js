@@ -2,7 +2,7 @@
 // for every case: the project's entry in data/portfolio.js gives the header, data/cases/<page>.js the body, copy.case
 // the labels. A section the case file leaves out is not drawn and leaves the bar (DECISIONS.md → Case page rules).
 const IMG = require("../../lib/images.js");
-const { C, esc, text, calcData, head, srcset, ICON, cvMenu } = require("./common.js");
+const { C, en, esc, md, text, calcData, head, srcset, ICON, cvMenu } = require("./common.js");
 
 const I = {
   back: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -12,28 +12,39 @@ const I = {
 };
 
 // the sections a case can have, in page order (overview is the header, always there)
-const SECTIONS = ["overview", "why", "architecture", "decisions", "tests", "ai", "missing"];
+const SECTIONS = ["overview", "why", "architecture", "decisions", "tests", "ai", "missing", "next"];
 
 // a case text: escaped, `…` as code
 const tx = s => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>");
-// a class name may break only before its role (GetNotes·UseCase), never inside a word
-const cw = s => esc(s).replace(/([a-z])(UseCase|ViewModel|Screen|Repository)\b/g, "$1<wbr>$2");
+// a class name may break only before its role (GetNotes·UseCase, Games·Repository·Impl), never inside a word
+const cw = s => esc(s).replace(/([a-z])(UseCase|ViewModel|Screen|Interceptor|Repository)(Impl)?\b/g, (m, a, role, impl) => `${a}<wbr>${role}${impl ? `<wbr>${impl}` : ""}`);
+// a package breaks after its slashes
+const pk = s => esc(s).replace(/\/(?=.)/g, "/<wbr>");
 
 // "path:15–22" under roots.main, "test:path" under another root → the file at the pinned commit, and its label
-const FILE = /^(?:(\w+):(?!\d))?(.+?)(?::(\d+(?:–\d+)?))?$/;
+const FILE = /^(?:(\w+):(?!\d+(?:–\d+)?$))?(.+?)(?::(\d+(?:–\d+)?))?$/;
+// and what is not a file there: a pull request, an issue, a commit (read before FILE, which would take "209" for a line)
+const ELSEWHERE = /^(pr|issue|commit):([0-9a-f]+)$/;
+const GO = { pr: ["pull", "PR #"], issue: ["issues", "Issue #"], commit: ["commit", "Commit "] };
+// a file whose name says little alone carries its folder; a decision record is its number; a folder is its path
 const fileOf = (cs, repo, ref) => {
-  const [, root = "main", p, lines] = ref.match(FILE);
-  const href = `${repo}/blob/${cs.pin.commit}/${cs.roots[root]}${p}${lines ? `#L${lines.replace("–", "-L")}` : ""}`;
-  return { href, label: p.split("/").pop() + (lines ? ` · l. ${lines}` : "") };
+  const x = ref.match(ELSEWHERE);
+  if (x) return { href: `${repo}/${GO[x[1]][0]}/${x[2]}`, label: GO[x[1]][1] + x[2], out: true };
+  const [, root = "main", p, lines] = ref.match(FILE), full = cs.roots[root] + p, dir = p.endsWith("/"), names = full.split("/");
+  const href = `${repo}/${dir ? "tree" : "blob"}/${cs.pin.commit}/${full}${lines ? `#L${lines.replace("–", "-L")}` : ""}`;
+  const adr = root === "adr" && p.match(/^(\d{4})-/);
+  const label = dir ? p : adr ? `ADR ${adr[1]}` : names.slice(/^(README|SKILL|spec)\.md$/.test(names[names.length - 1]) ? -2 : -1).join("/");
+  return { href, label: label + (lines ? ` · l.\u00a0${lines}` : "") };
 };
 
 module.exports = (cs, ctx) => {
   const { data } = ctx, cp = data.copy.case, p = data.profile;
   const w = data.work.find(x => x.id === cs.id), repo = w.links.repo, file = w.links.caseStudy;
   const f = ref => fileOf(cs, repo, ref);
-  const links = (refs = []) => refs.length ? `<span class="files">${refs.map(f).map(l => `<a class="fl" href="${esc(l.href)}">${I.code}<span>${esc(l.label)}</span></a>`).join("")}</span>` : "";
+  const links = (refs = []) => refs.length ? `<span class="files">${refs.map(f).map(l => `<a class="fl" href="${esc(l.href)}">${l.out ? ICON.github : I.code}<span>${esc(l.label)}</span></a>`).join("")}</span>` : "";
   const has = id => id === "overview" || cs[id] != null;
-  const h = id => `<div class="head"><h2 id="${id}-h">${esc(cp.h[id])}<a class="hash" href="#${id}" aria-label="${esc(cp.aria.hash + cp.h[id])}">#</a></h2>${cs[id].intro ? `<p>${tx(cs[id].intro)}</p>` : "<span></span>"}</div>`;
+  // the line beside a section's title (decisions is a list, so its line is decisionsNote)
+  const h = (id, line = id === "decisions" ? cs.decisionsNote : cs[id].intro) => `<div class="head"><h2 id="${id}-h">${esc(cp.h[id])}<a class="hash" href="#${id}" aria-label="${esc(cp.aria.hash + en(cp.h[id]))}">#</a></h2>${line ? `<p>${tx(line)}</p>` : "<span></span>"}</div>`;
   const repoLinks = `<div class="links"><a class="tlink" href="${esc(repo)}">${ICON.github}${esc(data.copy.experience.links.repo)}</a><a class="tlink" href="${esc(f(cs.readme).href)}">${ICON.doc}${esc(cp.readme)}</a></div>`;
 
   // the bar: the sections this case has, then Contact (outside the menu, in the template)
@@ -64,12 +75,12 @@ module.exports = (cs, ctx) => {
   const vid = cs.video ? `<figure class="it vid"><div class="phone"><video src="${esc(cs.video.src)}" poster="${esc(cs.video.poster)}" preload="none" controls muted playsinline aria-label="${esc(cs.video.alt)}"></video></div><figcaption>${esc(cp.demo)}</figcaption></figure>` : "";
   const strip = !shots.length && !cs.video ? "" : `<div class="strip" id="screens">
     <button class="sbtn prev" type="button" aria-label="${esc(cp.aria.prevScreens)}" hidden>${I.back}</button>
-    <div class="track" tabindex="0" role="group" aria-label="${esc(cp.aria.screens)}">${vid}${shots.map((s, i) => `<figure class="it"><button class="shot" type="button" data-i="${i}" aria-label="${esc(cp.aria.viewLarger + s.label)}"><span class="phone"><img ${srcset(s.src, SIZES)} alt="${esc(s.alt || "")}" width="240" height="539"></span></button><figcaption>${esc(s.label)}</figcaption></figure>`).join("")}</div>
+    <div class="track" tabindex="0" role="group" aria-label="${esc(cp.aria.screens)}">${vid}${shots.map((s, i) => `<figure class="it"><button class="shot" type="button" data-i="${i}" aria-label="${esc(cp.aria.viewLarger + en(s.label))}"><span class="phone"><img ${srcset(s.src, SIZES)} alt="${esc(s.alt || "")}" width="240" height="539"></span></button><figcaption>${esc(s.label)}</figcaption></figure>`).join("")}</div>
     <button class="sbtn next" type="button" aria-label="${esc(cp.aria.nextScreens)}" hidden>${I.fwd}</button>
   </div>
   ${cs.shotsFoot ? `<p class="shotnote">${tx(cs.shotsFoot)}</p>` : ""}
   ${shots.length ? `<dialog class="lb" aria-label="${esc(cp.aria.screen)}"><button class="theme lbx" type="button" aria-label="${esc(data.copy.aria.close)}">${I.x}</button><button class="lbn lbp" type="button" aria-label="${esc(cp.aria.prevScreen)}">${I.back}</button><button class="lbn lbf" type="button" aria-label="${esc(cp.aria.nextScreen)}">${I.fwd}</button><figure><img src="${esc(IMG.copiesOf(shots[0].src).full)}" alt="${esc(shots[0].alt || "")}" loading="lazy"><figcaption aria-live="polite">${esc(shots[0].label)}</figcaption></figure></dialog>` : ""}`;
-  const shotsJson = JSON.stringify(shots.map(s => ({ src: IMG.copiesOf(s.src).full, label: s.label, alt: s.alt || "" }))).replace(/</g, "\\u003c");
+  const shotsJson = JSON.stringify(shots.map(s => ({ src: IMG.copiesOf(s.src).full, label: en(s.label), alt: en(s.alt) || "" }))).replace(/</g, "\\u003c");
 
   // the architecture: the data's way to the screen (one trunk, layers as columns, side inputs below, one way back),
   // drawn in HTML/CSS from the data with no geometry; under 1000 px the same trunk goes down. Then the code walk.
@@ -80,7 +91,7 @@ module.exports = (cs, ctx) => {
     const runs = []; T.forEach((id, i) => { const l = piece(id).layer, r = runs[runs.length - 1];
       if (r && r.l === l) r.to = i; else runs.push({ l, from: i, to: i }); });
     const bands = runs.map(r => { const L = F.layers.find(x => x.id === r.l), span = `grid-column:${col(r.from)} / ${col(r.to) + 1}`;
-      return `<div class="fband" style="${span}"></div><div class="fhead" style="${span}"><b>${esc(L.name)}</b><code>${esc(L.pkg)}</code></div>`; }).join("");
+      return `<div class="fband" style="${span}"></div><div class="fhead" style="${span}"><b>${esc(L.name)}</b><code>${pk(L.pkg)}</code></div>`; }).join("");
     const mk = id => F.mark && F.mark[id] ? `<span class="mk">${esc(F.mark[id])}</span>` : "";
     const node = (id, i) => `<a class="fn${mk(id) ? " marked" : ""}" style="grid-column:${col(i)}" href="${href(piece(id))}">${mk(id)}<b>${cw(piece(id).name)}</b>${sub(piece(id))}</a>`;
     const ARROW = `<i class="ar" aria-hidden="true"></i>`;
@@ -93,7 +104,7 @@ module.exports = (cs, ctx) => {
       ${T.map(node).join("")}${F.edges.map(edge).join("")}${sides}${back}</div>`;
     let last = null;
     const phone = `<ol class="vflow">${T.map((id, i) => { const x = piece(id), L = layer(id);
-      const lh = L.id !== last ? `<li class="vl"><b>${esc(L.name)}</b> <code>${esc(L.pkg)}</code></li>` : ""; last = L.id;
+      const lh = L.id !== last ? `<li class="vl"><b>${esc(L.name)}</b> <code>${pk(L.pkg)}</code></li>` : ""; last = L.id;
       const side = (F.side || []).filter(s => s.into === id).map(s => { const q = piece(s.piece);
         return `<span class="vside"><a href="${href(q)}"><b>${esc(q.name)}</b>${q.sub ? ` <small>${esc(q.sub)}</small>` : ""}</a> → ${esc(s.say)}</span>`; }).join("");
       const isBack = [bk.to, bk.from].includes(id) && [bk.to, bk.from].includes(T[i + 1]);
@@ -104,7 +115,29 @@ module.exports = (cs, ctx) => {
   const A = cs.architecture;
   const walk = A && A.walk ? `<div class="walk"><h3>${esc(cp.walk)}</h3><ol>${A.walk.map(s => `<li><span><b>${tx(s.title)}</b> ${tx(s.text)}</span>${links(s.files)}</li>`).join("")}</ol></div>` : "";
 
+  // how AI was used: the stages as columns, one lane per actor; one list, whose items fill the lanes on desktop and are
+  // labeled by actor below 1000 px. A column is as wide as its longest text asks, within
+  // limits, and never narrower than its name's longest word. Then the controls.
+  const G = cs.ai, rows = G && G.stages ? G.actors.map(a => a.id) : [];
+  const word = s => Math.max(...en(s).split(/\s+/).map(x => x.length));
+  const weight = s => Math.max(.8, word(s.name) / 10.5, Math.min(1.5, Math.max(...rows.map(id => s[id] ? en(s[id]).length : 0)) / 60)).toFixed(2);
+  const stages = () => `<h3 class="sub-h">${esc(cp.aiStages)}</h3>
+    <div class="stages" style="--rows:${rows.length}">${G.actors.map((a, i) => `<div class="lane" style="grid-row:${i + 2}" aria-hidden="true"><b>${esc(a.name)}</b></div>`).join("")}
+    <ol style="grid-template-columns:${G.stages.map(s => `minmax(0,${weight(s)}fr)`).join(" ")}">${G.stages.map(s => `<li><div class="st"><b>${esc(s.name)}</b>${s.note ? ` <small>${esc(s.note)}</small>` : ""}</div>${G.actors.map((a, i) => s[a.id] ? `<div class="act a-${a.id}" style="grid-row:${i + 2}"><b>${esc(a.name)}</b> <p>${tx(s[a.id])}</p></div>` : "").join("")}</li>`).join("")}</ol></div>`;
+  const proof = (w.proof || []).filter(r => r.on.includes("case"));
+  const controls = () => `<h3 class="sub-h">${esc(cp.aiControls)}</h3>
+    <ul class="items ctl">${proof.map(r => `<li><b>${esc(r.label)}</b><p>${text(ctx, r.note)}</p>${links(r.files)}</li>`).join("")}</ul>`;
+
+  // what comes next: the project's roadmap and learning path; the blocks done or under way, and the rest in one line
+  const LEFT = { done: "var(--done)", now: "var(--wip)" }, ps = data.copy.path.status, groups = data.copy.next.groups;
+  const road = w.roadmap, path = w.learningPath;
+  const next = () => `<div class="nx">${road ? `<div><h3 class="group">${esc(groups.app)}</h3><ol class="steps">${[...road.steps, [road.goal, "goal"]].map(([t, s]) =>
+      `<li class="s-${s}"><span class="mark">${s === "done" ? ICON.check : ""}</span><b>${esc(t)}</b><small>${esc(ps[s])}</small></li>`).join("")}</ol>${cs.next.designed ? `<p class="nxnote">${tx(cs.next.designed)}</p>` : ""}</div>` : ""}
+    ${path ? `<div><h3 class="group">${esc(groups.path)}</h3><ol class="blocks">${path.blocks.filter(b => LEFT[b.status]).map(b =>
+      `<li><span class="tag">${esc(b.tag)}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p></div><span class="bst"><i style="background:${LEFT[b.status]}" aria-hidden="true"></i>${esc(ps[b.status])}</span></li>`).join("")}</ol>${cs.next.line ? `<p class="nxline">${md(tx(cs.next.line), "b")}</p>` : ""}</div>` : ""}</div>`;
+
   const body = {
+    next,
     why: () => `<div class="pair"><span></span><div class="prose">${[].concat(cs.why.body || []).map(x => `<p>${tx(x)}</p>`).join("")}</div></div>`,
     architecture: () => `<div class="dg">${A.flow ? flow(A.flow) : ""}${walk}</div>${A.flow ? `<p class="pin">${esc(cp.pin)}</p>` : ""}`,
     decisions: () => `<div class="dtable" role="table" aria-label="${esc(cp.aria.decisions)}">
@@ -113,11 +146,11 @@ module.exports = (cs, ctx) => {
   </div>`,
     tests: () => `<ul class="items">${cs.tests.items.map(t => `<li><span>${tx(t.text)}</span>${links(t.files)}</li>`).join("")}</ul>`,
     ai: () => { const c = cs.ai.contrast, o = c && data.work.find(x => x.id === c.to);
-      return `<div class="pair"><span></span><div class="prose">${(cs.ai.body || []).map(x => `<p>${tx(x)}</p>`).join("")}
-      ${c ? `<p>${tx(c.text)}</p>${o && o.links.caseStudy ? `<a class="tlink gs" href="${esc(o.links.caseStudy)}">${esc(cp.title.replace("{name}", o.name))}${I.fwd}</a>` : ""}` : ""}</div></div>`; },
+      return `${cs.ai.stages ? stages() : ""}${cs.ai.controls && proof.length ? controls() : ""}<div class="prose end">${(cs.ai.body || []).map(x => `<p>${tx(x)}</p>`).join("")}
+      ${c ? `<p>${tx(c.text)}</p>${o && o.links.caseStudy ? `<a class="tlink gs" href="${esc(o.links.caseStudy)}">${esc(cp.title.replace("{name}", o.name))}${I.fwd}</a>` : ""}` : ""}</div>`; },
     missing: () => `<ul class="items one">${cs.missing.items.map(g => `<li><b>${tx(g.title)}</b><span>${tx(g.text)}</span>${g.list ? `<ul class="sub">${g.list.map(x => `<li>${tx(x)}</li>`).join("")}</ul>` : ""}${links(g.files)}</li>`).join("")}</ul>${cs.missing.outro ? `<p class="outro">${tx(cs.missing.outro)}</p>` : ""}`
   };
-  const sections = SECTIONS.slice(1).filter(has).map(id => `<section id="${id}" aria-labelledby="${id}-h">${id === "decisions" ? h(id).replace(/<p>.*<\/p>/, "<span></span>") : h(id)}
+  const sections = SECTIONS.slice(1).filter(has).map(id => `<section id="${id}" aria-labelledby="${id}-h">${h(id)}
     ${body[id]()}
   </section>`).join("\n\n  ");
 
@@ -134,7 +167,7 @@ module.exports = (cs, ctx) => {
   </nav>`;
 
   return {
-    head: head(ctx, { title: `${cp.title.replace("{name}", w.name)} · ${p.name}`, file, desc: cs.lede.replace(/`/g, ""), type: "article", person: false, themeColor: { light: "#1F3FBF", dark: "#1A35A3" } }),
+    head: head(ctx, { title: `${cp.title.replace("{name}", w.name)} · ${p.name}`, file, desc: en(cs.lede).replace(/`/g, ""), type: "article", person: false, themeColor: { light: "#1F3FBF", dark: "#1A35A3" } }),
     nav, opening, strip, sections, source, after, shotsJson,
     flat: strip ? "" : " flat", // no screens: the field closes without the room the strip straddles
     // a case still running has a length that grows: the browser recomputes it (live.js), as on the landing
@@ -142,4 +175,4 @@ module.exports = (cs, ctx) => {
     githubIcon: ICON.github, cvMenu: cvMenu(ctx, "line", 2)
   };
 };
-Object.assign(module.exports, { FILE, SECTIONS }); // check-data holds the case files to the same reading
+Object.assign(module.exports, { FILE, ELSEWHERE, SECTIONS }); // check-data holds the case files to the same reading
