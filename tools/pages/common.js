@@ -60,7 +60,7 @@ const matrix = data => {
   const state = s => places.map(w => { const r = s.at.find(r => (typeof r === "string" ? r : r.id) === w.id); return !r ? "" : r.part ? "part" : "on"; });
   const say = (s, legend) => { const st = state(s), names = test => places.filter((w, i) => test(w, st[i])).map(w => w.name);
     return [[legend.client, names((w, x) => x === "on" && w.type === "job")], [legend.own, names((w, x) => x === "on" && w.type === "project")], [legend.part, names((w, x) => x === "part")]]
-      .filter(([, n]) => n.length).map(([k, n]) => `${k}: ${n.join(", ")}.`).join(" "); };
+      .filter(([, n]) => n.length).map(([k, n]) => `${en(k)}: ${n.join(", ")}.`).join(" "); };
   return { jobs, builds, places, state, say };
 };
 
@@ -84,7 +84,7 @@ const calcData = (data, year) => JSON.stringify({
 // A case study passes its own description (its lede), type "article" and no Person: the Person lives on the landing.
 const head = (ctx, { title, file, themeColor, desc: own, type = "profile", person: withPerson = true }) => {
   const p = ctx.data.profile, site = p.links.site, url = site + (file === "index.html" ? "" : file);
-  const desc = own || C.fill(ctx.data.copy.page.description, { careerYears: ctx.careerYears });
+  const desc = own || C.fill(en(ctx.data.copy.page.description), { careerYears: ctx.careerYears });
   const image = site + "assets/og.png";
   const person = {
     "@context": "https://schema.org", "@type": "Person",
@@ -115,7 +115,8 @@ const head = (ctx, { title, file, themeColor, desc: own, type = "profile", perso
 // Anything left unresolved stops the build.
 // {{>name}} first: a piece shared by several pages, src/partials/name as is (DESIGN.md, the Bar Menu Rule)
 const partials = tpl => tpl.replace(/\{\{>([\w.-]+)\}\}/g, (m, name) => require("fs").readFileSync(require("path").join(__dirname, "..", "..", "src", "partials", name), "utf8"));
-const fillTemplate = (tpl, data, parts, file) => partials(tpl).replace(/\{\{(@?)([\w.]+)\}\}/g, (m, raw, key) => {
+// A { en, es } put inside a larger string, instead of drawn with esc() or text(), stops the build.
+const fillTemplate = (tpl, data, parts, file) => noObject(file, partials(tpl).replace(/\{\{(@?)([\w.]+)\}\}/g, (m, raw, key) => {
   if (raw) {
     if (!(key in parts)) throw new Error(`${file}: no renderer for {{@${key}}}`);
     return parts[key];
@@ -123,7 +124,12 @@ const fillTemplate = (tpl, data, parts, file) => partials(tpl).replace(/\{\{(@?)
   const v = en(key.split(".").reduce((o, k) => o == null ? o : o[k], data));
   if (typeof v !== "string") throw new Error(`${file}: {{${key}}} is not a text in the data`);
   return esc(v);
-});
+}));
+const noObject = (file, html) => {
+  const m = html.match(/.{0,60}\[object Object\]/);
+  if (m) throw new Error(`${file}: a text in two languages was not drawn as text: "${m[0]}"`);
+  return html;
+};
 
 // An image from the data as its light WebP copies (tools/images.js): `size` is how wide it shows, in CSS px, or a
 // sizes value when that changes with the screen ("(max-width: 900px) 30vw, 160px"), so the browser picks the 240 or
@@ -136,7 +142,7 @@ const srcset = (src, size) => {
 // "Open to work · Mexico City (UTC−6) · …": it breaks between its phrases, never inside one; the "·" are drawn by the
 // pages' CSS before each phrase and clipped at the start of a line, so no line starts or ends with one. After the time zone goes
 // an empty, hidden clock phrase that live.js fills with the local time (the build's time would be wrong by reading time).
-const status = p => { const phrases = p.status.split(" · ");
+const status = p => { const phrases = en(p.status).split(" · ");
   const clock = p.timeZone ? ` <span class="clock" data-tz="${esc(p.timeZone)}" hidden><time></time></span>` : "";
   return phrases.map((s, i) => `<span>${esc(s).replace(/(\(UTC[^)]*\))/, '<span class="tz">$1</span>')}</span>${/\(UTC/.test(s) && i < phrases.length - 1 ? clock : ""}`).join(" "); };
 
@@ -155,4 +161,4 @@ const cvMenu = (ctx, cls, stroke) => { const cta = ctx.data.copy.cta;
   return `<details class="cv"><summary class="btn ${cls}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11M5.5 8.5L10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/></svg>${esc(cta.cv)}<svg class="caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><span class="cvmenu">${
     Object.entries(CV_FILES).map(([lang, f]) => `<a href="${f}" download target="_blank" rel="noopener" type="application/pdf" hreflang="${lang}"><span lang="${lang}">${esc(cta.cvIn[lang])}</span> <small>${esc(cta.cvKind)}</small></a>`).join("")}</span></details>`; };
 
-module.exports = { CV_FILES, cvMenu, C, esc, skillName, skillRows, md, stackLine, stackHtml, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };
+module.exports = { CV_FILES, cvMenu, C, en, esc, skillName, skillRows, md, stackLine, stackHtml, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };

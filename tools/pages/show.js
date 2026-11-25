@@ -1,7 +1,7 @@
 // Show (show.html): the parts of src/show.html that come from the data. Each key fills a {{@key}} of the template.
 // Everything the prototype drew in the browser is drawn here: every episode card (the remote only switches which one
 // shows), the strip, the skills place matrix, the title card's rays and color bars.
-const { C, esc, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu } = require("./common.js");
+const { C, en, esc, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu } = require("./common.js");
 const IMG = require("../../lib/images.js");
 
 /* ---------- props: one painted object per episode, its title lettered on it (show.prop in the data) ---------- */
@@ -179,7 +179,7 @@ module.exports = ctx => {
   const lane = (label, steps, goal) => {
     const n = steps.length, k = steps.findIndex(s => s[1] !== "done"), x = i => +(i / n * 100).toFixed(3);
     const here = k < 0 ? 100 : k === 0 ? 0 : (x(k - 1) + x(k)) / 2;
-    return `<div class="rl${n > 5 ? " tight" : ""}"><b>${esc(label)}</b><div class="rline" style="--n:${n};--f:${here}%" role="img" aria-label="${esc(`${label}: ${steps.map(([t, s]) => `${t} (${PS[s].toLowerCase()})`).join(", ")}. ${ui.goal}: ${goal}`)}">
+    return `<div class="rl${n > 5 ? " tight" : ""}"><b>${esc(label)}</b><div class="rline" style="--n:${n};--f:${here}%" role="img" aria-label="${esc(`${en(label)}: ${steps.map(([t, s]) => `${en(t)} (${en(PS[s]).toLowerCase()})`).join(", ")}. ${en(ui.goal)}: ${en(goal)}`)}">
       <span class="rfill"></span>${steps.map(([t, s], i) => `<span class="stop${s === "done" ? " ok" : i === k ? " at" : ""}" style="--x:${x(i)}%"><em>${esc(t)}</em></span>`).join("")}
       <span class="stop goal" style="--x:100%">${FLAG}<em><small>${esc(ui.goal)}</small>${esc(goal)}</em></span><span class="pin" style="--x:${here}%">${PIN}<b>${esc(ui.here)}</b></span></div></div>`;
   };

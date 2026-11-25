@@ -5,8 +5,8 @@
 // Conventions
 // · Dates: "2015-08" (a month = its first day) or "2026-07-15" when the day matters. end: null = ongoing.
 // · Texts are { en, es }: an English text written or changed brings its Spanish in the same change, also where only the
-//   site shows it (English today, Spanish planned). A plain string is a site text whose Spanish is still to write. Where
-//   the CV shows it, es: null = Spanish still to approve (check-data lists them).
+//   site shows it (English today, Spanish planned). A plain string is a site text whose Spanish is still to write;
+//   es: null = Spanish still to approve (check-data lists them).
 // · **…** marks the words a page highlights. {careerYears}, {lapse}, {pinDate} and {updated} are filled
 //   (lib/calc.js); never write a length, a number of years or an episode number by hand.
 // · Approved copy only: every text here passed _private/sources/copy-deck.md.

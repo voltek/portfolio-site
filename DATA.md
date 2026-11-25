@@ -10,8 +10,8 @@ numbers and "Now building" are computed (`lib/calc.js`); never type them. After 
 - **Dates:** `"2026-07"` (counts from the month's first day) or `"2026-07-15"`; `end: null` while ongoing. `work` stays
   oldest first: that order is the episode order.
 - **An English text written or changed brings its Spanish** in the same change: `{ en, es }`, also where only the site
-  shows it. A plain string is a site text still without Spanish. Where the CV shows it, `es: null` means the Spanish
-  still needs approval (until then the Spanish CV shows the English).
+  shows it. A plain string is a site text still without Spanish; `es: null` means the Spanish still needs approval
+  (until then the Spanish CV shows the English).
 
 ## I finished a project
 
@@ -79,7 +79,7 @@ those changes, run `node tools/og.js` (Edge headless) and commit the PNG; under 
    `legacy: true` sends it to "Apps with XML Views"; `pages: false` keeps it for the CV only (with `at: []` if no
    place stands behind it); `cv` is its name there when it says more. A name that changes in Spanish goes in
    `cv.terms`.
-2. Years come from `at`. To narrow one place, `{ id: "ir", end: "2017-12" }` instead of `"ir"`; `{ id: "ob", part: true }`
+2. Years come from `at`. To narrow one place, `{ id: "ag", end: "2017-12" }` instead of `"ag"`; `{ id: "ob", part: true }`
    is a place where it was used only some of the time (the matrix's hollow dot, no years); `len: false` keeps the
    length off the pages (a skill used in only part of a job). The pages show a length
    only for Core (chips and matrix rows), and there only when client work alone gives a year or more (`node tools/check-data.js --calc` lists them).

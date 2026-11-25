@@ -23,16 +23,18 @@ const span = (o, where, openEnd) => {
   if (a && b && b < a) err(`${where}: ends before it starts`);
   if (a && a > now) warn(`${where}: starts after today`);
 };
-// a text in both languages: { en, es }; es null = Spanish pending (only where the CV shows it)
+// a text the CV shows: always { en, es }
 const bi = (t, where) => {
   if (t == null || typeof t !== "object") return err(`${where}: expected { en, es }`);
   if (!t.en) err(`${where}: missing en`);
-  if (t.es === null) warn(`${where}: Spanish pending`);
 };
-// an { en } anywhere, the CV's or the site's, says its Spanish too
+// an { en } anywhere, the CV's or the site's, says its Spanish too; es null = pending
 const both = (o, where) => {
   if (!o || typeof o !== "object") return;
-  if (typeof o.en === "string" && o.es === undefined) err(`${where}: missing es`);
+  if (typeof o.en === "string") {
+    if (o.es === null) warn(`${where}: Spanish pending`);
+    else if (!o.es) err(`${where}: missing es (use null while pending)`);
+  }
   for (const [k, v] of Object.entries(o)) both(v, where ? `${where}.${k}` : k);
 };
 both(data, "");
@@ -100,14 +102,14 @@ data.work.forEach((w, i) => {
   });
   if (w.note) { bi(w.note, `${at}.note`); tokens(w.note, `${at}.note`); }
   if (w.cv) { (w.cv.more || []).forEach((t, j) => bi(t, `${at}.cv.more[${j}]`)); }
-  if (w.type === "job" && w.employer && !w.note) err(`${at}.note: Plain and the CV say what the client is with it`);
+  if (w.type === "job" && w.employer && !w.note) err(`${at}.note: Plain and the CV say what the place is with it`);
   if (w.pin) {
     if (!w.pin.date) err(`${at}.pin: needs the day the claims were checked`);
     else date(w.pin.date, `${at}.pin.date`);
     if (!w.pin.commit) err(`${at}.pin: needs the commit the claims were checked at`);
   }
   if ((w.proof || w.source) && !w.pin) err(`${at}: proof rows need a pin to trace them back to`);
-  (w.proof || []).forEach((r, j) => { if (r.es && !(r.es.label && r.es.note)) err(`${at}.proof[${j}].es: needs label and note`); if (r.check !== true) err(`${at}.proof[${j}]: needs check: true`);
+  (w.proof || []).forEach((r, j) => { if (typeof r.label !== "string" || typeof r.note !== "string") err(`${at}.proof[${j}]: label and note are plain strings; their Spanish goes in es: { label, note }`); if (r.es && !(r.es.label && r.es.note)) err(`${at}.proof[${j}].es: needs label and note`); if (r.check !== true) err(`${at}.proof[${j}]: needs check: true`);
     if (!Array.isArray(r.on) || !r.on.every(o => ON.includes(o))) err(`${at}.proof[${j}]: "on" must list ${ON.join(", ")}`); tokens(r.note, `${at}.proof[${j}]`); });
   if (w.learningPath) {
     const lp = w.learningPath;
