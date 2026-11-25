@@ -55,7 +55,7 @@ module.exports = ({ data, now, careerYears }, lang, { phone, fullName } = {}) =>
     done.add(w.employer);
     const e = data.employers[w.employer];
     return `<section class="employer">
-<header class="emp"><h3>${esc(e.name)}</h3> <span class="sub">${esc(t(e.role))} · ${esc(t(e.place))}</span> ${when(e)}</header>
+<header class="emp"><h3>${esc(e.name)}</h3> <span class="sub">${[e.role, e.kind, e.place].filter(Boolean).map(x => esc(t(x))).join(" · ")}</span> ${when(e)}</header>
 ${jobs.filter(x => x.employer === w.employer).map(job).join("\n")}
 </section>`;
   });

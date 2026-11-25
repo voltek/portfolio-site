@@ -57,7 +57,7 @@ span(p.education, "profile.education");
 p.languages.forEach((l, i) => { bi(l.name, `profile.languages[${i}].name`); bi(l.level, `profile.languages[${i}].level`); });
 for (const [k, s] of Object.entries(p.lede)) tokens(s, `profile.lede.${k}`);
 for (const [id, e] of Object.entries(data.employers)) {
-  span(e, `employers.${id}`, true); bi(e.role, `employers.${id}.role`); bi(e.place, `employers.${id}.place`); tokens(e.note, `employers.${id}.note`, true);
+  span(e, `employers.${id}`, true); bi(e.role, `employers.${id}.role`); bi(e.place, `employers.${id}.place`); if (e.kind) bi(e.kind, `employers.${id}.kind`); tokens(e.note, `employers.${id}.note`, true);
 }
 
 // the CV's own copy

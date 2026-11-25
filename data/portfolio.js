@@ -52,7 +52,7 @@
   },
 
   // An employer behind several places, with its own dates (Globant ran past Openbank: bench until May 21, 2026).
-  // note: Plain, under the employer's name, above its places.
+  // note: Plain, under the employer's name, above its places. kind: what the employer is, on its CV line.
   employers: {
     globant: {
       name: "Globant", start: "2020-02", end: "2026-05-21",
@@ -64,6 +64,7 @@
     ironbit: {
       name: "IRONBIT", start: "2017-01", end: "2020-02",
       role: { en: "Android Developer", es: "Desarrollador Android" },
+      kind: { en: "Digital agency", es: "Agencia digital" },
       place: { en: "Mexico City", es: "Ciudad de México" },
       note: { en: "**{lapse} in total** at a digital agency", es: "**{lapse} en total** en una agencia digital" }
     }
