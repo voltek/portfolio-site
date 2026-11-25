@@ -210,10 +210,12 @@
     text-shadow:3px 0 0 var(--ink),-3px 0 0 var(--ink),0 3px 0 var(--ink),0 -3px 0 var(--ink),2px 2px 0 var(--ink),-2px -2px 0 var(--ink),2px -2px 0 var(--ink),-2px 2px 0 var(--ink),5px 6px 0 var(--ink)}
   .star i{font-family:var(--script);font-style:normal;font-size:clamp(24px,2.4vw,32px)}
   .card .what{grid-column:1;font-size:16.5px;line-height:1.45;font-weight:700;max-width:40ch}
-  .credits{grid-column:1;display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:baseline;align-content:start}
+  .credits{grid-column:1;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 12px;align-items:baseline;align-content:start}
   /* labels whisper (small, spaced capitals, softened tone); values speak (larger, full ink) */
   .credits dt,.hl-h{font-weight:800;font-size:12px;letter-spacing:.11em;text-transform:uppercase}
   .credits dd{font-weight:700;font-size:16.5px;line-height:1.35}
+  /* a name stays whole, and wraps only when it is wider than the whole column (phones) */
+  .credits .nb{display:inline-block;max-width:100%;white-space:normal}
   .cardlinks{grid-column:1;display:flex;flex-wrap:wrap;gap:8px}
   .cardlinks a{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border:3px solid var(--ink);border-radius:11px;background:var(--paper);color:var(--ink);font-weight:800;font-size:14.5px;text-decoration:none}
   .cardlinks a.go{background:var(--go)}

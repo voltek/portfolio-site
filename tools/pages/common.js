@@ -9,7 +9,7 @@ const skillName = s => esc(s).replace(/ · /g, "&nbsp;· ");
 // a stack in one line, plain text (the CV: an ATS reads it) or HTML for the pages, where no name breaks in two and no line
 // starts with "·"
 const stackLine = list => list.join(" · ");
-const stackHtml = list => list.map((t, i) => `<span class="nb">${esc(t)}${i < list.length - 1 ? " ·" : ""}</span>`).join(" ");
+const stackHtml = list => list.map((t, i) => `<span class="nb">${esc(t)}${i < list.length - 1 ? "&nbsp;·" : ""}</span>`).join(" ");
 // **…** → the page's highlight (Plain: <em>)
 const md = (s, tag = "em") => s.replace(/\*\*(.+?)\*\*/g, `<${tag}>$1</${tag}>`);
 
