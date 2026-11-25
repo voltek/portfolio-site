@@ -1,83 +1,37 @@
 ---
 name: screenshots
-description: Take screenshots of the portfolio pages (Plain, Show, case studies, CV) at desktop and phone widths, light and dark, check them for JavaScript errors with Edge headless, run Lighthouse, or build the side-by-side comparison images for comps. Use whenever a page change or prototype needs to be seen or verified. Pass what to capture and what to check as the argument.
-context: fork
-agent: general-purpose
-background: false
+description: Take screenshots of the portfolio pages (Plain, Show, case studies) at real phone and desktop widths, light and dark, check them for JavaScript errors and sideways overflow with Edge headless, run Lighthouse, or build the side-by-side comparison images for comps. Use whenever a page change or prototype needs to be seen or verified. Pass what changed and the mode (quick, yours, full) as the argument; quick by default.
 ---
 
-# Screenshots (runs as a forked subagent)
-
-The task is in the argument below. Capture, look at the images yourself with Read, and return **text only**: findings per page and width, JS errors, scores, and the absolute paths
-of any image the main session should send to Alan. Never paste image contents or long tool output into the result.
-Save images to the scratchpad of the session (or `_comps/<topic>/` for comps).
+# Screenshots
 
 Task: $ARGUMENTS
 
-## Tools (Windows)
+`node tools/build.js` first; the pages are `_site/index.html` (Plain), `_site/show.html` and `_site/<case>.html`. The
+CV is two PDFs, not a page: `node tools/cv.js --check` prints them and reads them back.
 
-Scripted captures, error checks and Lighthouse use **Edge headless** through `capture.sh` (next to this file). The
-Claude in Chrome extension (`mcp__claude-in-chrome__*`) is for looking at a page in the real Chrome: interaction,
-sticky headers at desktop width. `resize_window` does not give a phone viewport (390 asked, the page saw 1006 px);
-phone widths stay with Edge headless and iframes. It only connects while Chrome is open and logged in to claude.ai. If
-`tabs_context_mcp` says it is not connected: open Chrome, then `/mcp` (reconnect) and `/chrome`.
-
-```
-bash .claude/skills/screenshots/capture.sh shot   <page.html> <out.png> [width] [height] [query]
-bash .claude/skills/screenshots/capture.sh errors <page.html> [query]
-```
-
-## Standard pass after a change
-
-Pages are the built ones: `node tools/build.js` first, then `_site/index.html` (Plain), `_site/show.html` (Show) and
-`_site/<case>.html`. The CV is two PDFs, not a page: `node tools/cv.js --check` prints them and reads them back.
-
-1. `errors` on every page touched.
-2. `shot` at **1440×900** and at **500×1000** (Edge headless never goes below a 504 px viewport, so 500 stands in for
-   phones; for 360/390/820 px, capture a small page that frames the target in iframes of those widths).
-3. Also `theme=dark` (and `theme=light` if the system is dark). `open` shows the Skills detail on Plain and Show.
-4. Compare against the page's brief in `.impeccable/surfaces/` and `DESIGN.md` (read by range) and report what is off.
-
-| Query | Page | Effect |
+| Mode | When | What |
 |---|---|---|
-| `theme=dark` / `theme=light` | all | forces the theme |
-| `open` | Plain, Show | opens "See years and where I used each one" |
-| `today=2027-09-15` | all | simulates another date (lengths, years, the Show axis) |
-
-## Lighthouse
-
-Run it headless with Kaspersky's requests blocked. Its injected script stays local (the live site never has it), so
-leave its failures out of the scores you judge by and say so; ask Alan to turn the injection off (several manual steps
-for him) only when a result cannot be separated from it. Start
-`node tools/serve.js --port=8181` in the background, set `CHROME_PATH` to Edge's `msedge.exe`, then
+| **quick** | after each change, and before the PR when it is one card or only text | you, no subagent: only what changed, 390 and 1440, one theme (both if a color changed); Read those images |
+| **yours** | Alan says he will look himself | you: `--check` on the pages touched, then give him the link or file; Read no image |
+| **full** | once, before the PR, if `src/`, `tokens.css` or `assets/` changed | one `general-purpose` agent (Alan approved it), as below |
 
 ```
-npx -y lighthouse@13.4.1 http://localhost:8181/<page>.html [--preset=desktop] \
-  --blocked-url-patterns="*kaspersky-labs.com*" --chrome-flags="--headless=new" --output=json --output-path=<scratch>.json
+node .claude/skills/screenshots/shots.js <page.html>... [options]      # options: the file's header
+# quick, one Show card (k counts from 0):
+node .claude/skills/screenshots/shots.js _site/show.html --click=".frame[data-k='3']" --el=".card.on" --out=<scratchpad>
+# full, the pages touched:
+node .claude/skills/screenshots/shots.js <pages> --full --width=360,390,820,1440 --theme=light,dark --out=<scratchpad>
 ```
 
-One run at a time, no `#` in the URL. Report the four scores, page weight, LCP, TBT and CLS from the JSON (extract them
-with `node -e`, never print the JSON). Known: Best practices is 77 everywhere, from two audits: `errors-in-console`
-(the missing favicon's 404, phase 9) and `is-on-https` (Kaspersky's script, so not the site's).
+- Errors and overflow are printed as text for every page and width: no image is needed to know them.
+- Queries for `--query`: `open` (opens the Skills detail on Plain and Show), `today=2027-09-15` (simulates a date).
+- Images go to the scratchpad, or `_comps/<topic>/` for comps.
 
-## Known limits
+**Full:** give the agent the pages, what changed, the command above and the path of `reference.md` (here). It Reads every
+360 and 1440 image in both themes, and 390 and 820 only where a layout changes or something looks off; compares with
+the page's brief in `.impeccable/surfaces/` and `DESIGN.md` (read by range), and returns **text only**: findings per
+page and width, and the paths of any image worth sending to Alan. Lighthouse joins only for a new page or a redesigned
+section.
 
-- When measuring the DOM, Edge headless lays a page out 30 px narrower than its window: to measure at W px, open a
-  window of W+30 px. A capture (`shot`) uses the full window width.
-- A long page: raise the height (e.g. 1440×4000) rather than scrolling; `#anchor` URLs come out black, also inside
-  iframes, so capture the whole page and crop it in a small viewer page.
-- Sticky bars and scroll states cannot be captured. For interactive states, make a temporary sibling copy with a script
-  that clicks on `load` (top-level `let` and functions are globals), capture it, and delete the copy.
-- A class name reused across sections, or a top-level `const top` (clashes with `window.top`), breaks a page silently.
-
-## Comparison images for comps
-
-Every comp or visual option goes to Alan twice, images and live; this fork prepares both, the main session sends them.
-
-1. **Images:** desktop and phone captures combined side by side in one PNG per option (a small page of `<img>`
-   captured at its full size). Return their absolute paths; the main session sends them with `SendUserFile`.
-2. **Live:** a comparison page in `_comps/<topic>/` that frames the real pages side by side in scaled iframes, with
-   desktop/phone and light/dark switches and an "open alone" link per option. Pages there use relative paths with
-   copies of `tokens.css`, the fonts and the images, so the same folder works locally and as a private artifact. Return
-   the folder; the main session publishes it (files at the same relative paths) and gives Alan the artifact link and
-   the local `file:///C:/…` path.
+Lighthouse, Claude in Chrome, limits and comparison images for comps: `reference.md`, the section you need.

@@ -26,7 +26,7 @@ never scratch or temp copies; end every commit message with the attribution line
      `low` for data, skill or rule text, a one-spot fix or a line or two of logic; `medium` for new or changed logic in `tools/`, `lib/`, `src/*.js`, hooks or settings; `high` for
      `tools/build.js`, `lib/calc.js`, `tools/check-data.js` or a refactor across several JS files; when two fit, the
      higher wins. Fix what it confirms; a finding that needs Alan's judgment is not fixed but goes, with a
-     recommendation, in the pre-merge note. UI changes were already checked with `screenshots`; other text and docs
+     recommendation, in the pre-merge note. UI changes get the `screenshots` mode that fits (its table) before the PR; other text and docs
      rely on the `checks` workflow. If it touches `src/`, `tokens.css` or `assets/` with finished visual work, confirm the
      `impeccable-finish-reviewer` agent ran on it (`.claude/rules/design.md`); if it did not, the report says why.
    - Wait for the checks (`gh pr checks <n> --watch`); fix and push until they pass. A
