@@ -9,8 +9,9 @@ numbers and "Now building" are computed (`lib/calc.js`); never type them. After 
 - **Three highlights per card.** What does not fit goes to the CV.
 - **Dates:** `"2026-07"` (counts from the month's first day) or `"2026-07-15"`; `end: null` while ongoing. `work` stays
   oldest first: that order is the episode order.
-- **Texts the CV shows are `{ en, es }`.** `es: null` means the Spanish still needs approval (until then the
-  Spanish CV shows the English).
+- **An English text written or changed brings its Spanish** in the same change: `{ en, es }`, also where only the site
+  shows it. A plain string is a site text still without Spanish. Where the CV shows it, `es: null` means the Spanish
+  still needs approval (until then the Spanish CV shows the English).
 
 ## I finished a project
 

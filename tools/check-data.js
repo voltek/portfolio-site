@@ -23,13 +23,19 @@ const span = (o, where, openEnd) => {
   if (a && b && b < a) err(`${where}: ends before it starts`);
   if (a && a > now) warn(`${where}: starts after today`);
 };
-// a CV text: { en, es }; es null = Spanish pending
+// a text in both languages: { en, es }; es null = Spanish pending (only where the CV shows it)
 const bi = (t, where) => {
   if (t == null || typeof t !== "object") return err(`${where}: expected { en, es }`);
   if (!t.en) err(`${where}: missing en`);
-  if (t.es === undefined) err(`${where}: missing es (use null while pending)`);
-  else if (t.es === null) warn(`${where}: Spanish pending`);
+  if (t.es === null) warn(`${where}: Spanish pending`);
 };
+// an { en } anywhere, the CV's or the site's, says its Spanish too
+const both = (o, where) => {
+  if (!o || typeof o !== "object") return;
+  if (typeof o.en === "string" && o.es === undefined) err(`${where}: missing es`);
+  for (const [k, v] of Object.entries(o)) both(v, where ? `${where}.${k}` : k);
+};
+both(data, "");
 const TOKEN = /\{(careerYears|lapse|pinDate|updated)\}/g;
 // {lapse} is filled only in an employer's note (the entry that holds it); anywhere else it would crash the build
 const tokens = (t, where, lapse = false) => {
@@ -155,6 +161,7 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   const f = path.join(root, "data", "cases", w.links.caseStudy.replace(/\.html$/, ".js"));
   if (!fs.existsSync(f)) { warn(`work.${w.id}: ${w.links.caseStudy} has no data/cases/${path.basename(f)} yet; its links wait while it is in PENDING (tools/build.js)`); continue; }
   const cs = require(f), at = `cases/${path.basename(f)}`;
+  both(cs, at);
   if (cs.id !== w.id) err(`${at}: id "${cs.id}" is not its project "${w.id}"`);
   if (!cs.pin || !/^[0-9a-f]{7,40}$/.test(cs.pin.commit || "")) err(`${at}: pin.commit missing: every code link goes to that commit`);
   else date(cs.pin.date, `${at}.pin.date`);
@@ -224,7 +231,7 @@ if (process.argv.includes("--calc")) {
   console.log(`Computed against ${day}\n\ncareer: ${years}+ years`);
   console.log("\nepisodes and lengths");
   for (const w of C.episodes(data)) console.log(`  Episode ${C.episode(data, w.id)} · ${w.name.padEnd(22)} ${C.lapse(w.start, w.end, now).padEnd(16)} ${C.range(w.start, w.end)}  ·  ${C.range(w.start, w.end, "es")}`);
-  for (const [id, e] of Object.entries(data.employers)) console.log(`  ${e.name} · ${C.fill(e.note.split("**").join(""), { lapse: C.lapse(e.start, e.end, now) })}  (${C.range(e.start, e.end)})`);
+  for (const [id, e] of Object.entries(data.employers)) console.log(`  ${e.name} · ${C.fill((e.note.en || e.note).split("**").join(""), { lapse: C.lapse(e.start, e.end, now) })}  (${C.range(e.start, e.end)})`);
   console.log("\nskills");
   for (const s of data.skills.filter(s => s.at.length)) console.log(`  ${s.name.padEnd(36)} ${C.skillSpan(s, data, now).padEnd(30)} pages: ${s.level === "core" && !s.legacy && s.pages !== false && C.skillLength(s, data, now) || "—"}`);
   const gs = data.work.find(w => w.learningPath);

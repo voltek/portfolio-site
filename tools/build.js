@@ -31,6 +31,8 @@ fs.mkdirSync(out, { recursive: true });
 const ctx = context(data, now);
 for (const p of PAGES) {
   const html = fillTemplate(fs.readFileSync(path.join(root, p.template), "utf8"), data, p.render(ctx), p.file);
+  // a { en, es } put inside a larger string instead of drawn with esc() or text()
+  if (html.includes("[object Object]")) throw new Error(`${p.file}: a text in two languages was not drawn as text`);
   fs.writeFileSync(path.join(out, p.file), html);
 }
 

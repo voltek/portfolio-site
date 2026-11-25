@@ -4,8 +4,9 @@
 //
 // Conventions
 // · Dates: "2015-08" (a month = its first day) or "2026-07-15" when the day matters. end: null = ongoing.
-// · Texts the CV shows come as { en, es }; es: null = Spanish still to approve (check-data lists them). Texts only the
-//   site shows (it is English) are plain strings.
+// · Texts are { en, es }: an English text written or changed brings its Spanish in the same change, also where only the
+//   site shows it (English today, Spanish planned). A plain string is a site text whose Spanish is still to write. Where
+//   the CV shows it, es: null = Spanish still to approve (check-data lists them).
 // · **…** marks the words a page highlights. {careerYears}, {lapse}, {pinDate} and {updated} are filled
 //   (lib/calc.js); never write a length, a number of years or an episode number by hand.
 // · Approved copy only: every text here passed _private/sources/copy-deck.md.
@@ -64,7 +65,7 @@
       name: "IRONBIT", start: "2017-01", end: "2020-02",
       role: { en: "Android Developer", es: "Desarrollador Android" },
       place: { en: "Mexico City", es: "Ciudad de México" },
-      note: "**{lapse} in total** at a digital agency"
+      note: { en: "**{lapse} in total** at a digital agency", es: "**{lapse} en total** en una agencia digital" }
     }
   },
 
@@ -281,9 +282,9 @@
     { name: "Firebase Analytics · Crashlytics", level: "familiar", at: ["ag"] },
     { name: "Google Maps · Places", level: "familiar", at: ["ag"] },
     { name: "Robolectric", level: "familiar", at: ["gs"], note: "Screen tests in GameStack", pages: false },
-    { name: "Dagger 2", level: "core", legacy: true, at: ["ob", "cd", { id: "ag", part: true }], note: "Also in the agency apps, toward the end. Citibanamex wired its dependencies by hand" },
+    { name: "Dagger 2", level: "core", legacy: true, at: ["ob", "cd", { id: "ag", part: true }], note: { en: "Also in the agency apps, toward the end. Citibanamex wired its dependencies by hand", es: "También en las apps de la agencia, hacia el final. En Citibanamex las dependencias se conectaban a mano" } },
     { name: "RxJava", level: "familiar", legacy: true, at: ["cb", "cd"] },
-    { name: "SQLite · Realm", level: "familiar", legacy: true, at: ["ag", "et"], note: "SQLite by hand for offline catalogs at Estrategia; Realm in the agency apps" },
+    { name: "SQLite · Realm", level: "familiar", legacy: true, at: ["ag", "et"], note: { en: "SQLite by hand for offline catalogs at Estrategia; Realm in the agency apps", es: "SQLite a mano para catálogos sin conexión en Estrategia; Realm en las apps de la agencia" } },
     { name: "MVP", level: "core", legacy: true, at: ["ob", "cb", "cd", "ag"] },
     { name: "Custom Views", level: "core", legacy: true, at: ["ob"] },
     { name: "Glide", level: "familiar", legacy: true, at: ["cd"] }

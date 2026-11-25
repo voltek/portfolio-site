@@ -3,7 +3,9 @@
 const C = require("../../lib/calc.js");
 const IMG = require("../../lib/images.js");
 
-const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+// a site text: a plain string, or { en, es }, of which the pages show the English
+const en = s => s && typeof s === "object" && typeof s.en === "string" ? s.en : s;
+const esc = s => String(en(s)).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 // a skill's name: "Google Maps · Places" never breaks before its dot
 const skillName = s => esc(s).replace(/ · /g, "&nbsp;· ");
 // a stack in one line, plain text (the CV: an ATS reads it) or HTML for the pages, where no name breaks in two and no line
@@ -118,7 +120,7 @@ const fillTemplate = (tpl, data, parts, file) => partials(tpl).replace(/\{\{(@?)
     if (!(key in parts)) throw new Error(`${file}: no renderer for {{@${key}}}`);
     return parts[key];
   }
-  const v = key.split(".").reduce((o, k) => o == null ? o : o[k], data);
+  const v = en(key.split(".").reduce((o, k) => o == null ? o : o[k], data));
   if (typeof v !== "string") throw new Error(`${file}: {{${key}}} is not a text in the data`);
   return esc(v);
 });

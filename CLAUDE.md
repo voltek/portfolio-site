@@ -31,6 +31,8 @@ Keep shell output short: pipe build, detector, Lighthouse and git output through
 - **Never fabricate proof**: no metrics, testimonials, benchmarks, inflated leadership or AI work not done. Every claim
   must be defensible in an interview. Source precedence: public repo > `_private/sources/sources.md`.
 - No copy reaches the site without passing `_private/sources/copy-deck.md` with its source and Alan's approval.
+- Every English text written or changed (site, cases, CV) brings its Spanish in the same change, data and copy deck,
+  even where only the English shows: the site in Spanish is planned. Show Alan both when he approves.
 - ModernNotes is "100% hand-written": Claude never writes code in that repo, only guides and audits.
 - Nothing private enters this public repo: phone, salary, personal email, interview notes stay in `_private/`.
 - Everything committed to either repo is in English (the CV also ships in Spanish), except `_private/sources/`:
