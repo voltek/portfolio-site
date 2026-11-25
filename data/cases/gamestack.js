@@ -154,7 +154,7 @@ module.exports = {
       { id: "auto", name: { en: "Automation", es: "Automatización" } }
     ],
     stages: [
-      { name: "Issue",
+      { name: { en: "GitHub issue", es: "Issue de GitHub" }, note: { en: "backlog: defects, product, harness", es: "backlog: defectos, producto, harness" },
         me: { en: "choose it at a triage", es: "lo elijo en un triage" },
         ai: { en: "propose the order", es: "propone el orden" } },
       { name: "Spec", note: { en: "features, from Game Detail on", es: "features, desde Game Detail" },
@@ -169,7 +169,7 @@ module.exports = {
         auto: { en: "check the message and the branch name", es: "revisa el mensaje y el nombre de la rama" } },
       { name: { en: "Review", es: "Revisión" },
         me: { en: "say yes to each round, then decide what needs me", es: "autorizo cada ronda y después decido lo que me toca" },
-        ai: { en: "review; in round 1, fix what needs no decision; report what I decide, what I should know and what leaves the branch", es: "revisa; en la ronda 1 corrige lo que no requiere decisión; reporta lo que yo decido, lo que debo saber y lo que sale de la rama" } },
+        ai: { en: "a subagent without the author's context reviews with Claude Code's `/code-review`; the author checks each finding, fixes in round 1 what needs no decision and reports the rest", es: "un subagente sin el contexto del autor revisa con `/code-review` de Claude Code; el autor verifica cada hallazgo, corrige en la ronda 1 lo que no requiere decisión y reporta el resto" } },
       { name: "Pull request",
         me: { en: "say yes to opening it", es: "autorizo abrirlo" },
         ai: { en: "open it; an external bot reviews it once", es: "lo abre; un bot externo lo revisa una vez" },
@@ -214,10 +214,6 @@ module.exports = {
       en: "The app's roadmap, and the self-directed learning path behind its harness. Each finished block is put to work here, and the repo shows it.",
       es: "El roadmap de la app y la ruta de aprendizaje autodirigida detrás de su harness. Cada bloque terminado se aplica aquí, y el repo lo muestra."
     },
-    designed: { en: "Designed: the screen has an approved mockup, which may still change.", es: "Diseñada: la pantalla tiene un mockup aprobado, que aún puede cambiar." },
-    line: {
-      en: "**Next:** agentic IDEs and other CLIs, AI APIs inside apps, rapid prototyping, and the goal: my own harness and loop.",
-      es: "**Sigue:** IDE agénticos y otras CLI, APIs de IA dentro de apps, prototipado rápido y la meta: mi propio harness y loop."
-    }
+    designed: { en: "Designed: the screen has an approved mockup, which may still change.", es: "Diseñada: la pantalla tiene un mockup aprobado, que aún puede cambiar." }
   }
 };

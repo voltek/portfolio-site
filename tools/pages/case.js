@@ -2,7 +2,7 @@
 // for every case: the project's entry in data/portfolio.js gives the header, data/cases/<page>.js the body, copy.case
 // the labels. A section the case file leaves out is not drawn and leaves the bar (DECISIONS.md → Case page rules).
 const IMG = require("../../lib/images.js");
-const { C, en, esc, md, text, calcData, head, srcset, ICON, cvMenu } = require("./common.js");
+const { C, en, esc, text, calcData, head, srcset, ICON, cvMenu } = require("./common.js");
 
 const I = {
   back: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -69,13 +69,14 @@ module.exports = (cs, ctx) => {
     </div>
   </aside>`;
 
-  // the strip: the video first (if any), then the screens; a tap opens the larger screen
+  // the strip: the screens, with the video (if any) in the middle; a tap opens the larger screen
   const shots = (w.shots || []).filter(s => s.on.includes("case"));
   const SIZES = "(max-width: 700px) min(62vw, 240px), 196px";
-  const vid = cs.video ? `<figure class="it vid"><div class="phone"><video src="${esc(cs.video.src)}" poster="${esc(cs.video.poster)}" preload="none" controls muted playsinline aria-label="${esc(cs.video.alt)}"></video></div><figcaption>${esc(cp.demo)}</figcaption></figure>` : "";
+  const vid = cs.video ? `<figure class="it vid"><div class="phone"><video src="${esc(cs.video.src)}" poster="${esc(cs.video.poster)}" preload="none" controls muted playsinline aria-label="${esc(en(cs.video.alt))}"></video></div><figcaption>${esc(cp.demo)}</figcaption></figure>` : "";
+  const mid = Math.floor(shots.length / 2);
   const strip = !shots.length && !cs.video ? "" : `<div class="strip" id="screens">
     <button class="sbtn prev" type="button" aria-label="${esc(cp.aria.prevScreens)}" hidden>${I.back}</button>
-    <div class="track" tabindex="0" role="group" aria-label="${esc(cp.aria.screens)}">${vid}${shots.map((s, i) => `<figure class="it"><button class="shot" type="button" data-i="${i}" aria-label="${esc(cp.aria.viewLarger + en(s.label))}"><span class="phone"><img ${srcset(s.src, SIZES)} alt="${esc(s.alt || "")}" width="240" height="539"></span></button><figcaption>${esc(s.label)}</figcaption></figure>`).join("")}</div>
+    <div class="track" tabindex="0" role="group" aria-label="${esc(cp.aria.screens)}">${shots.map((s, i) => `${i === mid ? vid : ""}<figure class="it"><button class="shot" type="button" data-i="${i}" aria-label="${esc(cp.aria.viewLarger + en(s.label))}"><span class="phone"><img ${srcset(s.src, SIZES)} alt="${esc(s.alt || "")}" width="240" height="539"></span></button><figcaption>${esc(s.label)}</figcaption></figure>`).join("")}${shots.length ? "" : vid}</div>
     <button class="sbtn next" type="button" aria-label="${esc(cp.aria.nextScreens)}" hidden>${I.fwd}</button>
   </div>
   ${cs.shotsFoot ? `<p class="shotnote">${tx(cs.shotsFoot)}</p>` : ""}
@@ -128,13 +129,13 @@ module.exports = (cs, ctx) => {
   const controls = () => `<h3 class="sub-h">${esc(cp.aiControls)}</h3>
     <ul class="items ctl">${proof.map(r => `<li><b>${esc(r.label)}</b><p>${text(ctx, r.note)}</p>${links(r.files)}</li>`).join("")}</ul>`;
 
-  // what comes next: the project's roadmap and learning path; the blocks done or under way, and the rest in one line
-  const LEFT = { done: "var(--done)", now: "var(--wip)" }, ps = data.copy.path.status, groups = data.copy.next.groups;
+  // what comes next: the project's roadmap and learning path
+  const DOT = { done: "var(--done)", now: "var(--wip)", next: "var(--client)", goal: "var(--own)" }, ps = data.copy.path.status, groups = data.copy.next.groups;
   const road = w.roadmap, path = w.learningPath;
   const next = () => `<div class="nx">${road ? `<div><h3 class="group">${esc(groups.app)}</h3><ol class="steps">${[...road.steps, [road.goal, "goal"]].map(([t, s]) =>
       `<li class="s-${s}"><span class="mark">${s === "done" ? ICON.check : ""}</span><b>${esc(t)}</b><small>${esc(ps[s])}</small></li>`).join("")}</ol>${cs.next.designed ? `<p class="nxnote">${tx(cs.next.designed)}</p>` : ""}</div>` : ""}
-    ${path ? `<div><h3 class="group">${esc(groups.path)}</h3><ol class="blocks">${path.blocks.filter(b => LEFT[b.status]).map(b =>
-      `<li><span class="tag">${esc(b.tag)}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p></div><span class="bst"><i style="background:${LEFT[b.status]}" aria-hidden="true"></i>${esc(ps[b.status])}</span></li>`).join("")}</ol>${cs.next.line ? `<p class="nxline">${md(tx(cs.next.line), "b")}</p>` : ""}</div>` : ""}</div>`;
+    ${path ? `<div><h3 class="group">${esc(groups.path)}</h3><ol class="blocks">${path.blocks.map(b =>
+      `<li><span class="tag">${esc(b.tag)}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p></div><span class="bst"><i style="background:${DOT[b.status]}" aria-hidden="true"></i>${esc(ps[b.status])}</span></li>`).join("")}</ol></div>` : ""}</div>`;
 
   const body = {
     next,
@@ -158,9 +159,8 @@ module.exports = (cs, ctx) => {
   const commit = tx(cp.commit).replace("{commit}", `<a href="${esc(`${repo}/tree/${cs.pin.commit}`)}"><code>${esc(cs.pin.commit)}</code></a>`).replace("{date}", C.factDate(cs.pin.date));
   const source = `<div class="source">${repoLinks}<p>${commit}</p>${cs.footNote ? `<p>${tx(cs.footNote)}</p>` : ""}</div>`;
 
-  // back to the left, forward to the right: the next case is the next project with a case study, in the data's order
-  const cases = data.work.filter(x => x.links && x.links.caseStudy), nx = cases.length > 1 && cases[(cases.indexOf(w) + 1) % cases.length];
-  // (its look waits for the "Next case" decision with more than two cases: DECISIONS.md → Case page rules)
+  // back to the left, forward to the right: the cases run newest to oldest (the data is oldest first) and wrap around
+  const cases = data.work.filter(x => x.links && x.links.caseStudy).reverse(), nx = cases.length > 1 && cases[(cases.indexOf(w) + 1) % cases.length];
   const after = `<nav class="after" aria-label="${esc(cp.aria.pager)}">
     <a class="back" href="index.html#${esc(w.id)}">${I.back}<span>${esc(cp.back)}</span></a>
     ${nx ? `<a class="nextc" href="${esc(nx.links.caseStudy)}"><small>${esc(cp.next)}</small><b>${esc(nx.name)}${I.fwd}</b><span>${text(ctx, nx.what.en)}</span></a>` : ""}

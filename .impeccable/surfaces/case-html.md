@@ -38,15 +38,15 @@ RULES (DECISIONS.md → Case page rules; Data-flow diagram):
   alone. Diagram tokens hold ≥ 3:1 in both themes.
 - Class names break only before their role (GetNotes·UseCase). Each section title links to itself.
 - Screens: a strip with scroll-snap, never a carousel; arrows only where it overflows; a tap opens a viewer
-  (keys, swipe, "2 / 3", focus back to the screen viewed). A video, if any, goes first and plays in its frame.
+  (keys, swipe, "2 / 3", focus back to the screen viewed). A video, if any, goes in the middle and plays in its frame.
 - Stack tags: Skills used at the project (same names) plus 2–3 verified libraries, ≤ ~15; check-data enforces it.
 
 FINISH: Lighthouse mobile and desktop, impeccable `audit` with the detector, `polish`, `impeccable-finish-reviewer`.
 
 ## Unresolved
 
-- "Next case" with more than two cases: a fixed order (today: the data's order, wrapping) or a list of all cases.
-  The ending's look is decided with it; until then the comp's "NEXT CASE" label stays above the name, an exception to
+- "Next case" runs newest to oldest and wraps (Alan, 2026-11-25); with five cases or more, a list of all of them.
+  The comp's "NEXT CASE" label stays above the name, an exception to
   the kicker ban accepted by Alan on 2026-10-28 (reviewers: do not flag it again).
 - Dark mode of the cases is reviewed with Plain's in phase 9 (diagram surfaces at 1.2–1.3:1).
 - A share image per case (today the landing's `og.png`).

@@ -25,7 +25,7 @@ module.exports = {
   // architecture, tests. check-data holds each tag to that.
   stack: ["Kotlin", "Jetpack Compose", "Material 3", "Coroutines", "Flow", "Hilt", "Room", "DataStore", "Retrofit", "Clean Architecture", "MVVM", "JUnit", "MockK", "Turbine", "MockWebServer"],
   libs: ["JUnit", "MockK", "Turbine", "MockWebServer"],
-  video: null, // { src, poster, alt } once recorded (DATA.md → New demo video); it goes first among the screens
+  video: null, // { src, poster, alt } once recorded (DATA.md → New demo video); it goes in the middle of the screens
   shotsFoot: "Real screens from the emulator.",
 
   architecture: {

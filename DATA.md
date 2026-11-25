@@ -51,7 +51,7 @@ only its WebP copies.
 ## New demo video (case studies)
 
 One short MP4 in the repo, never Git LFS (Pages does not serve it); the page loads it only on play. It goes in the case
-file's `video` (`data/cases/<page>.js`), and the screens strip opens with it.
+file's `video` (`data/cases/<page>.js`), in the middle of the screens strip.
 
 1. **Record what screenshots cannot show:** one flow, 20–30 s, portrait, from the emulator, something that moves (a
    list reordering, a loading state, a transition). Demo data only, system demo mode on, no sound.
@@ -65,7 +65,7 @@ file's `video` (`data/cases/<page>.js`), and the screens strip opens with it.
    ```
 
    Under 3 MB: if it weighs more, raise `-crf` to 30 or 32 and check it still looks sharp. `-ss` picks the poster frame.
-3. **List it** in `video`: `src`, `poster` and `alt` (what the video shows). Only the case page uses it.
+3. **List it** in `video`: `src`, `poster` and `alt` (`{ en, es }`, what the video shows). Only the case page uses it.
 
 ## The share image (assets/og.png)
 
@@ -113,5 +113,5 @@ Every case is drawn by `src/case.html` and `tools/pages/case.js`; nothing is wri
    named in `libs`; `check-data` checks the tags and the diagram's limits.
 6. `ai.stages` is the strip by actor (at most 8 stages, 3 `actors`), `ai.controls: true` adds the project's proof rows,
    and `next` draws its `roadmap` (status `designed` = an approved mockup) and `learningPath`.
-7. "Next case" is the next project with a case study, in the data's order.
+7. "Next case" goes from the newest project with a case study to the oldest, then back to the newest.
 8. Check the page (`.claude/rules/design.md`): Lighthouse, impeccable `audit`, `polish` and the finish review.

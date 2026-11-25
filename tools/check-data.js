@@ -212,7 +212,7 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   if (cs.ai && cs.ai.controls && !(w.proof || []).some(r => r.on.includes("case") && r.files)) err(`${at}.ai.controls: no proof row goes on the case with its files`);
   if (cs.next && !w.roadmap && !w.learningPath) err(`${at}.next: the project has no roadmap or learning path to draw`);
   if (cs.ai && cs.ai.contrast && !ids.has(cs.ai.contrast.to)) err(`${at}.ai.contrast: unknown project "${cs.ai.contrast.to}"`);
-  if (cs.video) for (const k of ["src", "poster", "alt"]) { if (!cs.video[k]) err(`${at}.video: missing ${k}`); else if (k !== "alt" && !fs.existsSync(path.join(root, cs.video[k]))) err(`${at}.video: ${cs.video[k]} not found`); }
+  if (cs.video) for (const k of ["src", "poster", "alt"]) { if (!cs.video[k] || k === "alt" && !(cs.video.alt.en && cs.video.alt.es)) err(`${at}.video: missing ${k}${k === "alt" ? " { en, es }" : ""}`); else if (k !== "alt" && !fs.existsSync(path.join(root, cs.video[k]))) err(`${at}.video: ${cs.video[k]} not found`); }
 }
 
 // image copies (made by node tools/images.js): the pages load these, never the original
