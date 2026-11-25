@@ -29,5 +29,5 @@ paths:
 - Before proposing a direction, look at real references as images (download and view them) and say what was taken
   from each. Style only: no characters, logos or brand names on the site.
 - Never propose a design mainly because it reuses an existing piece: say why it fits best, or that reuse was the reason.
-- Every comp goes out as images and live (skill `screenshots` → *Comparison images*); comps live in `_comps/<topic>/`.
+- Every comp goes out as images and live (skill `screenshots`, `reference.md` → *Comparison images*); comps live in `_comps/<topic>/`.
 - On throwaway prototypes, fix detector findings silently; report them only on final builds.
