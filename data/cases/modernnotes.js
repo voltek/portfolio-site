@@ -10,7 +10,7 @@
 //   that say something the page has not said yet (DECISIONS.md → Case page rules).
 module.exports = {
   id: "mn",
-  pin: { commit: "3274436", date: "2026-10-16" },
+  pin: { commit: "4eba15e", date: "2026-11-24" },
   roots: {
     repo: "",
     main: "app/src/main/java/com/example/modernnotes/",
