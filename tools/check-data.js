@@ -49,7 +49,7 @@ span(p.education, "profile.education");
 p.languages.forEach((l, i) => { bi(l.name, `profile.languages[${i}].name`); bi(l.level, `profile.languages[${i}].level`); });
 for (const [k, s] of Object.entries(p.lede)) tokens(s, `profile.lede.${k}`);
 for (const [id, e] of Object.entries(data.employers)) {
-  span(e, `employers.${id}`, true); bi(e.role, `employers.${id}.role`); bi(e.intro, `employers.${id}.intro`); bi(e.place, `employers.${id}.place`); tokens(e.note, `employers.${id}.note`, true);
+  span(e, `employers.${id}`, true); bi(e.role, `employers.${id}.role`); bi(e.place, `employers.${id}.place`); tokens(e.note, `employers.${id}.note`, true);
 }
 
 // the CV's own copy
@@ -57,8 +57,8 @@ const cv = data.cv;
 for (const k of ["status", "overlap", "summary"]) { bi(cv[k], `cv.${k}`); tokens(cv[k], `cv.${k}`); }
 for (const g of ["h", "levels", "kind"]) for (const [k, t] of Object.entries(cv[g])) bi(t, `cv.${g}.${k}`);
 cv.how.forEach((t, i) => { bi(t, `cv.how[${i}]`); tokens(t, `cv.how[${i}]`); });
-const named = new Set([...data.skills.map(s => s.cv || s.name), ...data.work.flatMap(w => w.stack)]);
-for (const k of Object.keys(cv.terms)) if (!named.has(k)) err(`cv.terms: "${k}" is no skill or stack name`);
+const named = new Set([...data.skills.map(s => s.cv || s.name), ...data.work.flatMap(w => [w.name, ...w.stack])]);
+for (const k of Object.keys(cv.terms)) if (!named.has(k)) err(`cv.terms: "${k}" is no skill, stack or place name`);
 
 // work: jobs and projects
 const ids = new Set(), STATUS = ["in-progress", "completed"], ON = ["plain", "show", "case"];

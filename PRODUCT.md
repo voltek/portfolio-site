@@ -52,7 +52,7 @@ A landing page (`index.html`) that a recruiter can scan top to bottom, plus one 
 ## Evidence on Hand
 
 - Public repos: GameStack (in progress) and ModernNotes (completed), both on https://github.com/voltek.
-- Real experience: Globant (Openbank Spain, Citibanamex Mexico), América Móvil/Claro Drive, IRONBIT Digital Experiences, Estrategia Tecnológica.
+- Real experience: Globant (Openbank Spain, Citibanamex Mexico), IRONBIT Digital Experiences (its agency apps, then América Móvil/Claro Drive on assignment), Estrategia Tecnológica.
 - Contact: email hello@alanhernandez.dev (forwards to a private Gmail that is never published); LinkedIn https://www.linkedin.com/in/alan-hernandez-voltek/; GitHub https://github.com/voltek.
 - Modern architecture, verified in the public repos (2026-10-15): MVI + Clean Architecture in GameStack (its CLAUDE.md, `SearchContract.kt`, the `write-viewmodel` Skill); MVVM with unidirectional state (ViewModel + UiState + UiEvent) in ModernNotes. Client work was MVP (IRONBIT, Claro Drive, Openbank), with Clean Architecture at Citibanamex. MVI/MVVM are claimed for personal work only.
 - AI-assisted development, verified: GameStack is built with Claude Code agents under a documented harness (CLAUDE.md and rules loaded by path, Skills, ADRs with "Enforced by", hooks, a capped review loop, CI checks behind branch protection, a Human-in-the-Loop principle); ModernNotes used AI only as a reviewer. Spec-Driven Development and context engineering come from Alan's self-directed roadmap, applied in GameStack. Not claimable yet: LLM APIs (Gemini, OpenAI, Anthropic), on-device AI, KMP, Alan's own subagents.

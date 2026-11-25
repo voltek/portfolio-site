@@ -35,7 +35,7 @@ module.exports = ({ data, now, careerYears }, lang, { phone, fullName } = {}) =>
   }).join("\n");
 
   const entry = (w, kind, sub, extra = []) => `<article class="entry ${kind}">
-  <header><h3>${esc(w.name)}</h3> <span class="sub">${sub}</span> ${when(w)}</header>
+  <header><h3>${esc(term(w.name))}</h3> <span class="sub">${sub}</span> ${when(w)}</header>
   <p class="what">${md(t(w.lede || w.what))}</p>
   ${bullets([...w.highlights.map(t), ...extra])}
   <p class="stack">${esc(stackLine(w.stack.map(term)))}</p>

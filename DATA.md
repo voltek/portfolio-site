@@ -28,8 +28,8 @@ its length and its skills' years follow.
 ## New job
 
 1. Add a `work` entry in date order with `type: "job"`, `start`, `end: null`, `studio`, `role` (or `employer` if it is a
-   client of an employer listed in `employers`), `what`, three `highlights`, `stack`, `show`. A client of an employer also needs `note`
-   (what the company is, with its name on Plain and the CV), and a new employer its `place`.
+   place under an employer listed in `employers`), `what`, three `highlights`, `stack`, `show`. A place under an employer also needs `note`
+   (what it is, with its name on Plain and the CV), and a new employer its `place`.
 2. Add its id to the `at` of the skills used there.
 3. `profile.status` (open to work) does not change by itself: update it through the copy deck if Alan stops looking.
 
