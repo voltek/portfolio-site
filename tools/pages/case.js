@@ -106,7 +106,7 @@ module.exports = (cs, ctx) => {
     const phone = `<ol class="vflow">${T.map((id, i) => { const x = piece(id), L = layer(id);
       const lh = L.id !== last ? `<li class="vl"><b>${esc(L.name)}</b> <code>${pk(L.pkg)}</code></li>` : ""; last = L.id;
       const side = (F.side || []).filter(s => s.into === id).map(s => { const q = piece(s.piece);
-        return `<span class="vside"><a href="${href(q)}"><b>${esc(q.name)}</b>${q.sub ? ` <small>${esc(q.sub)}</small>` : ""}</a> → ${esc(s.say)}</span>`; }).join("");
+        return `<span class="ve vside"><span class="dn" aria-hidden="true"></span><span><a href="${href(q)}"><b>${esc(q.name)}</b>${q.sub ? ` <small>${esc(q.sub)}</small>` : ""}</a> · ${esc(s.say)}</span></span>`; }).join("");
       const isBack = [bk.to, bk.from].includes(id) && [bk.to, bk.from].includes(T[i + 1]);
       const e = i < T.length - 1 ? `<li class="ve"><span class="dn" aria-hidden="true"></span>${esc(F.edges[i])}${isBack ? ` <span class="vb">· ${esc(bk.down)}</span>` : ""}</li>` : "";
       return `${lh}<li><a class="fn${mk(id) ? " marked" : ""}" href="${href(x)}">${mk(id)}<b>${esc(x.name)}</b>${sub(x)}</a>${side}</li>${e}`; }).join("")}</ol>`;
