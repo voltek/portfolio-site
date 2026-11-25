@@ -234,7 +234,7 @@
       // on the landing); the pin lands before the first step not done
       roadmap: {
         lane: "App",
-        steps: [[{ en: "Search", es: "Búsqueda" }, "done"], [{ en: "Game Detail", es: "Detalle" }, "designed"], [{ en: "Library", es: "Biblioteca" }, "designed"], [{ en: "Ratings", es: "Calificaciones" }, "next"], [{ en: "Home", es: "Inicio" }, "designed"]],
+        steps: [[{ en: "Search", es: "Búsqueda" }, "done"], [{ en: "Game Detail", es: "Detalle" }, "designed"], [{ en: "Library", es: "Biblioteca" }, "designed"], [{ en: "Home", es: "Inicio" }, "designed"], [{ en: "Ratings", es: "Calificaciones" }, "next"]],
         goal: { en: "On Google Play", es: "En Google Play" }
       },
       // The learning path lives on the project it proves: "Now building" draws it while GameStack is in progress, and it
