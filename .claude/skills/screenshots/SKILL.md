@@ -14,7 +14,7 @@ CV is two PDFs, not a page: `node tools/cv.js --check` prints them and reads the
 |---|---|---|
 | **quick** | after each change, and before the PR when it is one card or only text | you, no subagent: only what changed, 390 and 1440, one theme (both if a color changed); Read those images |
 | **yours** | Alan says he will look himself | you: `--check` on the pages touched, then give him the link or file; Read no image |
-| **full** | once, before the PR, if `src/`, `tokens.css` or `assets/` changed | one `general-purpose` agent (Alan approved it), as below |
+| **full** | once, before the PR, if `src/`, `tokens.css` or `assets/` changed and quick is not enough | one `general-purpose` agent (Alan approved it), as below |
 
 ```
 node .claude/skills/screenshots/shots.js <page.html>... [options]      # options: the file's header

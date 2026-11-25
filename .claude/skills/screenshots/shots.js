@@ -18,6 +18,7 @@ for (const a of process.argv.slice(2)) {
   else if (!KNOWN.includes(m[1])) stop(`unknown option ${a}`);
   else if (m[1] === "click") opt.click.push(m[2]);
   else opt[m[1]] = m[2] ?? true;
+  if (m && !["full", "check"].includes(m[1]) && !m[2]) stop(`--${m[1]} needs a value`);
 }
 const missing = pages.filter(p => !fs.existsSync(p));
 if (!EDGE) stop("no Edge found: set CHROME_PATH");
@@ -25,6 +26,11 @@ if (!pages.length) stop("which page?");
 if (missing.length) stop(`no such page: ${missing.join(", ")}`);
 const widths = (opt.width || "390,1440").split(",").map(Number), themes = (opt.theme || "light").split(","), height = +(opt.height || 900);
 const out = path.resolve(opt.out || "."), PIECE = 1600;
+if (themes.some(t => !["light", "dark"].includes(t))) stop("--theme takes light, dark or both");
+// images are named after the page, and after its folder too when two pages share the name
+const base = p => path.basename(p, ".html"), names = new Map(pages.map(p => [p, pages.some(q => path.resolve(q) !== path.resolve(p) && base(q) === base(p))
+  ? `${path.basename(path.dirname(path.resolve(p)))}-${base(p)}` : base(p)]));
+if (new Set(names.values()).size < names.size) stop("two pages would save over each other: capture them with different --out");
 if (widths.some(w => !(w > 0)) || !(height > 0)) stop("--width and --height take numbers");
 if (!opt.check) fs.mkdirSync(out, { recursive:true });
 
@@ -58,7 +64,7 @@ const walk = async () => {
   const wait = ms => new Promise(r => setTimeout(r, ms));
   for (let y = 0; y < document.documentElement.scrollHeight; y += innerHeight) { scrollTo({ top:y, behavior:"instant" }); await wait(60); }
   scrollTo({ top:0, behavior:"instant" });
-  for (let k = 0; k < 20 && [...document.images].some(i => !i.complete && i.loading !== "lazy"); k++) await wait(100);
+  for (let k = 0; k < 30 && [...document.images].some(i => !i.complete && i.getClientRects().length); k++) await wait(100);
   await wait(200);
 };
 
@@ -66,63 +72,75 @@ const walk = async () => {
   let found = false;
   try {
     const started = new Promise((yes, no) => { let s = "";
-      edge.stderr.on("data", d => { s += d; const m = s.match(/ws:\/\/\S+/); if (m) yes(m[0]); });
+      edge.stderr.on("data", d => { s += d; const m = s.match(/(ws:\/\/\S+)\r?\n/); if (m) yes(m[1]); });
       gone.then(() => no(Error(`Edge closed before starting: ${s.slice(-200)}`))); });
     const ws = new WebSocket(await limit(started, 15000, "starting Edge"));
     await limit(new Promise((yes, no) => { ws.onopen = yes; ws.onerror = () => no(Error("no connection to Edge")); }), 10000, "connecting to Edge");
     let id = 0; const waiting = new Map(), listeners = new Map();
     ws.onmessage = e => { const m = JSON.parse(e.data), w = waiting.get(m.id);
       if (w) { waiting.delete(m.id); m.error ? w[1](Error(m.error.message)) : w[0](m.result); } else listeners.get(m.sessionId)?.(m); };
+    let lost = false; ws.onclose = () => { lost = true; for (const [, no] of waiting.values()) no(Error("Edge closed")); };
     const send = (method, params = {}, sessionId) => limit(new Promise((yes, no) => {
       waiting.set(++id, [yes, no]); ws.send(JSON.stringify({ id, method, params, sessionId })); }), 30000, method);
 
     // a fresh context per load: nothing a click stored in one capture reaches the next
-    const open = async (page, width, theme, still) => {
+    const open = async (page, width, theme, still, errors) => {
       const { browserContextId } = await send("Target.createBrowserContext");
       const { targetId } = await send("Target.createTarget", { url:"about:blank", browserContextId });
       const { sessionId } = await send("Target.attachToTarget", { targetId, flatten:true });
-      const cdp = (method, params) => send(method, params, sessionId), errors = new Set();
+      const cdp = (method, params) => send(method, params, sessionId);
       const run = async js => { const r = await cdp("Runtime.evaluate", { expression:js, returnByValue:true, awaitPromise:true });
         if (r.exceptionDetails) throw Error((r.exceptionDetails.exception?.description || r.exceptionDetails.text).split("\n")[0]);
         return r.result.value; };
-      let onLoad; const loaded = new Promise(r => { onLoad = r; });
+      const seen = new Set(); let onLoad;
       listeners.set(sessionId, ({ method, params }) => {
-        if (method === "Page.loadEventFired") onLoad();
+        if (method === "Page.lifecycleEvent" && params.name === "load") { seen.add(params.loaderId); onLoad?.(); }
         if (method === "Runtime.exceptionThrown") { const d = params.exceptionDetails;
           errors.add(`${(d.exception?.description || d.text).split("\n")[0]} @${d.lineNumber + 1}`); }
         if (method === "Runtime.consoleAPICalled" && params.type === "error") errors.add("console.error: " + params.args.map(a => a.value ?? a.description).join(" "));
         if (method === "Log.entryAdded" && params.entry.level === "error") errors.add(`${params.entry.text} ${params.entry.url || ""}`.trim());
       });
       for (const d of ["Page", "Runtime", "Log"]) await cdp(`${d}.enable`);
+      await cdp("Page.setLifecycleEventsEnabled", { enabled:true });
       await cdp("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor:1, mobile:width < 900 });
-      await cdp("Emulation.setEmulatedMedia", { features:[{ name:"prefers-reduced-motion", value:still ? "reduce" : "no-preference" }] });
-      await cdp("Page.navigate", { url:`${pathToFileURL(path.resolve(page)).href}?${[`theme=${theme}`, opt.query].filter(Boolean).join("&")}` });
-      await limit(loaded, 15000, "loading the page");
-      await run("document.fonts.ready.then(() => 1)"); await sleep(300);
-      for (const css of opt.click) { await run(inPage(click, css)); await sleep(still ? 300 : 900); }
-      await run(inPage(walk));
-      return { cdp, run, errors, close:() => { listeners.delete(sessionId); return send("Target.disposeBrowserContext", { browserContextId }); } };
+      await cdp("Emulation.setEmulatedMedia", { features:[{ name:"prefers-reduced-motion", value:still ? "reduce" : "no-preference" },
+        { name:"prefers-color-scheme", value:theme }] });
+      const close = () => { listeners.delete(sessionId); return send("Target.disposeBrowserContext", { browserContextId }); };
+      const ready = async () => {
+        const { loaderId, errorText } = await cdp("Page.navigate", { url:`${pathToFileURL(path.resolve(page)).href}?${[`theme=${theme}`, opt.query].filter(Boolean).join("&")}` });
+        if (errorText) throw Error(`the page did not open: ${errorText}`);
+        // this navigation's load, never a late one of the blank page
+        await limit(new Promise(r => { onLoad = () => seen.has(loaderId) && r(); onLoad(); }), 15000, "loading the page");
+        await run("document.fonts.ready.then(() => 1)"); await sleep(300);
+        for (const css of opt.click) { await run(inPage(click, css)); await sleep(still ? 300 : 900); }
+        await run(inPage(walk));
+      };
+      return { cdp, run, ready, close };
     };
 
     for (const page of pages) for (const width of widths) {
-      const live = await open(page, width, themes[0], false), over = await live.run(inPage(overflow, width)), errors = new Set(live.errors);
-      await live.close();
-      for (const theme of opt.check ? [] : themes) {
-        const p = await open(page, width, theme, true), clips = [];
-        p.errors.forEach(e => errors.add(e));
-        if (opt.el) clips.push(await p.run(inPage(box, opt.el)));
-        else if (opt.full) { const h = await p.run("document.documentElement.scrollHeight");
-          for (let y = 0; y < h; y += PIECE) clips.push({ x:0, y, width, height:Math.min(PIECE, h - y), scale:1 }); }
-        else clips.push({ x:0, y:0, width, height, scale:1 });
-        for (const [k, clip] of clips.entries()) {
-          const { data } = await p.cdp("Page.captureScreenshot", { format:"png", captureBeyondViewport:true, clip });
-          const file = path.join(out, [path.basename(page, ".html"), width, theme, opt.name, clips.length > 1 && k + 1].filter(Boolean).join("-") + ".png");
-          fs.writeFileSync(file, Buffer.from(data, "base64")); console.log(`saved ${file}`);
-        }
-        await p.close();
-      }
-      if (errors.size || over) found = true;
-      console.log(`${path.basename(page)} at ${width}: ${errors.size ? "ERRORS " + [...errors].join(" | ") : "no errors"} · ${over ? "OVERFLOWS to " + over : "no overflow"}`);
+      if (lost) throw Error("Edge closed");
+      const errors = new Set(), over = new Set();
+      const load = async (theme, still, then) => { const p = await open(page, width, theme, still, errors);
+        try { await p.ready(); const o = await p.run(inPage(overflow, width)); if (o) over.add(o); await then?.(p); } finally { await p.close().catch(() => {}); } };
+      // one page that fails still reports what it logged, and the rest are checked
+      try {
+        for (const theme of themes) await load(theme, false);
+        for (const theme of opt.check ? [] : themes) await load(theme, true, async p => {
+          const clips = [];
+          if (opt.el) clips.push(await p.run(inPage(box, opt.el)));
+          else if (opt.full) { const h = await p.run("document.documentElement.scrollHeight");
+            for (let y = 0; y < h; y += PIECE) clips.push({ x:0, y, width, height:Math.min(PIECE, h - y), scale:1 }); }
+          else clips.push({ x:0, y:0, width, height, scale:1 });
+          for (const [k, clip] of clips.entries()) {
+            const { data } = await p.cdp("Page.captureScreenshot", { format:"png", captureBeyondViewport:true, clip });
+            const file = path.join(out, [names.get(page), width, theme, opt.name, clips.length > 1 && k + 1].filter(Boolean).join("-") + ".png");
+            fs.writeFileSync(file, Buffer.from(data, "base64")); console.log(`saved ${file}`);
+          }
+        });
+      } catch (e) { found = true; console.log(`FAILED ${names.get(page)} at ${width}: ${e.message}`); }
+      if (errors.size || over.size) found = true;
+      console.log(`${names.get(page)} at ${width}: ${errors.size ? "ERRORS " + [...errors].join(" | ") : "no errors"} · ${over.size ? "OVERFLOWS to " + [...over].join(" | ") : "no overflow"}`);
     }
     await send("Browser.close").catch(() => {});
   } catch (e) { console.log(`FAILED: ${e.message}`); found = true; edge.kill(); }
