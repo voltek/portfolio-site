@@ -166,12 +166,12 @@
       ],
       stack: ["Kotlin", "Compose", "Coroutines", "Flow", "Hilt", "Room", "DataStore", "Retrofit", "MVVM", "Clean Architecture", "JUnit", "MockK"],
       links: { repo: "https://github.com/voltek/ModernNotes", caseStudy: "modernnotes.html" },
-      pin: { date: "2026-10-16", commit: "3274436" }, // the case file's pin; tools/repo-changes.js reads it here
+      pin: { date: "2026-11-24", commit: "4eba15e" }, // the case file's pin; tools/repo-changes.js reads it here
       // on: where each screen appears ("plain", "show", "case"). No screens = the designed empty state.
       shots: [
-        { src: "assets/projects/modernnotes/home.png", label: "Home", alt: "ModernNotes list screen titled My notes, with two notes and a sort menu set to Date descendant", on: ["case"] },
-        { src: "assets/projects/modernnotes/filters.png", label: "Sort order", alt: "ModernNotes sort menu open with three options: Date descendant (selected), Date ascendant and Title", on: ["case"] },
-        { src: "assets/projects/modernnotes/detail.png", label: "Edit note", alt: "ModernNotes Edit Note screen with a title field and a content field, and a Save action", on: ["case"] }
+        { src: "assets/projects/modernnotes/home.png", label: "Home", alt: { en: "ModernNotes list screen titled My notes, with two notes and a sort menu set to Date descending", es: "Pantalla de lista de ModernNotes titulada My notes, con dos notas y un menú de orden en Date descending" }, on: ["case"] },
+        { src: "assets/projects/modernnotes/filters.png", label: "Sort order", alt: { en: "ModernNotes sort menu open with three options: Date descending (selected), Date ascending and Title", es: "Menú de orden de ModernNotes abierto con tres opciones: Date descending (seleccionada), Date ascending y Title" }, on: ["case"] },
+        { src: "assets/projects/modernnotes/detail.png", label: "Edit note", alt: { en: "ModernNotes Edit Note screen with a title field and a content field, and a Save action", es: "Pantalla Edit Note de ModernNotes con un campo de título, un campo de contenido y la acción Save" }, on: ["case"] }
       ],
       show: { title: ["Written", "by Hand"], prop: "notepad" }
     },
