@@ -167,7 +167,7 @@ module.exports = {
       { name: { en: "Spec", es: "Spec" }, note: { en: "features, from Game Detail on", es: "features, desde Game Detail" },
         me: { en: "approve it", es: "la apruebo" },
         ai: { en: "write it with OpenSpec, a tool for spec-driven development", es: "la escribe con OpenSpec, una herramienta de desarrollo guiado por specs" } },
-      { name: { en: "Build", es: "Construcción" },
+      { name: { en: "Build", es: "Build" },
         me: { en: "decide what the rules don't settle", es: "decido lo que las reglas no resuelven" },
         ai: { en: "write code, tests and documents", es: "escribe código, tests y documentos" },
         auto: { en: "permission rules (deny) block what is off limits", es: "las reglas de permisos (deny) bloquean lo prohibido" } },
