@@ -116,6 +116,7 @@ const BARS = [["#C0C0C0", "#C0C000", "#00C0C0", "#00C000", "#C000C0", "#C00000",
 
 const STAR = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8l2.9 6.4 7 .7-5.2 4.7 1.5 6.9L12 17l-6.2 3.5 1.5-6.9L2.1 8.9l7-.7z" style="fill:var(--sun);stroke:var(--ink)" stroke-width="2" stroke-linejoin="round"/></svg>`;
 const PIN = `<svg viewBox="0 0 30 40" aria-hidden="true"><path d="M15 38S3 23 3 14a12 12 0 0 1 24 0c0 9-12 24-12 24z" fill="#E5392B" stroke="#111" stroke-width="3" stroke-linejoin="round"/><circle cx="15" cy="14" r="5" fill="#fff" stroke="#111" stroke-width="2.5"/></svg>`;
+const ARROW = `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const FLAG = `<svg viewBox="0 0 24 30" aria-hidden="true"><path d="M3 29V2" stroke="#111" stroke-width="3" stroke-linecap="round"/><path d="M4 3h17l-4 5 4 5H4z" fill="#FFFFFF" stroke="#111" stroke-width="2.5" stroke-linejoin="round"/><path d="M8 3v5h4V3h4v5h-4v5H8V8H4" fill="#111"/></svg>`;
 const AI = `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4Q7.5 11 14.5 11Q7.5 11 7.5 18Q7.5 11 0.5 11Q7.5 11 7.5 4Z M15.5 1Q15.5 4.5 19 4.5Q15.5 4.5 15.5 8Q15.5 4.5 12 4.5Q15.5 4.5 15.5 1Z M16 13Q16 15.5 18.5 15.5Q16 15.5 16 18Q16 15.5 13.5 15.5Q16 15.5 16 13Z" fill="currentColor"/></svg>`;
 
@@ -186,7 +187,9 @@ module.exports = ctx => {
   const road = w => {
     const path = w.learningPath, lanes = [lane(w.roadmap.lane, w.roadmap.steps.map(([t, s]) => [t, landingStatus(s)]), w.roadmap.goal)];
     if (path) { const g = path.blocks.find(b => b.status === "goal"); lanes.push(lane(path.lane, path.blocks.flatMap(b => b.steps || []), g ? g.short || g.title : "")); }
-    return `<div class="road"><p class="hl-h">${esc(ui.next)}</p><div class="lanes">${lanes.join("")}</div></div>`;
+    // the whole path (both lanes, every block) is the case study's What comes next
+    const whole = path && w.links && w.links.caseStudy ? `<a class="whole" href="${esc(w.links.caseStudy)}#next">${esc(ui.wholePath)}${ARROW}</a>` : "";
+    return `<div class="road"><p class="hl-h">${esc(ui.next)}</p><div class="lanes">${lanes.join("")}</div>${whole}</div>`;
   };
 
   /* ---------- the episode guide: every card, the first one showing; the remote switches between them ---------- */
@@ -212,15 +215,6 @@ module.exports = ctx => {
     </div>
   </div>
 </section>`;
-
-  // the learning path behind the live build waits after the episode guide, as next season's teaser
-  const path = live && live.learningPath, ST = { done: "var(--done)", now: "var(--wip)", next: "var(--next)", goal: "var(--sun)" };
-  const dot = s => `<i style="background:${ST[s]}" aria-hidden="true"></i>`;
-  const season = !path ? "" : `<section class="season" id="season" aria-labelledby="tm-h"><div class="wrap"><div class="montage">
-    <p class="kick">${esc(cp.path.heading.show[0])}</p><h2 class="tm-h" id="tm-h">${esc(cp.path.heading.show[1])}</h2>
-    <p class="tm-lede">${text(ctx, path.intro, { tag: "b" })}${path.arc ? ` ${text(ctx, path.arc, { tag: "b" })}` : ""}</p>
-    <ol class="blocks">${path.blocks.map(b => `<li class="${b.status}"><span class="st">${dot(b.status)}${esc(PS[b.status])}</span><span class="no">${esc(b.tag)}</span><h3>${esc(b.title)}</h3>${b.note ? `<p>${esc(b.note)}</p>` : ""}${b.steps ? `<ul class="steps">${b.steps.map(([t, s]) => `<li class="${s}">${dot(s)}${esc(t)}<span class="sr"> (${esc(PS[s])})</span></li>`).join("")}</ul>` : ""}</li>`).join("")}</ol>
-    <p class="source">${text(ctx, cp.path.updated, { updated: path.updated })}</p></div></div></section>`;
 
   /* ---------- skills: the levels, then the place matrix behind the toggle ---------- */
   const L = cp.skills.levels, groups = skillRows(data.skills.map((s, i) => ({ ...s, i })).filter(s => s.pages !== false));
@@ -267,7 +261,7 @@ module.exports = ctx => {
     now: nowShowing, tiers, tlHead, timeline,
     matrixCols: `--jobs:${M.jobs.length};--builds:${M.builds.length}`,
     expIntro: text(ctx, cp.experience.intro.show),
-    cards, reel, season,
+    cards, reel,
     finale: text(ctx, p.contact.show, { tag: "i" }),
     education: `${esc(ed.degree.en)}, ${esc(ed.school)}, <span style="white-space:nowrap">${esc(ed.start)}–${esc(ed.end)}</span>`,
     languages: p.languages.map(l => `${esc(l.name.en)}, ${esc(l.level.en)}`).join(" · "),

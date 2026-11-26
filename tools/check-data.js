@@ -237,7 +237,10 @@ for (const src of IMG.sourcesOf(data)) {
 // page copy
 const walk = (o, k) => typeof o === "string" ? tokens(o, k) : o && typeof o === "object" && Object.entries(o).forEach(([kk, v]) => walk(v, `${k}.${kk}`));
 const { case: caseCopy, ...pageCopy } = data.copy;
-walk(pageCopy, "copy");
+// Plain's path line fills its own blanks in tools/pages/plain.js: {n} and {total} (blocks of the learning path)
+const { line: pathLine, ...pathCopy } = pageCopy.path || {};
+walk({ ...pageCopy, path: pathCopy }, "copy");
+if (pathLine) tokens(Object.fromEntries(Object.entries(pathLine).map(([k, v]) => [k, v.replace(/\{(n|total)\}/g, "")])), "copy.path.line");
 // the case labels fill their own blanks in tools/pages/case.js: {name} (a project), {commit} and {date} (the pin)
 JSON.stringify(caseCopy).replace(/\{(\w+)\}/g, (m, k) => { if (!["name", "commit", "date"].includes(k)) err(`copy.case: unknown template ${m}`); return m; });
 

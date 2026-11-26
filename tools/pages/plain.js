@@ -1,26 +1,21 @@
 // Plain (index.html): the parts of src/plain.html that come from the data. Each key fills a {{@key}} of the template.
-const { C, esc, landingStatus, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu } = require("./common.js");
+const { C, en, esc, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu } = require("./common.js");
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile;
-  const live = data.work.find(w => w.status === "in-progress"); // "Now building"; none = the box and "Next" are not drawn
+  const live = data.work.find(w => w.status === "in-progress"); // "Now building"; none = the box is not drawn
   const plainShot = live && (live.shots || []).find(s => s.on.includes("plain"));
-  const path = live && live.learningPath, road = live && live.roadmap;
 
-  const STATUS = {
-    done: [cp.path.status.done, "var(--done)"], "in-progress": [cp.experience.kind["in-progress"], "var(--wip)"],
-    completed: [cp.experience.kind.completed, "var(--done)"], now: [cp.path.status.now, "var(--wip)"],
-    next: [cp.path.status.next, "var(--client)"], goal: [cp.path.status.goal, "var(--own)"]
-  };
+  const STATUS = { "in-progress": [cp.experience.kind["in-progress"], "var(--wip)"], completed: [cp.experience.kind.completed, "var(--done)"] };
   const chip = s => `<span class="chip"><i style="background:${STATUS[s][1]}" aria-hidden="true"></i>${esc(STATUS[s][0])}</span>`;
   const links = l => `<div class="links">${l.caseStudy ? `<a class="tlink" href="${esc(l.caseStudy)}">${ICON.doc}${esc(cp.experience.links.caseStudy)}</a>` : ""}<a class="tlink" href="${esc(l.repo)}">${ICON.github}${esc(cp.experience.links.repo)}</a></div>`;
 
   // in Now building the case study is the main way on (a button); the repo stays a text link
   const nowLinks = l => `<div class="links">${l.caseStudy ? `<a class="btn go sm" href="${esc(l.caseStudy)}">${ICON.doc}${esc(cp.experience.links.caseStudy)}</a>` : ""}<a class="tlink" href="${esc(l.repo)}">${ICON.github}${esc(cp.experience.links.repo)}</a></div>`;
 
-  // the sections in the bar, in page order; the two that hang on a build in progress leave with it
-  const SECTIONS = ["now", "skills", "experience", "next", "contact"];
-  const nav = SECTIONS.map((id, i) => [id, cp.nav.plain[i]]).filter(([id]) => live || (id !== "now" && id !== "next"))
+  // the sections in the bar, in page order; Now building leaves with the build in progress
+  const SECTIONS = ["now", "skills", "experience", "contact"];
+  const nav = SECTIONS.map((id, i) => [id, cp.nav.plain[i]]).filter(([id]) => live || id !== "now")
     .map(([id, label]) => `<a href="#${id}">${esc(label)}</a>`).join("");
 
   // hero: the name around the portrait; the status breaks between its phrases, never inside one
@@ -62,9 +57,16 @@ module.exports = ctx => {
   // places on one line under it (h5), each saying what it is instead of repeating the employer
   // a card with a case study carries its id: the case's "All work" lands on it (index.html#mn)
   const sub = w => w.type === "project" ? cp.experience.kind.project : (w.employer ? w.note : w.studio).en;
+  // a build with a learning path and a case study says where it stands on the path and links to the case's next steps.
+  // n is the block in progress, total the numbered blocks (an "Extra" is not counted)
+  const pathLine = w => { const L = w.learningPath, num = b => +(b.tag.match(/^Block (\d+)$/) || [])[1];
+    const at = L && L.blocks.find(b => b.status === "now");
+    if (!at || !num(at) || !w.links || !w.links.caseStudy) return "";
+    const line = en(cp.path.line).replace("{n}", num(at)).replace("{total}", L.blocks.filter(num).length);
+    return `<p class="pathline">${esc(line)} <a class="tlink" href="${esc(w.links.caseStudy)}#next">${esc(cp.case.h.next)}</a></p>`; };
   const card = (w, h = "h4") => `<article class="job${w.type === "project" ? " own" : ""}${w.employer ? " client" : ""}"${w.links && w.links.caseStudy ? ` id="${esc(w.id)}"` : ""}><div class="when"><b class="num">${C.range(w.start, w.end)}</b><span>${calc.lapse(ctx, w.id)}</span></div>
       <div><${h}>${esc(w.name)}</${h}><p>${text(ctx, sub(w))}</p>${w.type === "project" ? chip(w.status) : ""}</div>
-      <div class="what-c"><p class="what">${text(ctx, w.what.en)}</p><ul>${w.highlights.map(h => `<li>${text(ctx, h.en)}</li>`).join("")}</ul>${w.links ? links(w.links) : ""}</div>
+      <div class="what-c"><p class="what">${text(ctx, w.what.en)}</p><ul>${w.highlights.map(h => `<li>${text(ctx, h.en)}</li>`).join("")}</ul>${pathLine(w)}${w.links ? links(w.links) : ""}</div>
       <p class="tags">${stackHtml(w.stack)}</p></article>`;
   const newest = data.work.slice().reverse();
   const jobs = [[cp.experience.groups.own, newest.filter(w => w.type === "project")], [cp.experience.groups.client, newest.filter(w => w.type === "job")]]
@@ -81,20 +83,9 @@ module.exports = ctx => {
   const education = `<div class="edu"><b>${esc(ed.start)}–${esc(ed.end)}</b><p>${esc(ed.degree.en)}, ${esc(ed.school)}</p></div>
     <div class="edu"><b>${esc(cp.education.languages)}</b><p>${langs}</p></div>`;
 
-  // what comes next: the app's roadmap and the learning path behind its harness
-  const next = !live || !(road || path) ? "" : `<section class="page" id="next" aria-labelledby="next-h">
-  <div class="wrap">
-    <div class="head"><h2 id="next-h">${esc(cp.next.heading.plain)}</h2><p>${text(ctx, cp.next.intro)}${path ? ` ${text(ctx, cp.path.updated, { updated: path.updated })}.` : ""}</p></div>
-    <div class="next">${road ? `<div><h3 class="group">${esc(cp.next.groups.app)}</h3><ol class="steps">${[...road.steps, [road.goal, "goal"]].map(([t, s]) => [t, landingStatus(s)]).map(([t, s]) =>
-      `<li class="s-${s}"><span class="mark">${s === "done" ? ICON.check : ""}</span><b>${esc(t)}</b><small>${esc(STATUS[s][0])}</small></li>`).join("")}</ol></div>` : ""}
-    ${path ? `<div><h3 class="group">${esc(cp.next.groups.path)}</h3><ol class="blocks">${path.blocks.map(b =>
-      `<li><span class="tag">${esc(b.tag)}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p></div><span class="st"><i style="background:${STATUS[b.status][1]}" aria-hidden="true"></i>${esc(STATUS[b.status][0])}</span></li>`).join("")}</ol></div>` : ""}</div>
-  </div>
-</section>`;
-
   return {
     head: head(ctx, { title: cp.page.title.plain, file: "index.html", themeColor: { light: "#1F3FBF", dark: "#1A35A3" } }),
-    nav, name, status: status(p), now: nowBox, tiers, detailHead, detail, jobs, education, next,
+    nav, name, status: status(p), now: nowBox, tiers, detailHead, detail, jobs, education,
     lede: text(ctx, p.lede.plain),
     stack: p.stack.map(s => `<li>${esc(s)}</li>`).join(" "),
     expIntro: text(ctx, cp.experience.intro.plain),
