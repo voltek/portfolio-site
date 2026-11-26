@@ -255,7 +255,7 @@
   .blocks > li.b-now > div > b{font-weight:800}
   .psteps{list-style:none;display:grid;gap:8px;margin-top:10px}
   .psteps li{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:0;border:0}
-  .psteps b{display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:600}
+  .blocks .psteps b{display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:600}
   .psteps b svg{width:14px;height:14px;flex:none}
   .psteps .files,.pw .blocks li > div > .files{flex-direction:row;flex-wrap:wrap;gap:4px 14px;margin-top:0}
   .pw .blocks li > div > .files{margin-top:10px}
@@ -451,9 +451,11 @@
     const s = history.state;
     if (s && typeof s.d === "number") depth = s.d; else { depth += 1; history.replaceState(Object.assign({}, s, { d: depth }), ""); }
   } catch (x) {} });
+  // read at the click, not kept: a page restored from the back/forward cache may sit on another entry
+  const depthNow = () => { try { return history.state && typeof history.state.d === "number" ? history.state.d : depth; } catch (x) { return depth; } };
   document.querySelectorAll('a[href^="index.html#"], .mast .who').forEach(a => a.addEventListener("click", e => { try {
     const r = document.referrer && new URL(document.referrer);
-    if (r && r.origin === location.origin && /(\/|index\.html|show\.html)$/.test(r.pathname) && history.length > depth + 1) { e.preventDefault(); history.go(-(depth + 1)); }
+    if (r && r.origin === location.origin && /(\/|index\.html|show\.html)$/.test(r.pathname) && history.length > depthNow() + 1) { e.preventDefault(); history.go(-(depthNow() + 1)); }
   } catch (x) {} }));
 
   // the demo video: a play button over the poster; its native controls come only once it plays

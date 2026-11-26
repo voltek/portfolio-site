@@ -159,12 +159,13 @@ const ICON = {
 // The CV's two PDFs (tools/cv.js prints them) and the button that asks for the language: a menu of its own (details), drawn
 // by each page in its world; src/partials/cv-menu.js closes it. download saves the file and leaves the reader where they
 // are; a browser that ignores it (some in-app ones) opens a new tab instead.
-// the learning path counted: true whichever blocks are in progress (Plain's card, the case's At a glance)
-const pathCount = (copy, L) => { const count = s => L.blocks.filter(b => b.status === s).length, now = count("now");
-  return en(now ? copy.path.line : copy.path.lineNone).replace("{done}", count("done")).replace("{now}", now).replace("{total}", L.blocks.length); };
 const CV_FILES = { en: "alan-hernandez-cv.pdf", es: "alan-hernandez-cv-es.pdf" };
 const cvMenu = (ctx, cls, stroke) => { const cta = ctx.data.copy.cta;
   return `<details class="cv"><summary class="btn ${cls}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11M5.5 8.5L10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/></svg>${esc(cta.cv)}<svg class="caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><span class="cvmenu">${
     Object.entries(CV_FILES).map(([lang, f]) => `<a href="${f}" download target="_blank" rel="noopener" type="application/pdf" hreflang="${lang}"><span lang="${lang}">${esc(cta.cvIn[lang])}</span> <small>${esc(cta.cvKind)}</small></a>`).join("")}</span></details>`; };
+
+// the learning path counted: true whichever blocks are in progress (Plain's card, the case's opening)
+const pathCount = (copy, L) => { const count = s => L.blocks.filter(b => b.status === s).length, now = count("now");
+  return en(now ? copy.path.line : copy.path.lineNone).replace("{done}", count("done")).replace("{now}", now).replace("{total}", L.blocks.length); };
 
 module.exports = { pathCount, CV_FILES, cvMenu, C, en, esc, landingStatus, skillName, skillRows, md, stackLine, stackHtml, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };

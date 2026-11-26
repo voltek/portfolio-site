@@ -120,12 +120,13 @@ data.work.forEach((w, i) => {
       if (b.n !== j + 1) err(`${bat}: n must be ${j + 1}, the blocks numbered in order`);
       bi(b.title, `${bat}.title: needs { en, es }`); bi(b.note, `${bat}.note: needs { en, es }`); if (b.short) bi(b.short, `${bat}.short: needs { en, es }`);
       (b.steps || []).forEach(s => { const name = s[0] && s[0].en || s[0];
-        if (!["done", "next"].includes(s[1])) err(`${bat}: step "${name}" has status "${s[1]}" (done or next)`);
-        if (s[1] === "done" && !(s[2] || []).length) err(`${bat}: step "${name}" is done and needs its files`); });
+        // a step is proof of work done: what is still to come is the block's own status
+        if (s[1] !== "done") err(`${bat}: step "${name}" has status "${s[1]}"; a step is only ever done`);
+        if (!(s[0] && typeof s[0] === "object" && s[0].en && s[0].es) && !/\.\w+$/.test(s[0])) err(`${bat}: step "${name}" needs { en, es } (a file name may stay a string)`);
+        if (!(s[2] || []).length) err(`${bat}: step "${name}" needs its files`); });
       // the path is updated only when a block closes: a block in progress shows only what is done
       if (b.status === "now") {
         if ([b.note && b.note.en, b.note && b.note.es].some(t => /\b(next|sigue|luego)\s*:/i.test(t || ""))) err(`${bat}: a block in progress says only what is done; its note announces what comes next`);
-        (b.steps || []).filter(s => s[1] !== "done").forEach(s => err(`${bat}: a block in progress shows only what is done; step "${s[0].en || s[0]}" is "${s[1]}"`));
       }
       if (b.status === "done" && !(b.files || []).length && !(b.steps || []).length) err(`${bat}: a finished block needs files or steps to prove it`);
     });
@@ -275,7 +276,7 @@ if (process.argv.includes("--calc")) {
   console.log("\nskills");
   for (const s of data.skills.filter(s => s.at.length)) console.log(`  ${s.name.padEnd(36)} ${C.skillSpan(s, data, now).padEnd(30)} pages: ${s.level === "core" && !s.legacy && s.pages !== false && C.skillLength(s, data, now) || "—"}`);
   const gs = data.work.find(w => w.learningPath);
-  if (gs) console.log(`\n${C.fill(gs.source, { pin: gs.pin })}\n${C.fill(data.copy.path.updated, { updated: gs.learningPath.updated })}`);
+  if (gs) console.log(`\n${C.fill(gs.source, { pin: gs.pin })}\n${C.fill(data.copy.path.updated.en || data.copy.path.updated, { updated: gs.learningPath.updated })}`);
   console.log(`\n${C.fill(data.copy.page.description, { careerYears: years })}`);
 }
 

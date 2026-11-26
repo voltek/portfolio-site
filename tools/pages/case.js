@@ -63,7 +63,7 @@ module.exports = (cs, ctx) => {
     <div class="meta"><span class="chip"><i style="background:${STATUS[w.status][0]}" aria-hidden="true"></i>${esc(STATUS[w.status][1])}</span><span class="num">${C.range(w.start, w.end)} · ${lapse}</span><span>${esc(data.copy.experience.kind.project)}</span></div>
     <p class="lede">${tx(cs.lede)}</p>
     <p class="role">${tx(cs.role)}</p>
-    ${cs.harnessTags ? `<div class="hrow"><p class="hlab" id="harness-h">${esc(cp.harnessTag)}</p><ul class="hchips" aria-labelledby="harness-h">${cs.harnessTags.map(t => `<li>${esc(t)}</li>`).join("")}</ul><a class="tlink" href="#ai">${esc(cp.h.ai)}</a></div>` : ""}
+    ${cs.harnessTags ? `<div class="hrow"><p class="hlab" id="harness-h">${esc(cp.harnessTag)}</p><ul class="hchips" role="list" aria-labelledby="harness-h">${cs.harnessTags.map(t => `<li>${esc(t)}</li>`).join("")}</ul><a class="tlink" href="#ai">${esc(cp.h.ai)}</a></div>` : ""}
     ${w.learningPath && cs.path ? `<p class="hpath">${esc(pathCount(data.copy, w.learningPath))} <a class="tlink" href="#path">${esc(cp.h.path)}</a></p>` : ""}
     ${repoLinks}
   </div>
@@ -146,7 +146,7 @@ module.exports = (cs, ctx) => {
     const legend = ["done", "now", "next", "goal"].filter(count).map(s => `<span class="lg-${s}"><i aria-hidden="true"></i>${s === "goal" ? "" : `<b>${count(s)}</b> `}${esc(ps[s])}</span>`).join("");
     return `<div class="pw"><ol class="pstrip" style="--nb:${B.length}" aria-hidden="true">${B.map(b => `<li class="b-${b.status}"><span></span><small>${b.n}</small></li>`).join("")}</ol>
     <p class="plegend">${legend}<span class="upd">${esc(C.fill(en(PC.updated), { updated: lp.updated }))}</span></p>
-    <ol class="blocks">${B.map(b => `<li class="b-${b.status}"><span class="tag">${esc(en(PC.block).replace("{n}", b.n))}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p>${(b.steps || []).length ? `<ul class="psteps">${b.steps.map(([t, , files]) => `<li><b>${ICON.check}${esc(t)}</b>${links(files)}</li>`).join("")}</ul>` : ""}${links(b.files)}</div><span class="bst"><i style="background:${DOT[b.status]}" aria-hidden="true"></i>${esc(ps[b.status])}</span></li>`).join("")}</ol></div>`; };
+    <ol class="blocks">${B.map(b => `<li class="b-${b.status}"><span class="tag">${esc(en(PC.block).replace("{n}", b.n))}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p>${(b.steps || []).length ? `<ul class="psteps">${b.steps.map(([t, s, files]) => `<li><b>${s === "done" ? ICON.check : ""}${esc(t)}</b>${links(files)}</li>`).join("")}</ul>` : ""}${links(b.files)}</div><span class="bst"><i style="background:${DOT[b.status]}" aria-hidden="true"></i>${esc(ps[b.status])}</span></li>`).join("")}</ol></div>`; };
   // what comes next: the app's roadmap
   const next = () => `<div class="nx"><ol class="steps">${[...road.steps, [road.goal, "goal"]].map(([t, s]) =>
       `<li class="s-${s}"><span class="mark">${s === "done" ? ICON.check : ""}</span><b>${esc(t)}</b><small>${esc(ps[s])}</small></li>`).join("")}</ol>${cs.next.designed && road.steps.some(([, s]) => s === "designed") ? `<p class="nxnote">${tx(cs.next.designed)}</p>` : ""}</div>`;

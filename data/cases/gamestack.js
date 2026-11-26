@@ -27,7 +27,7 @@ module.exports = {
   stack: ["Kotlin", "Jetpack Compose", "Material 3", "Coroutines", "Flow", "Hilt", "Retrofit", "Clean Architecture", "MVI", "JUnit", "MockK", "Turbine", "Robolectric", "GitHub Actions", "Claude Code"],
   libs: ["JUnit", "MockK", "Turbine"],
   // At a glance, under the stack: the harness in six names the case uses, linking to How AI was used
-  harnessTags: [{ en: "CLAUDE.md and area rules", es: "CLAUDE.md y reglas por área" }, "Skills", "ADRs", "Hooks",
+  harnessTags: [{ en: "CLAUDE.md and area rules", es: "CLAUDE.md y reglas por área" }, { en: "Skills", es: "Skills" }, { en: "ADRs", es: "ADRs" }, { en: "Hooks", es: "Hooks" },
     { en: "Capped review rounds", es: "Rondas de revisión con tope" }, { en: "CI checks", es: "Checks de CI" }],
   video: {
     src: "assets/projects/gamestack/demo.mp4",
