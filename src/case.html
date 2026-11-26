@@ -156,13 +156,10 @@
   .items{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px}
   .items > li{padding:22px 0;border-bottom:1px solid var(--rule);display:grid;gap:10px;align-content:start}
   .items.one{grid-template-columns:minmax(0,1fr)}
-  .items.ctl{grid-template-columns:repeat(3,minmax(0,1fr))}
   /* the measure: Figtree's "0" is wide, so 58ch is about 80 characters a line */
   .items.one li > span,.items.one .sub{max-width:58ch}
   .sub{display:grid;gap:6px;padding-left:1.2em}
   .items b{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.01em;line-height:1.2}
-  .items.ctl b{font-size:18px}
-  .items.ctl p{max-width:58ch}
   .dr span,.act p,.items p,.items span,.nextc span{text-wrap:pretty}
   .prose p{max-width:58ch;padding:22px 0 0}
   .outro{max-width:58ch;padding-top:22px;font-size:18px;line-height:1.6} /* what's missing: its closing line */
@@ -186,12 +183,40 @@
   .st small{font-size:12px;font-weight:600;padding-right:8px}
   .act{margin:6px 0;padding:9px 10px;border-radius:5px;font-size:14px;line-height:1.35;font-weight:600;border:2px solid transparent;overflow-wrap:break-word}
   .act > b{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-  .act p::first-letter,.ctl p::first-letter{text-transform:uppercase}
+  .act p::first-letter{text-transform:uppercase}
   .act code{white-space:nowrap}
   .a-me{background:var(--me);color:var(--me-ink)}
   .a-ai{background:var(--ai);color:var(--ai-ink)}
   /* an outline with no fill: the diagram's filled box is the one that is a link */
   .a-auto{padding:10px 11px;border-width:1px;border-color:var(--auto-line)}
+
+  /* ---------- the harness piece by piece: a column per group, each piece filled by how it holds (the strip's colors:
+     cobalt waits for my yes, pale blue guides, an outline blocks) and marked by an icon and a hidden word too ---------- */
+  .hx{--me:#1F3FBF;--me-ink:#FFFFFF;--ai:#C3D1FB;--ai-ink:var(--paper-ink);--auto-line:#4F5672;--head:var(--rule)}
+  :root[data-theme="dark"] .hx{--me:#8FA8FF;--me-ink:#0A1029;--ai:#2C3A86;--auto-line:#A3AEDB;--head:#323E76}
+  .ki{width:17px;height:17px;flex:none}
+  .hk{display:flex;flex-wrap:wrap;gap:12px 36px;margin:16px 0 22px}
+  .hk > div{flex:1 1 260px;display:grid;gap:5px;align-content:start;justify-items:start}
+  .hk dt{display:inline-flex;align-items:center;gap:7px;padding:3px 10px;border-radius:5px;font-size:14px;font-weight:700;border:1px solid transparent}
+  .hk dd{font-size:14.5px;line-height:1.45;color:var(--paper-muted);max-width:44ch;text-wrap:pretty}
+  .hx .k-waits{background:var(--me);color:var(--me-ink);--focus:var(--me-ink)}
+  .hx .k-guides{background:var(--ai);color:var(--ai-ink)}
+  .hx .k-blocks{border-color:var(--auto-line)}
+  .hc{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 8px;align-items:start}
+  .hc > li{display:grid;gap:8px;align-content:start;grid-template-columns:minmax(0,1fr)}
+  .hc ul{list-style:none;display:grid;gap:8px}
+  .hc .st{margin-right:-8px;min-height:52px;margin-bottom:2px;font-family:var(--display);font-weight:800;font-size:16.5px;letter-spacing:-.01em}
+  .hc > li:last-child > .st{margin-right:0}
+  .pc{padding:11px 12px 12px;border-radius:6px;border:1px solid transparent;display:grid;gap:5px}
+  .pc > b{display:flex;gap:7px;align-items:flex-start;font-family:var(--display);font-weight:800;font-size:16px;line-height:1.22;letter-spacing:-.01em}
+  .pc .ki{margin-top:1px}
+  .pc p{font-size:13.5px;line-height:1.42;font-weight:500;text-wrap:pretty}
+  .pc p::first-letter{text-transform:uppercase}
+  .pc code{background:none;padding:0}
+  .pc .fl{font-size:13px;color:inherit;text-decoration-color:currentColor;text-decoration-thickness:1px}
+  .pc .fl svg{color:inherit;opacity:.75}
+  .pc .files{display:flex;flex-direction:column;gap:3px;margin-top:2px;overflow-wrap:anywhere}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
   /* ---------- what comes next: the app's roadmap and the learning path, as Plain draws them ---------- */
   .nx{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px}
@@ -248,6 +273,9 @@
   }
   /* a phone: the trunk goes down, the layer named where it changes */
   @media (max-width:1000px){
+    /* the harness: two columns of groups, their heads as plain titles */
+    .hc{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 14px}
+    .hc .st,.hc > li:first-child > .st,.hc > li:last-child > .st{clip-path:none;background:none;padding:0;min-height:0;margin:0;font-size:19px}
     .flow{display:none}
     .vflow{display:block;list-style:none;margin-top:28px}
     .vflow li{display:grid;justify-items:start}
@@ -284,7 +312,7 @@
   }
   @media (max-width:900px){
     .open,.head,.pair,.nx{grid-template-columns:minmax(0,1fr);gap:24px}
-    .items,.items.ctl{grid-template-columns:minmax(0,1fr)}
+    .items{grid-template-columns:minmax(0,1fr)}
     .pair > span:empty,.head > span:empty{display:none}
     .walk ol{columns:1}
     .lbx{right:0;top:-52px}
@@ -305,6 +333,10 @@
     .nextc span{display:none}
   }
   @media (max-width:640px){
+    .hc{grid-template-columns:minmax(0,1fr)}
+    .pc p{font-size:15px}
+    .pc > b{font-size:17px}
+    .pc .fl{font-size:14px}
     main > .wrap > section{padding-top:72px}
     /* the block's number goes under its status, never as a label over the title */
     .blocks li{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr;gap:4px 12px}

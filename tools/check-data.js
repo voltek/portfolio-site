@@ -173,7 +173,8 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   const A = cs.architecture || {}, F = A.flow;
   const refs = [cs.readme, ...(A.walk || []).flatMap(s => s.files || []), ...(cs.decisions || []).flatMap(d => d.files || []),
     ...((cs.tests || {}).items || []).flatMap(t => t.files || []), ...((cs.missing || {}).items || []).flatMap(g => g.files || []),
-    ...(F ? F.pieces.map(p => p.file) : []), ...(w.proof || []).flatMap(r => r.files || [])].filter(Boolean);
+    ...(F ? F.pieces.map(p => p.file) : []), ...(w.proof || []).flatMap(r => r.files || []),
+    ...((cs.ai || {}).harness || []).flatMap(g => g.pieces.flatMap(x => x.files || []))].filter(Boolean);
   for (const r of refs) { if (ELSEWHERE.test(r)) continue; const m = String(r).match(FILE); if (!m || m[2].includes(":") || !((m[1] || "main") in (cs.roots || {}))) err(`${at}: file "${r}" names no root of roots`); }
   // the stack tags: Skills used at this project (same name, or the part of a compound name that applies), plus libs
   const parts = data.skills.filter(s => s.at.some(r => (typeof r === "string" ? r : r.id) === w.id)).flatMap(s => [s.name, ...s.name.split(" · ")]);
@@ -209,7 +210,9 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
     cs.ai.stages.forEach((s, i) => { if (!who.some(id => s[id])) err(`${at}.ai.stages[${i}]: no actor does anything`);
       for (const k of Object.keys(s)) if (!["name", "note", ...who].includes(k)) err(`${at}.ai.stages[${i}]: "${k}" is not an actor`); });
   }
-  if (cs.ai && cs.ai.controls && !(w.proof || []).some(r => r.on.includes("case") && r.files)) err(`${at}.ai.controls: no proof row goes on the case with its files`);
+  if (cs.ai && cs.ai.harness) cs.ai.harness.forEach((g, i) => (g.pieces || []).forEach((x, j) => { const at2 = `${at}.ai.harness[${i}].pieces[${j}]`;
+    if (!(x.kind in data.copy.case.harness.kinds)) err(`${at2}: kind "${x.kind}" is not blocks, waits or guides`);
+    if (!(x.files || []).length) err(`${at2}: a piece needs its evidence (files)`); }));
   if (cs.next && !w.roadmap && !w.learningPath) err(`${at}.next: the project has no roadmap or learning path to draw`);
   if (cs.ai && cs.ai.contrast && !ids.has(cs.ai.contrast.to)) err(`${at}.ai.contrast: unknown project "${cs.ai.contrast.to}"`);
   if (cs.video) for (const k of ["src", "poster", "alt"]) { if (!cs.video[k] || k === "alt" && !(cs.video.alt.en && cs.video.alt.es)) err(`${at}.video: missing ${k}${k === "alt" ? " { en, es }" : ""}`); else if (k !== "alt" && !fs.existsSync(path.join(root, cs.video[k]))) err(`${at}.video: ${cs.video[k]} not found`); }

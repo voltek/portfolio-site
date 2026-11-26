@@ -1,5 +1,5 @@
 // The GameStack case study (gamestack.html): what only the case page says. Its header (name, status, dates,
-// highlights, screens, repo), its controls (proof), its roadmap and its learning path come from the project's entry in
+// highlights, screens, repo), its roadmap and its learning path come from the project's entry in
 // data/portfolio.js (id "gs"); the bar, the section titles and the labels from copy.case there. Text: copy deck §12.
 //
 // Conventions: data/cases/modernnotes.js. Also here:
@@ -181,7 +181,52 @@ module.exports = {
       { name: "Checkpoint",
         ai: { en: "write the note the next session starts from", es: "escribe la nota con la que empieza la siguiente sesión" } }
     ],
-    controls: true, // the project's proof rows that go on the case, each with its files
+    // the harness piece by piece (copy deck §12.8, 11-25): grouped by what it controls; kind is how it holds,
+    // "blocks", "waits" (for my yes) or "guides", named in copy.case.harness
+    harness: [
+      { name: { en: "What gets built", es: "Qué se construye" }, pieces: [
+        { name: { en: "GitHub issues", es: "Issues de GitHub" }, kind: "waits", text: { en: "pending work is an issue from one of three forms; I choose what comes next at a triage", es: "lo pendiente es un issue de uno de tres formularios; yo elijo lo que sigue en un triage" },
+          files: ["repo:.github/ISSUE_TEMPLATE/", "adr:0038-pending-work-is-an-issue-opened-through-one-form.md"] },
+        { name: { en: "OpenSpec", es: "OpenSpec" }, kind: "waits", text: { en: "from Game Detail on, I approve a feature's spec before it is built; in Search's, every scenario names what verifies it: a test or a check on a device", es: "desde Game Detail, apruebo la spec de cada feature antes de construirla; en la de Search, cada escenario dice qué lo verifica: un test o una revisión en dispositivo" },
+          files: ["repo:openspec/specs/search/spec.md"] },
+        { name: { en: "Human in the loop", es: "Human in the loop" }, kind: "waits", text: { en: "what the rules don't settle waits for my approval, and I confirm every review triage and every merge", es: "lo que las reglas no resuelven espera mi aprobación, y yo confirmo cada triage de revisión y cada merge" },
+          files: ["repo:CLAUDE.md"] }
+      ] },
+      { name: { en: "What the agents know", es: "Qué saben los agentes" }, pieces: [
+        { name: { en: "CLAUDE.md and area rules", es: "CLAUDE.md y reglas por área" }, kind: "guides", text: { en: "a test holds the standing instructions under 60 lines, and area rules load only when needed: 31% fewer tokens before any task (measured once, Nov 2026)", es: "un test mantiene las instrucciones fijas en menos de 60 líneas, y las reglas de cada área se cargan solo cuando hacen falta: 31 % menos tokens antes de cualquier tarea (medido una vez, nov 2026)" },
+          files: ["test:ClaudeMdBoundTest.kt", "repo:.claude/rules/"] },
+        { name: { en: "Skills", es: "Skills" }, kind: "guides", text: { en: "one procedure per repeatable task, loaded only when needed: each layer's code and tests, device checks, shipping a branch", es: "un procedimiento por tarea repetible, que se carga solo cuando hace falta: el código y los tests de cada capa, las revisiones en dispositivo y la entrega de una rama" },
+          files: ["repo:.claude/skills/"] },
+        { name: { en: "Decision records (ADRs)", es: "Registros de decisión (ADR)" }, kind: "guides", text: { en: "each one states what enforces it: a test, a CI check, a setting, or prose only", es: "cada uno indica qué lo hace cumplir: un test, un check de CI, una configuración o solo texto" },
+          files: ["adr:README.md"] },
+        { name: { en: "Session note", es: "Nota de sesión" }, kind: "guides", text: { en: "a hook opens each session with where the work stands; the checkpoint Skill rewrites the note", es: "un hook abre cada sesión con el estado del trabajo; la Skill checkpoint reescribe la nota" },
+          files: ["repo:.claude/hooks/session-start.sh", "repo:.claude/skills/checkpoint/SKILL.md"] }
+      ] },
+      { name: { en: "What they may do", es: "Qué pueden hacer" }, pieces: [
+        { name: { en: "Deny rules", es: "Reglas deny" }, kind: "blocks", text: { en: "refuse the common ways to skip a git hook, push to main or change branch protection", es: "rechazan las formas comunes de saltarse un hook de git, hacer push a main o cambiar la protección de rama" },
+          files: ["repo:.claude/settings.json"] },
+        { name: { en: "Ask rules", es: "Reglas ask" }, kind: "waits", text: { en: "opening, editing or merging a pull request stops for my yes", es: "abrir, editar o fusionar un pull request se detiene hasta mi visto bueno" },
+          files: ["repo:.claude/settings.json"] },
+        { name: { en: "Memory hook", es: "Hook de memoria" }, kind: "blocks", text: { en: "stops the first write to each agent memory file, so the agent asks whether the lesson belongs in the repo", es: "detiene la primera escritura en cada archivo de memoria del agente, para que se pregunte si la lección va en el repo" },
+          files: ["repo:.claude/hooks/memory-gate.mjs", "adr:0066-agent-memory-holds-only-what-is-personal.md"] }
+      ] },
+      { name: { en: "What gets reviewed", es: "Qué se revisa" }, pieces: [
+        { name: { en: "Capped review rounds", es: "Rondas de revisión con tope" }, kind: "waits", text: { en: "local AI rounds before the pull request, each on my yes and capped per branch: real defects per round fell from 3.3 to 2.2 by round 3 (measured once, Nov 2026)", es: "rondas locales con IA antes del pull request, cada una con mi visto bueno y con tope por rama: los defectos reales por ronda bajaron de 3.3 a 2.2 para la ronda 3 (medido una vez, nov 2026)" },
+          files: ["repo:.claude/skills/review-round/SKILL.md", "pr:209"] },
+        { name: { en: "Codex, the review bot", es: "Codex, el bot de revisión" }, kind: "guides", text: { en: "one external review round on each pull request, as advice", es: "una ronda de revisión externa en cada pull request, como consejo" },
+          files: ["repo:docs/project/TOOLING.md"] },
+        { name: { en: "Drift trailer", es: "Trailer Drift" }, kind: "guides", text: { en: "the commit that resolves a disagreement between code and documents says which side was fixed", es: "el commit que resuelve un desacuerdo entre código y documentos dice cuál de los dos se corrigió" },
+          files: ["adr:0033-drift-is-a-commit-trailer.md", "commit:a00cf8c"] }
+      ] },
+      { name: { en: "What reaches main", es: "Qué llega a main" }, pieces: [
+        { name: { en: "Git hooks", es: "Hooks de git" }, kind: "blocks", text: { en: "check every commit's message and the branch name, with the script CI runs too", es: "revisan el mensaje de cada commit y el nombre de la rama, con el mismo script que corre CI" },
+          files: ["repo:.githooks/"] },
+        { name: { en: "CI checks", es: "Checks de CI" }, kind: "blocks", text: { en: "build, test, lint and commit checks on every pull request", es: "build, tests, lint y reglas de commit en cada pull request" },
+          files: ["repo:.github/workflows/gate.yml", "repo:.github/workflows/commits.yml"] },
+        { name: { en: "Branch protection", es: "Protección de rama" }, kind: "blocks", text: { en: "no direct or forced push; a merge waits for green checks and every review thread resolved, and it binds me too", es: "sin push directo ni forzado; el merge espera los checks en verde y cada hilo de revisión resuelto, y también me obliga a mí" },
+          files: ["adr:0028-the-agent-pushes-its-own-branch-without-asking.md"] }
+      ] }
+    ],
     contrast: {
       text: { en: "ModernNotes is the opposite experiment: I wrote every line by hand, and AI never wrote the code.", es: "ModernNotes es el experimento opuesto: escribí cada línea a mano y la IA nunca escribió el código." },
       to: "mn"

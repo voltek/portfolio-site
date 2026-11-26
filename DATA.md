@@ -111,7 +111,8 @@ Every case is drawn by `src/case.html` and `tools/pages/case.js`; nothing is wri
    a path that ends in `/` opens the folder; a decision record under the `adr` root shows its number.
 5. `stack` takes the Skills used at the project (same names; of "MVI · MVVM", the part that applies) plus the libraries
    named in `libs`; `check-data` checks the tags and the diagram's limits.
-6. `ai.stages` is the strip by actor (at most 8 stages, 3 `actors`), `ai.controls: true` adds the project's proof rows,
+6. `ai.stages` is the strip by actor (at most 8 stages, 3 `actors`), `ai.harness` lists its pieces by group, each with a
+   `kind` (`blocks`, `waits`, `guides`: copy.case.harness) and its files,
    and `next` draws its `roadmap` (status `designed` = an approved mockup) and `learningPath`.
 7. "Next case" goes from the newest project with a case study to the oldest, then back to the newest.
 8. Check the page (`.claude/rules/design.md`): Lighthouse, impeccable `audit`, `polish` and the finish review.

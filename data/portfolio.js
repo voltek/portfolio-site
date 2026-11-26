@@ -189,7 +189,7 @@
       links: { repo: "https://github.com/voltek/GameStack", caseStudy: "gamestack.html" },
       shots: [
         { src: "assets/projects/gamestack/search.png", label: { en: "Search", es: "Búsqueda" }, alt: { en: "GameStack search screen before any query, with an empty search field and the message Search for games", es: "Pantalla de búsqueda de GameStack antes de buscar, con el campo vacío y el mensaje Search for games" }, on: ["show", "case"] },
-        { src: "assets/projects/gamestack/search_results.png", label: { en: "Results", es: "Resultados" }, alt: { en: "GameStack search results with game covers", es: "Resultados de búsqueda de GameStack con portadas de juegos" }, on: ["plain", "show", "case"] },
+        { src: "assets/projects/gamestack/search_results.png", label: { en: "Results", es: "Resultados" }, alt: { en: "GameStack search results with game covers", es: "Resultados de búsqueda de GameStack con portadas de juegos" }, on: ["plain", "show"] },
         { src: "assets/projects/gamestack/search_refresh_error.png", label: { en: "Error keeps results", es: "El error conserva los resultados" }, alt: { en: "GameStack refresh error that keeps the previous results on screen", es: "Error al refrescar en GameStack que conserva en pantalla los resultados anteriores" }, on: ["show", "case"] },
         { src: "assets/projects/gamestack/search_loading.png", label: { en: "Loading", es: "Cargando" }, alt: { en: "GameStack search loading, with a grid of placeholder cards", es: "Búsqueda de GameStack cargando, con una cuadrícula de tarjetas provisionales" }, on: ["case"] },
         { src: "assets/projects/gamestack/search_no_results.png", label: { en: "No results", es: "Sin resultados" }, alt: { en: "GameStack search with the message No Results Found and a Go To Library button", es: "Búsqueda de GameStack con el mensaje No Results Found y un botón Go To Library" }, on: ["case"] }
@@ -197,37 +197,19 @@
       // The commit and day the site's claims were last checked against the repo (DATA.md → Re-pin GameStack).
       pin: { date: "2026-11-12", commit: "5fb80bc" },
       // "Now building": the proof, qualitative (no counts: the system is the value, not the quantity). on: where each
-      // row shows, like the shots ("plain", "show", "case"); the landing keeps the three that prove the differentiator,
-      // the case study has them all, each with its evidence (files: refs as in data/cases/, read with that case's roots).
+      // row shows ("plain", "show"), each with its evidence (files: refs as in data/cases/, read with that case's roots);
+      // the case study says them piece by piece, in its harness.
       // es: the row in Spanish. The CV draws the rows that go on Plain.
       proof: [
-        { check: true, label: "Decisions that name their enforcement", note: "each architecture decision record (ADR) states what enforces it: a test, a CI check, a setting, or prose only", on: ["plain", "show", "case"],
+        { check: true, label: "Decisions that name their enforcement", note: "each architecture decision record (ADR) states what enforces it: a test, a CI check, a setting, or prose only", on: ["plain", "show"],
           files: ["adr:README.md"],
           es: { label: "Decisiones que dicen qué las hace cumplir", note: "cada registro de decisión de arquitectura (ADR) indica si lo hace un test, un check de CI, una configuración o solo texto" } },
-        { check: true, label: "Human in the loop", note: "what the rules don't settle waits for my approval, and I confirm every review triage and every merge", on: ["plain", "show", "case"],
+        { check: true, label: "Human in the loop", note: "what the rules don't settle waits for my approval, and I confirm every review triage and every merge", on: ["plain", "show"],
           files: ["repo:CLAUDE.md", "repo:.claude/settings.json"],
           es: { label: "Human in the loop", note: "lo que las reglas no resuelven espera mi aprobación, y yo confirmo cada triage de revisión y cada merge" } },
-        { check: true, label: "Checks no agent can skip", note: "build, test, lint and commit checks on every PR, behind branch protection that binds me too", on: ["plain", "show", "case"],
+        { check: true, label: "Checks no agent can skip", note: "build, test, lint and commit checks on every PR, behind branch protection that binds me too", on: ["plain", "show"],
           files: ["repo:.github/workflows/gate.yml", "repo:.github/workflows/commits.yml"],
           es: { label: "Controles que ningún agente puede saltarse", note: "build, tests, lint y reglas de commit en cada PR, tras una protección de rama que también me obliga a mí" } },
-        { check: true, label: "Rules as mechanisms", note: "the rules that must never break are a hook, a deny rule or a test, not a line of prose", on: ["case"],
-          files: ["repo:.claude/settings.json", "adr:0066-agent-memory-holds-only-what-is-personal.md"],
-          es: { label: "Reglas como mecanismos", note: "las reglas que nunca deben romperse son un hook, una regla deny o un test, no una línea de texto" } },
-        { check: true, label: "A capped review loop", note: "local AI review rounds before every PR, capped per branch: real defects per round fell from 3.3 to 2.2 by round 3 (measured once, Nov 2026)", on: ["case"],
-          files: ["repo:.claude/skills/review-round/SKILL.md", "pr:209"],
-          es: { label: "Un ciclo de revisión con tope", note: "rondas locales de revisión con IA antes de cada PR, con tope por rama: los defectos reales por ronda bajaron de 3.3 a 2.2 para la ronda 3 (medido una vez, nov 2026)" } },
-        { check: true, label: "A context budget", note: "the agents' standing instructions are held under 60 lines by a test, and area rules load only when needed: 31% fewer tokens before any task (measured once, Nov 2026)", on: ["case"],
-          files: ["test:ClaudeMdBoundTest.kt", "repo:.claude/rules/"],
-          es: { label: "Un presupuesto de contexto", note: "un test mantiene las instrucciones fijas de los agentes en menos de 60 líneas, y las reglas de cada área se cargan solo cuando hacen falta: 31 % menos tokens antes de cualquier tarea (medido una vez, nov 2026)" } },
-        { check: true, label: "From spec to test", note: "in Search's spec, every scenario names what verifies it: a test or a check on a device", on: ["case"],
-          files: ["repo:openspec/specs/search/spec.md"],
-          es: { label: "De la spec al test", note: "en la spec de Search, cada escenario dice qué lo verifica: un test o una revisión en dispositivo" } },
-        { check: true, label: "Code and documents in step", note: "the commit that resolves a disagreement between them says which side was fixed", on: ["case"],
-          files: ["adr:0033-drift-is-a-commit-trailer.md", "commit:a00cf8c"],
-          es: { label: "Código y documentos al mismo paso", note: "el commit que resuelve un desacuerdo entre ellos dice cuál de los dos se corrigió" } },
-        { check: true, label: "Skills", note: "one procedure per repeatable task, loaded only when needed: each layer's code and tests, device checks, shipping a branch", on: ["case"],
-          files: ["repo:.claude/skills/"],
-          es: { label: "Skills", note: "un procedimiento por tarea repetible, que se carga solo cuando hace falta: el código y los tests de cada capa, las revisiones en dispositivo y la entrega de una rama" } }
       ],
       source: "Checked against the public repo, {pinDate}",
       // where the app goes next (status: "done" · "now" · "designed" · "next"; designed = an approved mockup, drawn as next
@@ -423,7 +405,8 @@
       nav: { overview: "Overview", why: "Why", architecture: "Architecture", decisions: "Decisions", tests: "Tests", ai: "AI", missing: "What’s missing", next: { en: "What’s next", es: "Qué sigue" } },
       h: { why: "Why it exists", architecture: "Architecture", decisions: "Key decisions", tests: "Tests", ai: "How AI was used", missing: "What went wrong, what is missing", next: { en: "What comes next", es: "Lo que viene" } },
       // How AI was used: the stages by actor, then the controls (the project's proof rows)
-      aiStages: { en: "How a change moves", es: "Cómo avanza un cambio" }, aiControls: { en: "What keeps it honest", es: "Qué lo mantiene honesto" },
+      aiStages: { en: "How a change moves", es: "Cómo avanza un cambio" }, harness: { h: { en: "The harness, piece by piece", es: "El harness, pieza por pieza" },
+        kinds: { blocks: { name: { en: "Blocks", es: "Bloquea" }, def: { en: "A hook, a deny rule or a required check stops it.", es: "Lo detiene un hook, una regla deny o un check obligatorio." } }, waits: { name: { en: "Waits for me", es: "Me espera" }, def: { en: "It needs my yes: a permission rule holds pull requests, instructions hold the rest.", es: "Necesita mi visto bueno: una regla de permisos sostiene los pull requests; instrucciones, lo demás." } }, guides: { name: { en: "Guides", es: "Guía" }, def: { en: "The agents read it, and can miss it.", es: "Los agentes lo leen, y pueden pasarlo por alto." } } } },
       decisionCols: ["Decision", "Instead of", "Why", "Cost", "Code"],
       back: "All work", glance: "At a glance", stack: "Stack", demo: "Demo", walk: "Read the code", next: "Next case",
       pin: "Each name opens its file.",

@@ -125,9 +125,13 @@ module.exports = (cs, ctx) => {
   const stages = () => `<h3 class="sub-h">${esc(cp.aiStages)}</h3>
     <div class="stages" style="--rows:${rows.length}">${G.actors.map((a, i) => `<div class="lane" style="grid-row:${i + 2}" aria-hidden="true"><b>${esc(a.name)}</b></div>`).join("")}
     <ol style="grid-template-columns:${G.stages.map(s => `minmax(0,${weight(s)}fr)`).join(" ")}">${G.stages.map(s => `<li><div class="st"><b>${esc(s.name)}</b>${s.note ? ` <small>${esc(s.note)}</small>` : ""}</div>${G.actors.map((a, i) => s[a.id] ? `<div class="act a-${a.id}" style="grid-row:${i + 2}"><b>${esc(a.name)}</b> <p>${tx(s[a.id])}</p></div>` : "").join("")}</li>`).join("")}</ol></div>`;
-  const proof = (w.proof || []).filter(r => r.on.includes("case"));
-  const controls = () => `<h3 class="sub-h">${esc(cp.aiControls)}</h3>
-    <ul class="items ctl">${proof.map(r => `<li><b>${esc(r.label)}</b><p>${text(ctx, r.note)}</p>${links(r.files)}</li>`).join("")}</ul>`;
+  // the harness: one column per group (what it controls), each piece filled by how it holds, as the strip's actors are
+  const HK = cp.harness, KI = { blocks: "M6 9V6.5a4 4 0 0 1 8 0V9M4.5 9h11v8h-11z", waits: "M10 9.5a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zM4 17c0-3.2 2.7-5 6-5s6 1.8 6 5",
+    guides: "M10 5.5C8 4 5.5 3.7 3 4v11.5c2.5-.3 5 0 7 1.5 2-1.5 4.5-1.8 7-1.5V4c-2.5-.3-5 0-7 1.5zm0 0V17" };
+  const kicon = k => `<svg class="ki" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="${KI[k]}"/></svg>`;
+  const harness = () => `<div class="hx"><h3 class="sub-h">${esc(HK.h)}</h3>
+    <dl class="hk">${Object.entries(HK.kinds).map(([id, k]) => `<div><dt class="k-${id}">${kicon(id)}${esc(k.name)}</dt><dd>${esc(k.def)}</dd></div>`).join("")}</dl>
+    <ol class="hc">${G.harness.map(g => `<li><h4 class="st">${esc(g.name)}</h4><ul>${g.pieces.map(x => `<li class="pc k-${x.kind}"><b>${kicon(x.kind)}<span>${esc(x.name)}<i class="sr"> (${esc(HK.kinds[x.kind].name)})</i></span></b><p>${tx(x.text)}</p>${links(x.files)}</li>`).join("")}</ul></li>`).join("")}</ol></div>`;
 
   // what comes next: the project's roadmap and learning path
   const DOT = { done: "var(--done)", now: "var(--wip)", next: "var(--client)", goal: "var(--own)" }, ps = data.copy.path.status, groups = data.copy.next.groups;
@@ -147,7 +151,7 @@ module.exports = (cs, ctx) => {
   </div>`,
     tests: () => `<ul class="items">${cs.tests.items.map(t => `<li><span>${tx(t.text)}</span>${links(t.files)}</li>`).join("")}</ul>`,
     ai: () => { const c = cs.ai.contrast, o = c && data.work.find(x => x.id === c.to);
-      return `${cs.ai.stages ? stages() : ""}${cs.ai.controls && proof.length ? controls() : ""}<div class="prose end">${(cs.ai.body || []).map(x => `<p>${tx(x)}</p>`).join("")}
+      return `${cs.ai.stages ? stages() : ""}${G.harness ? harness() : ""}<div class="prose end">${(cs.ai.body || []).map(x => `<p>${tx(x)}</p>`).join("")}
       ${c ? `<p>${tx(c.text)}</p>${o && o.links.caseStudy ? `<a class="tlink gs" href="${esc(o.links.caseStudy)}">${esc(cp.title.replace("{name}", o.name))}${I.fwd}</a>` : ""}` : ""}</div>`; },
     missing: () => `<ul class="items one">${cs.missing.items.map(g => `<li><b>${tx(g.title)}</b><span>${tx(g.text)}</span>${g.list ? `<ul class="sub">${g.list.map(x => `<li>${tx(x)}</li>`).join("")}</ul>` : ""}${links(g.files)}</li>`).join("")}</ul>${cs.missing.outro ? `<p class="outro">${tx(cs.missing.outro)}</p>` : ""}`
   };
