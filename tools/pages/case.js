@@ -2,7 +2,7 @@
 // for every case: the project's entry in data/portfolio.js gives the header, data/cases/<page>.js the body, copy.case
 // the labels. A section the case file leaves out is not drawn and leaves the bar (DECISIONS.md → Case page rules).
 const IMG = require("../../lib/images.js");
-const { C, en, esc, text, calcData, head, srcset, ICON, cvMenu } = require("./common.js");
+const { C, en, esc, text, calcData, head, srcset, ICON, cvMenu, pathCount } = require("./common.js");
 
 const I = {
   back: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -13,7 +13,8 @@ const I = {
 };
 
 // the sections a case can have, in page order (overview is the header, always there)
-const SECTIONS = ["overview", "why", "architecture", "decisions", "tests", "ai", "missing", "next"];
+// Android opens; the harness and the path behind it follow the architecture, before the decisions that span both
+const SECTIONS = ["overview", "why", "architecture", "ai", "path", "decisions", "tests", "missing", "next"];
 
 // a case text: escaped, `…` as code
 const tx = s => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>");
@@ -52,7 +53,8 @@ module.exports = (cs, ctx) => {
   // the bar: the sections this case has, then Contact (outside the menu, in the template)
   const nav = SECTIONS.filter(has).map(id => `<a href="#${id}">${esc(cp.nav[id])}</a>`).join("");
 
-  // the opening: the facts on the left, "At a glance" (the card's three highlights and the stack) on a raised sheet
+  // the opening: the facts on the left, then the harness in a few names and the learning path counted (the lede's
+  // "harness I designed", made concrete); "At a glance" (the card's three highlights and the stack) on a raised sheet
   const STATUS = { completed: ["var(--done)", data.copy.experience.kind.completed], "in-progress": ["var(--wip)", data.copy.experience.kind["in-progress"]] };
   const lapse = w.end == null ? `<span data-calc="lapse" data-id="${w.id}">${C.lapse(w.start, w.end, ctx.now)}</span>` : C.lapse(w.start, w.end, ctx.now);
   const opening = `<div>
@@ -61,6 +63,8 @@ module.exports = (cs, ctx) => {
     <div class="meta"><span class="chip"><i style="background:${STATUS[w.status][0]}" aria-hidden="true"></i>${esc(STATUS[w.status][1])}</span><span class="num">${C.range(w.start, w.end)} · ${lapse}</span><span>${esc(data.copy.experience.kind.project)}</span></div>
     <p class="lede">${tx(cs.lede)}</p>
     <p class="role">${tx(cs.role)}</p>
+    ${cs.harnessTags ? `<div class="hrow"><p class="hlab" id="harness-h">${esc(cp.harnessTag)}</p><ul class="hchips" aria-labelledby="harness-h">${cs.harnessTags.map(t => `<li>${esc(t)}</li>`).join("")}</ul><a class="tlink" href="#ai">${esc(cp.h.ai)}</a></div>` : ""}
+    ${w.learningPath && cs.path ? `<p class="hpath">${esc(pathCount(data.copy, w.learningPath))} <a class="tlink" href="#path">${esc(cp.h.path)}</a></p>` : ""}
     ${repoLinks}
   </div>
   <aside class="sheet" aria-labelledby="glance-h">
@@ -135,15 +139,20 @@ module.exports = (cs, ctx) => {
     <dl class="hk">${Object.entries(HK.kinds).map(([id, k]) => `<div><dt class="k-${id}">${kicon(id)}${esc(k.name)}</dt><dd>${esc(k.def)}</dd></div>`).join("")}</dl>
     <ol class="hc">${G.harness.map(g => `<li><h4 class="st">${esc(g.name)}</h4><ul>${g.pieces.map(x => `<li class="pc k-${x.kind}"><b>${kicon(x.kind)}<span>${esc(x.name)}<i class="sr"> (${esc(HK.kinds[x.kind].name)})</i></span></b><p>${tx(x.text)}</p>${links(x.files)}</li>`).join("")}</ul></li>`).join("")}</ol></div>`;
 
-  // what comes next: the project's roadmap and learning path
-  const DOT = { done: "var(--done)", now: "var(--wip)", next: "var(--client)", goal: "var(--own)" }, ps = data.copy.path.status, groups = data.copy.next.groups;
-  const road = w.roadmap, path = w.learningPath;
-  const next = () => `<div class="nx">${road ? `<div><h3 class="group">${esc(groups.app)}</h3><ol class="steps">${[...road.steps, [road.goal, "goal"]].map(([t, s]) =>
-      `<li class="s-${s}"><span class="mark">${s === "done" ? ICON.check : ""}</span><b>${esc(t)}</b><small>${esc(ps[s])}</small></li>`).join("")}</ol>${cs.next.designed && road.steps.some(([, s]) => s === "designed") ? `<p class="nxnote">${tx(cs.next.designed)}</p>` : ""}</div>` : ""}
-    ${path ? `<div><h3 class="group">${esc(groups.path)}</h3><ol class="blocks">${path.blocks.map(b =>
-      `<li><span class="tag">${esc(b.tag)}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p></div><span class="bst"><i style="background:${DOT[b.status]}" aria-hidden="true"></i>${esc(ps[b.status])}</span></li>`).join("")}</ol></div>` : ""}</div>`;
+  // the learning path: a strip of every block, then each block with its steps and the files that prove them
+  const DOT = { done: "var(--done)", now: "var(--wip)", next: "var(--client)", goal: "var(--own)" }, PC = data.copy.path, ps = PC.status;
+  const road = w.roadmap, lp = w.learningPath;
+  const pathSec = () => { const B = lp.blocks, count = s => B.filter(b => b.status === s).length;
+    const legend = ["done", "now", "next", "goal"].filter(count).map(s => `<span class="lg-${s}"><i aria-hidden="true"></i>${s === "goal" ? "" : `<b>${count(s)}</b> `}${esc(ps[s])}</span>`).join("");
+    return `<div class="pw"><ol class="pstrip" style="--nb:${B.length}" aria-hidden="true">${B.map(b => `<li class="b-${b.status}"><span></span><small>${b.n}</small></li>`).join("")}</ol>
+    <p class="plegend">${legend}<span class="upd">${esc(C.fill(en(PC.updated), { updated: lp.updated }))}</span></p>
+    <ol class="blocks">${B.map(b => `<li class="b-${b.status}"><span class="tag">${esc(en(PC.block).replace("{n}", b.n))}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p>${(b.steps || []).length ? `<ul class="psteps">${b.steps.map(([t, , files]) => `<li><b>${ICON.check}${esc(t)}</b>${links(files)}</li>`).join("")}</ul>` : ""}${links(b.files)}</div><span class="bst"><i style="background:${DOT[b.status]}" aria-hidden="true"></i>${esc(ps[b.status])}</span></li>`).join("")}</ol></div>`; };
+  // what comes next: the app's roadmap
+  const next = () => `<div class="nx"><ol class="steps">${[...road.steps, [road.goal, "goal"]].map(([t, s]) =>
+      `<li class="s-${s}"><span class="mark">${s === "done" ? ICON.check : ""}</span><b>${esc(t)}</b><small>${esc(ps[s])}</small></li>`).join("")}</ol>${cs.next.designed && road.steps.some(([, s]) => s === "designed") ? `<p class="nxnote">${tx(cs.next.designed)}</p>` : ""}</div>`;
 
   const body = {
+    path: pathSec,
     next,
     why: () => `<div class="pair"><span></span><div class="prose">${[].concat(cs.why.body || []).map(x => `<p>${tx(x)}</p>`).join("")}</div></div>`,
     architecture: () => `<div class="dg">${A.flow ? flow(A.flow) : ""}${walk}</div>${A.flow ? `<p class="pin">${esc(cp.pin)}</p>` : ""}`,
