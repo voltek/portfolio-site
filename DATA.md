@@ -51,12 +51,14 @@ only its WebP copies.
 ## New demo video (case studies)
 
 One short MP4 in the repo, never Git LFS (Pages does not serve it); the page loads it only on play. It goes in the case
-file's `video` (`data/cases/<page>.js`), and the screens strip opens with it.
+file's `video` (`data/cases/<page>.js`), in the middle of the screens strip.
 
-1. **Record what screenshots cannot show:** one flow, 20–30 s, portrait, from the emulator, something that moves (a
-   list reordering, a loading state, a transition). Demo data only, system demo mode on, no sound.
+1. **Record what screenshots cannot show:** one flow, as long as it needs and at most 30 s, portrait, from the
+   emulator, something that moves (a list reordering, a loading state, a transition). Demo data only, system demo mode
+   on, no sound.
    `adb shell screenrecord /sdcard/demo.mp4` (stop with Ctrl+C), then `adb pull /sdcard/demo.mp4 demo-raw.mp4`; the raw
-   file stays out of the repo.
+   file stays out of the repo. Recorded this way, touches sent with `adb shell input` do not show, and the keyboard can
+   show what was copied on the computer: empty the clipboard first.
 2. **Compress** (ffmpeg comes from winget; open a new terminal if it is not found):
 
    ```
@@ -64,8 +66,9 @@ file's `video` (`data/cases/<page>.js`), and the screens strip opens with it.
    ffmpeg -ss 2 -i assets/projects/<app>/demo.mp4 -frames:v 1 -vf "scale=-2:960" -c:v libwebp -quality 80 assets/projects/<app>/demo-poster.webp
    ```
 
-   Under 3 MB: if it weighs more, raise `-crf` to 30 or 32 and check it still looks sharp. `-ss` picks the poster frame.
-3. **List it** in `video`: `src`, `poster` and `alt` (what the video shows). Only the case page uses it.
+   Under 3 MB: if it weighs more, raise `-crf` to 30 or 32 and check it still looks sharp. `-ss` picks the poster
+   frame: one that repeats no screenshot of the strip.
+3. **List it** in `video`: `src`, `poster` and `alt` (`{ en, es }`, what the video shows). Only the case page uses it.
 
 ## The share image (assets/og.png)
 
@@ -94,7 +97,7 @@ those changes, run `node tools/og.js` (Edge headless) and commit the PNG; under 
 ## Re-pin GameStack
 
 When Alan says a project's repo moved, run the `sync-project` skill with its id. Proof rows are `check: true` (no
-counts) and say where they show with `on`; `pin` holds the commit and day the claims were checked.
+counts), say where they show with `on` (the CV takes Plain's) and name their evidence in `files`; `pin` holds the commit and day the claims were checked.
 
 ## New case study
 
@@ -107,8 +110,12 @@ Every case is drawn by `src/case.html` and `tools/pages/case.js`; nothing is wri
    file the page joins the build.
 3. Sections are optional: leave one out (`why`, `ai` …) and it leaves the page and the bar. Keep each idea once.
 4. `pin` is the commit every code link points to, and its date. A file is `"path"` under `roots.main`, `"path:15–22"`
-   with its lines, `"test:path"` under another root.
+   with its lines, `"test:path"` under another root. `"pr:209"`, `"issue:159"` and `"commit:a00cf8c"` open that on GitHub;
+   a path that ends in `/` opens the folder; a decision record under the `adr` root shows its number.
 5. `stack` takes the Skills used at the project (same names; of "MVI · MVVM", the part that applies) plus the libraries
    named in `libs`; `check-data` checks the tags and the diagram's limits.
-6. "Next case" is the next project with a case study, in the data's order.
-7. Check the page (`.claude/rules/design.md`): Lighthouse, impeccable `audit`, `polish` and the finish review.
+6. `ai.stages` is the strip by actor (at most 8 stages, 3 `actors`), `ai.harness` lists its pieces by group, each with a
+   `kind` (`blocks`, `waits`, `guides`: copy.case.harness) and its files,
+   and `next` draws its `roadmap` (status `designed` = an approved mockup) and `learningPath`.
+7. "Next case" goes from the newest project with a case study to the oldest, then back to the newest.
+8. Check the page (`.claude/rules/design.md`): Lighthouse, impeccable `audit`, `polish` and the finish review.

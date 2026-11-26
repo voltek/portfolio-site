@@ -1,7 +1,7 @@
 // Show (show.html): the parts of src/show.html that come from the data. Each key fills a {{@key}} of the template.
 // Everything the prototype drew in the browser is drawn here: every episode card (the remote only switches which one
 // shows), the strip, the skills place matrix, the title card's rays and color bars.
-const { C, en, esc, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu } = require("./common.js");
+const { C, en, esc, landingStatus, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu } = require("./common.js");
 const IMG = require("../../lib/images.js");
 
 /* ---------- props: one painted object per episode, its title lettered on it (show.prop in the data) ---------- */
@@ -154,7 +154,7 @@ module.exports = ctx => {
     if (mode === "feature") {
       const shots = (w.shots || []).filter(s => s.on.includes("show")).slice(0, 3);
       return `${head}<div class="bug">${propSVG(w)}</div>
-      <div class="shots">${shots.map(s => `<button type="button" class="shot" data-full="${esc(IMG.copiesOf(s.src).full)}" data-cap="${esc(`${w.name} · ${s.label}`)}"><span class="sr">${esc(cp.aria.viewLarger)}</span><span class="frame-p"><img ${srcset(s.src, "(max-width: 900px) 30vw, 160px")} alt="${esc(s.alt || "")}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'empty',textContent:'${esc(s.label)}'}))"></span><span class="lbl">${esc(s.label)}</span></button>`).join("")}</div>`;
+      <div class="shots">${shots.map(s => `<button type="button" class="shot" data-full="${esc(IMG.copiesOf(s.src).full)}" data-cap="${esc(`${w.name} · ${en(s.label)}`)}"><span class="sr">${esc(cp.aria.viewLarger)}</span><span class="frame-p"><img ${srcset(s.src, "(max-width: 900px) 30vw, 160px")} alt="${esc(s.alt || "")}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'empty',textContent:'${esc(s.label)}'}))"></span><span class="lbl">${esc(s.label)}</span></button>`).join("")}</div>`;
     }
     const studio = w.type === "project" ? cp.experience.kind.project : w.studio.en;
     const dates = `${C.range(w.start, w.end)}${w.type === "project" ? ` ${chip(w.status)}` : ""}`;
@@ -184,7 +184,7 @@ module.exports = ctx => {
       <span class="stop goal" style="--x:100%">${FLAG}<em><small>${esc(ui.goal)}</small>${esc(goal)}</em></span><span class="pin" style="--x:${here}%">${PIN}<b>${esc(ui.here)}</b></span></div></div>`;
   };
   const road = w => {
-    const path = w.learningPath, lanes = [lane(w.roadmap.lane, w.roadmap.steps, w.roadmap.goal)];
+    const path = w.learningPath, lanes = [lane(w.roadmap.lane, w.roadmap.steps.map(([t, s]) => [t, landingStatus(s)]), w.roadmap.goal)];
     if (path) { const g = path.blocks.find(b => b.status === "goal"); lanes.push(lane(path.lane, path.blocks.flatMap(b => b.steps || []), g ? g.short || g.title : "")); }
     return `<div class="road"><p class="hl-h">${esc(ui.next)}</p><div class="lanes">${lanes.join("")}</div></div>`;
   };

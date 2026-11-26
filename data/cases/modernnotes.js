@@ -6,7 +6,7 @@
 // · `…` in a text becomes code. Texts are escaped: no HTML here.
 // · A file is "path" under roots.main, "path:15–22" adds its lines, "test:path" takes another root. Every code link
 //   goes to the pinned commit; the page says the commit once, at the end.
-// · A section is drawn only if it is here (why, architecture, decisions, tests, ai, missing): each case keeps the ones
+// · A section is drawn only if it is here (why, architecture, decisions, tests, ai, missing, next): each case keeps the ones
 //   that say something the page has not said yet (DECISIONS.md → Case page rules).
 module.exports = {
   id: "mn",
@@ -25,7 +25,15 @@ module.exports = {
   // architecture, tests. check-data holds each tag to that.
   stack: ["Kotlin", "Jetpack Compose", "Material 3", "Coroutines", "Flow", "Hilt", "Room", "DataStore", "Retrofit", "Clean Architecture", "MVVM", "JUnit", "MockK", "Turbine", "MockWebServer"],
   libs: ["JUnit", "MockK", "Turbine", "MockWebServer"],
-  video: null, // { src, poster, alt } once recorded (DATA.md → New demo video); it goes first among the screens
+  // DATA.md → New demo video; it goes in the middle of the screens
+  video: {
+    src: "assets/projects/modernnotes/demo.mp4",
+    poster: "assets/projects/modernnotes/demo-poster.webp",
+    alt: {
+      en: "A note is added, the list is sorted by title, and the new note opens to edit.",
+      es: "Se añade una nota, la lista se ordena por título y la nueva nota se abre para editarla."
+    }
+  },
   shotsFoot: "Real screens from the emulator.",
 
   architecture: {
@@ -78,6 +86,13 @@ module.exports = {
   },
 
   ai: {
+    actors: [{ id: "me", name: { en: "Me", es: "Yo" } }, { id: "ai", name: { en: "An AI model", es: "Un modelo de IA" } }],
+    stages: [
+      { name: { en: "Design", es: "Diseño" }, me: { en: "design the app", es: "diseño la app" } },
+      { name: { en: "Code", es: "Código" }, me: { en: "write every line and the tests", es: "escribo cada línea y los tests" } },
+      { name: { en: "Review", es: "Revisión" }, ai: { en: "audit each finished phase, with no code", es: "audita cada fase terminada, sin código" } },
+      { name: { en: "Fix", es: "Corrección" }, me: { en: "apply the corrections by hand", es: "aplico las correcciones a mano" } }
+    ],
     intro: "AI was used only as an auditor: after each phase I had the finished code reviewed by an AI model, which returned corrections and explanations, never code.",
     body: ["No code-completion assistants were used at any point. This is my declaration, not something git can prove; what the repo does show is the result: the code, the tests and the fixes below."],
     // one plain line to the other case (no box): its link and name come from that project's entry

@@ -1,5 +1,5 @@
 // Plain (index.html): the parts of src/plain.html that come from the data. Each key fills a {{@key}} of the template.
-const { C, esc, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu } = require("./common.js");
+const { C, esc, landingStatus, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu } = require("./common.js");
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile;
@@ -85,7 +85,7 @@ module.exports = ctx => {
   const next = !live || !(road || path) ? "" : `<section class="page" id="next" aria-labelledby="next-h">
   <div class="wrap">
     <div class="head"><h2 id="next-h">${esc(cp.next.heading.plain)}</h2><p>${text(ctx, cp.next.intro)}${path ? ` ${text(ctx, cp.path.updated, { updated: path.updated })}.` : ""}</p></div>
-    <div class="next">${road ? `<div><h3 class="group">${esc(cp.next.groups.app)}</h3><ol class="steps">${[...road.steps, [road.goal, "goal"]].map(([t, s]) =>
+    <div class="next">${road ? `<div><h3 class="group">${esc(cp.next.groups.app)}</h3><ol class="steps">${[...road.steps, [road.goal, "goal"]].map(([t, s]) => [t, landingStatus(s)]).map(([t, s]) =>
       `<li class="s-${s}"><span class="mark">${s === "done" ? ICON.check : ""}</span><b>${esc(t)}</b><small>${esc(STATUS[s][0])}</small></li>`).join("")}</ol></div>` : ""}
     ${path ? `<div><h3 class="group">${esc(cp.next.groups.path)}</h3><ol class="blocks">${path.blocks.map(b =>
       `<li><span class="tag">${esc(b.tag)}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p></div><span class="st"><i style="background:${STATUS[b.status][1]}" aria-hidden="true"></i>${esc(STATUS[b.status][0])}</span></li>`).join("")}</ol></div>` : ""}</div>

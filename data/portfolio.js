@@ -181,44 +181,43 @@
       lede: { en: "A game library app in Kotlin and Compose, built with AI agents inside a harness I designed, using Claude Code. The agents write the code; I review every change.", es: "App de biblioteca de videojuegos en Kotlin y Compose, hecha con agentes de IA dentro de un harness que yo diseñé, usando Claude Code. Los agentes escriben el código; yo reviso cada cambio." },
       what: { en: "An Android app to search video games from IGDB, with game details coming next.", es: "App Android para buscar videojuegos en IGDB; el detalle de cada juego viene después." },
       highlights: [
-        { en: "Search end to end: four screen states, debounced queries, and a failed refresh that keeps the results", es: "La búsqueda funciona de punta a punta: cuatro estados de pantalla, consultas con debounce y un refresh fallido que conserva los resultados" },
+        { en: "Search end to end: loading, empty and error states, debounced queries, and a failed refresh that keeps the results", es: "La búsqueda funciona de punta a punta: estados de carga, vacío y error, consultas con debounce y un refresh fallido que conserva los resultados" },
         { en: "IGDB queries in its Apicalypse language, behind Twitch OAuth", es: "Consultas a IGDB en su lenguaje Apicalypse, detrás de OAuth de Twitch" },
         { en: "MVI with Clean Architecture; screen tests with Robolectric", es: "MVI con Clean Architecture; pruebas de pantalla con Robolectric" }
       ],
       stack: ["Kotlin", "Compose", "Coroutines", "Flow", "Hilt", "Retrofit", "MVI", "Clean Architecture", "JUnit", "MockK", "GitHub Actions", "Claude Code agents"],
       links: { repo: "https://github.com/voltek/GameStack", caseStudy: "gamestack.html" },
       shots: [
-        { src: "assets/projects/gamestack/search.png", label: "Search", alt: "GameStack search screen, empty state", on: ["show", "case"] },
-        { src: "assets/projects/gamestack/search_results.png", label: "Results", alt: "GameStack search results with game covers", on: ["plain", "show", "case"] },
-        { src: "assets/projects/gamestack/search_refresh_error.png", label: "Error keeps results", alt: "GameStack refresh error that keeps the previous results on screen", on: ["show", "case"] },
-        { src: "assets/projects/gamestack/search_loading.png", label: "Loading", alt: null, on: ["case"] },
-        { src: "assets/projects/gamestack/search_no_results.png", label: "No results", alt: null, on: ["case"] }
+        { src: "assets/projects/gamestack/search.png", label: { en: "Search", es: "Búsqueda" }, alt: { en: "GameStack search screen before any query, with an empty search field and the message Search for games", es: "Pantalla de búsqueda de GameStack antes de buscar, con el campo vacío y el mensaje Search for games" }, on: ["show", "case"] },
+        { src: "assets/projects/gamestack/search_results.png", label: { en: "Results", es: "Resultados" }, alt: { en: "GameStack search results with game covers", es: "Resultados de búsqueda de GameStack con portadas de juegos" }, on: ["plain", "show", "case"] },
+        { src: "assets/projects/gamestack/search_refresh_error.png", label: { en: "Error keeps results", es: "El error conserva los resultados" }, alt: { en: "GameStack refresh error that keeps the previous results on screen", es: "Error al refrescar en GameStack que conserva en pantalla los resultados anteriores" }, on: ["show", "case"] },
+        { src: "assets/projects/gamestack/search_loading.png", label: { en: "Loading", es: "Cargando" }, alt: { en: "GameStack search loading, with a grid of placeholder cards", es: "Búsqueda de GameStack cargando, con una cuadrícula de tarjetas provisionales" }, on: ["case"] },
+        { src: "assets/projects/gamestack/search_no_results.png", label: { en: "No results", es: "Sin resultados" }, alt: { en: "GameStack search with the message No Results Found and a Go To Library button", es: "Búsqueda de GameStack con el mensaje No Results Found y un botón Go To Library" }, on: ["case"] }
       ],
       // The commit and day the site's claims were last checked against the repo (DATA.md → Re-pin GameStack).
       pin: { date: "2026-11-12", commit: "5fb80bc" },
       // "Now building": the proof, qualitative (no counts: the system is the value, not the quantity). on: where each
-      // row shows, like the shots ("plain", "show", "case"); the landing keeps the three that prove the differentiator,
-      // the case study has them all (Alan, 10-27 and 11-12). es: the row in Spanish; the CV draws the rows that have it.
+      // row shows ("plain", "show"), each with its evidence (files: refs as in data/cases/, read with that case's roots);
+      // the case study says them piece by piece, in its harness.
+      // es: the row in Spanish. The CV draws the rows that go on Plain.
       proof: [
-        { check: true, label: "Decisions that name their enforcement", note: "each ADR states what enforces it: a test, a CI check, a setting, or prose only", on: ["plain", "show", "case"],
-          es: { label: "Decisiones que dicen qué las hace cumplir", note: "cada ADR indica si lo hace un test, un check de CI, una configuración o solo texto" } },
-        { check: true, label: "Human in the loop", note: "what the rules don't settle waits for my approval, and I confirm every review triage and every merge", on: ["plain", "show", "case"],
+        { check: true, label: "Decisions that name their enforcement", note: "each architecture decision record (ADR) states what enforces it: a test, a CI check, a setting, or prose only", on: ["plain", "show"],
+          files: ["adr:README.md"],
+          es: { label: "Decisiones que dicen qué las hace cumplir", note: "cada registro de decisión de arquitectura (ADR) indica si lo hace un test, un check de CI, una configuración o solo texto" } },
+        { check: true, label: "Human in the loop", note: "what the rules don't settle waits for my approval, and I confirm every review triage and every merge", on: ["plain", "show"],
+          files: ["repo:CLAUDE.md", "repo:.claude/settings.json"],
           es: { label: "Human in the loop", note: "lo que las reglas no resuelven espera mi aprobación, y yo confirmo cada triage de revisión y cada merge" } },
-        { check: true, label: "Checks no agent can skip", note: "build, test, lint and commit checks on every PR, behind branch protection that binds me too", on: ["plain", "show", "case"],
+        { check: true, label: "Checks no agent can skip", note: "build, test, lint and commit checks on every PR, behind branch protection that binds me too", on: ["plain", "show"],
+          files: ["repo:.github/workflows/gate.yml", "repo:.github/workflows/commits.yml"],
           es: { label: "Controles que ningún agente puede saltarse", note: "build, tests, lint y reglas de commit en cada PR, tras una protección de rama que también me obliga a mí" } },
-        { check: true, label: "Rules as mechanisms", note: "the rules that must never break are a hook, a deny rule or a test, not a line of prose", on: ["case"] },
-        { check: true, label: "A capped review loop", note: "local AI review rounds before every PR, capped per branch: real defects per round fell from 3.3 to 2.2 by round 3 (measured once, Nov 2026)", on: ["case"] },
-        { check: true, label: "A context budget", note: "the agents' standing instructions are held under 60 lines by a test, and area rules load only when needed: 31% fewer tokens before any task (measured once, Nov 2026)", on: ["case"] },
-        { check: true, label: "From spec to test", note: "in Search's spec, every scenario names the test that verifies it", on: ["case"] },
-        { check: true, label: "Code and documents in step", note: "the commit that resolves a disagreement between them says which side was fixed", on: ["case"] },
-        { check: true, label: "Skills", note: "one procedure per repeatable task, loaded only when needed: each layer's code and tests, device checks, shipping a branch", on: ["case"] }
       ],
       source: "Checked against the public repo, {pinDate}",
-      // where the app goes next (status: "done" · "now" · "next"); the pin lands before the first step not done
+      // where the app goes next (status: "done" · "now" · "designed" · "next"; designed = an approved mockup, drawn as next
+      // on the landing); the pin lands before the first step not done
       roadmap: {
         lane: "App",
-        steps: [["Search", "done"], ["Game Detail", "next"], ["Library", "next"], ["Ratings", "next"], ["Home", "next"]],
-        goal: "On Google Play"
+        steps: [[{ en: "Search", es: "Búsqueda" }, "done"], [{ en: "Game Detail", es: "Detalle" }, "designed"], [{ en: "Library", es: "Biblioteca" }, "designed"], [{ en: "Home", es: "Inicio" }, "designed"], [{ en: "Ratings", es: "Calificaciones" }, "next"]],
+        goal: { en: "On Google Play", es: "En Google Play" }
       },
       // The learning path lives on the project it proves: "Now building" draws it while GameStack is in progress, and it
       // stays with this project (and its case study) when another build takes over. Show's harness lane is read from the
@@ -229,7 +228,7 @@
         intro: "A self-directed path in AI-assisted Android development, updated as the tools change. Each finished block is put to work in GameStack, and the repo shows it.",
         arc: "It goes from **writing every line by hand** (ModernNotes) to **directing AI agents** (GameStack).", // Show only
         blocks: [
-          { tag: "Block 1", title: "Fundamentals", status: "done", note: "How LLMs work, research with checked sources, and GameStack's first spec, later replaced by a living PRD" },
+          { tag: "Block 1", title: "Fundamentals", status: "done", note: { en: "How large language models (LLMs) work, research with checked sources, and GameStack's first spec, later replaced by a living PRD", es: "Cómo funcionan los modelos de lenguaje (LLM), investigación con fuentes verificadas y la primera spec de GameStack, después reemplazada por un PRD vivo" } },
           { tag: "Block 2", title: "Context engineering", status: "done", note: "Prompting, CLAUDE.md and the first Skills", steps: [["CLAUDE.md", "done"], ["Skills", "done"]] },
           { tag: "Block 3", title: "Spec-Driven Development", status: "done", note: "Specs, a drift checklist, human in the loop and handoffs" },
           { tag: "Extra", title: "Design phase", status: "done", note: "Four screens and their states, designed and documented" },
@@ -274,7 +273,7 @@
     { name: "Coil", level: "strong", at: ["gs"], pages: false },
     { name: "Git", level: "strong", at: ["gs", "mn", "ob", "cb", "cd", "ag", "et"], note: "At every job; in GameStack, pull requests behind branch protection", pages: false },
     { name: "Agentic engineering · Claude Code", level: "strong", ai: true, at: ["gs"], note: "Claude Code agents build inside a harness I designed, with a human in the loop: I confirm every review triage and every merge. In ModernNotes, AI never wrote the code" },
-    { name: "Spec-Driven Development", cv: "Spec-Driven Development (OpenSpec)", level: "strong", ai: true, at: ["gs"], note: "A living PRD and OpenSpec, each scenario naming the test that verifies it, a drift checklist and session checkpoints, from my learning path, applied in GameStack" },
+    { name: "Spec-Driven Development", cv: "Spec-Driven Development (OpenSpec)", level: "strong", ai: true, at: ["gs"], note: { en: "A living product requirements document (PRD) and OpenSpec, each scenario naming what verifies it, a drift checklist and session checkpoints, from my learning path, applied in GameStack", es: "Un documento vivo de requisitos del producto (PRD) y OpenSpec, donde cada escenario dice qué lo verifica, un checklist de drift y checkpoints de sesión, de mi ruta de aprendizaje, aplicados en GameStack" } },
     { name: "AI code review loops", level: "strong", ai: true, at: ["gs"], note: "Capped review rounds per branch, every finding triaged in a table I confirm, then one Codex round on the pull request" },
     { name: "Harness engineering", cv: "Harness engineering (CLAUDE.md, path-scoped rules, Agent Skills, hooks, permissions, CI gates)", level: "strong", ai: true, at: ["gs"], note: "CLAUDE.md and rules loaded by path, Skills, hooks, permissions and two required CI checks" },
     { name: "Using subagents and MCP servers", level: "familiar", ai: true, at: [], pages: false }, // used, none built: never without "using"
@@ -397,21 +396,24 @@
     },
     path: {
       heading: { show: ["Next season · my AI learning path", "Training montage"] },
-      status: { done: "Completed", now: "In progress", next: "Coming up", goal: "Goal" },
+      status: { done: "Completed", now: "In progress", designed: { en: "Designed", es: "Diseñada" }, next: "Coming up", goal: "Goal" },
       updated: "Updated {updated}"
     },
     // the case-study pages (copy deck §10.9): the bar, the section titles and the labels every case shares.
     // A section a case leaves out takes its label out of the bar too.
     case: {
-      nav: { overview: "Overview", why: "Why", architecture: "Architecture", decisions: "Decisions", tests: "Tests", ai: "AI", missing: "What’s missing" },
-      h: { why: "Why it exists", architecture: "Architecture", decisions: "Key decisions", tests: "Tests", ai: "How AI was used", missing: "What went wrong, what is missing" },
+      nav: { overview: "Overview", why: "Why", architecture: "Architecture", decisions: "Decisions", tests: "Tests", ai: "AI", missing: "What’s missing", next: { en: "What’s next", es: "Qué sigue" } },
+      h: { why: "Why it exists", architecture: "Architecture", decisions: "Key decisions", tests: "Tests", ai: "How AI was used", missing: "What went wrong, what is missing", next: { en: "What comes next", es: "Lo que viene" } },
+      // How AI was used: the stages by actor, then the harness piece by piece (ai.harness in the case file)
+      aiStages: { en: "How a change moves", es: "Cómo avanza un cambio" }, harness: { h: { en: "The harness, piece by piece", es: "El harness, pieza por pieza" },
+        kinds: { blocks: { name: { en: "Blocks", es: "Bloquea" }, def: { en: "A hook, a deny rule or a required check stops it.", es: "Lo detiene un hook, una regla deny o un check obligatorio." } }, waits: { name: { en: "Waits for me", es: "Me espera" }, def: { en: "It needs my yes: a permission rule holds pull requests, instructions hold the rest.", es: "Necesita mi visto bueno: una regla de permisos sostiene los pull requests; instrucciones, lo demás." } }, guides: { name: { en: "Guides", es: "Guía" }, def: { en: "The agents read it, and can miss it.", es: "Los agentes lo leen, y pueden pasarlo por alto." } } } },
       decisionCols: ["Decision", "Instead of", "Why", "Cost", "Code"],
       back: "All work", glance: "At a glance", stack: "Stack", demo: "Demo", walk: "Read the code", next: "Next case",
       pin: "Each name opens its file.",
       commit: "Code links point to commit {commit} ({date}).",
       readme: "README",
       title: "{name} case study",
-      aria: { screens: "Screens", prevScreens: "Previous screens", nextScreens: "Next screens", viewLarger: "View larger: ",
+      aria: { play: { en: "Play the demo", es: "Reproducir la demo" }, screens: "Screens", prevScreens: "Previous screens", nextScreens: "Next screens", viewLarger: "View larger: ",
         prevScreen: "Previous screen", nextScreen: "Next screen", screen: "Screen", hash: "Link to this section: ", decisions: "Key decisions",
         pager: "Case studies" }
     }
