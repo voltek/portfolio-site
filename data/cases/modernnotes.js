@@ -25,7 +25,15 @@ module.exports = {
   // architecture, tests. check-data holds each tag to that.
   stack: ["Kotlin", "Jetpack Compose", "Material 3", "Coroutines", "Flow", "Hilt", "Room", "DataStore", "Retrofit", "Clean Architecture", "MVVM", "JUnit", "MockK", "Turbine", "MockWebServer"],
   libs: ["JUnit", "MockK", "Turbine", "MockWebServer"],
-  video: null, // { src, poster, alt } once recorded (DATA.md → New demo video); it goes in the middle of the screens
+  // DATA.md → New demo video; it goes in the middle of the screens
+  video: {
+    src: "assets/projects/modernnotes/demo.mp4",
+    poster: "assets/projects/modernnotes/demo-poster.webp",
+    alt: {
+      en: "A note is added, the list is sorted by title, and the new note opens to edit.",
+      es: "Se añade una nota, la lista se ordena por título y la nueva nota se abre para editarla."
+    }
+  },
   shotsFoot: "Real screens from the emulator.",
 
   architecture: {
