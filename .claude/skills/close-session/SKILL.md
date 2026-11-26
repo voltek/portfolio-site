@@ -32,9 +32,10 @@ never scratch or temp copies; end every commit message with the attribution line
    - Wait for the checks (`gh pr checks <n> --watch`); fix and push until they pass. A
      `BLOCKED` PR whose newest `checks` run on the head is `cancelled` (a push and a body edit raced) needs `gh run
      rerun <id>`, never `--admin`; a PR with no run at all, `gh pr close` and `reopen`. Tell Alan in two lines what the PR
-     changes and what the review found (with its level and why), then run `gh pr merge <n> --squash --delete-branch`:
-     the `ask` rule in `.claude/settings.json` stops it for his explicit yes. After it, `git switch main && git pull
-     --ff-only && git fetch --prune`, and delete any local branch whose remote is gone (`git branch -vv`, `: gone]`;
+     changes and what the review found (with its level and why), then run `gh pr merge <n> --squash`:
+     the `ask` rule in `.claude/settings.json` stops it for his explicit yes. GitHub deletes the remote branch on merge
+     (repo setting); after it, `git switch main && git pull --ff-only && git fetch --prune`, and delete any local branch
+     whose remote is gone (`git branch -vv`, `: gone]`;
      `-D`, since squash leaves it unmerged to git). If he declines, the PR stays open and the handoff says so.
 3. **`_private/handoff/HANDOFF.md`**: rewrite it in English, **≤ 4 KB and ≤ 60 lines** (the hook alerts above that):
    date and session id; one line per phase; *Alan owes* (items marked "do not remind" stay but are not mentioned);
@@ -51,8 +52,6 @@ never scratch or temp copies; end every commit message with the attribution line
    if any, and the next session. Then:
    - **Repeated correction?** If Alan corrected the same thing twice this session, say so and propose turning it into a
      rule with a mechanism (a check, a hook, a rule file), not a memory.
-   - **Qué aprender** (≤ 3 lines): a web concept the session used that is worth knowing beyond its steps (what it is,
-     why it mattered here). A recap of what was done is not a lesson: with no such concept, leave the section out.
    - **Model for the next task**, one sentence. **Sonnet** for work that follows a settled plan or format (approved
      decisions, text from approved sources, mechanical edits, captures, closes). **Opus** for open design or
      architecture calls, visual direction, a deep audit, or costly trade-offs; in a mixed session, the hardest step decides.
