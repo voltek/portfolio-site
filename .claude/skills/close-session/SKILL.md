@@ -20,10 +20,11 @@ never scratch or temp copies; end every commit message with the attribution line
      appends the co-authors of the branch commits). Its body is `## What changed`, `## Why` and `## Verification`, with
      at most 6 lines of text under them; the `checks` workflow rejects any other shape.
    - Review, once per PR, after it is open and before merging, and after Alan's visual review and the finish checks
-     (`.claude/rules/design.md`): every PR gets `/code-review <level> <PR number>`, run yourself,
+     (`.claude/rules/design.md`): every PR gets `/code-review <level> <PR number>`, run yourself, except one
+     that only changes Markdown outside `.claude/` (README, DESIGN.md, DATA.md: the `checks` workflow reads those),
      with the session's model (only the level is set). It forks to the background: wait for its notification before
      going on; the result text is the review, and `(none)` means no findings. The level follows the actual diff:
-     `low` for text, data, skill or rule text, a one-spot fix or a line or two of logic; `medium` for new or changed logic in `tools/`, `lib/`, `src/*.js`, hooks or settings; `high` for
+     `low` for data, skill or rule text, a one-spot fix or a line or two of logic; `medium` for new or changed logic in `tools/`, `lib/`, `src/*.js`, hooks or settings; `high` for
      `tools/build.js`, `lib/calc.js`, `tools/check-data.js` or a refactor across several JS files; when two fit, the
      higher wins. Fix what it confirms; a finding that needs Alan's judgment is not fixed but goes, with a
      recommendation, in the pre-merge note. UI changes were already checked in the `screenshots` mode that fits (its table). If it touches `src/`, `tokens.css` or `assets/` with finished visual work, confirm the
