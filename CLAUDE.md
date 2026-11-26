@@ -65,6 +65,7 @@ alternative before building it.
   Scopes: `plain show case cv data build tokens assets harness repo deploy readme`. Commit body ≤ 6 lines, only the
   why. PR body: `## What changed`, `## Why`, `## Verification`, ≤ 6 lines of text under them (`checks` enforces it).
 - Public repo: branches `{type}/{kebab-name}` (GitHub only lets PRs into `main`). Claude commits, pushes its branch and
-  opens the PR without asking; **merging needs a `/code-review` (docs-only PRs skip it) and Alan's explicit yes** (`close-session`).
+  opens the PR without asking; **merging needs a `/code-review` (docs-only PRs skip it) and Alan's explicit yes**
+  (`close-session`).
 - Private repo: one commit per session on `main`, `Session <id>: <summary>`; that is the log.
 - Retired files are deleted (`git rm`), not archived; the commit names the hash to recover them from.
