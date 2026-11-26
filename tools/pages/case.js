@@ -25,12 +25,13 @@ const pk = s => esc(s).replace(/\/(?=.)/g, "/<wbr>");
 // "path:15–22" under roots.main, "test:path" under another root → the file at the pinned commit, and its label
 const FILE = /^(?:(\w+):(?!\d+(?:–\d+)?$))?(.+?)(?::(\d+(?:–\d+)?))?$/;
 // and what is not a file there: a pull request, an issue, a commit (read before FILE, which would take "209" for a line)
-const ELSEWHERE = /^(pr|issue|commit):([0-9a-f]+)$/;
+// a pull request or an issue is a number, a commit a hash: anything else is a typo check-data must catch
+const ELSEWHERE = /^(?:(pr|issue):(\d+)|(commit):([0-9a-f]{7,40}))$/;
 const GO = { pr: ["pull", "PR #"], issue: ["issues", "Issue #"], commit: ["commit", "Commit "] };
 // a file whose name says little alone carries its folder; a decision record is its number; a folder is its path
 const fileOf = (cs, repo, ref) => {
   const x = ref.match(ELSEWHERE);
-  if (x) return { href: `${repo}/${GO[x[1]][0]}/${x[2]}`, label: GO[x[1]][1] + x[2], out: true };
+  if (x) { const kind = x[1] || x[3], id = x[2] || x[4]; return { href: `${repo}/${GO[kind][0]}/${id}`, label: GO[kind][1] + id, out: true }; }
   const [, root = "main", p, lines] = ref.match(FILE), full = cs.roots[root] + p, dir = p.endsWith("/"), names = full.split("/");
   const href = `${repo}/${dir ? "tree" : "blob"}/${cs.pin.commit}/${full}${lines ? `#L${lines.replace("–", "-L")}` : ""}`;
   const adr = root === "adr" && p.match(/^(\d{4})-/);
@@ -138,7 +139,7 @@ module.exports = (cs, ctx) => {
   const DOT = { done: "var(--done)", now: "var(--wip)", next: "var(--client)", goal: "var(--own)" }, ps = data.copy.path.status, groups = data.copy.next.groups;
   const road = w.roadmap, path = w.learningPath;
   const next = () => `<div class="nx">${road ? `<div><h3 class="group">${esc(groups.app)}</h3><ol class="steps">${[...road.steps, [road.goal, "goal"]].map(([t, s]) =>
-      `<li class="s-${s}"><span class="mark">${s === "done" ? ICON.check : ""}</span><b>${esc(t)}</b><small>${esc(ps[s])}</small></li>`).join("")}</ol>${cs.next.designed ? `<p class="nxnote">${tx(cs.next.designed)}</p>` : ""}</div>` : ""}
+      `<li class="s-${s}"><span class="mark">${s === "done" ? ICON.check : ""}</span><b>${esc(t)}</b><small>${esc(ps[s])}</small></li>`).join("")}</ol>${cs.next.designed && road.steps.some(([, s]) => s === "designed") ? `<p class="nxnote">${tx(cs.next.designed)}</p>` : ""}</div>` : ""}
     ${path ? `<div><h3 class="group">${esc(groups.path)}</h3><ol class="blocks">${path.blocks.map(b =>
       `<li><span class="tag">${esc(b.tag)}</span><div><b>${esc(b.title)}</b><p>${esc(b.note)}</p></div><span class="bst"><i style="background:${DOT[b.status]}" aria-hidden="true"></i>${esc(ps[b.status])}</span></li>`).join("")}</ol></div>` : ""}</div>`;
 

@@ -404,7 +404,7 @@
     case: {
       nav: { overview: "Overview", why: "Why", architecture: "Architecture", decisions: "Decisions", tests: "Tests", ai: "AI", missing: "What’s missing", next: { en: "What’s next", es: "Qué sigue" } },
       h: { why: "Why it exists", architecture: "Architecture", decisions: "Key decisions", tests: "Tests", ai: "How AI was used", missing: "What went wrong, what is missing", next: { en: "What comes next", es: "Lo que viene" } },
-      // How AI was used: the stages by actor, then the controls (the project's proof rows)
+      // How AI was used: the stages by actor, then the harness piece by piece (ai.harness in the case file)
       aiStages: { en: "How a change moves", es: "Cómo avanza un cambio" }, harness: { h: { en: "The harness, piece by piece", es: "El harness, pieza por pieza" },
         kinds: { blocks: { name: { en: "Blocks", es: "Bloquea" }, def: { en: "A hook, a deny rule or a required check stops it.", es: "Lo detiene un hook, una regla deny o un check obligatorio." } }, waits: { name: { en: "Waits for me", es: "Me espera" }, def: { en: "It needs my yes: a permission rule holds pull requests, instructions hold the rest.", es: "Necesita mi visto bueno: una regla de permisos sostiene los pull requests; instrucciones, lo demás." } }, guides: { name: { en: "Guides", es: "Guía" }, def: { en: "The agents read it, and can miss it.", es: "Los agentes lo leen, y pueden pasarlo por alto." } } } },
       decisionCols: ["Decision", "Instead of", "Why", "Cost", "Code"],
