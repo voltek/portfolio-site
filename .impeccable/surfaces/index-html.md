@@ -19,7 +19,7 @@ related_targets: ["show.html"]
 
 OWN-WORLD: deliberately the opposite of Show: sober and corporate, easy to read and to find things in. Light: cobalt `#1F3FBF` field with paper panels; dark: "Noche azul" (Alan, 2026-10-17), a slightly deeper cobalt band `#1A35A3` over blue-black paper `#0A1029`, cards `#141E46`, visible rules `#323E76`, with the Now building box as the lighter surface. Client work in light blue `#9FB3F2` (dark `#4F6AD2`), never grey. One clickable color, Bricolage Grotesque for display (max 96 px) and Figtree for reading, no hard shadows, no illustration. It shares with Show only the data, the status colors and purple = own builds. The theme follows the system until the visitor picks one.
 
-ORDER: hero + Now building box → Skills → Experience → Education and languages → What comes next → contact; sticky top bar with the current section marked.
+ORDER: hero + Now building box → Skills → Experience → Education and languages → contact; sticky top bar with the current section marked.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict and DESIGN.md.
 
