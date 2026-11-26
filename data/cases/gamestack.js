@@ -190,6 +190,11 @@ module.exports = {
     ],
     // the harness piece by piece (copy deck §12.8, 11-25): grouped by what it controls; kind is how it holds,
     // "blocks", "waits" (for my yes) or "guides", named in copy.case.harness
+    // one line over the pieces, with the frame it borrows (Birgitta Böckeler, martinfowler.com)
+    harnessNote: {
+      text: { en: "Guides steer the agents before they act; checks catch what they got wrong after.", es: "Las guías orientan a los agentes antes de actuar; los checks atrapan después lo que hicieron mal." },
+      source: { label: "Birgitta Böckeler, Harness engineering", href: "https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html" }
+    },
     harness: [
       { name: { en: "What gets built", es: "Qué se construye" }, pieces: [
         { name: { en: "GitHub issues", es: "Issues de GitHub" }, kind: "waits", text: { en: "pending work is an issue from one of three forms; I choose what comes next at a triage", es: "lo pendiente es un issue de uno de tres formularios; yo elijo lo que sigue en un triage" },

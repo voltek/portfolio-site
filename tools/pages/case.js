@@ -129,7 +129,7 @@ module.exports = (cs, ctx) => {
   const HK = cp.harness, KI = { blocks: "M6 9V6.5a4 4 0 0 1 8 0V9M4.5 9h11v8h-11z", waits: "M10 9.5a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zM4 17c0-3.2 2.7-5 6-5s6 1.8 6 5",
     guides: "M10 5.5C8 4 5.5 3.7 3 4v11.5c2.5-.3 5 0 7 1.5 2-1.5 4.5-1.8 7-1.5V4c-2.5-.3-5 0-7 1.5zm0 0V17" };
   const kicon = k => `<svg class="ki" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="${KI[k]}"/></svg>`;
-  const harness = () => `<div class="hx"><h3 class="sub-h">${esc(HK.h)}</h3>
+  const harness = () => `<div class="hx"><h3 class="sub-h">${esc(HK.h)}</h3>${G.harnessNote ? `<p class="hi">${tx(G.harnessNote.text)} <a class="fl" href="${esc(G.harnessNote.source.href)}"><span>${esc(G.harnessNote.source.label)}</span></a></p>` : ""}
     <dl class="hk">${Object.entries(HK.kinds).map(([id, k]) => `<div><dt class="k-${id}">${kicon(id)}${esc(k.name)}</dt><dd>${esc(k.def)}</dd></div>`).join("")}</dl>
     <ol class="hc">${G.harness.map(g => `<li><h4 class="st">${esc(g.name)}</h4><ul>${g.pieces.map(x => `<li class="pc k-${x.kind}"><b>${kicon(x.kind)}<span>${esc(x.name)}<i class="sr"> (${esc(HK.kinds[x.kind].name)})</i></span></b><p>${tx(x.text)}</p>${links(x.files)}</li>`).join("")}</ul></li>`).join("")}</ol></div>`;
 
