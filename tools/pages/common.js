@@ -164,4 +164,8 @@ const cvMenu = (ctx, cls, stroke) => { const cta = ctx.data.copy.cta;
   return `<details class="cv"><summary class="btn ${cls}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11M5.5 8.5L10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/></svg>${esc(cta.cv)}<svg class="caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><span class="cvmenu">${
     Object.entries(CV_FILES).map(([lang, f]) => `<a href="${f}" download target="_blank" rel="noopener" type="application/pdf" hreflang="${lang}"><span lang="${lang}">${esc(cta.cvIn[lang])}</span> <small>${esc(cta.cvKind)}</small></a>`).join("")}</span></details>`; };
 
-module.exports = { CV_FILES, cvMenu, C, en, esc, landingStatus, skillName, skillRows, md, stackLine, stackHtml, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };
+// the learning path counted: true whichever blocks are in progress (Plain's card, the case's opening)
+const pathCount = (copy, L) => { const count = s => L.blocks.filter(b => b.status === s).length, now = count("now");
+  return en(now ? copy.path.line : copy.path.lineNone).replace("{done}", count("done")).replace("{now}", now).replace("{total}", L.blocks.length); };
+
+module.exports = { pathCount, CV_FILES, cvMenu, C, en, esc, landingStatus, skillName, skillRows, md, stackLine, stackHtml, context, open, lapseOf, calc, matrix, text, calcData, head, fillTemplate, srcset, status, ICON };

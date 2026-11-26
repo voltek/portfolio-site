@@ -26,6 +26,9 @@ module.exports = {
   },
   stack: ["Kotlin", "Jetpack Compose", "Material 3", "Coroutines", "Flow", "Hilt", "Retrofit", "Clean Architecture", "MVI", "JUnit", "MockK", "Turbine", "Robolectric", "GitHub Actions", "Claude Code"],
   libs: ["JUnit", "MockK", "Turbine"],
+  // At a glance, under the stack: the harness in six names the case uses, linking to How AI was used
+  harnessTags: [{ en: "CLAUDE.md and area rules", es: "CLAUDE.md y reglas por área" }, { en: "Skills", es: "Skills" }, { en: "ADRs", es: "ADRs" }, { en: "Hooks", es: "Hooks" },
+    { en: "Capped review rounds", es: "Rondas de revisión con tope" }, { en: "CI checks", es: "Checks de CI" }],
   video: {
     src: "assets/projects/gamestack/demo.mp4",
     poster: "assets/projects/gamestack/demo-poster.webp",
@@ -265,11 +268,17 @@ module.exports = {
     ]
   },
 
-  // the roadmap and the learning path are drawn from the project's entry
+  // the learning path and the roadmap are drawn from the project's entry
+  path: {
+    intro: {
+      en: "A self-directed path in AI-assisted Android development, updated each time a block closes. Each block is put to work in GameStack, and every step links to where the repo shows it.",
+      es: "Una ruta autodirigida de desarrollo Android asistido por IA, que se actualiza cada vez que cierro un bloque. Cada bloque se aplica en GameStack, y cada paso enlaza a donde el repo lo muestra."
+    }
+  },
   next: {
     intro: {
-      en: "The app's roadmap, and the self-directed learning path behind its harness. Each finished block is put to work here, and the repo shows it.",
-      es: "El roadmap de la app y la ruta de aprendizaje autodirigida detrás de su harness. Cada bloque terminado se aplica aquí, y el repo lo muestra."
+      en: "Where the app goes next, screen by screen, on its way to Google Play.",
+      es: "Hacia dónde va la app, pantalla por pantalla, camino a Google Play."
     },
     designed: { en: "Designed: the screen has an approved mockup, which may still change.", es: "Diseñada: la pantalla tiene un mockup aprobado, que aún puede cambiar." }
   }

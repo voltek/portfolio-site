@@ -278,6 +278,9 @@
   .pin b{position:absolute;left:28px;top:-2px;white-space:nowrap;background:var(--pin);color:var(--paper);border:2.5px solid var(--ink);border-radius:7px;padding:2px 7px 1px;font-family:var(--tag);font-weight:400;font-size:15px;letter-spacing:.05em;transform:rotate(-4deg)}
   /* a tight line (many steps): the pin's label goes to its left, clear of the goal */
   .rl.tight .pin b{left:auto;right:26px}
+  /* the learning path: several blocks can be in progress, so no pin and no fill; each one in progress is marked */
+  .rl.each .rfill{display:none}
+  .rl.each .stop.ok > svg{position:absolute;inset:0;margin:auto;width:13px;height:13px;color:var(--ink)}
   .whole{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-weight:800;font-size:15px;color:inherit;text-decoration:underline;text-decoration-thickness:2.5px;text-underline-offset:4px}
   .whole:hover{text-decoration-thickness:3.5px}
   .whole svg{width:16px;height:16px}

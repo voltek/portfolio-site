@@ -175,20 +175,25 @@ module.exports = ctx => {
   };
 
   // next episodes, as Cuphead's progress line: every step is a point, the goal is the last one (a flag), and the pin
-  // sits halfway between the last finished step and the first one that isn't; past five steps the line is "tight"
+  // sits halfway between the last finished step and the first one that isn't; past five steps the line is "tight".
+  // The learning path's lane ("each": several blocks can be in progress at once) marks every "now" stop and has no
+  // pin and no fill, so a finished stop carries a check (not only its color); its stops are block numbers, their
+  // titles read out in the line's label.
   const PS = cp.path.status;
-  const lane = (label, steps, goal) => {
+  const lane = (label, steps, goal, each) => {
     const n = steps.length, k = steps.findIndex(s => s[1] !== "done"), x = i => +(i / n * 100).toFixed(3);
-    const here = k < 0 ? 100 : k === 0 ? 0 : (x(k - 1) + x(k)) / 2;
-    return `<div class="rl${n > 5 ? " tight" : ""}"><b>${esc(label)}</b><div class="rline" style="--n:${n};--f:${here}%" role="img" aria-label="${esc(`${en(label)}: ${steps.map(([t, s]) => `${en(t)} (${en(PS[s]).toLowerCase()})`).join(", ")}. ${en(ui.goal)}: ${en(goal)}`)}">
-      <span class="rfill"></span>${steps.map(([t, s], i) => `<span class="stop${s === "done" ? " ok" : i === k ? " at" : ""}" style="--x:${x(i)}%"><em>${esc(t)}</em></span>`).join("")}
-      <span class="stop goal" style="--x:100%">${FLAG}<em><small>${esc(ui.goal)}</small>${esc(goal)}</em></span><span class="pin" style="--x:${here}%">${PIN}<b>${esc(ui.here)}</b></span></div></div>`;
+    const here = each ? 0 : k < 0 ? 100 : k === 0 ? 0 : (x(k - 1) + x(k)) / 2;
+    const at = (s, i) => s === "done" ? " ok" : (each ? s === "now" : i === k) ? " at" : "";
+    return `<div class="rl${n > 5 ? " tight" : ""}${each ? " each" : ""}"><b>${esc(label)}</b><div class="rline" style="--n:${n};--f:${here}%" role="img" aria-label="${esc(`${en(label)}: ${steps.map(([t, s, name]) => `${en(name || t)} (${en(PS[s]).toLowerCase()})`).join(", ")}. ${en(ui.goal)}: ${en(goal)}`)}">
+      <span class="rfill"></span>${steps.map(([t, s], i) => `<span class="stop${at(s, i)}" style="--x:${x(i)}%">${each && s === "done" ? ICON.check : ""}<em>${esc(t)}</em></span>`).join("")}
+      <span class="stop goal" style="--x:100%">${FLAG}<em><small>${esc(ui.goal)}</small>${esc(goal)}</em></span>${each ? "" : `<span class="pin" style="--x:${here}%">${PIN}<b>${esc(ui.here)}</b></span>`}</div></div>`;
   };
   const road = w => {
     const path = w.learningPath, lanes = [lane(w.roadmap.lane, w.roadmap.steps.map(([t, s]) => [t, landingStatus(s)]), w.roadmap.goal)];
-    if (path) { const g = path.blocks.find(b => b.status === "goal"); lanes.push(lane(path.lane, path.blocks.flatMap(b => b.steps || []), g ? g.short || g.title : "")); }
-    // the whole path (both lanes, every block) is the case study's What comes next
-    const whole = path && w.links && w.links.caseStudy ? `<a class="whole" href="${esc(w.links.caseStudy)}#next">${esc(ui.wholePath)}${ARROW}</a>` : "";
+    if (path) { const g = path.blocks.find(b => b.status === "goal");
+      lanes.push(lane(path.lane, path.blocks.filter(b => b.status !== "goal").map(b => [String(b.n), b.status, b.title]), g ? g.short || g.title : "", true)); }
+    // the whole path (every block, its steps and their proof) is the case study's learning path section
+    const whole = path && w.links && w.links.caseStudy ? `<a class="whole" href="${esc(w.links.caseStudy)}#path">${esc(ui.wholePath)}${ARROW}</a>` : "";
     return `<div class="road"><p class="hl-h">${esc(ui.next)}</p><div class="lanes">${lanes.join("")}</div>${whole}</div>`;
   };
 

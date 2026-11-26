@@ -90,9 +90,16 @@ those changes, run `node tools/og.js` (Edge headless) and commit the PNG; under 
 
 ## New block in the learning path (or a block changes status)
 
-1. In `learningPath.blocks` of the project it proves: change `status` (`done` · `now` · `next` · `goal`), add a block,
-   or add `steps` to a block (they feed Show's harness lane).
-2. Set `learningPath.updated` to today's date: it is shown as a fact and does not move by itself.
+The path changes only when a block closes, so it never announces what comes next inside a block.
+
+1. In `learningPath.blocks` of the project it proves: change `status` (`done` · `now` · `next` · `goal`), add a block
+   (`n` in order; `title` and `note` as `{ en, es }`), or add `steps` as `[{ en, es }, "done", files]`: a step is
+   only ever done (what is still to come is the block's status).
+2. A `now` block shows only what is done: no "next: …" in its note (`check-data` stops the build). Future blocks stay
+   `next`. Every step, and every done block without steps, carries its `files` (the case's
+   link syntax: `repo:`, `adr:`, `pr:`).
+3. Set `learningPath.updated` to today's date: it is shown as a fact and does not move by itself.
+4. Plain's line counts the blocks and Show draws one stop per block, so neither needs a change.
 
 ## Re-pin GameStack
 

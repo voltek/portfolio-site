@@ -48,6 +48,14 @@
   .lede{margin-top:20px;font-size:clamp(18px,1.5vw,21px);line-height:1.5;max-width:46ch}
   .role{margin-top:14px;font-size:16px;color:var(--on-field-2)}
   .links{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:26px}
+  /* the harness in a few names and the learning path counted, on the field under the role; each links down */
+  .hrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:22px;max-width:640px}
+  .hlab{font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--on-field-2);margin-right:4px}
+  .hchips{display:contents;list-style:none}
+  .hchips li{font-size:14px;font-weight:600;line-height:1.35;padding:3px 10px;border-radius:4px;border:1px solid var(--field-rule)}
+  .hrow .tlink{font-size:14px;margin-left:4px}
+  .hpath{margin-top:14px;font-size:15px;color:var(--on-field-2)}
+  .hpath .tlink{font-size:14px;white-space:nowrap}
   .tlink{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:15px;color:var(--on-field);text-decoration:underline;text-decoration-color:var(--go-line);text-decoration-thickness:2px;text-underline-offset:5px}
   .tlink:hover{text-decoration-thickness:3px}
   .tlink svg{width:16px;height:16px}
@@ -224,9 +232,46 @@
   .pc .files{display:flex;flex-direction:column;gap:6px;margin-top:2px;overflow-wrap:anywhere}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
-  /* ---------- what comes next: the app's roadmap and the learning path, as Plain draws them ---------- */
-  .nx{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px}
-  h3.group{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--paper-muted);padding:30px 0 10px;border-bottom:1px solid var(--rule)}
+  /* ---------- the learning path: a strip of every block, then each block with its steps and their proof ---------- */
+  .pw{max-width:980px}
+  .pstrip{list-style:none;display:grid;grid-template-columns:repeat(var(--nb,10),minmax(0,1fr));gap:6px;margin-top:8px}
+  .pstrip span{display:block;height:14px;border-radius:4px;border:2px solid var(--client-mark)}
+  .pstrip small{display:block;margin-top:6px;font-size:13px;font-weight:700;color:var(--paper-muted);text-align:center;font-variant-numeric:tabular-nums}
+  /* meaning not by color alone: done is filled, in progress half filled, coming up empty, the goal dashed */
+  .pstrip .b-done span{background:var(--done);border-color:var(--done)}
+  .pstrip .b-now span{border-color:var(--wip);background:linear-gradient(90deg,var(--wip) 50%,transparent 50%)}
+  .pstrip .b-goal span{border-style:dashed;border-color:var(--own)}
+  .pstrip .b-now small{color:var(--paper-ink)}
+  .plegend{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;margin-top:16px;padding-bottom:6px;font-size:13px;font-weight:700;color:var(--paper-muted);text-transform:uppercase;letter-spacing:.05em}
+  .plegend span{display:inline-flex;align-items:center;gap:7px}
+  .plegend i{width:16px;height:10px;border-radius:3px;border:2px solid var(--client-mark)}
+  .plegend .lg-done i{background:var(--done);border-color:var(--done)}
+  .plegend .lg-now i{border-color:var(--wip);background:linear-gradient(90deg,var(--wip) 50%,transparent 50%)}
+  .plegend .lg-goal i{border-style:dashed;border-color:var(--own)}
+  .plegend b{color:var(--paper-ink);font-weight:800}
+  .plegend .upd{margin-left:auto;text-transform:none;letter-spacing:0;font-weight:600}
+  .pw .blocks{margin-top:10px;border-top:1px solid var(--rule)}
+  .pw .blocks > li{padding:16px 0}
+  .blocks > li.b-now > div > b{font-weight:800}
+  .psteps{list-style:none;display:grid;gap:8px;margin-top:10px}
+  .psteps li{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:0;border:0}
+  .blocks .psteps b{display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:600}
+  .psteps b svg{width:14px;height:14px;flex:none}
+  .psteps .files,.pw .blocks li > div > .files{flex-direction:row;flex-wrap:wrap;gap:4px 14px;margin-top:0}
+  .pw .blocks li > div > .files{margin-top:10px}
+  .blocks .fl{font-size:13px}
+  /* a wide screen: two blocks a row, read across; each block's tag and status share its top line */
+  @media (min-width:1001px){
+    .pw{max-width:none}
+    .pw .blocks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:56px;border-top:0}
+    .pw .blocks > li{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tag bst" "body body";gap:6px 16px;align-content:start;border-bottom:0;border-top:1px solid var(--rule);padding:16px 0 22px}
+    .pw .blocks > li > .tag{grid-area:tag}
+    .pw .blocks > li > .bst{grid-area:bst}
+    .pw .blocks > li > div{grid-area:body}
+  }
+
+  /* ---------- what comes next: the app's roadmap ---------- */
+  .nx{max-width:640px}
   .steps,.blocks{list-style:none}
   .steps li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rule)}
   .steps li b{font-weight:600}
@@ -241,7 +286,7 @@
   #next-h{white-space:nowrap}
   .nxnote{margin-top:16px;font-size:15px;line-height:1.5;max-width:58ch}
   .nxnote{color:var(--paper-muted)}
-  .blocks li{display:grid;grid-template-columns:74px minmax(0,1fr) 112px;gap:16px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+  .blocks > li{display:grid;grid-template-columns:74px minmax(0,1fr) 112px;gap:16px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:baseline}
   .blocks .tag{font-size:13px;font-weight:700;color:var(--paper-muted);text-transform:uppercase;letter-spacing:.05em}
   .blocks b{font-weight:700}
   .blocks p{font-size:15px;color:var(--paper-muted);margin-top:2px}
@@ -347,8 +392,8 @@
     .pc .fl{font-size:14px}
     main > .wrap > section{padding-top:72px}
     /* the block's number goes under its status, never as a label over the title */
-    .blocks li{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr;gap:4px 12px}
-    .blocks li > div{grid-column:1;grid-row:1/3}
+    .blocks > li{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr;gap:4px 12px}
+    .blocks > li > div{grid-column:1;grid-row:1/3}
     .blocks .bst{grid-column:2;grid-row:1;justify-self:end}
     .blocks .tag{grid-column:2;grid-row:2;justify-self:end;align-self:start}
   }
@@ -398,9 +443,19 @@
   // "All work" and the name in the bar: back to the exact place on the landing when we came from it (same site; Plain or
   // Show, whichever the visitor was reading); else
   // "All work" goes to the project's card and the name to the landing's top, as a home link does (Alan, 10-28)
+  // Every jump inside the case (the bar, a section's #) adds a history entry, so the way back skips them all: each entry
+  // carries its depth, and a new one (no state yet) takes the last depth plus one.
+  let depth = 0;
+  try { history.replaceState(Object.assign({}, history.state, { d: history.state && history.state.d || 0 }), ""); depth = history.state.d; } catch (x) {}
+  addEventListener("hashchange", () => { try {
+    const s = history.state;
+    if (s && typeof s.d === "number") depth = s.d; else { depth += 1; history.replaceState(Object.assign({}, s, { d: depth }), ""); }
+  } catch (x) {} });
+  // read at the click, not kept: a page restored from the back/forward cache may sit on another entry
+  const depthNow = () => { try { return history.state && typeof history.state.d === "number" ? history.state.d : depth; } catch (x) { return depth; } };
   document.querySelectorAll('a[href^="index.html#"], .mast .who').forEach(a => a.addEventListener("click", e => { try {
     const r = document.referrer && new URL(document.referrer);
-    if (r && r.origin === location.origin && /(\/|index\.html|show\.html)$/.test(r.pathname) && history.length > 1) { e.preventDefault(); history.back(); }
+    if (r && r.origin === location.origin && /(\/|index\.html|show\.html)$/.test(r.pathname) && history.length > depthNow() + 1) { e.preventDefault(); history.go(-(depthNow() + 1)); }
   } catch (x) {} }));
 
   // the demo video: a play button over the poster; its native controls come only once it plays

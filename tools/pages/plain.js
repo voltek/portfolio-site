@@ -1,5 +1,5 @@
 // Plain (index.html): the parts of src/plain.html that come from the data. Each key fills a {{@key}} of the template.
-const { C, en, esc, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu } = require("./common.js");
+const { C, en, esc, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu, pathCount } = require("./common.js");
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile;
@@ -57,13 +57,12 @@ module.exports = ctx => {
   // places on one line under it (h5), each saying what it is instead of repeating the employer
   // a card with a case study carries its id: the case's "All work" lands on it (index.html#mn)
   const sub = w => w.type === "project" ? cp.experience.kind.project : (w.employer ? w.note : w.studio).en;
-  // a build with a learning path and a case study says where it stands on the path and links to the case's next steps.
-  // n is the block in progress, total the numbered blocks (an "Extra" is not counted)
-  const pathLine = w => { const L = w.learningPath, num = b => +(b.tag.match(/^Block (\d+)$/) || [])[1];
-    const at = L && L.blocks.find(b => b.status === "now");
-    if (w.status !== "in-progress" || !at || !num(at) || !w.links || !w.links.caseStudy) return "";
-    const line = en(cp.path.line).replace("{n}", num(at)).replace("{total}", L.blocks.filter(num).length);
-    return `<p class="pathline">${esc(line)} <a class="tlink" href="${esc(w.links.caseStudy)}#next">${esc(cp.case.h.next)}</a></p>`; };
+  // a build with a learning path and a case study counts the path's blocks and links to the case's own section on it:
+  // counts stay true whichever blocks are in progress
+  const pathLine = w => { const L = w.learningPath;
+    if (w.status !== "in-progress" || !L || !w.links || !w.links.caseStudy) return "";
+    const line = pathCount(cp, L);
+    return `<p class="pathline">${esc(line)} <a class="tlink" href="${esc(w.links.caseStudy)}#path">${esc(cp.case.h.path)}</a></p>`; };
   const card = (w, h = "h4") => `<article class="job${w.type === "project" ? " own" : ""}${w.employer ? " client" : ""}"${w.links && w.links.caseStudy ? ` id="${esc(w.id)}"` : ""}><div class="when"><b class="num">${C.range(w.start, w.end)}</b><span>${calc.lapse(ctx, w.id)}</span></div>
       <div><${h}>${esc(w.name)}</${h}><p>${text(ctx, sub(w))}</p>${w.type === "project" ? chip(w.status) : ""}</div>
       <div class="what-c"><p class="what">${text(ctx, w.what.en)}</p><ul>${w.highlights.map(h => `<li>${text(ctx, h.en)}</li>`).join("")}</ul>${pathLine(w)}${w.links ? links(w.links) : ""}</div>

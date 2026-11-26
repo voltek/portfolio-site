@@ -114,10 +114,21 @@ data.work.forEach((w, i) => {
   if (w.learningPath) {
     const lp = w.learningPath;
     date(lp.updated, `${at}.learningPath.updated`);
-    const ST = ["done", "now", "next", "goal"];
-    lp.blocks.forEach((b, j) => {
-      if (!ST.includes(b.status)) err(`${at}.learningPath.blocks[${j}]: status must be ${ST.join(", ")}`);
-      (b.steps || []).forEach(s => { if (!ST.includes(s[1])) err(`${at}.learningPath.blocks[${j}]: step "${s[0]}" has status "${s[1]}"`); });
+    const ST = ["done", "now", "next", "goal"], bi = (s, k) => s && typeof s === "object" && s.en && s.es || err(k);
+    lp.blocks.forEach((b, j) => { const bat = `${at}.learningPath.blocks[${j}]`;
+      if (!ST.includes(b.status)) err(`${bat}: status must be ${ST.join(", ")}`);
+      if (b.n !== j + 1) err(`${bat}: n must be ${j + 1}, the blocks numbered in order`);
+      bi(b.title, `${bat}.title: needs { en, es }`); bi(b.note, `${bat}.note: needs { en, es }`); if (b.short) bi(b.short, `${bat}.short: needs { en, es }`);
+      (b.steps || []).forEach(s => { const name = s[0] && s[0].en || s[0];
+        // a step is proof of work done: what is still to come is the block's own status
+        if (s[1] !== "done") err(`${bat}: step "${name}" has status "${s[1]}"; a step is only ever done`);
+        if (!(s[0] && typeof s[0] === "object" && s[0].en && s[0].es) && !/\.\w+$/.test(s[0])) err(`${bat}: step "${name}" needs { en, es } (a file name may stay a string)`);
+        if (!(s[2] || []).length) err(`${bat}: step "${name}" needs its files`); });
+      // the path is updated only when a block closes: a block in progress shows only what is done
+      if (b.status === "now") {
+        if ([b.note && b.note.en, b.note && b.note.es].some(t => /\b(next|sigue|luego)\s*:/i.test(t || ""))) err(`${bat}: a block in progress says only what is done; its note announces what comes next`);
+      }
+      if (b.status === "done" && !(b.files || []).length && !(b.steps || []).length) err(`${bat}: a finished block needs files or steps to prove it`);
     });
     if (lp.blocks.filter(b => b.status === "goal").length > 1) err(`${at}.learningPath: more than one goal`);
   }
@@ -168,15 +179,16 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   if (!cs.pin || !/^[0-9a-f]{7,40}$/.test(cs.pin.commit || "")) err(`${at}: pin.commit missing: every code link goes to that commit`);
   else date(cs.pin.date, `${at}.pin.date`);
   for (const k of ["lede", "role", "readme"]) if (!cs[k]) err(`${at}: missing ${k}`);
-  // Plain's path line and Show's "The whole path" link to the case's #next
-  if (w.learningPath && !cs.next) err(`${at}: missing next: ${w.id} has a learning path, and the landing links to its #next`);
+  // Plain's path line and Show's "The whole path" link to the case's #path
+  if (w.learningPath && !cs.path) err(`${at}: missing path: ${w.id} has a learning path, and the landing links to its #path`);
   for (const k of Object.keys(cs)) if (/^[a-z]+$/.test(k) && !SECTIONS.includes(k) && !["id", "pin", "roots", "readme", "lede", "role", "stack", "libs", "video", "shots"].includes(k)) warn(`${at}: "${k}" is not a section the page draws`);
   // every file names a root the case has
   const A = cs.architecture || {}, F = A.flow;
   const refs = [cs.readme, ...(A.walk || []).flatMap(s => s.files || []), ...(cs.decisions || []).flatMap(d => d.files || []),
     ...((cs.tests || {}).items || []).flatMap(t => t.files || []), ...((cs.missing || {}).items || []).flatMap(g => g.files || []),
     ...(F ? F.pieces.map(p => p.file) : []), ...(w.proof || []).flatMap(r => r.files || []),
-    ...((cs.ai || {}).harness || []).flatMap(g => g.pieces.flatMap(x => x.files || []))].filter(Boolean);
+    ...((cs.ai || {}).harness || []).flatMap(g => g.pieces.flatMap(x => x.files || [])),
+    ...((w.learningPath || {}).blocks || []).flatMap(b => [...(b.files || []), ...(b.steps || []).flatMap(s => s[2] || [])])].filter(Boolean);
   for (const r of refs) { if (ELSEWHERE.test(r)) continue; const m = String(r).match(FILE); if (!m || m[2].includes(":") || !((m[1] || "main") in (cs.roots || {}))) err(`${at}: file "${r}" names no root of roots`); }
   // the stack tags: Skills used at this project (same name, or the part of a compound name that applies), plus libs
   const parts = data.skills.filter(s => s.at.some(r => (typeof r === "string" ? r : r.id) === w.id)).flatMap(s => [s.name, ...s.name.split(" · ")]);
@@ -215,7 +227,8 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   if (cs.ai && cs.ai.harness) cs.ai.harness.forEach((g, i) => (g.pieces || []).forEach((x, j) => { const at2 = `${at}.ai.harness[${i}].pieces[${j}]`;
     if (!(x.kind in data.copy.case.harness.kinds)) err(`${at2}: kind "${x.kind}" is not blocks, waits or guides`);
     if (!(x.files || []).length) err(`${at2}: a piece needs its evidence (files)`); }));
-  if (cs.next && !w.roadmap && !w.learningPath) err(`${at}.next: the project has no roadmap or learning path to draw`);
+  if (cs.next && !w.roadmap) err(`${at}.next: the project has no roadmap to draw`);
+  if (cs.path && !w.learningPath) err(`${at}.path: the project has no learning path to draw`);
   if (cs.ai && cs.ai.contrast && !ids.has(cs.ai.contrast.to)) err(`${at}.ai.contrast: unknown project "${cs.ai.contrast.to}"`);
   if (cs.video) for (const k of ["src", "poster", "alt"]) { if (!cs.video[k] || k === "alt" && !(cs.video.alt.en && cs.video.alt.es)) err(`${at}.video: missing ${k}${k === "alt" ? " { en, es }" : ""}`); else if (k !== "alt" && !fs.existsSync(path.join(root, cs.video[k]))) err(`${at}.video: ${cs.video[k]} not found`); }
 }
@@ -239,12 +252,16 @@ for (const src of IMG.sourcesOf(data)) {
 // page copy
 const walk = (o, k) => typeof o === "string" ? tokens(o, k) : o && typeof o === "object" && Object.entries(o).forEach(([kk, v]) => walk(v, `${k}.${kk}`));
 const { case: caseCopy, ...pageCopy } = data.copy;
-// Plain's path line fills its own blanks in tools/pages/plain.js: {n} and {total} (blocks of the learning path)
-const { line: pathLine, ...pathCopy } = pageCopy.path || {};
+// Plain's path line and the case's block tag fill their own blanks (tools/pages/plain.js, case.js): {done}, {now} and
+// {total} count the learning path's blocks, {n} numbers one
+const { line: pathLine, lineNone, block: blockTag, ...pathCopy } = pageCopy.path || {};
 walk({ ...pageCopy, path: pathCopy }, "copy");
-for (const [k, v] of Object.entries(!pathLine ? {} : typeof pathLine === "object" ? pathLine : { en: pathLine })) {
-  if (!/\{n\}/.test(v) || !/\{total\}/.test(v)) err(`copy.path.line.${k}: needs {n} and {total}`);
-  tokens(v.replace(/\{(n|total)\}/g, ""), `copy.path.line.${k}`);
+for (const [name, t, need] of [["line", pathLine, ["done", "now", "total"]], ["lineNone", lineNone, ["done", "total"]], ["block", blockTag, ["n"]]]) {
+  if (!(t && t.en && t.es)) { err(`copy.path.${name}: needs { en, es }`); continue; }
+  for (const [k, v] of Object.entries(t)) {
+    for (const x of need) if (!v.includes(`{${x}}`)) err(`copy.path.${name}.${k}: needs {${x}}`);
+    tokens(v.replace(/\{(done|now|total|n)\}/g, ""), `copy.path.${name}.${k}`);
+  }
 }
 // the case labels fill their own blanks in tools/pages/case.js: {name} (a project), {commit} and {date} (the pin)
 JSON.stringify(caseCopy).replace(/\{(\w+)\}/g, (m, k) => { if (!["name", "commit", "date"].includes(k)) err(`copy.case: unknown template ${m}`); return m; });
@@ -259,7 +276,7 @@ if (process.argv.includes("--calc")) {
   console.log("\nskills");
   for (const s of data.skills.filter(s => s.at.length)) console.log(`  ${s.name.padEnd(36)} ${C.skillSpan(s, data, now).padEnd(30)} pages: ${s.level === "core" && !s.legacy && s.pages !== false && C.skillLength(s, data, now) || "—"}`);
   const gs = data.work.find(w => w.learningPath);
-  if (gs) console.log(`\n${C.fill(gs.source, { pin: gs.pin })}\n${C.fill(data.copy.path.updated, { updated: gs.learningPath.updated })}`);
+  if (gs) console.log(`\n${C.fill(gs.source, { pin: gs.pin })}\n${C.fill(data.copy.path.updated.en || data.copy.path.updated, { updated: gs.learningPath.updated })}`);
   console.log(`\n${C.fill(data.copy.page.description, { careerYears: years })}`);
 }
 
