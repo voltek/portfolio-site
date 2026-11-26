@@ -189,7 +189,7 @@
       links: { repo: "https://github.com/voltek/GameStack", caseStudy: "gamestack.html" },
       shots: [
         { src: "assets/projects/gamestack/search.png", label: { en: "Search", es: "Búsqueda" }, alt: { en: "GameStack search screen before any query, with an empty search field and the message Search for games", es: "Pantalla de búsqueda de GameStack antes de buscar, con el campo vacío y el mensaje Search for games" }, on: ["show", "case"] },
-        { src: "assets/projects/gamestack/search_results.png", label: { en: "Results", es: "Resultados" }, alt: { en: "GameStack search results with game covers", es: "Resultados de búsqueda de GameStack con portadas de juegos" }, on: ["plain", "show"] },
+        { src: "assets/projects/gamestack/search_results.png", label: { en: "Results", es: "Resultados" }, alt: { en: "GameStack search results with game covers", es: "Resultados de búsqueda de GameStack con portadas de juegos" }, on: ["plain", "show", "case"] },
         { src: "assets/projects/gamestack/search_refresh_error.png", label: { en: "Error keeps results", es: "El error conserva los resultados" }, alt: { en: "GameStack refresh error that keeps the previous results on screen", es: "Error al refrescar en GameStack que conserva en pantalla los resultados anteriores" }, on: ["show", "case"] },
         { src: "assets/projects/gamestack/search_loading.png", label: { en: "Loading", es: "Cargando" }, alt: { en: "GameStack search loading, with a grid of placeholder cards", es: "Búsqueda de GameStack cargando, con una cuadrícula de tarjetas provisionales" }, on: ["case"] },
         { src: "assets/projects/gamestack/search_no_results.png", label: { en: "No results", es: "Sin resultados" }, alt: { en: "GameStack search with the message No Results Found and a Go To Library button", es: "Búsqueda de GameStack con el mensaje No Results Found y un botón Go To Library" }, on: ["case"] }
@@ -413,7 +413,7 @@
       commit: "Code links point to commit {commit} ({date}).",
       readme: "README",
       title: "{name} case study",
-      aria: { screens: "Screens", prevScreens: "Previous screens", nextScreens: "Next screens", viewLarger: "View larger: ",
+      aria: { play: { en: "Play the demo", es: "Reproducir la demo" }, screens: "Screens", prevScreens: "Previous screens", nextScreens: "Next screens", viewLarger: "View larger: ",
         prevScreen: "Previous screen", nextScreen: "Next screen", screen: "Screen", hash: "Link to this section: ", decisions: "Key decisions",
         pager: "Case studies" }
     }

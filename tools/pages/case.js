@@ -8,6 +8,7 @@ const I = {
   back: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   fwd: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   code: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 6l-4 4 4 4M13 6l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  play: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.5v11l9-5.5z" fill="currentColor"/></svg>`,
   x: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`
 };
 
@@ -72,7 +73,7 @@ module.exports = (cs, ctx) => {
   // the strip: the screens, with the video (if any) in the middle; a tap opens the larger screen
   const shots = (w.shots || []).filter(s => s.on.includes("case"));
   const SIZES = "(max-width: 700px) min(62vw, 240px), 196px";
-  const vid = cs.video ? `<figure class="it vid"><div class="phone"><video src="${esc(cs.video.src)}" poster="${esc(cs.video.poster)}" preload="none" controls muted playsinline aria-label="${esc(en(cs.video.alt))}"></video></div><figcaption>${esc(cp.demo)}</figcaption></figure>` : "";
+  const vid = cs.video ? `<figure class="it vid"><div class="phone"><video src="${esc(cs.video.src)}" poster="${esc(cs.video.poster)}" preload="none" controls muted playsinline aria-label="${esc(en(cs.video.alt))}"></video><button class="play" type="button" aria-label="${esc(en(cp.aria.play))}" hidden>${I.play}</button></div><figcaption>${esc(cp.demo)}</figcaption></figure>` : "";
   const mid = Math.floor(shots.length / 2);
   const strip = !shots.length && !cs.video ? "" : `<div class="strip" id="screens">
     <button class="sbtn prev" type="button" aria-label="${esc(cp.aria.prevScreens)}" hidden>${I.back}</button>
@@ -109,7 +110,7 @@ module.exports = (cs, ctx) => {
       const side = (F.side || []).filter(s => s.into === id).map(s => { const q = piece(s.piece);
         return `<span class="ve vside"><span class="dn" aria-hidden="true"></span><span><a href="${href(q)}"><b>${esc(q.name)}</b>${q.sub ? ` <small>${esc(q.sub)}</small>` : ""}</a> · ${esc(s.say)}</span></span>`; }).join("");
       const isBack = [bk.to, bk.from].includes(id) && [bk.to, bk.from].includes(T[i + 1]);
-      const e = i < T.length - 1 ? `<li class="ve"><span class="dn" aria-hidden="true"></span>${esc(F.edges[i])}${isBack ? ` <span class="vb">· ${esc(bk.down)}</span>` : ""}</li>` : "";
+      const e = i < T.length - 1 ? `<li class="ve"><span class="dn" aria-hidden="true"></span><span>${esc(F.edges[i])}${isBack ? ` <span class="vb">· ${esc(bk.down)}</span>` : ""}</span></li>` : "";
       return `${lh}<li><a class="fn${mk(id) ? " marked" : ""}" href="${href(x)}">${mk(id)}<b>${esc(x.name)}</b>${sub(x)}</a>${side}</li>${e}`; }).join("")}</ol>`;
     return desk + phone;
   };

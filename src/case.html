@@ -71,6 +71,9 @@
   .it{flex:0 0 196px;scroll-snap-align:center;text-align:center;position:relative}
   .it figcaption{font-size:14px;font-weight:700;margin-top:10px}
   .phone{display:block;aspect-ratio:9/20.2;border-radius:22px;background:var(--screen);padding:5px;box-shadow:var(--lift);position:relative}
+  .play{position:absolute;inset:0;margin:auto;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;border:2px solid rgba(244,239,230,.75);background:rgba(5,10,30,.62);color:#F4EFE6;cursor:pointer;box-shadow:var(--lift);--focus:#F4EFE6}
+  .play svg{width:26px;height:26px;margin-left:3px}
+  .play:hover{background:rgba(5,10,30,.8)}
   .phone img,.phone video{width:100%;height:100%;border-radius:18px;object-fit:cover;object-position:top;display:block}
   .shot{all:unset;display:block;cursor:zoom-in;border-radius:22px;transition:transform var(--t)}
   .shot:hover{transform:translateY(-4px)}
@@ -184,7 +187,7 @@
   .act{margin:6px 0;padding:9px 10px;border-radius:5px;font-size:14px;line-height:1.35;font-weight:600;border:2px solid transparent;overflow-wrap:break-word}
   .act > b{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
   .act p::first-letter{text-transform:uppercase}
-  .act code{white-space:nowrap}
+  .act code{white-space:nowrap;padding:.05em .2em}
   .a-me{background:var(--me);color:var(--me-ink)}
   .a-ai{background:var(--ai);color:var(--ai-ink)}
   /* an outline with no fill: the diagram's filled box is the one that is a link */
@@ -198,7 +201,7 @@
   .hi .fl{display:inline;font-size:inherit;font-weight:400}
   .ki{width:17px;height:17px;flex:none}
   .hk{display:flex;flex-wrap:wrap;gap:12px 36px;margin:16px 0 22px}
-  .hk > div{flex:1 1 260px;display:grid;gap:5px;align-content:start;justify-items:start}
+  .hk > div{flex:0 1 300px;display:grid;gap:5px;align-content:start;justify-items:start}
   .hk dt{display:inline-flex;align-items:center;gap:7px;padding:3px 10px;border-radius:5px;font-size:14px;font-weight:700;border:1px solid transparent}
   .hk dd{font-size:14.5px;line-height:1.45;color:var(--paper-muted);max-width:44ch;text-wrap:pretty}
   .hx .k-waits{background:var(--me);color:var(--me-ink);--focus:var(--me-ink)}
@@ -241,7 +244,8 @@
   .blocks .tag{font-size:13px;font-weight:700;color:var(--paper-muted);text-transform:uppercase;letter-spacing:.05em}
   .blocks b{font-weight:700}
   .blocks p{font-size:15px;color:var(--paper-muted);margin-top:2px}
-  .blocks .bst{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;white-space:nowrap}
+  /* the same status style as the app's list beside it, at the row's end */
+  .blocks .bst{display:inline-flex;align-items:center;gap:7px;justify-self:end;font-size:13px;font-weight:700;color:var(--paper-muted);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
   .bst i{width:8px;height:8px;border-radius:50%;flex:none}
   .source{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);display:grid;gap:8px;font-size:15px;color:var(--paper-muted)}
   .source .links{margin-top:0}
@@ -276,7 +280,8 @@
   /* a phone: the trunk goes down, the layer named where it changes */
   @media (max-width:1000px){
     /* the harness: two columns of groups, their heads as plain titles */
-    .hc{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 14px}
+    .hc{grid-template-columns:minmax(0,1fr);gap:28px}
+    .hc > li > ul{grid-template-columns:repeat(2,minmax(0,1fr))}
     .hc .st,.hc > li:first-child > .st,.hc > li:last-child > .st{clip-path:none;background:none;padding:0;min-height:0;margin:0;font-size:19px}
     .flow{display:none}
     .vflow{display:block;list-style:none;margin-top:28px}
@@ -303,7 +308,7 @@
     .stages li{display:grid;grid-template-rows:none;gap:8px;padding:16px 0;border-bottom:1px solid var(--rule)}
     .stages .st,.stages li:first-child > .st,.stages li:last-child > .st{display:block;min-height:0;margin:0;padding:0;background:none;color:inherit;clip-path:none}
     .st b{font-size:17px}
-    .st small{font-size:14px;color:var(--paper-muted)}
+    .st small{display:block;margin-top:2px;font-size:14px;color:var(--paper-muted)}
     .act{grid-row:auto !important;display:grid;grid-template-columns:112px minmax(0,1fr);gap:12px;align-items:baseline;margin:0;padding:0;border:0;background:none;color:inherit;font-size:15.5px;font-weight:400;line-height:1.45}
     .act > b{position:static;width:auto;height:auto;overflow:visible;clip-path:none;justify-self:start;padding:2px 9px;border:2px solid transparent;border-radius:5px;font-size:13.5px;font-weight:700}
     .a-me > b{background:var(--me);color:var(--me-ink)}
@@ -335,7 +340,7 @@
     .nextc span{display:none}
   }
   @media (max-width:640px){
-    .hc{grid-template-columns:minmax(0,1fr)}
+    .hc > li > ul{grid-template-columns:minmax(0,1fr)}
     .pc p{font-size:15px}
     .pc > b{font-size:17px}
     .pc .fl{font-size:14px}
@@ -396,6 +401,11 @@
     const r = document.referrer && new URL(document.referrer);
     if (r && r.origin === location.origin && /(\/|index\.html|show\.html)$/.test(r.pathname) && history.length > 1) { e.preventDefault(); history.back(); }
   } catch (x) {} }));
+
+  // the demo video: a play button over the poster; its native controls come only once it plays
+  document.querySelectorAll(".vid .play").forEach(b => { const v = b.parentNode.querySelector("video");
+    v.controls = false; b.hidden = false;
+    b.addEventListener("click", () => { v.controls = true; b.remove(); v.focus(); v.play().catch(() => {}); }); });
 
   // the strip: arrows only when it overflows; a tap opens the larger screen in a dialog
   (() => { const st = document.querySelector(".strip"); if (!st) return;
