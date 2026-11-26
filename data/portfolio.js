@@ -219,14 +219,12 @@
         steps: [[{ en: "Search", es: "Búsqueda" }, "done"], [{ en: "Game Detail", es: "Detalle" }, "designed"], [{ en: "Library", es: "Biblioteca" }, "designed"], [{ en: "Home", es: "Inicio" }, "designed"], [{ en: "Ratings", es: "Calificaciones" }, "next"]],
         goal: { en: "On Google Play", es: "En Google Play" }
       },
-      // The learning path lives on the project it proves: "Now building" draws it while GameStack is in progress, and it
-      // stays with this project (and its case study) when another build takes over. Show's harness lane is read from the
+      // The learning path lives on the project it proves: the case study draws it whole; Plain's card says the block in
+      // progress, and Show's next episodes draw its steps. Show's harness lane is read from the
       // blocks' steps, then the goal's short name. status: "done" · "now" · "next" · "goal".
       learningPath: {
         updated: "2026-11-13", // a fact, not a length: the day this path last changed
         lane: "Harness", // Show: the label of its lane under the app's
-        intro: "A self-directed path in AI-assisted Android development, updated as the tools change. Each finished block is put to work in GameStack, and the repo shows it.",
-        arc: "It goes from **writing every line by hand** (ModernNotes) to **directing AI agents** (GameStack).", // Show only
         blocks: [
           { tag: "Block 1", title: "Fundamentals", status: "done", note: { en: "How large language models (LLMs) work, research with checked sources, and GameStack's first spec, later replaced by a living PRD", es: "Cómo funcionan los modelos de lenguaje (LLM), investigación con fuentes verificadas y la primera spec de GameStack, después reemplazada por un PRD vivo" } },
           { tag: "Block 2", title: "Context engineering", status: "done", note: "Prompting, CLAUDE.md and the first Skills", steps: [["CLAUDE.md", "done"], ["Skills", "done"]] },
@@ -338,7 +336,7 @@
       description: "Senior Android Developer in Mexico City: {careerYears}+ years of client apps in banking, telecom and consumer products, now building with AI agents inside a harness I designed."
     },
     nav: {
-      plain: ["Now building", "Skills", "Experience", "Next", "Contact"],
+      plain: ["Now building", "Skills", "Experience", "Contact"],
       show: ["Now showing", "Skills", "Experience", "Contact"]
     },
     links: {
@@ -378,7 +376,7 @@
         show: "Season 2 is my own builds, where Compose, MVI/MVVM and AI agents come in. Season 1 is {careerYears}+ years of client apps, from Java to Kotlin."
       },
       groups: { own: "Own builds", client: "Client work", ownShow: "Season 2 · Own builds", clientShow: "Season 1 · Client work" },
-      showUi: { newer: "Newer", playAll: "Play all", pause: "Pause", older: "Older", next: "Next episodes", here: "I'm here", goal: "Goal", inProduction: "in production",
+      showUi: { newer: "Newer", playAll: "Play all", pause: "Pause", older: "Older", next: "Next episodes", wholePath: { en: "The whole path", es: "El camino completo" }, here: "I'm here", goal: "Goal", inProduction: "in production",
         // the episode card: "Episode 6 · Season 2", "ALAN in" (the first name, then starIn), its credits;
         // nowKick sits over "Now showing"
         episode: "Episode", season: "Season", starIn: "in", about: "about", at: "at", highlights: "Episode highlights",
@@ -390,12 +388,11 @@
       shotsNote: "Real screens from the app. Select one to see it full size." // Show
     },
     next: {
-      heading: { plain: "What comes next", show: "Next episodes" },
-      groups: { app: "The app", path: "The learning path" }, // Plain
-      intro: "GameStack's roadmap, and the self-directed learning path behind its harness. Each finished block is put to work in GameStack, and the repo shows it." // Plain
+      groups: { app: "The app", path: "The learning path" } // the case study's What comes next
     },
     path: {
-      heading: { show: ["Next season · my AI learning path", "Training montage"] },
+      // Plain, a card with a learning path: {n} is the block in progress, {total} the numbered blocks
+      line: { en: "Learning path: block {n} of {total}, harness and loop engineering.", es: "Ruta de aprendizaje: bloque {n} de {total}, ingeniería de harness y loops." },
       status: { done: "Completed", now: "In progress", designed: { en: "Designed", es: "Diseñada" }, next: "Coming up", goal: "Goal" },
       updated: "Updated {updated}"
     },

@@ -79,7 +79,7 @@
   --client:#C4ECF9;
   --client-mark:#1A9AD6;                                    /* client work as a small mark that carries meaning (the Skills matrix dots): a deeper sky, 3:1 on the white cells */
   --night:#141414;                                         /* the room around the set: the page background */
-  --on-night:#E8E8E8; --muted:#C9C9C9; --night-rule:#3A3A3A;
+  --on-night:#E8E8E8; --muted:#C9C9C9;
   /* the title card's sky: its two ray colors, the text set straight on it, and the disc the rays pour out of
      (the sun by day; by night a moon, with craters and stars) */
   --stage:var(--sky); --stage-ray:var(--sun); --stage-ink:var(--ink);
@@ -89,8 +89,6 @@
   /* the top bar once it turns solid (always, on phones), and its links */
   --bar:var(--paper); --bar-ink:var(--ink); --bar-edge:var(--ink);
   --bar-hover:var(--paper); --bar-hover-line:var(--ink); --bar-now:var(--ink); --bar-now-ink:var(--paper);
-  --next:#BDBDBD; --next-pale:#E9E9E9; --next-ink:#3A3A3A;  /* "coming up" steps of the learning path */
-  --done-pale:#D9F7EA;                                      /* a finished block of the learning path */
   --pin:#CC3024;                                            /* the "I'm here" map pin (white text on it holds 4.5:1) */
   --focus:var(--ink);                                       /* focus ring: ink on the light surfaces; the dark room and the night theme swap it to --sun */
   --sel:var(--ink); --sel-ink:var(--paper);                 /* text selection, the same logic: ink on light surfaces, --sun on dark ones */
@@ -115,7 +113,7 @@
 :root[data-world="show"][data-theme="dark"]{
   --stage:#172064; --stage-ray:#22308A; --stage-ink:#F4F1E6;
   --orb:#FFF1C2; --orb-mark:#EBD89A; --stars:1;
-  --night:#0B0E22; --night-rule:#2A3060;
+  --night:#0B0E22;
   --focus:var(--sun); --sel:var(--sun); --sel-ink:var(--ink);
   --band:#1E2B7A; --band-ink:#F4F1E6;
   --veil:rgba(255,255,255,.1); --veil-2:rgba(255,255,255,.14);

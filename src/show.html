@@ -28,16 +28,16 @@
   body{font-family:var(--text);font-size:16px;line-height:normal;min-height:100vh;background:var(--night);color:var(--paper)}
   /* the selection is the inverse of the paint under it: ink on the light surfaces, --sun on the dark ones (a sun highlight vanishes on the sun band, the sky and white) */
   ::selection{background:var(--sel);color:var(--sel-ink)}
-  section.now,.guide,.season,.th-marquee,.th-scanner,.lower,.stack li.ai,.narrator,.ep,.film{--sel:var(--sun);--sel-ink:var(--ink)}
+  section.now,.guide,.th-marquee,.th-scanner,.lower,.stack li.ai,.narrator,.ep,.film{--sel:var(--sun);--sel-ink:var(--ink)}
   .stack li:not(.ai),.onair,.btn.alt,.co,.cardlinks a,.bubble,.endcred,.lb,.th-notepad,.th-cert,.th-qr,.th-suitcase,.th-ticket,.th-slate{--sel:var(--ink);--sel-ink:var(--paper)}
   /* the ring takes --focus from the surface under it: ink on the light ones, --sun on the dark room, the dark cards and the whole night theme (tokens.css) */
   :focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:10px}
-  section.now,.guide,.season,.th-marquee,.th-scanner{--focus:var(--sun)}
+  section.now,.guide,.th-marquee,.th-scanner{--focus:var(--sun)}
   .th-notepad,.th-cert,.th-qr,.th-suitcase,.th-ticket,.th-slate,.lb{--focus:var(--ink)}
   /* the night theme only: on the night sky, bar, room and ending an ink shadow vanishes, so the same offset is lit */
-  :root[data-theme="dark"] nav.top,:root[data-theme="dark"] .title,:root[data-theme="dark"] section.now,:root[data-theme="dark"] .guide,:root[data-theme="dark"] .season,:root[data-theme="dark"] .finale{--shadow-s:3px 3px 0 var(--shadow-lit); --shadow:4px 4px 0 var(--shadow-lit); --shadow-l:5px 5px 0 var(--shadow-lit); --shadow-xl:6px 6px 0 var(--shadow-lit); --shadow-up:4px 5px 0 var(--shadow-lit)}
+  :root[data-theme="dark"] nav.top,:root[data-theme="dark"] .title,:root[data-theme="dark"] section.now,:root[data-theme="dark"] .guide,:root[data-theme="dark"] .finale{--shadow-s:3px 3px 0 var(--shadow-lit); --shadow:4px 4px 0 var(--shadow-lit); --shadow-l:5px 5px 0 var(--shadow-lit); --shadow-xl:6px 6px 0 var(--shadow-lit); --shadow-up:4px 5px 0 var(--shadow-lit)}
   /* the day theme: only the dark room around the set needs it (the sky, the band and the ending are light, so ink holds), and there the offset is cream */
-  :root[data-theme="light"] section.now,:root[data-theme="light"] .guide,:root[data-theme="light"] .season{--shadow-s:3px 3px 0 var(--cream); --shadow:4px 4px 0 var(--cream); --shadow-l:5px 5px 0 var(--cream); --shadow-xl:6px 6px 0 var(--cream); --shadow-up:4px 5px 0 var(--cream)}
+  :root[data-theme="light"] section.now,:root[data-theme="light"] .guide{--shadow-s:3px 3px 0 var(--cream); --shadow:4px 4px 0 var(--cream); --shadow-l:5px 5px 0 var(--cream); --shadow-xl:6px 6px 0 var(--cream); --shadow-up:4px 5px 0 var(--cream)}
   /* what sits on a card's own paint (the TV screen, the viewer) keeps the ink shadow: the company name, the years circle, the card links */
   .screen,.lb{--shadow-s:3px 3px 0 var(--ink); --shadow:4px 4px 0 var(--ink); --shadow-l:5px 5px 0 var(--ink); --shadow-xl:6px 6px 0 var(--ink); --shadow-up:4px 5px 0 var(--ink)}
   a{color:inherit}
@@ -278,6 +278,9 @@
   .pin b{position:absolute;left:28px;top:-2px;white-space:nowrap;background:var(--pin);color:var(--paper);border:2.5px solid var(--ink);border-radius:7px;padding:2px 7px 1px;font-family:var(--tag);font-weight:400;font-size:15px;letter-spacing:.05em;transform:rotate(-4deg)}
   /* a tight line (many steps): the pin's label goes to its left, clear of the goal */
   .rl.tight .pin b{left:auto;right:26px}
+  .whole{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-weight:800;font-size:15px;color:inherit;text-decoration:underline;text-decoration-thickness:2.5px;text-underline-offset:4px}
+  .whole:hover{text-decoration-thickness:3.5px}
+  .whole svg{width:16px;height:16px}
   .featline{font-weight:700;font-size:15px;line-height:1.4;text-wrap:balance} /* two even lines, not one long and a stub */
   .featline b{font-weight:800;font-size:12px;letter-spacing:.11em;text-transform:uppercase;margin-right:6px}
   @container (max-width:860px){
@@ -382,26 +385,6 @@
   .ledger i{border-bottom:5px dotted var(--sun);margin-bottom:8px}
   .ledger b{font-family:var(--tag);font-weight:400;font-size:36px;letter-spacing:.04em;color:var(--sun);line-height:1;min-width:40px;text-align:right}
   .ledger svg{display:inline-block}
-  /* the learning path, as a training montage: a "next season" teaser after the episode guide, before the ending */
-  .season{padding:0 0 96px}
-  .montage{padding-top:72px;border-top:4px dashed var(--night-rule)}
-  .tm-h{font-family:var(--title);font-weight:400;font-size:clamp(34px,3.8vw,52px);line-height:1.05}
-  .tm-lede{margin-top:12px;font-size:19px;line-height:1.6;color:var(--on-night);max-width:60ch}
-  .tm-lede b{color:var(--sun)}
-  .blocks{list-style:none;margin-top:28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-  .blocks > li{position:relative;background:var(--done-pale);color:var(--ink);border:4px solid var(--ink);border-radius:16px;padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px}
-  .blocks > li.now{background:var(--sun);box-shadow:var(--shadow-xl)}
-  .blocks > li.next{background:var(--next-pale);color:var(--next-ink);border-style:dashed}
-  .blocks > li.goal{background:var(--ink);color:var(--paper);border-color:var(--sun)}
-  .blocks .no{font-family:var(--tag);font-size:20px;letter-spacing:.05em}
-  .blocks h3{font-weight:800;font-size:17px;line-height:1.25}
-  .blocks p{font-size:14.5px;font-weight:600;line-height:1.4}
-  .blocks i{flex:none;width:13px;height:13px;border-radius:50%;border:2px solid currentColor}
-  .blocks .st{position:absolute;right:10px;top:10px;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
-  .steps{list-style:none;display:flex;flex-wrap:wrap;gap:5px 6px;margin-top:2px}
-  .steps li{display:inline-flex;align-items:center;gap:6px;background:var(--paper);border:2.5px solid var(--ink);border-radius:9px;padding:2px 9px 2px 6px;font-weight:800;font-size:13.5px}
-  .steps li.next{border-style:dashed;color:var(--next-ink)}
-  .montage .source{margin-top:18px}
   .source{margin-top:14px;font-size:14px;color:var(--muted)}
   .source a{text-underline-offset:3px}
   .feature .ctas{justify-content:flex-start;margin-top:26px}
@@ -745,8 +728,6 @@
   </div>
   <div class="film"><div class="reel" id="reel" role="group" aria-label="{{copy.aria.episodes}}">{{@reel}}</div></div>
 </section>
-{{@season}}
-
 <section class="finale" id="contact" aria-labelledby="fin-h">
   <div class="pose-wrap">
     <div class="shapes" aria-hidden="true"><svg viewBox="-730 -730 1460 1460" id="squircles"></svg></div>
