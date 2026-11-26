@@ -17,8 +17,11 @@ paths:
 - Shared pieces of Plain's world live in `src/partials/`: include them, never copy or rebuild them.
 - A page's `body` (not only `html`) carries background, color and the 16 px base: the artifact viewer wraps pages in
   its own `body`.
-- A new page or a redesigned section counts as done only after Lighthouse mobile and desktop (skill `screenshots`), impeccable `audit` with the
-  detector, `polish`, and the `impeccable-finish-reviewer` agent. Report scores and findings, also what was not fixed.
+- **The finish, in this order**, for a new page or a redesigned section: build it and check it in `screenshots`
+  quick mode; Alan looks at it and asks for changes until he has none; only then `polish` (if needed), impeccable `audit`
+  with the detector, the `impeccable-finish-reviewer` agent and Lighthouse mobile and desktop (skill `screenshots`),
+  showing him again any fix that changes what he saw; then `close-session`'s `/code-review`. Report scores and findings,
+  also what was not fixed.
 
 ## Deciding visual options with Alan
 
