@@ -26,7 +26,14 @@ module.exports = {
   },
   stack: ["Kotlin", "Jetpack Compose", "Material 3", "Coroutines", "Flow", "Hilt", "Retrofit", "Clean Architecture", "MVI", "JUnit", "MockK", "Turbine", "Robolectric", "GitHub Actions", "Claude Code"],
   libs: ["JUnit", "MockK", "Turbine"],
-  video: null,
+  video: {
+    src: "assets/projects/gamestack/demo.mp4",
+    poster: "assets/projects/gamestack/demo-poster.webp",
+    alt: {
+      en: "A search for \"zelda\" loads results with covers and scrolls through them; a search with no matches shows the empty state.",
+      es: "Una búsqueda de «zelda» carga resultados con portadas y se recorren; una búsqueda sin coincidencias muestra el estado vacío."
+    }
+  },
   shotsFoot: {
     en: "Real screens from the emulator. Game data and covers come from IGDB and belong to their owners.",
     es: "Pantallas reales del emulador. Los datos y las portadas vienen de IGDB y pertenecen a sus dueños."
