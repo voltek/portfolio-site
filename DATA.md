@@ -53,10 +53,11 @@ only its WebP copies.
 One short MP4 in the repo, never Git LFS (Pages does not serve it); the page loads it only on play. It goes in the case
 file's `video` (`data/cases/<page>.js`), in the middle of the screens strip.
 
-1. **Record what screenshots cannot show:** one flow, 20–30 s, portrait, from the emulator, something that moves (a
+1. **Record what screenshots cannot show:** one flow, as long as it needs and at most 30 s, portrait, from the emulator, something that moves (a
    list reordering, a loading state, a transition). Demo data only, system demo mode on, no sound.
    `adb shell screenrecord /sdcard/demo.mp4` (stop with Ctrl+C), then `adb pull /sdcard/demo.mp4 demo-raw.mp4`; the raw
-   file stays out of the repo.
+   file stays out of the repo. Recorded this way, touches sent with `adb shell input` do not show, and the keyboard can
+   show what was copied on the computer: empty the clipboard first.
 2. **Compress** (ffmpeg comes from winget; open a new terminal if it is not found):
 
    ```
@@ -64,7 +65,8 @@ file's `video` (`data/cases/<page>.js`), in the middle of the screens strip.
    ffmpeg -ss 2 -i assets/projects/<app>/demo.mp4 -frames:v 1 -vf "scale=-2:960" -c:v libwebp -quality 80 assets/projects/<app>/demo-poster.webp
    ```
 
-   Under 3 MB: if it weighs more, raise `-crf` to 30 or 32 and check it still looks sharp. `-ss` picks the poster frame.
+   Under 3 MB: if it weighs more, raise `-crf` to 30 or 32 and check it still looks sharp. `-ss` picks the poster frame: one that repeats no
+   screenshot of the strip.
 3. **List it** in `video`: `src`, `poster` and `alt` (`{ en, es }`, what the video shows). Only the case page uses it.
 
 ## The share image (assets/og.png)
