@@ -168,6 +168,8 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   if (!cs.pin || !/^[0-9a-f]{7,40}$/.test(cs.pin.commit || "")) err(`${at}: pin.commit missing: every code link goes to that commit`);
   else date(cs.pin.date, `${at}.pin.date`);
   for (const k of ["lede", "role", "readme"]) if (!cs[k]) err(`${at}: missing ${k}`);
+  // Plain's path line and Show's "The whole path" link to the case's #next
+  if (w.learningPath && !cs.next) err(`${at}: missing next: ${w.id} has a learning path, and the landing links to its #next`);
   for (const k of Object.keys(cs)) if (/^[a-z]+$/.test(k) && !SECTIONS.includes(k) && !["id", "pin", "roots", "readme", "lede", "role", "stack", "libs", "video", "shots"].includes(k)) warn(`${at}: "${k}" is not a section the page draws`);
   // every file names a root the case has
   const A = cs.architecture || {}, F = A.flow;
@@ -240,7 +242,10 @@ const { case: caseCopy, ...pageCopy } = data.copy;
 // Plain's path line fills its own blanks in tools/pages/plain.js: {n} and {total} (blocks of the learning path)
 const { line: pathLine, ...pathCopy } = pageCopy.path || {};
 walk({ ...pageCopy, path: pathCopy }, "copy");
-if (pathLine) tokens(Object.fromEntries(Object.entries(pathLine).map(([k, v]) => [k, v.replace(/\{(n|total)\}/g, "")])), "copy.path.line");
+for (const [k, v] of Object.entries(!pathLine ? {} : typeof pathLine === "object" ? pathLine : { en: pathLine })) {
+  if (!/\{n\}/.test(v) || !/\{total\}/.test(v)) err(`copy.path.line.${k}: needs {n} and {total}`);
+  tokens(v.replace(/\{(n|total)\}/g, ""), `copy.path.line.${k}`);
+}
 // the case labels fill their own blanks in tools/pages/case.js: {name} (a project), {commit} and {date} (the pin)
 JSON.stringify(caseCopy).replace(/\{(\w+)\}/g, (m, k) => { if (!["name", "commit", "date"].includes(k)) err(`copy.case: unknown template ${m}`); return m; });
 

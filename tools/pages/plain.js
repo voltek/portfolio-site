@@ -61,7 +61,7 @@ module.exports = ctx => {
   // n is the block in progress, total the numbered blocks (an "Extra" is not counted)
   const pathLine = w => { const L = w.learningPath, num = b => +(b.tag.match(/^Block (\d+)$/) || [])[1];
     const at = L && L.blocks.find(b => b.status === "now");
-    if (!at || !num(at) || !w.links || !w.links.caseStudy) return "";
+    if (w.status !== "in-progress" || !at || !num(at) || !w.links || !w.links.caseStudy) return "";
     const line = en(cp.path.line).replace("{n}", num(at)).replace("{total}", L.blocks.filter(num).length);
     return `<p class="pathline">${esc(line)} <a class="tlink" href="${esc(w.links.caseStudy)}#next">${esc(cp.case.h.next)}</a></p>`; };
   const card = (w, h = "h4") => `<article class="job${w.type === "project" ? " own" : ""}${w.employer ? " client" : ""}"${w.links && w.links.caseStudy ? ` id="${esc(w.id)}"` : ""}><div class="when"><b class="num">${C.range(w.start, w.end)}</b><span>${calc.lapse(ctx, w.id)}</span></div>
