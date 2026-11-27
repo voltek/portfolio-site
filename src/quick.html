@@ -81,6 +81,8 @@
   @media (min-width:901px) and (max-width:1060px){
     .open{--bleed:-8vw}
     .lead > :not(h1){max-width:56%} .lead .deck{max-width:48%}
+    /* 480 px keeps today's stack on one line down to 901 px (the shoulder starts ~60 px past it); a longer one wraps */
+    .lead .stack{max-width:max(56%,480px)}
   }
   @media (max-width:900px){
     /* the lead's and the role's children join the hero grid, so the name and the role can share the card's cell */
