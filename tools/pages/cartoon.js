@@ -280,7 +280,7 @@ module.exports = ctx => {
     nav, initials: esc(initials), rays: RAYS, bars: BARS,
     markPhoto: `<img ${srcset(p.photo.src, 42)} alt="" onerror="this.replaceWith(Object.assign(document.createElement('i'),{textContent:'${esc(initials)}'}))">`,
     // the host under the name: the cut-out (src/cartoon.html → the host); if it fails, the badge leaves and the name sits on the lower third
-    badgePhoto: `<img ${srcset(p.cutout.src, "(max-width: 900px) 480px, 520px", true)} alt="${esc(p.photo.alt)}" onerror="this.parentNode.remove()">`,
+    badgePhoto: `<img ${srcset(p.cutout.src, "(max-width: 640px) calc((100vw - 24px) * .96), (max-width: 900px) min(calc((100vw - 24px) * .88), 520px), 520px", true)} alt="${esc(p.photo.alt)}" onerror="this.parentNode.remove()">`,
     finalePhoto: photo(230, "", true),
     logoFirst: esc(first.toUpperCase()), logoRest: esc(rest.join(" ").toUpperCase()),
     status: status(p), lede: text(ctx, en(p.lede.cartoon)),

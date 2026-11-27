@@ -25,7 +25,7 @@ module.exports = ctx => {
   // the portrait (src/quick.html → the portrait): the cut-out, and .ink, a cream copy of the name and the role that the
   // cut-out masks on a phone. A photo that fails to load leaves the hero as text (the card stays, empty).
   const cut = p.cutout && IMG.copiesOf(p.cutout.src, true);
-  const portrait = !cut ? "" : `<figure class="rise"><img class="cut" ${srcset(p.cutout.src, "(max-width: 900px) 460px, 800px", true)} alt="${esc(p.photo.alt)}" onerror="this.remove()"></figure>
+  const portrait = !cut ? "" : `<figure class="rise"><img class="cut" ${srcset(p.cutout.src, "(max-width: 900px) min(calc((100vw - 32px) * .84), 460px), 800px", true)} alt="${esc(p.photo.alt)}" onerror="this.remove()"></figure>
       <div class="ink" aria-hidden="true" style="--cut:url('${esc(cut[480])}')">${name}<b class="ink-role">${esc(en(p.title))}</b></div>`;
 
   // now building: the build in progress, its proof and its links
