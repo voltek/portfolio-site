@@ -27,7 +27,10 @@ with `node -e`, never print the JSON). Known: Best practices is 77 everywhere, f
 
 - Phone widths are Chromium's emulation, not iOS Safari or a real touch screen. Images are taken from the top of the
   page with reduced motion: sticky bars, scroll states and animations are looked at in Chrome.
-- The whole page is scrolled once before each capture, so what appears on scroll is already there.
+- For `--full` and `--el` the whole page is scrolled once before the capture, so what appears on scroll is already
+  there; a first-screen capture is taken without scrolling. A `--full` piece below the first screen enlarges the view
+  while it is taken, so a part that watches the scroll may show its scrolled state there.
+- The stretch check sees `<img>` only: a CSS background or mask image is not measured.
 - A class name reused across sections, or a top-level `const top` (clashes with `window.top`), breaks a page silently.
 
 ## Comparison images for comps

@@ -4,8 +4,9 @@
 //   --click=<css>   click it before capturing (repeatable, in order)
 //   --el=<css>      capture only that element        --full   whole page, in pieces that stay readable
 //   --check         no images                        --out=<dir>  --name=<suffix>
-// Every page is first loaded with its animations on, for JavaScript errors, failed requests and sideways overflow; the
-// images are taken with reduced motion, so they are settled. Exit 1 if anything was found.
+// Every page is first loaded with its animations on, on a 2x screen, for JavaScript errors, failed requests, sideways
+// overflow and images stretched past their pixels (blurry); the images are taken at 1x with reduced motion, so they are
+// settled. Exit 1 if anything was found.
 const fs = require("fs"), os = require("os"), path = require("path"), { spawn } = require("child_process"), { pathToFileURL } = require("url");
 const EDGE = [process.env.CHROME_PATH, "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
   "C:/Program Files/Microsoft/Edge/Application/msedge.exe"].find(p => p && fs.existsSync(p));
@@ -59,6 +60,18 @@ const box = css => {
   const x = Math.max(0, r.x - 12), y = Math.max(0, r.y + scrollY - 12);
   return { x, y, width:r.right + 12 - x, height:r.bottom + scrollY + 12 - y, scale:1 };
 };
+// images shown larger than their pixels allow on this screen (the check pass runs at 2x): blurry. Over 1.2x is reported:
+// a large copy can only be as wide as its original (the cut-out, 1448 px, is 1.1x on the widest 2x screens)
+const STRETCH = 1.2;
+// naturalWidth of a srcset image is already divided by the density it was picked for, so the file's own pixels come
+// from loading the same URL again without srcset (from the cache)
+const stretched = async max => (await Promise.all([...document.images].filter(i => i.complete && i.naturalWidth && i.getClientRects().length).map(async i => {
+  const px = new Image(); px.src = i.currentSrc || i.src; await px.decode().catch(() => {}); if (!px.naturalWidth) return null;
+  // the layout size, not the box on screen: a rotated image's box is wider than the image
+  const sx = i.offsetWidth / px.naturalWidth, sy = i.offsetHeight / px.naturalHeight, fit = getComputedStyle(i).objectFit;
+  const k = (fit === "none" ? 1 : fit === "contain" || fit === "scale-down" ? Math.min(sx, sy) : Math.max(sx, sy)) * devicePixelRatio;
+  return k > max ? `${px.src.split("/").pop()} ×${k.toFixed(2)}` : null;
+}))).filter(Boolean);
 // through the whole page and back: lazy images load, and whatever appears on scroll has appeared
 const walk = async () => {
   const wait = ms => new Promise(r => setTimeout(r, ms));
@@ -102,27 +115,30 @@ const walk = async () => {
       });
       for (const d of ["Page", "Runtime", "Log"]) await cdp(`${d}.enable`);
       await cdp("Page.setLifecycleEventsEnabled", { enabled:true });
-      await cdp("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor:1, mobile:width < 900 });
+      await cdp("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor:still ? 1 : 2, mobile:width < 900 });
       await cdp("Emulation.setEmulatedMedia", { features:[{ name:"prefers-reduced-motion", value:still ? "reduce" : "no-preference" },
         { name:"prefers-color-scheme", value:theme }] });
       const close = () => { listeners.delete(sessionId); return send("Target.disposeBrowserContext", { browserContextId }); };
-      const ready = async () => {
+      // the walk is skipped for a capture of the first screen: it adds nothing there
+      const ready = async (scroll = true) => {
         const { loaderId, errorText } = await cdp("Page.navigate", { url:`${pathToFileURL(path.resolve(page)).href}?${[`theme=${theme}`, opt.query].filter(Boolean).join("&")}` });
         if (errorText) throw Error(`the page did not open: ${errorText}`);
         // this navigation's load, never a late one of the blank page
         await limit(new Promise(r => { onLoad = () => seen.has(loaderId) && r(); onLoad(); }), 15000, "loading the page");
         await run("document.fonts.ready.then(() => 1)"); await sleep(300);
         for (const css of opt.click) { await run(inPage(click, css)); await sleep(still ? 300 : 900); }
-        await run(inPage(walk));
+        if (scroll) await run(inPage(walk));
       };
       return { cdp, run, ready, close };
     };
 
     for (const page of pages) for (const width of widths) {
       if (lost) throw Error("Edge closed");
-      const errors = new Set(), over = new Set();
+      const errors = new Set(), over = new Set(), blur = new Set();
       const load = async (theme, still, then) => { const p = await open(page, width, theme, still, errors);
-        try { await p.ready(); const o = await p.run(inPage(overflow, width)); if (o) over.add(o); await then?.(p); } finally { await p.close().catch(() => {}); } };
+        try { await p.ready(!still || opt.full || opt.el); const o = await p.run(inPage(overflow, width)); if (o) over.add(o);
+          if (!still) (await p.run(inPage(stretched, STRETCH))).forEach(b => blur.add(b));
+          await then?.(p); } finally { await p.close().catch(() => {}); } };
       // one page that fails still reports what it logged, and the rest are checked
       try {
         for (const theme of themes) await load(theme, false);
@@ -133,14 +149,16 @@ const walk = async () => {
             for (let y = 0; y < h; y += PIECE) clips.push({ x:0, y, width, height:Math.min(PIECE, h - y), scale:1 }); }
           else clips.push({ x:0, y:0, width, height, scale:1 });
           for (const [k, clip] of clips.entries()) {
-            const { data } = await p.cdp("Page.captureScreenshot", { format:"png", captureBeyondViewport:true, clip });
+            // beyond the viewport only when the clip needs it: Edge enlarges the view for it, which an IntersectionObserver
+            // reads as a scroll (Cartoon's bar then showed its photo at the top)
+            const { data } = await p.cdp("Page.captureScreenshot", { format:"png", captureBeyondViewport:clip.y + clip.height > height, clip });
             const file = path.join(out, [names.get(page), width, theme, opt.name, clips.length > 1 && k + 1].filter(Boolean).join("-") + ".png");
             fs.writeFileSync(file, Buffer.from(data, "base64")); console.log(`saved ${file}`);
           }
         });
       } catch (e) { found = true; console.log(`FAILED ${names.get(page)} at ${width}: ${e.message}`); }
-      if (errors.size || over.size) found = true;
-      console.log(`${names.get(page)} at ${width}: ${errors.size ? "ERRORS " + [...errors].join(" | ") : "no errors"} · ${over.size ? "OVERFLOWS to " + [...over].join(" | ") : "no overflow"}`);
+      if (errors.size || over.size || blur.size) found = true;
+      console.log(`${names.get(page)} at ${width}: ${errors.size ? "ERRORS " + [...errors].join(" | ") : "no errors"} · ${over.size ? "OVERFLOWS to " + [...over].join(" | ") : "no overflow"}${blur.size ? " · STRETCHED on a 2x screen " + [...blur].join(" | ") : ""}`);
     }
     await send("Browser.close").catch(() => {});
   } catch (e) { console.log(`FAILED: ${e.message}`); found = true; edge.kill(); }
