@@ -35,7 +35,7 @@
   section.now,.guide,.th-marquee,.th-scanner{--focus:var(--sun)}
   .th-notepad,.th-cert,.th-qr,.th-suitcase,.th-ticket,.th-slate,.lb{--focus:var(--ink)}
   /* the night theme only: on the night sky, bar, room and ending an ink shadow vanishes, so the same offset is lit */
-  :root[data-theme="dark"] nav.top,:root[data-theme="dark"] .title,:root[data-theme="dark"] section.now,:root[data-theme="dark"] .guide,:root[data-theme="dark"] .finale{--shadow-s:3px 3px 0 var(--shadow-lit); --shadow:4px 4px 0 var(--shadow-lit); --shadow-l:5px 5px 0 var(--shadow-lit); --shadow-xl:6px 6px 0 var(--shadow-lit); --shadow-up:4px 5px 0 var(--shadow-lit)}
+  :root[data-theme="dark"] nav.top,:root[data-theme="dark"] .title,:root[data-theme="dark"] section.now,:root[data-theme="dark"] .guide,:root[data-theme="dark"] .finale{--shadow-s:3px 3px 0 var(--shadow-lit); --shadow:4px 4px 0 var(--shadow-lit); --shadow-l:5px 5px 0 var(--shadow-lit); --shadow-xl:6px 6px 0 var(--shadow-lit); --shadow-up:4px 5px 0 var(--shadow-lit); --shadow-lift:6px 7px 0 var(--shadow-lit)}
   /* the day theme: only the dark room around the set needs it (the sky, the band and the ending are light, so ink holds), and there the offset is cream */
   :root[data-theme="light"] section.now,:root[data-theme="light"] .guide{--shadow-s:3px 3px 0 var(--cream); --shadow:4px 4px 0 var(--cream); --shadow-l:5px 5px 0 var(--cream); --shadow-xl:6px 6px 0 var(--cream); --shadow-up:4px 5px 0 var(--cream)}
   /* what sits on a card's own paint (the TV screen, the viewer) keeps the ink shadow: the company name, the years circle, the card links */
@@ -125,9 +125,10 @@
   .links a[aria-current="true"]{background:var(--bar-now);color:var(--bar-now-ink);border-color:var(--bar-now)}
   .quick{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 16px;border:3px solid var(--ink);border-radius:12px;background:var(--go);color:var(--ink);font-weight:800;font-size:16px;text-decoration:none;white-space:nowrap;transition:transform var(--t-quick),box-shadow var(--t-quick)}
   .btn,.cardlinks a,.rb{transition:transform var(--t-quick),box-shadow var(--t-quick)}
-  /* the lead actions rest raised ("Get in touch" and "Download CV" in the title, every button of the finale), so the hover is the shadow growing; every other button shows its shadow only on hover */
+  /* the lead actions rest raised ("Get in touch" and "Download CV" in the title, every button of the finale), so on hover they lift farther and the shadow grows from 3 to 6-7 px, its far edge staying where it rested; every other button shows its shadow only on hover */
   :where(.title,.finale) .ctas .btn:not(:hover):not(:active){box-shadow:var(--shadow-s)}
   .quick:hover,.btn:hover,.cardlinks a:hover,.rb:hover,.theme:hover{transform:translate(-2px,-3px);box-shadow:var(--shadow-up)}
+  :where(.title,.finale) .ctas .btn:hover:not(:active){transform:translate(-3px,-4px);box-shadow:var(--shadow-lift,6px 7px 0 var(--ink))}
   .quick:active,.btn:active,.cardlinks a:active,.rb:active,.theme:active{transform:translate(1px,1px);box-shadow:var(--shadow-down)}
   .quick svg{width:18px;height:18px}
   .quick .short{display:none}
@@ -653,7 +654,7 @@
     html{scroll-behavior:auto}
     .rays g,.beam,.bulb,.card .stamp,.scribble,.sig,.swing,.coin,.tick,.mn.s-now .dot{animation:none}
     .sig,.tick{stroke-dashoffset:0}
-    .btn:hover,.rb:hover,.frame:hover,.quick:hover,.cardlinks a:hover,.btn:active,.rb:active,.quick:active,.cardlinks a:active{transform:none}
+    .btn:hover,.rb:hover,.frame:hover,.quick:hover,.cardlinks a:hover,.btn:active,.rb:active,.quick:active,.cardlinks a:active,:where(.title,.finale) .ctas .btn:hover:not(:active){transform:none}
     .shot:hover{transform:none} .shot:nth-child(1){transform:rotate(-6deg) translateY(6px)} .shot:nth-child(3){transform:rotate(6deg) translateY(6px)}
     .frame[aria-current="true"]{transform:none}
     .screen.tear .card,.screen.tear::after{animation:none}
