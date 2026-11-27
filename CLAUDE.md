@@ -6,7 +6,7 @@ Portfolio of Alan Hernández (Senior Android Developer) for technical recruiters
 `alanhernandez.dev`. Plain HTML/CSS/JS, no framework, no npm dependencies. `tools/build.js` fills `src/` from
 `data/portfolio.js` into `_site/`; dated numbers come from `lib/calc.js`, never hard-coded.
 
-- **Plain** (`index.html` from `src/plain.html`): the quick read and main door. **Show** (`show.html`): the expressive one.
+- **Quick** (`index.html` from `src/quick.html`): the quick read and main door. **Cartoon** (`cartoon.html`): the expressive one.
 - Case studies: `data/cases/<case>.js` → `<case>.html` through `src/case.html`. The CV is two PDFs (EN, ES) that the
   build prints from `src/cv.html` with `tools/cv.js` (`--check` reads them back; `--phone --full-name` makes the ones Alan sends).
 
@@ -51,7 +51,7 @@ alternative before building it.
 - When he asks whether something is worth it, how it would work or which is better, answer with pros, cons and a
   recommendation and wait for his choice before building or merging it, even if the same message approves the rest.
 - Test his framing against evidence (references, `FACTS.md`) and say where it holds or not; he wants grounds, not assent.
-- A scope he names (one theme, one surface) stays exactly there; ask before extending. Exception: Plain and Show move
+- A scope he names (one theme, one surface) stays exactly there; ask before extending. Exception: Quick and Cartoon move
   together (`.claude/rules/design.md`).
 - After a second failed fix on the same piece, stop: write what was tried and the root cause, then propose options.
 - He is an Android developer, not a web one: explain web/SEO terms in one plain line with how much they matter; when he
@@ -62,7 +62,7 @@ alternative before building it.
 ## Conventions
 
 - Commit and PR title: `type(scope): Imperative summary`, ≤ 72 chars. Types: `feat fix refactor docs chore perf ci`.
-  Scopes: `plain show case cv data build tokens assets harness repo deploy readme`. Commit body ≤ 6 lines, only the
+  Scopes: `quick show case cv data build tokens assets harness repo deploy readme`. Commit body ≤ 6 lines, only the
   why. PR body: `## What changed`, `## Why`, `## Verification`, ≤ 6 lines of text under them (`checks` enforces it).
 - Public repo: branches `{type}/{kebab-name}` (GitHub only lets PRs into `main`). Claude commits, pushes its branch and
   opens the PR without asking; **merging needs a `/code-review` and Alan's explicit yes** (`close-session`; only a PR

@@ -21,8 +21,8 @@ const summary = check.stdout.trim().split("\n").pop();
 // whose links.caseStudy is "x.html" and that has data/cases/x.js (until then its links fail the build unless the page is in PENDING, step 5).
 const renderCase = require("./pages/case.js");
 const PAGES = [
-  { file: "index.html", template: "src/plain.html", render: require("./pages/plain.js") },
-  { file: "show.html", template: "src/show.html", render: require("./pages/show.js") },
+  { file: "index.html", template: "src/quick.html", render: require("./pages/quick.js") },
+  { file: "cartoon.html", template: "src/cartoon.html", render: require("./pages/cartoon.js") },
   ...data.work.filter(w => w.links && w.links.caseStudy).map(w => [w.links.caseStudy, path.join(root, "data", "cases", w.links.caseStudy.replace(/\.html$/, ".js"))])
     .filter(([, f]) => fs.existsSync(f)).map(([file, f]) => ({ file, template: "src/case.html", render: ctx => renderCase(require(f), ctx) }))
 ];

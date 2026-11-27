@@ -1,13 +1,13 @@
 ---
 name: screenshots
-description: Take screenshots of the portfolio pages (Plain, Show, case studies) at real phone and desktop widths, light and dark, check them for JavaScript errors and sideways overflow with Edge headless, run Lighthouse, or build the side-by-side comparison images for comps. Use whenever a page change or prototype needs to be seen or verified. Pass what changed and the mode (quick, yours, full) as the argument; quick by default.
+description: Take screenshots of the portfolio pages (Quick, Cartoon, case studies) at real phone and desktop widths, light and dark, check them for JavaScript errors and sideways overflow with Edge headless, run Lighthouse, or build the side-by-side comparison images for comps. Use whenever a page change or prototype needs to be seen or verified. Pass what changed and the mode (quick, yours, full) as the argument; quick by default.
 ---
 
 # Screenshots
 
 Task: $ARGUMENTS
 
-`node tools/build.js` first; the pages are `_site/index.html` (Plain), `_site/show.html` and `_site/<case>.html`. The
+`node tools/build.js` first; the pages are `_site/index.html` (Quick), `_site/cartoon.html` and `_site/<case>.html`. The
 CV is two PDFs, not a page: `node tools/cv.js --check` prints them and reads them back.
 
 | Mode | When | What |
@@ -18,14 +18,14 @@ CV is two PDFs, not a page: `node tools/cv.js --check` prints them and reads the
 
 ```
 node .claude/skills/screenshots/shots.js <page.html>... [options]      # options: the file's header
-# quick, one Show card (k counts from 0):
-node .claude/skills/screenshots/shots.js _site/show.html --click=".frame[data-k='3']" --el=".card.on" --out=<scratchpad>
+# quick, one Cartoon card (k counts from 0):
+node .claude/skills/screenshots/shots.js _site/cartoon.html --click=".frame[data-k='3']" --el=".card.on" --out=<scratchpad>
 # full, the pages touched:
 node .claude/skills/screenshots/shots.js <pages> --full --width=360,390,820,1440 --theme=light,dark --out=<scratchpad>
 ```
 
 - Errors and overflow are printed as text for every page and width: no image is needed to know them.
-- Queries for `--query`: `open` (opens the Skills detail on Plain and Show), `today=2027-09-15` (simulates a date).
+- Queries for `--query`: `open` (opens the Skills detail on Quick and Cartoon), `today=2027-09-15` (simulates a date).
 - Images go to the scratchpad, or `_comps/<topic>/` for comps.
 
 **Full:** give the agent the pages, what changed, the command above and the path of `reference.md` (here). It Reads every

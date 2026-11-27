@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-world="show">
+<html lang="en" data-world="cartoon">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +7,7 @@
 <script>
   document.documentElement.classList.add("js"); // the parts that need JS show only with it
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("boot");
-  // theme before first paint: the visitor's saved choice (shared with Plain), else the system setting (?theme= forces one, for previews)
+  // theme before first paint: the visitor's saved choice (shared with Quick), else the system setting (?theme= forces one, for previews)
   (() => { let t = null; try { t = localStorage.getItem("ah-theme"); if (t !== "dark" && t !== "light") t = null; } catch (e) {}
     const q = new URLSearchParams(location.search).get("theme");
     document.documentElement.dataset.theme = q === "dark" || q === "light" ? q : t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); })();
@@ -17,7 +17,7 @@
 <link rel="preload" href="assets/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="tokens.css">
 <style>
-  /* every role color, font, shadow and timing comes from tokens.css (world "show"); the gouache textures stay here,
+  /* every role color, font, shadow and timing comes from tokens.css (world "cartoon"); the gouache textures stay here,
      and each painted prop (the set, the film strip) keeps its own paint as local tokens */
   :root{
     --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .08 0 0 0 0 .05 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -278,7 +278,7 @@
   .pin b{position:absolute;left:28px;top:-2px;white-space:nowrap;background:var(--pin);color:var(--paper);border:2.5px solid var(--ink);border-radius:7px;padding:2px 7px 1px;font-family:var(--tag);font-weight:400;font-size:15px;letter-spacing:.05em;transform:rotate(-4deg)}
   /* a tight line (many steps): the pin's label goes to its left, clear of the goal */
   .rl.tight .pin b{left:auto;right:26px}
-  /* the learning path as a level map (show.js → map): a cream road in ink; cleared = green with a check, playing = a
+  /* the learning path as a level map (cartoon.js → map): a cream road in ink; cleared = green with a check, playing = a
      yellow tile with a play mark, locked = a padlock, the goal a castle. Each stop's name sits under it when the card is
      wide (two rows that turn at the right) and beside it when narrow (one zigzag column). .ml is its own container, so
      the map follows the width it gets, a whole row or half of the mid-width two-lane grid */
@@ -690,7 +690,7 @@
 <nav class="top" id="top" aria-label="{{copy.aria.primary}}"><div class="wrap">
   <a class="mark" href="#"><b class="mono" aria-hidden="true">{{@initials}}</b>{{@markPhoto}}<span class="nm">{{profile.name}}</span><span class="sr">, {{copy.aria.home}}</span></a>
   <div class="links" id="links">{{@nav}}</div>
-  <a class="quick" href="index.html"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 2h8l4 4v12H4z M12 2v4h4 M7 10h6 M7 13h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg><span class="long">{{copy.links.toPlain.long}}</span><span class="short">{{copy.links.toPlain.short}}</span></a>
+  <a class="quick" href="index.html"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 2h8l4 4v12H4z M12 2v4h4 M7 10h6 M7 13h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg><span class="long">{{copy.links.toQuick.long}}</span><span class="short">{{copy.links.toQuick.short}}</span></a>
   <button class="theme" id="theme" type="button" aria-label="{{copy.aria.toDark}}" data-to-dark="{{copy.aria.toDark}}" data-to-light="{{copy.aria.toLight}}">
     <svg class="sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.8" fill="currentColor"/><path d="M10 1.5v2.4M10 16.1v2.4M1.5 10h2.4M16.1 10h2.4M4 4l1.7 1.7M14.3 14.3L16 16M4 16l1.7-1.7M14.3 5.7L16 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
     <svg class="moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 12.6A6.5 6.5 0 017.4 4.5a6.5 6.5 0 108.1 8.1z" fill="currentColor"/></svg>
@@ -751,7 +751,7 @@
 
 <section class="cast" id="skills" aria-labelledby="skills-h">
   <div class="wrap">
-    <h2 class="h2" id="skills-h">{{copy.nav.show.1}}</h2>
+    <h2 class="h2" id="skills-h">{{copy.nav.cartoon.1}}</h2>
     <p class="intro">{{copy.skills.intro}}</p>
     <div class="tiers" id="tiers">{{@tiers}}</div>
     <div class="tl" id="tl" style="{{@matrixCols}}">
@@ -768,14 +768,14 @@
 
 <section class="guide" id="guide" aria-labelledby="guide-h">
   <div class="wrap">
-    <p class="kick">{{copy.experience.heading.show.0}}</p>
-    <h2 class="h2" id="guide-h">{{copy.experience.heading.show.1}}</h2>
+    <p class="kick">{{copy.experience.heading.cartoon.0}}</p>
+    <h2 class="h2" id="guide-h">{{copy.experience.heading.cartoon.1}}</h2>
     <p class="intro">{{@expIntro}}</p>
     <div class="tv"><div class="screen" id="screen" aria-live="polite">{{@cards}}</div></div>
     <div class="remote">
-      <button class="rb" id="newer" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13 3L5 10l8 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>{{copy.experience.showUi.newer}}</button>
-      <button class="rb play" id="play" type="button" aria-pressed="false" data-play="{{copy.experience.showUi.playAll}}" data-pause="{{copy.experience.showUi.pause}}"><svg viewBox="0 0 20 20" aria-hidden="true"><path id="play-ic" d="M5 3l12 7-12 7z" fill="currentColor"/></svg><span id="play-l">{{copy.experience.showUi.playAll}}</span></button>
-      <button class="rb" id="older" type="button">{{copy.experience.showUi.older}}<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 3l8 7-8 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="rb" id="newer" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13 3L5 10l8 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>{{copy.experience.cartoonUi.newer}}</button>
+      <button class="rb play" id="play" type="button" aria-pressed="false" data-play="{{copy.experience.cartoonUi.playAll}}" data-pause="{{copy.experience.cartoonUi.pause}}"><svg viewBox="0 0 20 20" aria-hidden="true"><path id="play-ic" d="M5 3l12 7-12 7z" fill="currentColor"/></svg><span id="play-l">{{copy.experience.cartoonUi.playAll}}</span></button>
+      <button class="rb" id="older" type="button">{{copy.experience.cartoonUi.older}}<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 3l8 7-8 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
   </div>
   <div class="film"><div class="reel" id="reel" role="group" aria-label="{{copy.aria.episodes}}">{{@reel}}</div></div>
@@ -791,7 +791,7 @@
     <span class="mail"><a class="btn go" href="mailto:{{profile.email}}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 5h16v10H2z M2 5l8 6 8-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>{{profile.email}}</a><button class="btn alt copy" type="button" data-copy="{{profile.email}}" aria-label="{{copy.aria.copyEmail}}"><svg class="cp" viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M13 7V4.5A1.5 1.5 0 0011.5 3h-7A1.5 1.5 0 003 4.5v7A1.5 1.5 0 004.5 13H7" fill="none" stroke="currentColor" stroke-width="2.4"/></svg><svg class="ok" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="copied" role="status" data-text="{{copy.cta.copied}}"></span></span>
   </div>
   <div class="ctas rest">{{@cvMenu}}<a class="btn alt" href="{{profile.links.linkedin}}"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M0 1.15C0 .52.52 0 1.18 0h13.64C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.18 1.15H1.18C.52 16 0 15.48 0 14.85V1.15zM4.94 13.4V6.17H2.54v7.23h2.4zM3.74 5.19c.84 0 1.36-.56 1.36-1.25-.02-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .69.52 1.25 1.33 1.25h.01zM6.27 13.4h2.4V9.36c0-.22.02-.43.08-.58.17-.43.57-.88 1.23-.88.87 0 1.21.66 1.21 1.63v3.87h2.4V9.25c0-2.22-1.18-3.26-2.77-3.26-1.29 0-1.86.72-2.17 1.21h.02V6.17h-2.4c.03.68 0 7.23 0 7.23z"/></svg>LinkedIn</a><a class="btn alt" href="{{profile.links.github}}">{{@githubIcon}}GitHub</a></div>
-  <dl class="endcred"><div><dt>{{copy.education.show}}</dt><dd>{{@education}}</dd></div><div><dt>{{copy.education.languages}}</dt><dd>{{@languages}}</dd></div></dl>
+  <dl class="endcred"><div><dt>{{copy.education.cartoon}}</dt><dd>{{@education}}</dd></div><div><dt>{{copy.education.languages}}</dt><dd>{{@languages}}</dd></div></dl>
   <svg class="spark" style="left:8%;top:16%" data-d="0" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8l2.9 6.4 7 .7-5.2 4.7 1.5 6.9L12 17l-6.2 3.5 1.5-6.9L2.1 8.9l7-.7z" fill="#FFF3B0" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg>
   <svg class="spark" style="left:86%;top:12%" data-d=".2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8l2.9 6.4 7 .7-5.2 4.7 1.5 6.9L12 17l-6.2 3.5 1.5-6.9L2.1 8.9l7-.7z" fill="#FFF3B0" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg>
   <svg class="spark" style="left:90%;top:54%" data-d=".4" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8l2.9 6.4 7 .7-5.2 4.7 1.5 6.9L12 17l-6.2 3.5 1.5-6.9L2.1 8.9l7-.7z" fill="#FFF3B0" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg>
@@ -801,7 +801,7 @@
 </section>
 </main>
 
-<footer class="wrap"><p class="note">{{copy.footer.showCredit}}</p></footer>
+<footer class="wrap"><p class="note">{{copy.footer.cartoonCredit}}</p></footer>
 
 <dialog class="lb" id="lb" aria-labelledby="lb-cap">
   <div id="lb-pic"></div>
@@ -834,8 +834,8 @@
   more.addEventListener("click", () => { const v = !tl.classList.contains("shown"), y = more.getBoundingClientRect().top; openDetail(v);
     if (!v) { scrollBy({ top:more.getBoundingClientRect().top - y, behavior:"instant" }); stuck(); } });
   // remembered for this tab: back from a case study, it reopens before the browser restores the scroll position
-  more.addEventListener("click", () => { try { sessionStorage.setItem("ah-skills-show", tl.classList.contains("shown") ? "open" : ""); } catch (e) {} });
-  let kept = false; try { kept = sessionStorage.getItem("ah-skills-show") === "open"; } catch (e) {}
+  more.addEventListener("click", () => { try { sessionStorage.setItem("ah-skills-cartoon", tl.classList.contains("shown") ? "open" : ""); } catch (e) {} });
+  let kept = false; try { kept = sessionStorage.getItem("ah-skills-cartoon") === "open"; } catch (e) {}
   if (kept || new URLSearchParams(location.search).has("open")) openDetail(true); // ?open: starts open, for previews
 
   /* ---------- episode guide: every card is in the page; the remote and the strip pick the one on screen ---------- */
@@ -886,7 +886,7 @@
   const bar = $("top"), links = $("links"), menu = $("menu");
   const solid = () => bar.classList.toggle("solid", scrollY > 40);
   addEventListener("scroll", solid, { passive:true }); solid();
-  // opening the menu moves the focus to its first link; like Plain's, it closes with a link, Esc, a tap outside the bar,
+  // opening the menu moves the focus to its first link; like Quick's, it closes with a link, Esc, a tap outside the bar,
   // focus leaving the bar, or the page scrolling on
   let openedAt = 0;
   const isOpen = () => links.classList.contains("open");
@@ -916,7 +916,7 @@
   $("lb-close").addEventListener("click", () => lb.close());
   lb.addEventListener("click", e => { if (e.target === lb) lb.close(); });
 
-  // theme switch: a click is remembered (and shared with Plain); until then the page follows the system setting, live
+  // theme switch: a click is remembered (and shared with Quick); until then the page follows the system setting, live
   (() => {
     const btn = $("theme"), sys = matchMedia("(prefers-color-scheme: dark)"), forced = new URLSearchParams(location.search).has("theme");
     let chosen = false; try { chosen = !!localStorage.getItem("ah-theme"); } catch (e) {}

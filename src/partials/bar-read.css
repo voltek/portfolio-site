@@ -1,4 +1,4 @@
-  /* ---------- the top bar of Plain's world (Plain, the case studies): one copy, included by the build as {{>bar-read.css}}.
+  /* ---------- the top bar of Quick's world (Quick, the case studies): one copy, included by the build as {{>bar-read.css}}.
      DESIGN.md, the Bar Menu Rule. A page adds only its own pieces (its .full action's text, its sections). ---------- */
   /* it stays while the page scrolls: sections, the page's own action and the theme are always one click away */
   .topbar{position:sticky;top:0;z-index:20;padding:0 16px;background:var(--field);color:var(--on-field);transition:box-shadow var(--t)}

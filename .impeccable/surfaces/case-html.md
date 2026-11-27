@@ -7,7 +7,7 @@ related_targets: ["gamestack.html", "index.html"]
 
 # Surface brief: case studies (`modernnotes.html`, then `gamestack.html`)
 
-**Scope and mode:** one page per own build, for the reader who audits. Same world as Plain (`index-html.md`): it
+**Scope and mode:** one page per own build, for the reader who audits. Same world as Quick (`index-html.md`): it
 inherits the landing's tokens (`data-world="read"`), its bar and its contact section, and adds nothing of its own beyond
 the pieces a case needs (the screens strip, the data-flow diagram, the decisions table, the strip of stages by actor, the roadmap with the
 learning path). Approved comp: the **Ficha**
@@ -18,7 +18,7 @@ links to the file that proves it, at a pinned commit. Action: open the code, or 
 
 **Built page:** `src/case.html` + `tools/pages/case.js` → `_site/<case>.html`, from the project's entry in
 `data/portfolio.js` (header, highlights, screens, repo) and `data/cases/<case>.js` (the body). A case joins the build by
-having that file. Shared with Plain: `src/partials/bar-read.*`, `contact-read.html`, `copy-email.js`.
+having that file. Shared with Quick: `src/partials/bar-read.*`, `contact-read.html`, `copy-email.js`.
 
 ## Contract
 
@@ -48,5 +48,5 @@ FINISH: Lighthouse mobile and desktop, impeccable `audit` with the detector, `po
 - "Next case" runs newest to oldest and wraps (Alan, 2026-11-25); with five cases or more, a list of all of them.
   The comp's "NEXT CASE" label stays above the name, an exception to
   the kicker ban accepted by Alan on 2026-10-28 (reviewers: do not flag it again).
-- Dark mode of the cases is reviewed with Plain's in phase 9 (diagram surfaces at 1.2–1.3:1).
+- Dark mode of the cases is reviewed with Quick's in phase 9 (diagram surfaces at 1.2–1.3:1).
 - A share image per case (today the landing's `og.png`).

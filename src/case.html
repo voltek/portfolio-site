@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{@head}}
 <script>
-  // theme before first paint, as in Plain: the visitor's saved choice, else the system setting (?theme= forces one, for previews)
+  // theme before first paint, as in Quick: the visitor's saved choice, else the system setting (?theme= forces one, for previews)
   document.documentElement.classList.add("js");
   (() => { let t = null; try { t = localStorage.getItem("ah-theme"); if (t !== "dark" && t !== "light") t = null; } catch (e) {}
     const q = new URLSearchParams(location.search).get("theme");
@@ -15,7 +15,7 @@
 <link rel="preload" href="assets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="tokens.css">
 <style>
-  /* a case study, the Ficha (approved 10-27): Plain's world (tokens.css, world "read"); the cobalt field opens the
+  /* a case study, the Ficha (approved 10-27): Quick's world (tokens.css, world "read"); the cobalt field opens the
      page, paper is where reading happens, --go is the one clickable color. Layout by the data: tools/pages/case.js */
   *{box-sizing:border-box;margin:0;padding:0}
   html{background:var(--paper);color:var(--paper-ink);scrollbar-color:var(--field) var(--paper);scroll-behavior:smooth}
@@ -106,7 +106,7 @@
   .lbn svg{width:18px;height:18px}
   .lbp{left:-64px}.lbf{right:-64px}
 
-  /* ---------- sections: Plain's .head (title 4 / text 8) ---------- */
+  /* ---------- sections: Quick's .head (title 4 / text 8) ---------- */
   main > .wrap > section{padding-top:96px}
   .head{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:48px;align-items:end;padding-bottom:20px;border-bottom:2px solid var(--head-rule)}
   h2{font-family:var(--display);font-weight:800;font-size:clamp(32px,3.6vw,48px);letter-spacing:-.03em;line-height:1;text-wrap:balance}
@@ -408,7 +408,7 @@
       <a class="who" href="index.html">{{profile.name}}</a>
       <div class="right">
         <nav aria-label="{{copy.aria.primary}}" id="nav">{{@nav}}</nav>
-        <a class="full" href="#contact">{{copy.nav.plain.3}}</a>
+        <a class="full" href="#contact">{{copy.nav.quick.3}}</a>
         <button class="theme" id="theme" type="button" aria-label="{{copy.aria.toDark}}" data-to-dark="{{copy.aria.toDark}}" data-to-light="{{copy.aria.toLight}}">
           <svg class="sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.6" fill="currentColor"/><path d="M10 1.5v2.4M10 16.1v2.4M1.5 10h2.4M16.1 10h2.4M4 4l1.7 1.7M14.3 14.3L16 16M4 16l1.7-1.7M14.3 5.7L16 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
           <svg class="moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 12.6A6.5 6.5 0 017.4 4.5a6.5 6.5 0 108.1 8.1z" fill="currentColor"/></svg>
@@ -440,8 +440,8 @@
 {{>current-section.js}}
 {{>bar-read.js}}
 
-  // "All work" and the name in the bar: back to the exact place on the landing when we came from it (same site; Plain or
-  // Show, whichever the visitor was reading); else
+  // "All work" and the name in the bar: back to the exact place on the landing when we came from it (same site; Quick or
+  // Cartoon, whichever the visitor was reading); else
   // "All work" goes to the project's card and the name to the landing's top, as a home link does (Alan, 10-28)
   // Every jump inside the case (the bar, a section's #) adds a history entry, so the way back skips them all: each entry
   // carries its depth, and a new one (no state yet) takes the last depth plus one.
@@ -455,7 +455,7 @@
   const depthNow = () => { try { return history.state && typeof history.state.d === "number" ? history.state.d : depth; } catch (x) { return depth; } };
   document.querySelectorAll('a[href^="index.html#"], .mast .who').forEach(a => a.addEventListener("click", e => { try {
     const r = document.referrer && new URL(document.referrer);
-    if (r && r.origin === location.origin && /(\/|index\.html|show\.html)$/.test(r.pathname) && history.length > depthNow() + 1) { e.preventDefault(); history.go(-(depthNow() + 1)); }
+    if (r && r.origin === location.origin && /(\/|index\.html|cartoon.html)$/.test(r.pathname) && history.length > depthNow() + 1) { e.preventDefault(); history.go(-(depthNow() + 1)); }
   } catch (x) {} }));
 
   // the demo video: a play button over the poster; its native controls come only once it plays

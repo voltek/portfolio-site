@@ -1,5 +1,5 @@
 // Makes assets/og.png, the 1200×630 image link previews show (LinkedIn, Slack, WhatsApp…), with Edge headless.
-// Design A (Alan, 10-21): Plain's hero on the cobalt field (name with the photo, role, the AI line) and a footer with the
+// Design A (Alan, 10-21): Quick's hero on the cobalt field (name with the photo, role, the AI line) and a footer with the
 // domain and the stack. Every text comes from data/portfolio.js and none carries a date, so the image only changes when
 // the name, title, AI line, stack or photo change: then run node tools/og.js and commit the PNG.
 // WhatsApp shows the large preview only for an image under 600 KB (safe target: 300 KB), 300 px wide or more.

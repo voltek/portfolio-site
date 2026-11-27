@@ -1,10 +1,10 @@
-// Plain (index.html): the parts of src/plain.html that come from the data. Each key fills a {{@key}} of the template.
+// Quick (index.html): the parts of src/quick.html that come from the data. Each key fills a {{@key}} of the template.
 const { C, en, esc, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu, pathCount } = require("./common.js");
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile;
   const live = data.work.find(w => w.status === "in-progress"); // "Now building"; none = the box is not drawn
-  const plainShot = live && (live.shots || []).find(s => s.on.includes("plain"));
+  const quickShot = live && (live.shots || []).find(s => s.on.includes("quick"));
 
   const STATUS = { "in-progress": [cp.experience.kind["in-progress"], "var(--wip)"], completed: [cp.experience.kind.completed, "var(--done)"] };
   const chip = s => `<span class="chip"><i style="background:${STATUS[s][1]}" aria-hidden="true"></i>${esc(STATUS[s][0])}</span>`;
@@ -15,7 +15,7 @@ module.exports = ctx => {
 
   // the sections in the bar, in page order; Now building leaves with the build in progress
   const SECTIONS = ["now", "skills", "experience", "contact"];
-  const nav = SECTIONS.map((id, i) => [id, cp.nav.plain[i]]).filter(([id]) => live || id !== "now")
+  const nav = SECTIONS.map((id, i) => [id, cp.nav.quick[i]]).filter(([id]) => live || id !== "now")
     .map(([id, label]) => `<a href="#${id}">${esc(label)}</a>`).join("");
 
   // hero: the name around the portrait; the status breaks between its phrases, never inside one
@@ -23,10 +23,10 @@ module.exports = ctx => {
   const name = `<span><i>${esc(first)} <img class="portrait" ${srcset(p.photo.src, 68)} alt="${esc(p.photo.alt)}" onerror="this.replaceWith(Object.assign(document.createElement('b'),{className:'portrait',textContent:'${esc(first[0] + rest.join(" ")[0])}'}))"></i></span><span><i>${esc(rest.join(" "))}</i></span>`;
 
   // now building: the build in progress, its proof and its links
-  const nowBox = !live ? "" : `<aside class="now" id="now" aria-labelledby="now-h"><div class="bar"><h2 id="now-h">${esc(cp.nav.plain[0])}</h2>${chip("in-progress")}</div><div class="body">
-    <div class="top${plainShot ? "" : " solo"}">${plainShot ? `<div class="phone"><img ${srcset(plainShot.src, 84)} alt="${esc(plainShot.alt || "")}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${esc(plainShot.label)}'}))"></div>` : ""}
+  const nowBox = !live ? "" : `<aside class="now" id="now" aria-labelledby="now-h"><div class="bar"><h2 id="now-h">${esc(cp.nav.quick[0])}</h2>${chip("in-progress")}</div><div class="body">
+    <div class="top${quickShot ? "" : " solo"}">${quickShot ? `<div class="phone"><img ${srcset(quickShot.src, 84)} alt="${esc(quickShot.alt || "")}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${esc(quickShot.label)}'}))"></div>` : ""}
     <div><h3>${esc(live.name)}</h3><p class="since num">${esc(cp.experience.kind.project)} · ${esc(cp.experience.since)} ${C.monthYear(live.start)}</p><p class="lede">${text(ctx, (live.lede || live.what).en)}</p></div></div>
-    <ul class="proof">${(live.proof || []).filter(r => r.on.includes("plain")).map(r => `<li><b class="num">${ICON.check}<span class="sr">${esc(cp.aria.yes)}</span></b><span><strong>${esc(r.label)}</strong> <small>· ${text(ctx, r.note)}</small></span></li>`).join("")}</ul>
+    <ul class="proof">${(live.proof || []).filter(r => r.on.includes("quick")).map(r => `<li><b class="num">${ICON.check}<span class="sr">${esc(cp.aria.yes)}</span></b><span><strong>${esc(r.label)}</strong> <small>· ${text(ctx, r.note)}</small></span></li>`).join("")}</ul>
     ${live.source ? `<p class="src">${text(ctx, live.source, { pin: live.pin })}</p>` : ""}${nowLinks(live.links)}</div></aside>`;
 
   // skills: the rows of skillRows (common.js); the XML Views row has one quiet look for all (its years and places
@@ -83,11 +83,11 @@ module.exports = ctx => {
     <div class="edu"><b>${esc(cp.education.languages)}</b><p>${langs}</p></div>`;
 
   return {
-    head: head(ctx, { title: cp.page.title.plain, file: "index.html", themeColor: { light: "#1F3FBF", dark: "#1A35A3" } }),
+    head: head(ctx, { title: cp.page.title.quick, file: "index.html", themeColor: { light: "#1F3FBF", dark: "#1A35A3" } }),
     nav, name, status: status(p), now: nowBox, tiers, detailHead, detail, jobs, education,
-    lede: text(ctx, p.lede.plain),
+    lede: text(ctx, p.lede.quick),
     stack: p.stack.map(s => `<li>${esc(s)}</li>`).join(" "),
-    expIntro: text(ctx, cp.experience.intro.plain),
+    expIntro: text(ctx, cp.experience.intro.quick),
     githubIcon: ICON.github, cvMenu: cvMenu(ctx, "line", 2),
     matrixCols: `--jobs:${M.jobs.length};--builds:${M.builds.length}`,
     calcData: calcData(data, now.getUTCFullYear())

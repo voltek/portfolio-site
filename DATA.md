@@ -21,28 +21,28 @@ its length and its skills' years follow.
 ## I started a project
 
 1. Add a `work` entry at the end: `id` (two letters, unique), `type: "project"`, `status: "in-progress"`, `start`,
-   `end: null`, `what`, three `highlights`, `stack`, `links.repo`, and `show.title` + `show.prop` for its episode (an
+   `end: null`, `what`, three `highlights`, `stack`, `links.repo`, and `cartoon.title` + `cartoon.prop` for its episode (an
    unknown prop draws the generic one).
-2. Screens are optional: `shots` with `label`, `alt` and `on` (`"plain"`, `"show"`, `"case"`).
+2. Screens are optional: `shots` with `label`, `alt` and `on` (`"quick"`, `"cartoon"`, `"case"`).
 3. Add its id to the `at` of every skill it uses.
 
 ## New job
 
 1. Add a `work` entry in date order with `type: "job"`, `start`, `end: null`, `studio`, `role` (or `employer` if it is a
-   place under an employer listed in `employers`), `what`, three `highlights`, `stack`, `show`. A place under an employer also needs `note`
-   (what it is, with its name on Plain and the CV), and a new employer its dates, `role`, `place` and
+   place under an employer listed in `employers`), `what`, three `highlights`, `stack`, `cartoon`. A place under an employer also needs `note`
+   (what it is, with its name on Quick and the CV), and a new employer its dates, `role`, `place` and
    `note` (and `kind`, what it is, if its name does not say).
 2. Add its id to the `at` of the skills used there.
 3. `profile.status` (open to work) does not change by itself: update it through the copy deck if Alan stops looking.
 
 ## New app screenshots (or a new photo)
 
-Pages never load the original (a raw PNG is ~450 KB, Plain's whole first load budget is ~300 KB); the build publishes
+Pages never load the original (a raw PNG is ~450 KB, Quick's whole first load budget is ~300 KB); the build publishes
 only its WebP copies.
 
 1. Save the original PNG in `assets/projects/<app>/` with a short lowercase name (`search_results.png`); it stays in
    the repo as the source. The photo is `assets/alan.jpg` (`profile.photo.src`).
-2. List it in the project's `shots` with `label`, `alt` (what the screen shows) and `on`. Plain shows one, Show up to
+2. List it in the project's `shots` with `label`, `alt` (what the screen shows) and `on`. Quick shows one, Cartoon up to
    three, the case study all.
 3. Run `node tools/images.js` (Edge headless): it makes `name-240.webp`, `name-480.webp` and `name.webp` for originals
    whose hash changed (`data/images.lock.json`; `--all` remakes every one). Commit the copies and the lock file.
@@ -99,13 +99,13 @@ The path changes only when a block closes, so it never announces what comes next
    `next`. Every step, and every done block without steps, carries its `files` (the case's
    link syntax: `repo:`, `adr:`, `pr:`).
 3. Set `learningPath.updated` to today's date: it is shown as a fact and does not move by itself.
-4. Plain's line counts the blocks and Show's map draws one stop per block by its `short` name (`{ en, es }`,
+4. Quick's line counts the blocks and Cartoon's map draws one stop per block by its `short` name (`{ en, es }`,
    through the copy deck; `check-data` requires it), so neither page needs a change.
 
 ## Re-pin GameStack
 
 When Alan says a project's repo moved, run the `sync-project` skill with its id. Proof rows are `check: true` (no
-counts), say where they show with `on` (the CV takes Plain's) and name their evidence in `files`; `pin` holds the commit and day the claims were checked.
+counts), say where they show with `on` (the CV takes Quick's) and name their evidence in `files`; `pin` holds the commit and day the claims were checked.
 
 ## New case study
 

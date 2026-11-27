@@ -10,13 +10,13 @@
   const parts = el => { const w = find(el.dataset.id); return C.lapseParts(w.start, w.end, now); };
   const value = {
     career: () => C.careerYears(D, now),
-    // data-about: Show's words for screen readers ("about 4 months" instead of "≈ 4 months")
+    // data-about: Cartoon's words for screen readers ("about 4 months" instead of "≈ 4 months")
     lapse: el => { const w = find(el.dataset.id), v = C.lapse(w.start, w.end, now); return el.dataset.about ? v.replace("≈", el.dataset.about) : v; },
     "skill-len": el => C.skillLength(D.skills[el.dataset.i], D, now),
     year: () => Math.max(Y1, D.year),
     years: el => C.yearSpan(el.dataset.ids.split(",").map(find), now),
     "years-short": el => C.yearSpanShort(el.dataset.ids.split(",").map(find), now),
-    // Show's sticker: "≈4.5" (a half sets smaller) over "months"
+    // Cartoon's sticker: "≈4.5" (a half sets smaller) over "months"
     dur: el => { const n = parts(el).n; el.classList.toggle("half", n % 1 > 0); return `≈${n}`; },
     "dur-unit": el => parts(el).unit
   };
@@ -29,7 +29,7 @@
 })();
 
 // The hero pill: once it wraps, CSS keeps it as wide as the row while its lines are shorter, so it is fitted to its
-// longest line. Layout offsets, not screen boxes: Show's pill is rotated.
+// longest line. Layout offsets, not screen boxes: Cartoon's pill is rotated.
 const fitPills = () => document.querySelectorAll(".status .t, .onair .t").forEach(t => {
   t.style.width = "";
   const phrases = [...t.children].filter(s => !s.hidden);

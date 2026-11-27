@@ -1,4 +1,4 @@
-  /* ---------- the contact of Plain's world (Plain and the case studies): one copy, included by the build
+  /* ---------- the contact of Quick's world (Quick and the case studies): one copy, included by the build
      as {{>contact-read.css}} with its markup {{>contact-read.html}} and scripts {{>copy-email.js}} and {{>cv-menu.js}}. Its words come from
      profile in data/portfolio.js. A page adds only its own gap above it. The buttons are the world's buttons. ---------- */
   .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}

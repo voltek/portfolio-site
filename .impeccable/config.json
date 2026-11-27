@@ -7,7 +7,7 @@
         "rule": "broken-image",
         "value": "*",
         "files": [
-          "tools/pages/plain.js"
+          "tools/pages/quick.js"
         ],
         "createdAt": "2026-10-22T04:43:02.457Z",
         "reason": "Claude: src comes from the srcset() helper interpolated into the template string; the detector cannot see it"
@@ -16,7 +16,7 @@
         "rule": "broken-image",
         "value": "*",
         "files": [
-          "tools/pages/show.js"
+          "tools/pages/cartoon.js"
         ],
         "createdAt": "2026-10-22T04:45:08.127Z",
         "reason": "Claude: src comes from the srcset() helper interpolated into the template string; the detector cannot see it"
@@ -25,10 +25,10 @@
         "rule": "wide-tracking",
         "value": "*",
         "files": [
-          "src/show.html"
+          "src/cartoon.html"
         ],
         "createdAt": "2026-10-22T04:50:14.514Z",
-        "reason": "Claude: every rule over .05em is a short uppercase label or Bangers display text (kick, credits dt, nav, intertitles), carried verbatim from the approved Show prototype"
+        "reason": "Claude: every rule over .05em is a short uppercase label or Bangers display text (kick, credits dt, nav, intertitles), carried verbatim from the approved Cartoon prototype"
       },
       {
         "rule": "broken-image",
