@@ -9,7 +9,7 @@ description: Rules shared by Quick, Cartoon and every page of Quick's world. Eac
 
 ## Overview
 
-Two pages, two worlds, one data file. The **Quick** (`index.html`, the main door) is sober and quick: easy to scan and to find things in. **Cartoon** (`cartoon.html`) is the expressive version: a Saturday-morning cartoon program. They share only the data, the status colors and the role logic below; neither borrows the other's colors, fonts or outlines. The CV inherits Quick. The retired bento grid with glass panes and an aurora field is the generic developer-portfolio pattern this redesign exists to leave.
+Two pages, two worlds, one data file. The **Quick** (`index.html`, the main door) is sober and plain: easy to scan and to find things in. **Cartoon** (`cartoon.html`) is the expressive version: a Saturday-morning cartoon program. They share only the data, the status colors and the role logic below; neither borrows the other's colors, fonts or outlines. The CV inherits Quick. The retired bento grid with glass panes and an aurora field is the generic developer-portfolio pattern this redesign exists to leave.
 
 ## Colors
 

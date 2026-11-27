@@ -53,7 +53,7 @@ only its WebP copies.
 One short MP4 in the repo, never Git LFS (Pages does not serve it); the page loads it only on play. It goes in the case
 file's `video` (`data/cases/<page>.js`), in the middle of the screens strip.
 
-1. **Record what screenshots cannot cartoon:** one flow, as long as it needs and at most 30 s, portrait, from the
+1. **Record what screenshots cannot show:** one flow, as long as it needs and at most 30 s, portrait, from the
    emulator, something that moves (a list reordering, a loading state, a transition). Demo data only, system demo mode
    on, no sound.
    `adb shell screenrecord /sdcard/demo.mp4` (stop with Ctrl+C), then `adb pull /sdcard/demo.mp4 demo-raw.mp4`; the raw
