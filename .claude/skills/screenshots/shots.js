@@ -61,24 +61,34 @@ const box = css => {
   return { x, y, width:r.right + 12 - x, height:r.bottom + scrollY + 12 - y, scale:1 };
 };
 // images shown larger than their pixels allow on this screen (the check pass runs at 2x): blurry. Over 1.2x is reported:
-// a large copy can only be as wide as its original (the cut-out, 1448 px, is 1.1x on the widest 2x screens)
+// a large copy can only be as wide as its original (the cut-out, 1448 px, is 1.1x on the widest 2x screens). The file's
+// own pixels come from loading the same URL again without srcset (from the cache); naturalWidth is already divided by
+// the density srcset picked, so it is the image's size in CSS px. Vector images (SVG) never blur and are left out.
 const STRETCH = 1.2;
-// naturalWidth of a srcset image is already divided by the density it was picked for, so the file's own pixels come
-// from loading the same URL again without srcset (from the cache)
-const stretched = async max => (await Promise.all([...document.images].filter(i => i.complete && i.naturalWidth && i.getClientRects().length).map(async i => {
+const stretched = async max => (await Promise.all([...document.images].filter(i => i.complete && i.naturalWidth && i.getClientRects().length
+  && !/\.svg([?#]|$)|^data:image\/svg/i.test(i.currentSrc || i.src)).map(async i => {
   const px = new Image(); px.src = i.currentSrc || i.src; await px.decode().catch(() => {}); if (!px.naturalWidth) return null;
-  // the layout size, not the box on screen: a rotated image's box is wider than the image
-  const sx = i.offsetWidth / px.naturalWidth, sy = i.offsetHeight / px.naturalHeight, fit = getComputedStyle(i).objectFit;
-  const k = (fit === "none" ? 1 : fit === "contain" || fit === "scale-down" ? Math.min(sx, sy) : Math.max(sx, sy)) * devicePixelRatio;
+  // the content box in layout px (not the box on screen: a rotated image's box is wider than the image)
+  const cs = getComputedStyle(i), w = i.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight),
+    h = i.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom), iw = i.naturalWidth, ih = i.naturalHeight;
+  // how much the image is scaled from its CSS size to the size drawn; "fill" stretches each side on its own
+  const fit = cs.objectFit, contain = Math.min(w / iw, h / ih);
+  const drawn = fit === "fill" ? Math.max(w / px.naturalWidth, h / px.naturalHeight)
+    : iw / px.naturalWidth * (fit === "cover" ? Math.max(w / iw, h / ih) : fit === "contain" ? contain : fit === "scale-down" ? Math.min(1, contain) : 1);
+  const k = drawn * devicePixelRatio;
   return k > max ? `${px.src.split("/").pop()} ×${k.toFixed(2)}` : null;
 }))).filter(Boolean);
+// the images on screen finish loading before a capture, with or without the walk
+const settle = async () => {
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  for (let k = 0; k < 30 && [...document.images].some(i => !i.complete && i.getClientRects().length); k++) await wait(100);
+  await wait(200);
+};
 // through the whole page and back: lazy images load, and whatever appears on scroll has appeared
 const walk = async () => {
   const wait = ms => new Promise(r => setTimeout(r, ms));
   for (let y = 0; y < document.documentElement.scrollHeight; y += innerHeight) { scrollTo({ top:y, behavior:"instant" }); await wait(60); }
   scrollTo({ top:0, behavior:"instant" });
-  for (let k = 0; k < 30 && [...document.images].some(i => !i.complete && i.getClientRects().length); k++) await wait(100);
-  await wait(200);
 };
 
 (async () => {
@@ -128,6 +138,7 @@ const walk = async () => {
         await run("document.fonts.ready.then(() => 1)"); await sleep(300);
         for (const css of opt.click) { await run(inPage(click, css)); await sleep(still ? 300 : 900); }
         if (scroll) await run(inPage(walk));
+        await run(inPage(settle));
       };
       return { cdp, run, ready, close };
     };
@@ -149,9 +160,10 @@ const walk = async () => {
             for (let y = 0; y < h; y += PIECE) clips.push({ x:0, y, width, height:Math.min(PIECE, h - y), scale:1 }); }
           else clips.push({ x:0, y:0, width, height, scale:1 });
           for (const [k, clip] of clips.entries()) {
-            // beyond the viewport only when the clip needs it: Edge enlarges the view for it, which an IntersectionObserver
-            // reads as a scroll (Cartoon's bar then showed its photo at the top)
-            const { data } = await p.cdp("Page.captureScreenshot", { format:"png", captureBeyondViewport:clip.y + clip.height > height, clip });
+            // beyond the viewport only when the clip leaves it: Edge enlarges the view for that, which an
+            // IntersectionObserver reads as a scroll, so a part that watches the scroll shows its scrolled state
+            const beyond = clip.x + clip.width > width || clip.y + clip.height > height;
+            const { data } = await p.cdp("Page.captureScreenshot", { format:"png", captureBeyondViewport:beyond, clip });
             const file = path.join(out, [names.get(page), width, theme, opt.name, clips.length > 1 && k + 1].filter(Boolean).join("-") + ".png");
             fs.writeFileSync(file, Buffer.from(data, "base64")); console.log(`saved ${file}`);
           }
