@@ -71,7 +71,7 @@ for (const p of PAGES) {
 }
 // an exception only while a page is being made: once built, it must leave PENDING so its links fail like any other
 for (const f of PENDING) if (fs.existsSync(path.join(out, f))) broken.add(`PENDING still lists ${f}, which is built now: remove it`);
-if (!fs.existsSync(path.join(out, "assets/og.png"))) broken.add("share image → assets/og.png");
+if (!fs.existsSync(path.join(out, "assets/og.jpg"))) broken.add("share image → assets/og.jpg");
 
 const kb = f => (fs.statSync(path.join(out, f)).size / 1024).toFixed(1) + " KB";
 console.log(`built _site/ against ${day} · data: ${summary}`);

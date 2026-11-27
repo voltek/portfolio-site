@@ -9,13 +9,14 @@
 const fs = require("fs"), os = require("os"), path = require("path"), { spawnSync } = require("child_process");
 const root = path.join(__dirname, "..");
 const data = require(path.join(root, "data", "portfolio.js"));
-const { SIZES, FULL, LOCK, copiesOf, sourcesOf, hashOf } = require("../lib/images.js");
+const { SIZES, FULL, LARGE, LOCK, copiesOf, sourcesOf, hashOf } = require("../lib/images.js");
 
 const EDGE = ["C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe", "C:/Program Files/Microsoft/Edge/Application/msedge.exe"]
   .find(f => fs.existsSync(f));
 if (!EDGE) { console.log("Edge not found: the copies are made with Edge headless"); process.exit(1); }
 
 // WebP quality: 0.8 keeps small screenshots' text sharp; the full copy, seen large, holds up at 0.72 for less weight
+// (a large image's copies take LARGE.quality, lib/images.js)
 const QUALITY = { small: 0.8, full: 0.72 };
 const all = process.argv.includes("--all");
 const lockFile = path.join(root, LOCK);
@@ -25,12 +26,12 @@ const next = {};
 // the page Edge runs: the original goes in as a data URL (a file:// image would taint the canvas), each copy comes
 // back as a data URL inside <pre id="out">, read with --dump-dom. The work runs synchronously on "load", which
 // --dump-dom waits for (async work would be cut off). Halving in steps keeps the small copies sharp.
-const page = (src, widths) => `<!doctype html><meta charset="utf-8"><img id="src" src="${src}"><pre id="out"></pre><script>
+const page = (src, jobs) => `<!doctype html><meta charset="utf-8"><img id="src" src="${src}"><pre id="out"></pre><script>
 addEventListener("load", () => {
   const img = document.getElementById("src"), out = {};
   const canvas = (w, h) => Object.assign(document.createElement("canvas"), { width: w, height: h });
   try {
-    for (const w of ${JSON.stringify(widths)}) {
+    for (const [w, q] of ${JSON.stringify(jobs)}) {
       const width = Math.min(w, img.naturalWidth), height = Math.round(img.naturalHeight * width / img.naturalWidth);
       let from = img, fw = img.naturalWidth, fh = img.naturalHeight;
       while (fw / 2 >= width) {
@@ -40,7 +41,7 @@ addEventListener("load", () => {
       }
       const c = canvas(width, height), g = c.getContext("2d");
       g.imageSmoothingQuality = "high"; g.drawImage(from, 0, 0, width, height);
-      out[w] = c.toDataURL("image/webp", w === ${FULL} ? ${QUALITY.full} : ${QUALITY.small});
+      out[w] = c.toDataURL("image/webp", q);
     }
   } catch (e) { out.error = String(e); }
   document.getElementById("out").textContent = JSON.stringify(out);
@@ -49,18 +50,18 @@ addEventListener("load", () => {
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "portfolio-images-"));
 let made = 0, failed = 0;
-for (const src of sourcesOf(data)) {
+for (const { src, large } of sourcesOf(data)) {
   const file = path.join(root, src);
   if (!fs.existsSync(file)) { console.log(`  missing original: ${src}`); failed++; continue; }
-  const copies = copiesOf(src), hash = hashOf(file);
-  const todo = [...SIZES.map(w => [w, copies[w]]), [FULL, copies.full]]
+  const copies = copiesOf(src, large), hash = hashOf(file);
+  const todo = [...(large ? LARGE.sizes : SIZES).map(w => [w, copies[w]]), [large ? LARGE.full : FULL, copies.full]]
     .filter(([, c]) => all || lock[src] !== hash || !fs.existsSync(path.join(root, c)));
   next[src] = hash;
   if (!todo.length) continue;
 
   const type = /\.png$/i.test(src) ? "image/png" : "image/jpeg";
   const html = path.join(tmp, "encode.html");
-  fs.writeFileSync(html, page(`data:${type};base64,${fs.readFileSync(file).toString("base64")}`, todo.map(([w]) => w)));
+  fs.writeFileSync(html, page(`data:${type};base64,${fs.readFileSync(file).toString("base64")}`, todo.map(([w]) => [w, large ? LARGE.quality : w === FULL ? QUALITY.full : QUALITY.small])));
   const r = spawnSync(EDGE, ["--headless=new", "--disable-gpu", "--virtual-time-budget=20000", "--dump-dom",
     "file:///" + html.replace(/\\/g, "/")], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
   const json = (r.stdout.match(/<pre id="out">([^<]*)<\/pre>/) || [])[1];

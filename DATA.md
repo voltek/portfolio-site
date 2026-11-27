@@ -41,11 +41,13 @@ Pages never load the original (a raw PNG is ~450 KB, Quick's whole first load bu
 only its WebP copies.
 
 1. Save the original PNG in `assets/projects/<app>/` with a short lowercase name (`search_results.png`); it stays in
-   the repo as the source. The photo is `assets/alan.jpg` (`profile.photo.src`).
+   the repo as the source. The photo is `assets/alan.png` (`profile.photo.src`) and its cut-out, transparent,
+   `assets/alan-cutout.png` (`profile.cutout.src`): zero its alpha under 8 first, or Cartoon's sticker shadows turn
+   the faint specks black. Never encode the cut-out with ffmpeg: its WebP alpha leaves 1/255 on the background.
 2. List it in the project's `shots` with `label`, `alt` (what the screen shows) and `on`. Quick shows one, Cartoon up to
    three, the case study all.
-3. Run `node tools/images.js` (Edge headless): it makes `name-240.webp`, `name-480.webp` and `name.webp` for originals
-   whose hash changed (`data/images.lock.json`; `--all` remakes every one). Commit the copies and the lock file.
+3. Run `node tools/images.js` (Edge headless): it makes `name-240.webp`, `name-480.webp` and `name.webp` (the cut-out,
+   shown large: `-480`, `-960` and a sharper full copy, `lib/images.js` → `LARGE`) for originals whose hash changed (`data/images.lock.json`; `--all` remakes every one). Commit the copies and the lock file.
 4. `check-data` warns if a copy is missing, stale or over its budget (`lib/images.js`).
 
 ## New demo video (case studies)
@@ -70,10 +72,10 @@ file's `video` (`data/cases/<page>.js`), in the middle of the screens strip.
    frame: one that repeats no screenshot of the strip.
 3. **List it** in `video`: `src`, `poster` and `alt` (`{ en, es }`, what the video shows). Only the case page uses it.
 
-## The share image (assets/og.png)
+## The share image (assets/og.jpg)
 
-1200×630, made from `profile` (name, `title`, `aiLine`, `stack`, `links.site`, the photo's copy), no date. When one of
-those changes, run `node tools/og.js` (Edge headless) and commit the PNG; under 300 KB or WhatsApp may show no picture.
+1200×630, made from `profile` (name, `title`, `aiLine`, `stack`, `links.site`, the cut-out's full copy), no date. When one of
+those changes, run `node tools/og.js` (Edge headless) and commit the JPEG; under 300 KB or WhatsApp may show no picture.
 
 ## New skill
 

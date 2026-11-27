@@ -100,7 +100,7 @@ flowchart LR
 | **Build** | Plain Node, no npm dependencies ([`tools/build.js`](tools/build.js)) |
 | **Images** | WebP with `srcset`, made with Edge headless: nothing to install ([`tools/images.js`](tools/images.js)) |
 | **CV** | Printed to PDF by Edge or Chrome headless at every build ([`tools/cv.js`](tools/cv.js)) |
-| **Share image** | `assets/og.png`, drawn from the data by [`tools/og.js`](tools/og.js) |
+| **Share image** | `assets/og.jpg`, drawn from the data by [`tools/og.js`](tools/og.js) |
 | **CI** | GitHub Actions: one required check on every pull request ([`checks.yml`](.github/workflows/checks.yml)) |
 | **Hosting** | GitHub Pages under a custom domain: the domain is the only running cost |
 

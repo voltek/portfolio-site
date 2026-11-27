@@ -23,7 +23,7 @@ OWN-WORLD: flat rubber-hose cartoon on a CRT set. Sunburst of sky blue and sun y
 
 STORY: the visitor sees an Android developer who builds with AI under written rules, backed by ten years of client work; they skim episodes, check the record so far, and get in touch.
 
-FIRST VIEWPORT: inside the TV screen, arched "ALAN HERNÁNDEZ" lockup centered over the sun, photo badge with speed lines top-left, "Open to work" pill, black lower-third "Senior Android Developer", stack chips plus the AI chip, then "Get in touch" (primary) and "Download CV"; quick-read link in the top bar.
+FIRST VIEWPORT: inside the TV screen, arched "ALAN HERNÁNDEZ" lockup centered over the sun, Alan's cut-out as a die-cut sticker under it, the straight black lower-third "Senior Android Developer" over the sticker's bottom edge, the "Open to work" pill, "Get in touch" (primary) and "Download CV", then the stack chips plus the AI chip; quick-read link in the top bar.
 
 FORM: Cortinilla (cartoon title card), from the bolder re-roll rounds of 1d; seed key 61470666. Signature: the episode guide that irises between cards.
 
