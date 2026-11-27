@@ -206,7 +206,7 @@ module.exports = ctx => {
     const mark = { done: ICON.check, now: PLAY, next: LOCK };
     return `<div class="ml"><b>${esc(path.lane)}</b><div class="map" style="--rows:${n}"><ol aria-label="${esc(path.lane)}">${blocks.map((b, i) =>
       `<li class="mn s-${b.status}" style="${at(i)}"><span class="dot">${mark[b.status]}</span><span class="pname"><small>${b.n}</small> ${esc(b.short)}<span class="sr">, ${esc(en(PS[b.status]).toLowerCase())}</span></span></li>`).join("")}${g ?
-      `<li class="mn s-goal" style="${at(n - 1)}"><span class="dot">${CASTLE}</span><span class="pname"><em>${esc(ui.goal)}</em>${esc(g.short || g.title)}</span></li>` : ""}</ol>
+      `<li class="mn s-goal" style="${at(n - 1)}"><span class="dot">${CASTLE}</span><span class="pname"><em>${esc(ui.goal)}</em>${esc(g.short)}</span></li>` : ""}</ol>
       ${road(wd, "0 0 1000 220", "w")}${road(smooth(tall), `0 0 100 ${n * 44}`, "t")}</div></div>`;
   };
   const road = w => {
