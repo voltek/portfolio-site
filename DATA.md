@@ -99,7 +99,8 @@ The path changes only when a block closes, so it never announces what comes next
    `next`. Every step, and every done block without steps, carries its `files` (the case's
    link syntax: `repo:`, `adr:`, `pr:`).
 3. Set `learningPath.updated` to today's date: it is shown as a fact and does not move by itself.
-4. Plain's line counts the blocks and Show draws one stop per block, so neither needs a change.
+4. Plain's line counts the blocks and Show's map draws one stop per block by its `short` name (`{ en, es }`,
+   through the copy deck; `check-data` requires it), so neither page needs a change.
 
 ## Re-pin GameStack
 

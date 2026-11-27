@@ -118,6 +118,10 @@ const STAR = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8l2.9 6
 const PIN = `<svg viewBox="0 0 30 40" aria-hidden="true"><path d="M15 38S3 23 3 14a12 12 0 0 1 24 0c0 9-12 24-12 24z" fill="#E5392B" stroke="#111" stroke-width="3" stroke-linejoin="round"/><circle cx="15" cy="14" r="5" fill="#fff" stroke="#111" stroke-width="2.5"/></svg>`;
 const ARROW = `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const FLAG = `<svg viewBox="0 0 24 30" aria-hidden="true"><path d="M3 29V2" stroke="#111" stroke-width="3" stroke-linecap="round"/><path d="M4 3h17l-4 5 4 5H4z" fill="#FFFFFF" stroke="#111" stroke-width="2.5" stroke-linejoin="round"/><path d="M8 3v5h4V3h4v5h-4v5H8V8H4" fill="#111"/></svg>`;
+// the learning path's map: a block in progress (play), one to come (padlock), and the goal (a castle with a flag)
+const PLAY = `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.5l11 6.5-11 6.5z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`;
+const LOCK = `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 9V6.5a3.5 3.5 0 0 1 7 0V9" fill="none" stroke="currentColor" stroke-width="2.6"/><rect x="4" y="9" width="12" height="9" rx="2" fill="currentColor"/></svg>`;
+const CASTLE = `<svg viewBox="0 0 64 64" aria-hidden="true"><g style="stroke:var(--ink)" stroke-linejoin="round"><path d="M40 4v12" stroke-width="3" stroke-linecap="round"/><path d="M41 5h15l-4 4 4 4H41z" style="fill:var(--paper)" stroke-width="2.5"/><path d="M45 5v4h4V5h4v4h-4v4h-4V9h-4" style="fill:var(--ink)" stroke="none"/><path d="M6 60V30h8v6h6v-6h8v6h6v-6h8v6h6v-6h8v30z" style="fill:var(--sun)" stroke-width="3.5"/><path d="M18 60V18h6v5h6v-5h6v5h6v-5h6v42z" style="fill:var(--sunset)" stroke-width="3.5"/><path d="M27 60V48a6 6 0 0 1 12 0v12z" style="fill:var(--ink)" stroke-width="3.5"/></g></svg>`;
 const AI = `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4Q7.5 11 14.5 11Q7.5 11 7.5 18Q7.5 11 0.5 11Q7.5 11 7.5 4Z M15.5 1Q15.5 4.5 19 4.5Q15.5 4.5 15.5 8Q15.5 4.5 12 4.5Q15.5 4.5 15.5 1Z M16 13Q16 15.5 18.5 15.5Q16 15.5 16 18Q16 15.5 13.5 15.5Q16 15.5 16 13Z" fill="currentColor"/></svg>`;
 
 module.exports = ctx => {
@@ -176,22 +180,38 @@ module.exports = ctx => {
 
   // next episodes, as Cuphead's progress line: every step is a point, the goal is the last one (a flag), and the pin
   // sits halfway between the last finished step and the first one that isn't; past five steps the line is "tight".
-  // The learning path's lane ("each": several blocks can be in progress at once) marks every "now" stop and has no
-  // pin and no fill, so a finished stop carries a check (not only its color); its stops are block numbers, their
-  // titles read out in the line's label.
   const PS = cp.path.status;
-  const lane = (label, steps, goal, each) => {
+  const lane = (label, steps, goal) => {
     const n = steps.length, k = steps.findIndex(s => s[1] !== "done"), x = i => +(i / n * 100).toFixed(3);
-    const here = each ? 0 : k < 0 ? 100 : k === 0 ? 0 : (x(k - 1) + x(k)) / 2;
-    const at = (s, i) => s === "done" ? " ok" : (each ? s === "now" : i === k) ? " at" : "";
-    return `<div class="rl${n > 5 ? " tight" : ""}${each ? " each" : ""}"><b>${esc(label)}</b><div class="rline" style="--n:${n};--f:${here}%" role="img" aria-label="${esc(`${en(label)}: ${steps.map(([t, s, name]) => `${en(name || t)} (${en(PS[s]).toLowerCase()})`).join(", ")}. ${en(ui.goal)}: ${en(goal)}`)}">
-      <span class="rfill"></span>${steps.map(([t, s], i) => `<span class="stop${at(s, i)}" style="--x:${x(i)}%">${each && s === "done" ? ICON.check : ""}<em>${esc(t)}</em></span>`).join("")}
-      <span class="stop goal" style="--x:100%">${FLAG}<em><small>${esc(ui.goal)}</small>${esc(goal)}</em></span>${each ? "" : `<span class="pin" style="--x:${here}%">${PIN}<b>${esc(ui.here)}</b></span>`}</div></div>`;
+    const here = k < 0 ? 100 : k === 0 ? 0 : (x(k - 1) + x(k)) / 2;
+    return `<div class="rl${n > 5 ? " tight" : ""}"><b>${esc(label)}</b><div class="rline" style="--n:${n};--f:${here}%" role="img" aria-label="${esc(`${en(label)}: ${steps.map(([t, s]) => `${en(t)} (${en(PS[s]).toLowerCase()})`).join(", ")}. ${en(ui.goal)}: ${en(goal)}`)}">
+      <span class="rfill"></span>${steps.map(([t, s], i) => `<span class="stop${s === "done" ? " ok" : i === k ? " at" : ""}" style="--x:${x(i)}%"><em>${esc(t)}</em></span>`).join("")}
+      <span class="stop goal" style="--x:100%">${FLAG}<em><small>${esc(ui.goal)}</small>${esc(goal)}</em></span><span class="pin" style="--x:${here}%">${PIN}<b>${esc(ui.here)}</b></span></div></div>`;
+  };
+  // The learning path, as a level map: several blocks can be in progress at once, so each stop says its own state by
+  // shape (a check, a play mark, a padlock) and carries its short name; the road winds to a castle. Wide, two rows that
+  // turn at the right (viewBox 1000 × 220, stretched in x only); narrow, one column that zigzags, names to its right.
+  const smooth = pts => pts.slice(1).reduce((d, p2, i) => { // through every point (Catmull-Rom as cubic Béziers)
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p3 = pts[i + 2] || p2, c = (a, b, k) => +(a + (b - k) / 6).toFixed(1);
+    return `${d} C${c(p1[0], p2[0], p0[0])} ${c(p1[1], p2[1], p0[1])} ${c(p2[0], p1[0], p3[0])} ${c(p2[1], p1[1], p3[1])} ${p2[0]} ${p2[1]}`; }, `M${pts[0][0]} ${pts[0][1]}`);
+  const map = path => {
+    const blocks = path.blocks.filter(b => b.status !== "goal"), g = path.blocks.find(b => b.status === "goal");
+    const n = blocks.length + (g ? 1 : 0), cols = Math.ceil(n / 2), x = i => Math.round(70 + i * 800 / Math.max(cols - 1, 1));
+    const wide = Array.from({ length: n }, (_, i) => i < cols ? [x(i), i % 2 ? 58 : 42] : [x(2 * cols - 1 - i), (i - cols) % 2 ? 150 : 166]);
+    const tall = Array.from({ length: n }, (_, i) => [[40, 58, 70, 58, 40, 28][i % 6], 22 + i * 44]); // 44 px a stop, as the App lane
+    const top = wide.slice(0, cols), bot = wide.slice(cols), t = top[cols - 1], b = bot[0];
+    const wd = smooth(top) + (b ? ` C${t[0] + 90} ${t[1]} ${b[0] + 90} ${b[1]} ${b[0]} ${b[1]}${smooth(bot).replace(/^M\S+ \S+/, "")}` : "");
+    const road = (d, vb, k) => `<svg class="mroad ${k}" viewBox="${vb}" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" class="r1"/><path d="${d}" class="r2"/><path d="${d}" class="r3"/></svg>`;
+    const at = i => `--wx:${wide[i][0] / 10}%;--wy:${wide[i][1]}px;--tx:${tall[i][0]}px;--ty:${tall[i][1]}px`;
+    const mark = { done: ICON.check, now: PLAY, next: LOCK };
+    return `<div class="ml"><b>${esc(path.lane)}</b><div class="map" style="--rows:${n}"><ol aria-label="${esc(path.lane)}">${blocks.map((b, i) =>
+      `<li class="mn s-${b.status}" style="${at(i)}"><span class="dot">${mark[b.status]}</span><span class="pname"><small>${b.n}</small> ${esc(b.short)}<span class="sr">, ${esc(en(PS[b.status]).toLowerCase())}</span></span></li>`).join("")}${g ?
+      `<li class="mn s-goal" style="${at(n - 1)}"><span class="dot">${CASTLE}</span><span class="pname"><em>${esc(ui.goal)}</em>${esc(g.short || g.title)}</span></li>` : ""}</ol>
+      ${road(wd, "0 0 1000 220", "w")}${road(smooth(tall), `0 0 100 ${n * 44}`, "t")}</div></div>`;
   };
   const road = w => {
     const path = w.learningPath, lanes = [lane(w.roadmap.lane, w.roadmap.steps.map(([t, s]) => [t, landingStatus(s)]), w.roadmap.goal)];
-    if (path) { const g = path.blocks.find(b => b.status === "goal");
-      lanes.push(lane(path.lane, path.blocks.filter(b => b.status !== "goal").map(b => [String(b.n), b.status, b.title]), g ? g.short || g.title : "", true)); }
+    if (path) lanes.push(map(path));
     // the whole path (every block, its steps and their proof) is the case study's learning path section
     const whole = path && w.links && w.links.caseStudy ? `<a class="whole" href="${esc(w.links.caseStudy)}#path">${esc(ui.wholePath)}${ARROW}</a>` : "";
     return `<div class="road"><p class="hl-h">${esc(ui.next)}</p><div class="lanes">${lanes.join("")}</div>${whole}</div>`;
