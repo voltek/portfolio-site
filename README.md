@@ -9,7 +9,7 @@ Source of the portfolio of Alan Hernández, Senior Android Developer. Work in pr
 - One data file, `data/portfolio.js`, feeds every page and the CV (English and Spanish).
 - `tools/build.js` (plain Node) fills the templates in `src/` into `_site/`; `tools/check-data.js` checks the data
   first. Dates and spans are computed by `lib/calc.js` at build time and again in the browser.
-- Two versions of the same content: **Plain** (`index.html`, the quick read) and **Show** (`show.html`), plus one page
+- Two versions of the same content: **Quick** (`index.html`, the quick read) and **Cartoon** (`cartoon.html`), plus one page
   per case study, built from `data/cases/`.
 - Static files only, hosted on GitHub Pages: the domain is the only running cost.
 

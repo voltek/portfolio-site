@@ -11,10 +11,10 @@ paths:
 # Design work
 
 - The `impeccable` skill owns design work; its `context` step loads `DESIGN.md`, `PRODUCT.md` and the page's brief.
-- **Plain and Show move together**: a change to a piece both pages have (Skills and its detail, Experience, contact,
+- **Quick and Cartoon move together**: a change to a piece both pages have (Skills and its detail, Experience, contact,
   the bar, shared copy) goes to both in the same session, each in its own world, and the report says what changed in
   each. Only Alan naming one page keeps it there.
-- Shared pieces of Plain's world live in `src/partials/`: include them, never copy or rebuild them.
+- Shared pieces of Quick's world live in `src/partials/`: include them, never copy or rebuild them.
 - A page's `body` (not only `html`) carries background, color and the 16 px base: the artifact viewer wraps pages in
   its own `body`.
 - **The finish, in this order**, for a new page or a redesigned section: build it and check it in `screenshots`

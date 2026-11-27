@@ -1,4 +1,4 @@
-// The one source for Plain (index.html), Show (show.html), the case studies and both CVs. Every page only draws what
+// The one source for Quick (index.html), Cartoon (cartoon.html), the case studies and both CVs. Every page only draws what
 // is here; a new job, project, skill or learning block is an edit to this file, never to the HTML.
 // Recipes for the usual changes: DATA.md. Check after editing: node tools/check-data.js
 //
@@ -32,12 +32,12 @@
     stack: ["Kotlin", "Jetpack Compose", "MVI", "MVVM", "Clean Architecture"],
     aiLine: { en: "AI agents inside a harness I designed", es: "agentes de IA dentro de un harness que yo diseñé" },
     lede: {
-      plain: "{careerYears}+ years of Android client apps in banking, telecom and consumer products. In 2026 I wrote a modern Android app by hand; now I build the next one with **AI agents inside a harness I designed**: rules and checks they can't skip.",
-      show: "Modern Android and AI-assisted development · {careerYears}+ years in banking, telecom and consumer apps"
+      quick: "{careerYears}+ years of Android client apps in banking, telecom and consumer products. In 2026 I wrote a modern Android app by hand; now I build the next one with **AI agents inside a harness I designed**: rules and checks they can't skip.",
+      cartoon: "Modern Android and AI-assisted development · {careerYears}+ years in banking, telecom and consumer apps"
     },
     contact: {
-      plain: "Let's talk.",
-      show: "So once again, the episode ends… and the next one begins with **your team!**",
+      quick: "Let's talk.",
+      cartoon: "So once again, the episode ends… and the next one begins with **your team!**",
       body: "Looking for Senior Android or Android + AI roles. Available now, for remote work or relocation, based in Mexico City (UTC−6): full overlap with US hours and European afternoons." //  : the time zone never sits alone on a line
     },
     education: {
@@ -52,7 +52,7 @@
   },
 
   // An employer behind several places, with its own dates (Globant ran past Openbank: bench until May 21, 2026).
-  // note: Plain, under the employer's name, above its places. kind: what the employer is, on its CV line.
+  // note: Quick, under the employer's name, above its places. kind: what the employer is, on its CV line.
   employers: {
     globant: {
       name: "Globant", start: "2020-02", end: "2026-05-21",
@@ -70,12 +70,12 @@
     }
   },
 
-  // Jobs and projects, oldest first: this order is also the episode order (Show numbers them from it).
+  // Jobs and projects, oldest first: this order is also the episode order (Cartoon numbers them from it).
   // type: "job" (client work, Season 1) · "project" (own build, Season 2; status "in-progress" | "completed").
   // highlights: three per card, always (a fourth dilutes the scan; what does not fit goes to the CV).
-  // note: what a place under an employer is, under its name (Plain) or beside it (CV); Show says studio instead.
+  // note: what a place under an employer is, under its name (Quick) or beside it (CV); Cartoon says studio instead.
   // cv: what only the CV adds: more (bullets after the highlights).
-  // show: the Show episode's title card and its prop (an unknown prop falls back to the generic one).
+  // cartoon: the Cartoon episode's title card and its prop (an unknown prop falls back to the generic one).
   work: [
     {
       id: "et", type: "job", name: "Estrategia Tecnológica", short: "Estrategia",
@@ -89,7 +89,7 @@
         { en: "Worked on a board game app's redesign: refactors, new animations and AdMob ads", es: "Trabajé en el rediseño de una app de juego de mesa: refactors, animaciones nuevas y anuncios de AdMob" }
       ],
       stack: ["Java", "SQLite", "REST APIs", "Bluetooth printing", "AdMob"],
-      show: { title: ["FIRST", "TICKET"], prop: "ticket" }
+      cartoon: { title: ["FIRST", "TICKET"], prop: "ticket" }
     },
     {
       id: "ag", type: "job", name: "Agency apps", employer: "ironbit",
@@ -104,7 +104,7 @@
       ],
       stack: ["Java", "Kotlin", "Google Maps", "Places", "Firebase Analytics", "Crashlytics", "Retrofit", "Realm", "MVP"],
       cv: { more: [{ en: "Minor work on KidZania's visitor and kiosk apps", es: "Trabajo menor en las apps de visitantes y de kiosco de KidZania" }] },
-      show: { title: ["Bon", "Voyage"], prop: "suitcase" }
+      cartoon: { title: ["Bon", "Voyage"], prop: "suitcase" }
     },
     {
       id: "cd", type: "job", name: "Claro Drive", company: "América Móvil", employer: "ironbit",
@@ -118,7 +118,7 @@
         { en: "File sharing by email or link, with editable permissions", es: "Compartir archivos por correo o enlace, con permisos editables" }
       ],
       stack: ["Java", "RxJava", "Dagger 2", "Glide", "EventBus", "Retrofit", "MVP"],
-      show: { title: ["PAPER", "CHASE"], prop: "scanner" }
+      cartoon: { title: ["PAPER", "CHASE"], prop: "scanner" }
     },
     {
       id: "cb", type: "job", name: "Citibanamex", employer: "globant",
@@ -132,7 +132,7 @@
         { en: "Wrote unit tests inside a Clean Architecture codebase", es: "Escribí pruebas unitarias dentro de una base de código con Clean Architecture" }
       ],
       stack: ["Java", "Kotlin", "RxJava", "Retrofit", "MVP", "Clean Architecture", "Unit testing"],
-      show: { title: ["QUICK RESPONSE"], prop: "qr" }
+      cartoon: { title: ["QUICK RESPONSE"], prop: "qr" }
     },
     {
       id: "ob", type: "job", name: "Openbank", employer: "globant",
@@ -153,7 +153,7 @@
           { en: "Replaced legacy AsyncTask code with coroutines in the sections I worked on", es: "Reemplacé código legacy con AsyncTask por coroutines en las secciones en las que trabajé" }
         ]
       },
-      show: { title: ["Compound", "Interest"], prop: "cert" }
+      cartoon: { title: ["Compound", "Interest"], prop: "cert" }
     },
     {
       id: "mn", type: "project", name: "ModernNotes", status: "completed",
@@ -167,13 +167,13 @@
       stack: ["Kotlin", "Compose", "Coroutines", "Flow", "Hilt", "Room", "DataStore", "Retrofit", "MVVM", "Clean Architecture", "JUnit", "MockK"],
       links: { repo: "https://github.com/voltek/ModernNotes", caseStudy: "modernnotes.html" },
       pin: { date: "2026-11-24", commit: "4eba15e" }, // the case file's pin; tools/repo-changes.js reads it here
-      // on: where each screen appears ("plain", "show", "case"). No screens = the designed empty state.
+      // on: where each screen appears ("quick", "cartoon", "case"). No screens = the designed empty state.
       shots: [
         { src: "assets/projects/modernnotes/home.png", label: "Home", alt: { en: "ModernNotes list screen titled My notes, with two notes and a sort menu set to Date descending", es: "Pantalla de lista de ModernNotes titulada My notes, con dos notas y un menú de orden en Date descending" }, on: ["case"] },
         { src: "assets/projects/modernnotes/filters.png", label: "Sort order", alt: { en: "ModernNotes sort menu open with three options: Date descending (selected), Date ascending and Title", es: "Menú de orden de ModernNotes abierto con tres opciones: Date descending (seleccionada), Date ascending y Title" }, on: ["case"] },
         { src: "assets/projects/modernnotes/detail.png", label: "Edit note", alt: { en: "ModernNotes Edit Note screen with a title field and a content field, and a Save action", es: "Pantalla Edit Note de ModernNotes con un campo de título, un campo de contenido y la acción Save" }, on: ["case"] }
       ],
-      show: { title: ["Written", "by Hand"], prop: "notepad" }
+      cartoon: { title: ["Written", "by Hand"], prop: "notepad" }
     },
     {
       id: "gs", type: "project", name: "GameStack", status: "in-progress",
@@ -188,26 +188,26 @@
       stack: ["Kotlin", "Compose", "Coroutines", "Flow", "Hilt", "Retrofit", "MVI", "Clean Architecture", "JUnit", "MockK", "GitHub Actions", "Claude Code agents"],
       links: { repo: "https://github.com/voltek/GameStack", caseStudy: "gamestack.html" },
       shots: [
-        { src: "assets/projects/gamestack/search.png", label: { en: "Search", es: "Búsqueda" }, alt: { en: "GameStack search screen before any query, with an empty search field and the message Search for games", es: "Pantalla de búsqueda de GameStack antes de buscar, con el campo vacío y el mensaje Search for games" }, on: ["show", "case"] },
-        { src: "assets/projects/gamestack/search_results.png", label: { en: "Results", es: "Resultados" }, alt: { en: "GameStack search results with game covers", es: "Resultados de búsqueda de GameStack con portadas de juegos" }, on: ["plain", "show", "case"] },
-        { src: "assets/projects/gamestack/search_refresh_error.png", label: { en: "Error keeps results", es: "El error conserva los resultados" }, alt: { en: "GameStack refresh error that keeps the previous results on screen", es: "Error al refrescar en GameStack que conserva en pantalla los resultados anteriores" }, on: ["show", "case"] },
+        { src: "assets/projects/gamestack/search.png", label: { en: "Search", es: "Búsqueda" }, alt: { en: "GameStack search screen before any query, with an empty search field and the message Search for games", es: "Pantalla de búsqueda de GameStack antes de buscar, con el campo vacío y el mensaje Search for games" }, on: ["cartoon", "case"] },
+        { src: "assets/projects/gamestack/search_results.png", label: { en: "Results", es: "Resultados" }, alt: { en: "GameStack search results with game covers", es: "Resultados de búsqueda de GameStack con portadas de juegos" }, on: ["quick", "cartoon", "case"] },
+        { src: "assets/projects/gamestack/search_refresh_error.png", label: { en: "Error keeps results", es: "El error conserva los resultados" }, alt: { en: "GameStack refresh error that keeps the previous results on screen", es: "Error al refrescar en GameStack que conserva en pantalla los resultados anteriores" }, on: ["cartoon", "case"] },
         { src: "assets/projects/gamestack/search_loading.png", label: { en: "Loading", es: "Cargando" }, alt: { en: "GameStack search loading, with a grid of placeholder cards", es: "Búsqueda de GameStack cargando, con una cuadrícula de tarjetas provisionales" }, on: ["case"] },
         { src: "assets/projects/gamestack/search_no_results.png", label: { en: "No results", es: "Sin resultados" }, alt: { en: "GameStack search with the message No Results Found and a Go To Library button", es: "Búsqueda de GameStack con el mensaje No Results Found y un botón Go To Library" }, on: ["case"] }
       ],
       // The commit and day the site's claims were last checked against the repo (DATA.md → Re-pin GameStack).
       pin: { date: "2026-11-12", commit: "5fb80bc" },
       // "Now building": the proof, qualitative (no counts: the system is the value, not the quantity). on: where each
-      // row shows ("plain", "show"), each with its evidence (files: refs as in data/cases/, read with that case's roots);
+      // row shows ("quick", "cartoon"), each with its evidence (files: refs as in data/cases/, read with that case's roots);
       // the case study says them piece by piece, in its harness.
-      // es: the row in Spanish. The CV draws the rows that go on Plain.
+      // es: the row in Spanish. The CV draws the rows that go on Quick.
       proof: [
-        { check: true, label: "Decisions that name their enforcement", note: "each architecture decision record (ADR) states what enforces it: a test, a CI check, a setting, or prose only", on: ["plain", "show"],
+        { check: true, label: "Decisions that name their enforcement", note: "each architecture decision record (ADR) states what enforces it: a test, a CI check, a setting, or prose only", on: ["quick", "cartoon"],
           files: ["adr:README.md"],
           es: { label: "Decisiones que dicen qué las hace cumplir", note: "cada registro de decisión de arquitectura (ADR) indica si lo hace un test, un check de CI, una configuración o solo texto" } },
-        { check: true, label: "Human in the loop", note: "what the rules don't settle waits for my approval, and I confirm every review triage and every merge", on: ["plain", "show"],
+        { check: true, label: "Human in the loop", note: "what the rules don't settle waits for my approval, and I confirm every review triage and every merge", on: ["quick", "cartoon"],
           files: ["repo:CLAUDE.md", "repo:.claude/settings.json"],
           es: { label: "Human in the loop", note: "lo que las reglas no resuelven espera mi aprobación, y yo confirmo cada triage de revisión y cada merge" } },
-        { check: true, label: "Checks no agent can skip", note: "build, test, lint and commit checks on every PR, behind branch protection that binds me too", on: ["plain", "show"],
+        { check: true, label: "Checks no agent can skip", note: "build, test, lint and commit checks on every PR, behind branch protection that binds me too", on: ["quick", "cartoon"],
           files: ["repo:.github/workflows/gate.yml", "repo:.github/workflows/commits.yml"],
           es: { label: "Controles que ningún agente puede saltarse", note: "build, tests, lint y reglas de commit en cada PR, tras una protección de rama que también me obliga a mí" } },
       ],
@@ -220,14 +220,14 @@
         goal: { en: "On Google Play", es: "En Google Play" }
       },
       // The learning path lives on the project it proves: the case study draws it whole, in its own section (#path);
-      // Plain's card counts its blocks, and Show's next episodes draw it as a level map: one stop per block, by its short
+      // Quick's card counts its blocks, and Cartoon's next episodes draw it as a level map: one stop per block, by its short
       // name (every block has one: check-data), then the goal.
       // status: "done" · "now" · "next" · "goal". It is updated only when a block closes, so a "now" block shows only
       // what is done: no "next:" in its note and no "next" step (check-data). A step is [name, status, files]; a block
       // without steps carries its own files. Files use the case's roots (data/cases/gamestack.js).
       learningPath: {
         updated: "2026-11-26", // a fact, not a length: the day this path last changed
-        lane: { en: "AI path", es: "Ruta IA" }, // Show: the label of its lane under the app's
+        lane: { en: "AI path", es: "Ruta IA" }, // Cartoon: the label of its lane under the app's
         blocks: [
           { n: 1, title: { en: "LLM foundations and AI-assisted research", es: "Fundamentos de LLM e investigación asistida por IA" }, short: { en: "LLM basics", es: "Bases de LLM" }, status: "done",
             note: { en: "How large language models (LLMs) work, research with checked sources, and GameStack's first spec, later replaced by a living PRD", es: "Cómo funcionan los modelos de lenguaje (LLM), investigación con fuentes verificadas y la primera spec de GameStack, después reemplazada por un PRD vivo" },
@@ -263,14 +263,14 @@
             note: { en: "Where the whole path leads", es: "Adonde lleva toda la ruta" } }
         ]
       },
-      show: { title: ["RULES OF", "THE GAME"], prop: "marquee", record: "The record so far!" }
+      cartoon: { title: ["RULES OF", "THE GAME"], prop: "marquee", record: "The record so far!" }
     }
   ],
 
   // Skills by level, in Alan's own judgment (words only: never bars, stars or percentages). Each row keeps this
   // order, what Android openings ask for most first, with a few set by hand (Flow by Coroutines, RxJava over SQLite,
   // Git and MCP last): Alan approved it, do not re-sort. ai: true goes to the "AI-assisted development" row. cv: the name on the CV, when it says more there. legacy: true goes to the "Apps with XML Views" row, in this order and one look for all.
-  // pages: false keeps a skill off Plain and Show (Git, the Compose-era libraries): it stays for the CV. at: where it
+  // pages: false keeps a skill off Quick and Cartoon (Git, the Compose-era libraries): it stays for the CV. at: where it
   // was used (ids from work; { id, start, end } narrows one place; part: true marks a place where it was used only
   // some of the time: the matrix's hollow dot, and no years); its years are computed from there. len: false names the
   // places instead of a length (a skill used in only part of a job). note: the line under its row in the detail.
@@ -355,33 +355,33 @@
   copy: {
     page: {
       title: {
-        plain: "Alan Hernández · Senior Android Developer",
-        show: "Alan Hernández · Senior Android Developer · Animated version",
+        quick: "Alan Hernández · Senior Android Developer",
+        cartoon: { en: "Alan Hernández · Senior Android Developer · Cartoon version", es: "Alan Hernández · Senior Android Developer · Versión caricatura" },
         cv: "Alan Hernández · CV"
       },
       description: "Senior Android Developer in Mexico City: {careerYears}+ years of client apps in banking, telecom and consumer products, now building with AI agents inside a harness I designed."
     },
     nav: {
-      plain: ["Now building", "Skills", "Experience", "Contact"],
-      show: ["Now showing", "Skills", "Experience", "Contact"]
+      quick: ["Now building", "Skills", "Experience", "Contact"],
+      cartoon: ["Now showing", "Skills", "Experience", "Contact"]
     },
     links: {
-      toShow: { long: "Play the animated version", short: "Animated" },
-      toPlain: { long: "Read the plain version", short: "Plain" }
+      toCartoon: { long: { en: "Watch the cartoon version", es: "Ver la versión caricatura" }, short: { en: "Cartoon", es: "Caricatura" } },
+      toQuick: { long: { en: "Read the quick version", es: "Leer la versión rápida" }, short: { en: "Quick read", es: "Rápida" } }
     },
     cta: { contact: "Get in touch", cv: "Download CV", cvIn: { en: "English", es: "Español" }, cvKind: "PDF", copied: "Copied" },
     footer: {
       // CC BY 3.0 requires this credit wherever the Android robot appears
-      showCredit: "The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License."
+      cartoonCredit: "The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License."
     },
-    // home: Show's name link reads "Alan Hernández, back to top", the visible name and then this
+    // home: Cartoon's name link reads "Alan Hernández, back to top", the visible name and then this
     aria: {
       primary: "Primary", menu: "Menu", toLight: "Switch to light mode", toDark: "Switch to dark mode",
       home: "back to top", stack: "Current stack", copyEmail: "Copy email address",
       episodes: "All episodes, newest first", viewLarger: "View larger: ", close: "Close",
       skip: "Skip to content", yes: "Yes"
     },
-    education: { plain: "Education and languages", show: "Education", languages: "Languages" },
+    education: { quick: "Education and languages", cartoon: "Education", languages: "Languages" },
     skills: {
       intro: "Grouped by how well I know them, with AI and XML Views in rows of their own.",
       levels: {
@@ -396,25 +396,25 @@
       legend: { own: "Own builds", client: "Client work", part: "Some of the time" }
     },
     experience: {
-      heading: { plain: "Experience", show: ["Experience · newest first", "Episode guide"] },
+      heading: { quick: "Experience", cartoon: ["Experience · newest first", "Episode guide"] },
       intro: {
-        plain: "Newest first: my own builds, where Compose, MVI/MVVM and AI agents come in, then {careerYears}+ years of client apps, from Java to Kotlin.",
-        show: "Season 2 is my own builds, where Compose, MVI/MVVM and AI agents come in. Season 1 is {careerYears}+ years of client apps, from Java to Kotlin."
+        quick: "Newest first: my own builds, where Compose, MVI/MVVM and AI agents come in, then {careerYears}+ years of client apps, from Java to Kotlin.",
+        cartoon: "Season 2 is my own builds, where Compose, MVI/MVVM and AI agents come in. Season 1 is {careerYears}+ years of client apps, from Java to Kotlin."
       },
-      groups: { own: "Own builds", client: "Client work", ownShow: "Season 2 · Own builds", clientShow: "Season 1 · Client work" },
-      showUi: { newer: "Newer", playAll: "Play all", pause: "Pause", older: "Older", next: "Next episodes", wholePath: { en: "The whole path", es: "El camino completo" }, here: "I'm here", goal: "Goal", inProduction: "in production",
+      groups: { own: "Own builds", client: "Client work", ownCartoon: "Season 2 · Own builds", clientCartoon: "Season 1 · Client work" },
+      cartoonUi: { newer: "Newer", playAll: "Play all", pause: "Pause", older: "Older", next: "Next episodes", wholePath: { en: "The whole path", es: "El camino completo" }, here: "I'm here", goal: "Goal", inProduction: "in production",
         // the episode card: "Episode 6 · Season 2", "ALAN in" (the first name, then starIn), its credits;
         // nowKick sits over "Now showing"
         episode: "Episode", season: "Season", starIn: "in", about: "about", at: "at", highlights: "Episode highlights",
         credits: { studio: "Studio", dates: "Dates", total: "Total", featuring: "Featuring" },
         nowKick: "What I'm building now" },
       kind: { project: "Own build", "in-progress": "In progress", completed: "Completed" },
-      since: "since", // Plain, Now building: "Own build · since Jul 2026"
+      since: "since", // Quick, Now building: "Own build · since Jul 2026"
       links: { caseStudy: "Case study", repo: "GitHub repo" },
-      shotsNote: "Real screens from the app. Select one to see it full size." // Show
+      shotsNote: "Real screens from the app. Select one to see it full size." // Cartoon
     },
     path: {
-      // Plain, a card with a learning path: {done} and {now} count its blocks, {total} all of them, the goal too;
+      // Quick, a card with a learning path: {done} and {now} count its blocks, {total} all of them, the goal too;
       // lineNone when no block is in progress
       line: { en: "AI learning path: {done} of {total} blocks done, {now} in progress.", es: "Ruta de aprendizaje de IA: {done} de {total} bloques terminados, {now} en curso." },
       lineNone: { en: "AI learning path: {done} of {total} blocks done.", es: "Ruta de aprendizaje de IA: {done} de {total} bloques terminados." },

@@ -1,4 +1,4 @@
-// Show (show.html): the parts of src/show.html that come from the data. Each key fills a {{@key}} of the template.
+// Cartoon (cartoon.html): the parts of src/cartoon.html that come from the data. Each key fills a {{@key}} of the template.
 // Everything the prototype drew in the browser is drawn here: every episode card (the remote only switches which one
 // shows), the strip, the skills place matrix, the title card's rays and color bars.
 const { C, en, esc, landingStatus, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu } = require("./common.js");
@@ -103,9 +103,9 @@ const PROPS = {
     <circle cx="66" cy="112" r="9" fill="#C9C9C9" ${ink(4)}/>
     ${t.length > 1 ? T(200, 200, 50, "Bangers", "#111", t[0], 'letter-spacing="1"') + T(200, 258, 50, "Bangers", "#C62828", t[1], 'letter-spacing="1"') : T(200, 230, 50, "Bangers", "#111", t[0], 'letter-spacing="1"')}</g>`
 };
-const propOf = w => PROPS[w.show && w.show.prop] ? w.show.prop : "slate";
+const propOf = w => PROPS[w.cartoon && w.cartoon.prop] ? w.cartoon.prop : "slate";
 // the title as lettered on the prop, inside curly quotes
-const lines = w => { const t = (w.show && w.show.title) || [w.name]; return t.map((l, i) => `${i ? "" : "“"}${l}${i === t.length - 1 ? "”" : ""}`); };
+const lines = w => { const t = (w.cartoon && w.cartoon.title) || [w.name]; return t.map((l, i) => `${i ? "" : "“"}${l}${i === t.length - 1 ? "”" : ""}`); };
 const propSVG = w => `<svg class="prop" viewBox="0 0 400 340" aria-hidden="true">${PROPS[propOf(w)](lines(w))}</svg>`;
 
 // the title card's sunburst and the color bars of the set warming up
@@ -125,7 +125,7 @@ const CASTLE = `<svg viewBox="0 0 64 64" aria-hidden="true"><g style="stroke:var
 const AI = `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4Q7.5 11 14.5 11Q7.5 11 7.5 18Q7.5 11 0.5 11Q7.5 11 7.5 4Z M15.5 1Q15.5 4.5 19 4.5Q15.5 4.5 15.5 8Q15.5 4.5 12 4.5Q15.5 4.5 15.5 1Z M16 13Q16 15.5 18.5 15.5Q16 15.5 16 18Q16 15.5 13.5 15.5Q16 15.5 16 13Z" fill="currentColor"/></svg>`;
 
 module.exports = ctx => {
-  const { data, now } = ctx, cp = data.copy, p = data.profile, ui = cp.experience.showUi;
+  const { data, now } = ctx, cp = data.copy, p = data.profile, ui = cp.experience.cartoonUi;
   const live = data.work.find(w => w.status === "in-progress"); // "Now showing"; none = the section and its link leave
   const [first, ...rest] = p.name.split(" ");
   const initials = first[0] + rest.join(" ")[0];
@@ -142,7 +142,7 @@ module.exports = ctx => {
   const seasonOf = w => w.type === "project" ? 2 : 1;
   // the label on the card and the strip: "América Móvil · Claro Drive", "Globant · Citibanamex"
   const co = w => [w.company || (w.employer && data.employers[w.employer].name), w.name].filter(Boolean).join(" · ");
-  const plainTitle = w => ((w.show && w.show.title) || [w.name]).join(" ");
+  const plainTitle = w => ((w.cartoon && w.cartoon.title) || [w.name]).join(" ");
   // the calendar years of some places; marked for live.js while one of them is still running
   const years = list => { const v = C.yearSpan(list, now);
     return list.some(w => w.end == null) ? `<span data-calc="years" data-ids="${list.map(w => w.id).join(",")}">${v}</span>` : v; };
@@ -157,7 +157,7 @@ module.exports = ctx => {
     const head = `<div class="head"><span class="ep">${esc(ui.episode)} ${n} · ${mode === "feature" ? esc(ui.inProduction) : `${esc(ui.season)} ${seasonOf(w)}`}</span>
       <p class="star"><b>${esc(first.toUpperCase())}</b><i>${esc(ui.starIn)}</i></p>${mode === "feature" ? "" : `<p class="co-row" aria-hidden="true"><span class="co">${esc(co(w))}</span>${sticker}</p>`}<h3 class="sr">${esc(first)} ${esc(ui.starIn)} ${esc(plainTitle(w))}: ${esc(w.name)}, ${C.range(w.start, w.end)}, ${about}</h3></div>`;
     if (mode === "feature") {
-      const shots = (w.shots || []).filter(s => s.on.includes("show")).slice(0, 3);
+      const shots = (w.shots || []).filter(s => s.on.includes("cartoon")).slice(0, 3);
       return `${head}<div class="bug">${propSVG(w)}</div>
       <div class="shots">${shots.map(s => `<button type="button" class="shot" data-full="${esc(IMG.copiesOf(s.src).full)}" data-cap="${esc(`${w.name} · ${en(s.label)}`)}"><span class="sr">${esc(cp.aria.viewLarger)}</span><span class="frame-p"><img ${srcset(s.src, "(max-width: 900px) 30vw, 160px")} alt="${esc(s.alt || "")}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'empty',textContent:'${esc(s.label)}'}))"></span><span class="lbl">${esc(s.label)}</span></button>`).join("")}</div>`;
     }
@@ -227,14 +227,14 @@ module.exports = ctx => {
   const nowShowing = !live ? "" : `<section class="now" id="now" aria-labelledby="now-h">
   <div class="wrap">
     <p class="kick">${esc(ui.nowKick)}</p>
-    <h2 class="h2" id="now-h">${esc(cp.nav.show[0])}</h2>
+    <h2 class="h2" id="now-h">${esc(cp.nav.cartoon[0])}</h2>
     <div class="feature" id="feature">
       <div><div class="tv"><div class="screen"><div class="card feat paint th-${propOf(live)}">${card(live, "feature")}</div></div></div>
-        ${(live.shots || []).some(s => s.on.includes("show")) ? `<p class="shots-note">${esc(cp.experience.shotsNote)}</p>` : ""}</div>
+        ${(live.shots || []).some(s => s.on.includes("cartoon")) ? `<p class="shots-note">${esc(cp.experience.shotsNote)}</p>` : ""}</div>
       <div><h3>${esc(live.name)}</h3>${chip("in-progress")}
         <p class="lede">${text(ctx, (live.lede || live.what).en)}</p>
-        ${live.proof ? `<p class="rec-h">${esc((live.show && live.show.record) || "")}</p>
-        <ul class="ledger">${live.proof.filter(r => r.on.includes("show")).map(r => `<li><span class="k">${esc(r.label)}</span><i aria-hidden="true"></i><b><svg viewBox="0 0 24 24" width="32" height="32" role="img" aria-label="${esc(cp.aria.yes)}"><path d="M4 13l5 5L20 6" fill="none" style="stroke:var(--sun)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></b><small>${text(ctx, r.note)}</small></li>`).join("")}</ul>` : ""}
+        ${live.proof ? `<p class="rec-h">${esc((live.cartoon && live.cartoon.record) || "")}</p>
+        <ul class="ledger">${live.proof.filter(r => r.on.includes("cartoon")).map(r => `<li><span class="k">${esc(r.label)}</span><i aria-hidden="true"></i><b><svg viewBox="0 0 24 24" width="32" height="32" role="img" aria-label="${esc(cp.aria.yes)}"><path d="M4 13l5 5L20 6" fill="none" style="stroke:var(--sun)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></b><small>${text(ctx, r.note)}</small></li>`).join("")}</ul>` : ""}
         ${live.source ? `<p class="source">${text(ctx, live.source, { pin: live.pin })}</p>` : ""}
         <div class="ctas">${live.links.caseStudy ? `<a class="btn go" href="${esc(live.links.caseStudy)}">${esc(cp.experience.links.caseStudy)}</a>` : ""}<a class="btn alt" href="${esc(live.links.repo)}">${ICON.github}${esc(cp.experience.links.repo)}</a></div></div>
     </div>
@@ -258,7 +258,7 @@ module.exports = ctx => {
   const seasonHead = (n, label, from, span) => `<b class="season" style="grid-column:${from} / span ${span}"><span class="full">${esc(label)}</span><span class="abbr">${esc(ui.season)} ${n}</span></b>`;
   // the head held under the bar is the toggle and the column heads; the key scrolls away with the rows' top. The key
   // and the heads are for the eye: each row tells a screen reader its places in words (M.say)
-  const tlHead = `<div class="cols" aria-hidden="true">${M.jobs.length ? seasonHead(1, gx.clientShow, 1, M.jobs.length) : ""}${M.builds.length ? seasonHead(2, gx.ownShow, M.jobs.length + 2, M.builds.length) : ""}
+  const tlHead = `<div class="cols" aria-hidden="true">${M.jobs.length ? seasonHead(1, gx.clientCartoon, 1, M.jobs.length) : ""}${M.builds.length ? seasonHead(2, gx.ownCartoon, M.jobs.length + 2, M.builds.length) : ""}
     ${gap(M.places.map(w => `<span class="pl"><span class="full">${esc(w.short || w.name)}<small>${calc.years(ctx, w)}</small></span><span class="abbr">${code(w)}</span></span>`))}</div>`;
   const key = `<div class="mkey" aria-hidden="true"><ul class="legend"><li><i class="c"></i>${esc(lg.client)}</li><li><i class="o"></i>${esc(lg.own)}</li><li><i class="p"></i>${esc(lg.part)}</li></ul>
     <p class="places">${M.places.map(w => `<span><b>${code(w)}</b> ${esc(w.short || w.name)} ${calc.years(ctx, w)}</span>`).join(" · ")}</p></div>`;
@@ -270,24 +270,24 @@ module.exports = ctx => {
 
   // the sections in the bar, in page order; Now showing leaves with the build in progress
   const nav = [["now", 0], ["skills", 1], ["guide", 2], ["contact", 3]].filter(([id]) => live || id !== "now")
-    .map(([id, i]) => `<a href="#${id}">${esc(cp.nav.show[i])}</a>`).join("");
+    .map(([id, i]) => `<a href="#${id}">${esc(cp.nav.cartoon[i])}</a>`).join("");
 
   const photo = (size, alt, lazy) => `<img ${srcset(p.photo.src, size)} alt="${esc(alt)}"${lazy ? ' loading="lazy"' : ""} onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${esc(initials)}'}))">`;
   const ed = p.education;
 
   return {
-    head: head(ctx, { title: cp.page.title.show, file: "show.html", themeColor: { light: "#2EC4F1", dark: "#131942" } }),
+    head: head(ctx, { title: cp.page.title.cartoon, file: "cartoon.html", themeColor: { light: "#2EC4F1", dark: "#131942" } }),
     nav, initials: esc(initials), rays: RAYS, bars: BARS,
     markPhoto: `<img ${srcset(p.photo.src, 42)} alt="" onerror="this.replaceWith(Object.assign(document.createElement('i'),{textContent:'${esc(initials)}'}))">`,
     badgePhoto: photo("(max-width: 900px) 100px, 170px", p.photo.alt), finalePhoto: photo(230, "", true),
     logoFirst: esc(first.toUpperCase()), logoRest: esc(rest.join(" ").toUpperCase()),
-    status: status(p), lede: text(ctx, p.lede.show),
+    status: status(p), lede: text(ctx, p.lede.cartoon),
     stack: p.stack.map(s => `<li>${esc(s)}</li>`).join("") + `<li class="ai">${AI}${esc(p.aiLine.en)}</li>`,
     now: nowShowing, tiers, tlHead, timeline,
     matrixCols: `--jobs:${M.jobs.length};--builds:${M.builds.length}`,
-    expIntro: text(ctx, cp.experience.intro.show),
+    expIntro: text(ctx, cp.experience.intro.cartoon),
     cards, reel,
-    finale: text(ctx, p.contact.show, { tag: "i" }),
+    finale: text(ctx, p.contact.cartoon, { tag: "i" }),
     education: `${esc(ed.degree.en)}, ${esc(ed.school)}, <span style="white-space:nowrap">${esc(ed.start)}–${esc(ed.end)}</span>`,
     languages: p.languages.map(l => `${esc(l.name.en)}, ${esc(l.level.en)}`).join(" · "),
     githubIcon: ICON.github, cvMenu: cvMenu(ctx, "alt", 2.4),

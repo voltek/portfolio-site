@@ -1,19 +1,19 @@
 ---
 version: 1
-slug: "show-html"
-primary_target: "show.html"
+slug: "cartoon-html"
+primary_target: "cartoon.html"
 related_targets: ["index.html"]
 ---
 
-# Surface brief: expressive landing (Show)
+# Surface brief: expressive landing (Cartoon)
 
-**Scope and mode:** the expressive version of the landing, its own page beside Plain (`index.html`, the main door since 2026-10-17). The file name `show.html` is provisional until the copy deck. Persuade and be remembered: this is the door for a reader who wants to get to know Alan, linked prominently from Plain's header. It renders from the same data file as Plain.
+**Scope and mode:** the expressive version of the landing, its own page beside Quick (`index.html`, the main door since 2026-10-17). Persuade and be remembered: this is the door for a reader who wants to get to know Alan, linked prominently from Quick's header. It renders from the same data file as Quick.
 
 **Audience and job:** a recruiter or hiring manager who already chose to see more; it still has to be clear on its own (role, stack and availability in the first viewport). Action: get in touch or download the CV.
 
 **Constraints:** every number dated and linked to a public repo; no invented proof; client work and own builds kept visibly apart.
 
-**Built page:** `src/show.html` + `tools/pages/show.js` → `_site/show.html` (phase 4c, 2026-10-21). The prototype (approved by Alan on 2026-10-16 after ~20 tuning rounds) is in the private history, `21f7e48` (`git -C _private show`).
+**Built page:** `src/cartoon.html` + `tools/pages/cartoon.js` → `_site/cartoon.html` (phase 4c, 2026-10-21). The prototype (approved by Alan on 2026-10-16 after ~20 tuning rounds) is in the private history, `21f7e48` (`git -C _private show`).
 
 ## Direction contract
 
@@ -35,4 +35,4 @@ The same program after sundown, as the `data-theme="dark"` block of `tokens.css`
 cream moon with craters where the sun was, ink-outlined stars, a blue-black room, the Skills band and the ending's rings
 in night blue. Outlines stay ink and cards stay white (they are the lit things). The solid top bar goes dark with cream
 text and a cream "current section" pill. It follows the system until the visitor picks a theme with the bar's button;
-the choice (`localStorage` `ah-theme`) is shared with Plain.
+the choice (`localStorage` `ah-theme`) is shared with Quick.

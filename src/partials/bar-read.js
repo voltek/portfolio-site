@@ -1,4 +1,4 @@
-  // ---------- the top bar of Plain's world: one copy, included by the build as {{>bar-read.js}} (DESIGN.md, the Bar Menu Rule).
+  // ---------- the top bar of Quick's world: one copy, included by the build as {{>bar-read.js}} (DESIGN.md, the Bar Menu Rule).
   // It needs {{>current-section.js}} before it, #top, .mast with .who and .right, nav#nav with links to the page's sections, #theme and #menu.
   (() => {
     const root = document.documentElement, top = document.getElementById("top"), mast = top.querySelector(".mast");

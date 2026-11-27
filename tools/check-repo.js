@@ -14,7 +14,7 @@ for (const f of tracked.filter(f => PRIVATE.test(f))) err(`tracked path must sta
 
 // 2) the pull request
 const TYPES = "feat|fix|refactor|docs|chore|perf|ci";
-const SCOPES = "plain|show|case|cv|data|build|tokens|assets|harness|repo|deploy|readme";
+const SCOPES = "quick|cartoon|case|cv|data|build|tokens|assets|harness|repo|deploy|readme";
 const { PR_TITLE: title, PR_BODY: body, PR_BRANCH: branch } = process.env;
 
 if (title != null) {

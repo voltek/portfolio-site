@@ -1,15 +1,15 @@
 ---
 name: Alan Hernández — Portfolio
-description: Rules shared by Plain, Show and every page of Plain's world. Each world's palette, faces and material live in its surface brief; the impeccable documenter rewrites this file from the build in phase 8.
+description: Rules shared by Quick, Cartoon and every page of Quick's world. Each world's palette, faces and material live in its surface brief; the impeccable documenter rewrites this file from the build in phase 8.
 ---
 
-<!-- Each world is described in its surface brief (.impeccable/surfaces/index-html.md, show-html.md, case-html.md) and built in src/. Re-run /impeccable document in phase 8 (_private/phases/phase-8-docs.md). The bento / glass / Aurum-Aqua system is an anti-reference (its old DESIGN.md: private commit df28821). -->
+<!-- Each world is described in its surface brief (.impeccable/surfaces/index-html.md, cartoon-html.md, case-html.md) and built in src/. Re-run /impeccable document in phase 8 (_private/phases/phase-8-docs.md). The bento / glass / Aurum-Aqua system is an anti-reference (its old DESIGN.md: private commit df28821). -->
 
 # Design System: Alan Hernández — Portfolio
 
 ## Overview
 
-Two pages, two worlds, one data file. The **Plain** (`index.html`, the main door) is sober and plain: easy to scan and to find things in. **Show** (`show.html`) is the expressive version: a Saturday-morning cartoon program. They share only the data, the status colors and the role logic below; neither borrows the other's colors, fonts or outlines. The CV inherits Plain. The retired bento grid with glass panes and an aurora field is the generic developer-portfolio pattern this redesign exists to leave.
+Two pages, two worlds, one data file. The **Quick** (`index.html`, the main door) is sober and quick: easy to scan and to find things in. **Cartoon** (`cartoon.html`) is the expressive version: a Saturday-morning cartoon program. They share only the data, the status colors and the role logic below; neither borrows the other's colors, fonts or outlines. The CV inherits Quick. The retired bento grid with glass panes and an aurora field is the generic developer-portfolio pattern this redesign exists to leave.
 
 ## Colors
 
@@ -38,13 +38,13 @@ on phones). Never add a `scroll-margin-top` on the sections as well: the two add
 
 ## Components
 
-**Skills by level.** Three levels in words (Core, Strong, Familiar) plus two rows of their own, "AI-assisted development" after Strong (its line says the level, its chips wear Strong's color) and "Apps with XML Views" last; a row with no skills is not drawn. Each row is ordered by what Android openings ask for most. The level reads from the row, the color and the chip size: one hue in three solid steps, **never a dashed or dotted outline** (it reads as "I don't have it"), and **no color legend** (the row names are the legend). Never bars, stars, percentages or scores. Only Core's chips carry years ("Kotlin 7+ yrs", rounded down). Where each skill was used sits behind a collapsible detail ("See where I used each one"): a place matrix, one row per skill and one column per place oldest to newest (client jobs, a gap, own builds), a filled dot where it was used and a hollow one for "some of the time"; a length under the name only in Core, as on its chips; no years axis, no bars; two-letter codes with a key line on phones. Show draws it under its season headers. Exact dates belong to the CV.
+**Skills by level.** Three levels in words (Core, Strong, Familiar) plus two rows of their own, "AI-assisted development" after Strong (its line says the level, its chips wear Strong's color) and "Apps with XML Views" last; a row with no skills is not drawn. Each row is ordered by what Android openings ask for most. The level reads from the row, the color and the chip size: one hue in three solid steps, **never a dashed or dotted outline** (it reads as "I don't have it"), and **no color legend** (the row names are the legend). Never bars, stars, percentages or scores. Only Core's chips carry years ("Kotlin 7+ yrs", rounded down). Where each skill was used sits behind a collapsible detail ("See where I used each one"): a place matrix, one row per skill and one column per place oldest to newest (client jobs, a gap, own builds), a filled dot where it was used and a hollow one for "some of the time"; a length under the name only in Core, as on its chips; no years axis, no bars; two-letter codes with a key line on phones. Cartoon draws it under its season headers. Exact dates belong to the CV.
 
-**The Employer Block (Plain).** An employer with several places (clients, or its own work) is one block: its name larger than theirs, the tenure in
+**The Employer Block (Quick).** An employer with several places (clients, or its own work) is one block: its name larger than theirs, the tenure in
 bold ink, and one `--client-mark` line in the dates column with a dot at the employer and at each place, ending at the
 last one. Names share one column; under a place goes what it is (`note`), never the employer again. No panel behind it.
 
-**The Bar Menu Rule (Plain's world: Plain, the case studies and any new page that inherits it; Alan, 10-27).** Every
+**The Bar Menu Rule (Quick's world: Quick, the case studies and any new page that inherits it; Alan, 10-27).** Every
 page copies this bar exactly; a new page never redesigns it. Sections inline while they fit; when they don't (measured by
 the script, not a fixed width), they go behind a menu button. The open menu is a panel on the field color; each item
 fills the **whole width** of the panel (its hover and current background is the full row, never just the word); the
@@ -53,22 +53,22 @@ focus to the first item with `focus({ preventScroll:true })` (a plain `focus()` 
 closes with any link in the bar (the page's own action too), Esc, a tap outside, focus leaving the bar, or scrolling on
 more than 24 px. The bar itself always stays at the top, on phones too. The marked section is computed from positions
 (the last one whose top passed under the bar; at the end of the page, the last one in view), and a section chosen in
-the bar stays marked until the visitor scrolls by hand. A page's own always-visible action (Plain: "Animated"; a case
+the bar stays marked until the visitor scrolls by hand. A page's own always-visible action (Quick: "Cartoon"; a case
 study: "Contact") stays outside the menu. The name is the home link and looks the same everywhere; on a case study it
 returns to the exact place on the landing when the visitor came from there, else to the landing's top (Alan, 10-28).
-Show has its own bar in its own world. **One copy:** the bar's CSS and script
+Cartoon has its own bar in its own world. **One copy:** the bar's CSS and script
 are `src/partials/bar-read.css` and `bar-read.js`, included with `{{>name}}`; a page never copies or restyles them. Which
-section the bar marks is `current-section.js`, one copy for Show's bar too: the last whose top passed under the bar.
+section the bar marks is `current-section.js`, one copy for Cartoon's bar too: the last whose top passed under the bar.
 
-**The Contact Rule (Plain's world: Plain, the case studies, and any new page that ends with contact;
+**The Contact Rule (Quick's world: Quick, the case studies, and any new page that ends with contact;
 Alan, 10-28).** "Let's talk" is one piece, never rebuilt: its markup `src/partials/contact-read.html`, its CSS
 `contact-read.css` (which also carries the world's buttons: `.btn`, `.go`, `.line`, `.copy`, `.ctas`) and its copy script
-`copy-email.js`, each included with `{{>name}}`. Its words come from `profile` in `data/portfolio.js` (`contact.plain`,
-`contact.body`, `email`, `links`), so a change there reaches every page. A page adds only the gap above it (Plain:
-`.contact{margin-top:88px}`) and must give its renderer `githubIcon` (`ICON.github`). Show ends with its own "finale" in its
+`copy-email.js`, each included with `{{>name}}`. Its words come from `profile` in `data/portfolio.js` (`contact.quick`,
+`contact.body`, `email`, `links`), so a change there reaches every page. A page adds only the gap above it (Quick:
+`.contact{margin-top:88px}`) and must give its renderer `githubIcon` (`ICON.github`). Cartoon ends with its own "finale" in its
 own world, reading the same `profile` data.
 
-**Text links (Plain's world).** Every text link is underlined from the start in the clickable color (2 px; 3 px for a
+**Text links (Quick's world).** Every text link is underlined from the start in the clickable color (2 px; 3 px for a
 large title link) and the underline thickens on hover; it never appears only on hover. Bar items (a 2 px border under the
 current one) and the diagram's pieces (the box says it is clickable) are the exceptions.
 

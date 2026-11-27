@@ -12,7 +12,7 @@ const skillName = s => esc(s).replace(/ · /g, "&nbsp;· ");
 // starts with "·"
 const stackLine = list => list.join(" · ");
 const stackHtml = list => list.map((t, i) => `<span class="nb">${esc(t)}${i < list.length - 1 ? "&nbsp;·" : ""}</span>`).join(" ");
-// **…** → the page's highlight (Plain: <em>)
+// **…** → the page's highlight (Quick: <em>)
 const md = (s, tag = "em") => s.replace(/\*\*(.+?)\*\*/g, `<${tag}>$1</${tag}>`);
 
 // The context of one build: the data, the build day and what is computed once from both.
@@ -47,14 +47,14 @@ const calc = {
 // A roadmap step's status on the landing: "designed" is drawn as "next" there; only the case tells them apart.
 const landingStatus = s => s === "designed" ? "next" : s;
 
-// The Skills rows in reading order, on Plain, Show and the CV: the levels, with the AI skills in a row of their own
+// The Skills rows in reading order, on Quick, Cartoon and the CV: the levels, with the AI skills in a row of their own
 // after Strong and the XML Views era last. An empty row is left out; each keeps the data's order.
 const skillRows = list => {
   const level = lv => list.filter(s => !s.legacy && !s.ai && s.level === lv);
   return [["core", level("core")], ["strong", level("strong")], ["ai", list.filter(s => s.ai && !s.legacy)], ["familiar", level("familiar")], ["legacy", list.filter(s => s.legacy)]].filter(([, l]) => l.length);
 };
 
-// The Skills detail's place matrix, shared by Plain and Show (each draws it in its own world): the places as columns,
+// The Skills detail's place matrix, shared by Quick and Cartoon (each draws it in its own world): the places as columns,
 // client jobs oldest first and then own builds, and per skill how each place used it: "on", "part" (some of the time,
 // the hollow dot) or "". say() is what the dots tell a screen reader, with the legend's words.
 const matrix = data => {
@@ -164,7 +164,7 @@ const cvMenu = (ctx, cls, stroke) => { const cta = ctx.data.copy.cta;
   return `<details class="cv"><summary class="btn ${cls}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11M5.5 8.5L10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/></svg>${esc(cta.cv)}<svg class="caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><span class="cvmenu">${
     Object.entries(CV_FILES).map(([lang, f]) => `<a href="${f}" download target="_blank" rel="noopener" type="application/pdf" hreflang="${lang}"><span lang="${lang}">${esc(cta.cvIn[lang])}</span> <small>${esc(cta.cvKind)}</small></a>`).join("")}</span></details>`; };
 
-// the learning path counted: true whichever blocks are in progress (Plain's card, the case's opening)
+// the learning path counted: true whichever blocks are in progress (Quick's card, the case's opening)
 const pathCount = (copy, L) => { const count = s => L.blocks.filter(b => b.status === s).length, now = count("now");
   return en(now ? copy.path.line : copy.path.lineNone).replace("{done}", count("done")).replace("{now}", now).replace("{total}", L.blocks.length); };
 

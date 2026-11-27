@@ -143,7 +143,7 @@ module.exports = {
     items: [
       { text: { en: "The ViewModel tests run on virtual time. One pins a fixed bug that could show answers to text already replaced: a newer query must cancel the search already on the network.", es: "Los tests del ViewModel corren con tiempo virtual. Uno fija un bug ya corregido que podía mostrar respuestas a un texto ya reemplazado: una consulta nueva debe cancelar la búsqueda que ya está en la red." },
         files: ["test:feature/search/presentation/SearchViewModelTest.kt:406–431"] },
-      { text: { en: "Robolectric is allowed for screen tests only. The first one found a defect no device would show: the double-tap guard swallowed the first click.", es: "Robolectric se permite solo en los tests de pantalla. El primero encontró un defecto que ningún dispositivo mostraría: la protección contra el doble toque se comía el primer clic." },
+      { text: { en: "Robolectric is allowed for screen tests only. The first one found a defect no device would cartoon: the double-tap guard swallowed the first click.", es: "Robolectric se permite solo en los tests de pantalla. El primero encontró un defecto que ningún dispositivo mostraría: la protección contra el doble toque se comía el primer clic." },
         files: ["test:feature/search/presentation/SearchScreenTest.kt", "adr:0016-robolectric-only-for-screen-tests.md"] },
       { text: { en: "A regression test counts only after it was seen failing against the code it guards.", es: "Un test de regresión cuenta solo después de verlo fallar contra el código que protege." },
         files: ["adr:0049-review-rounds-are-capped-and-the-human-confirms-the-triage.md"] },

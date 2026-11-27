@@ -44,7 +44,7 @@ module.exports = ({ data, now, careerYears }, lang, { phone, fullName } = {}) =>
 
   const projects = newest.filter(w => w.type === "project").map(w => entry(w, "own",
     `${esc(t(cv.kind.project))} · ${esc(t(cv.kind[w.status]))}${w.links && w.links.repo ? DOT + link(w.links.repo) : ""}`,
-    (w.proof || []).filter(r => r.es && r.on.includes("plain")).map(r => lang === "es" ? r.es : r).map(r => C.fill(`**${r.label}**: ${r.note}`, { careerYears, pin: w.pin, updated: w.learningPath && w.learningPath.updated }))));
+    (w.proof || []).filter(r => r.es && r.on.includes("quick")).map(r => lang === "es" ? r.es : r).map(r => C.fill(`**${r.label}**: ${r.note}`, { careerYears, pin: w.pin, updated: w.learningPath && w.learningPath.updated }))));
 
   // newest first; an employer's places go together under its line
   const job = w => entry(w, "client", esc(w.employer ? t(w.note) : `${t(w.studio)} · ${t(w.role)}`), (w.cv && w.cv.more || []).map(t));

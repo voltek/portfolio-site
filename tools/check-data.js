@@ -69,7 +69,7 @@ const named = new Set([...data.skills.map(s => s.cv || s.name), ...data.work.fla
 for (const k of Object.keys(cv.terms)) if (!named.has(k)) err(`cv.terms: "${k}" is no skill, stack or place name`);
 
 // work: jobs and projects
-const ids = new Set(), STATUS = ["in-progress", "completed"], ON = ["plain", "show", "case"];
+const ids = new Set(), STATUS = ["in-progress", "completed"], ON = ["quick", "cartoon", "case"];
 data.work.forEach((w, i) => {
   const at = `work.${w.id || i}`;
   if (!w.id) err(`work[${i}]: missing id`); else if (ids.has(w.id)) err(`${at}: duplicate id`); else ids.add(w.id);
@@ -92,7 +92,7 @@ data.work.forEach((w, i) => {
   else w.highlights.forEach((h, j) => { bi(h, `${at}.highlights[${j}]`); tokens(h, `${at}.highlights[${j}]`); });
   if (!Array.isArray(w.stack) || !w.stack.length) err(`${at}: missing stack`);
   else if (w.stack.length > (w.type === "job" ? 9 : 12)) warn(`${at}.stack: ${w.stack.length} tags, more than 9 for a job or 12 for a project no longer scans`);
-  if (!w.show || !w.show.title) warn(`${at}: no Show title card`);
+  if (!w.cartoon || !w.cartoon.title) warn(`${at}: no Cartoon title card`);
   (w.shots || []).forEach((s, j) => {
     const where = `${at}.shots[${j}]`;
     if (!fs.existsSync(path.join(root, s.src))) warn(`${where}: file not found, the empty state will show (${s.src})`);
@@ -102,7 +102,7 @@ data.work.forEach((w, i) => {
   });
   if (w.note) { bi(w.note, `${at}.note`); tokens(w.note, `${at}.note`); }
   if (w.cv) { (w.cv.more || []).forEach((t, j) => bi(t, `${at}.cv.more[${j}]`)); }
-  if (w.type === "job" && w.employer && !w.note) err(`${at}.note: Plain and the CV say what the place is with it`);
+  if (w.type === "job" && w.employer && !w.note) err(`${at}.note: Quick and the CV say what the place is with it`);
   if (w.pin) {
     if (!w.pin.date) err(`${at}.pin: needs the day the claims were checked`);
     else date(w.pin.date, `${at}.pin.date`);
@@ -118,7 +118,7 @@ data.work.forEach((w, i) => {
     lp.blocks.forEach((b, j) => { const bat = `${at}.learningPath.blocks[${j}]`;
       if (!ST.includes(b.status)) err(`${bat}: status must be ${ST.join(", ")}`);
       if (b.n !== j + 1) err(`${bat}: n must be ${j + 1}, the blocks numbered in order`);
-      bi(b.title, `${bat}.title: needs { en, es }`); bi(b.note, `${bat}.note: needs { en, es }`); bi(b.short, `${bat}.short: needs { en, es } (Show's map names each block by it)`);
+      bi(b.title, `${bat}.title: needs { en, es }`); bi(b.note, `${bat}.note: needs { en, es }`); bi(b.short, `${bat}.short: needs { en, es } (Cartoon's map names each block by it)`);
       (b.steps || []).forEach(s => { const name = s[0] && s[0].en || s[0];
         // a step is proof of work done: what is still to come is the block's own status
         if (s[1] !== "done") err(`${bat}: step "${name}" has status "${s[1]}"; a step is only ever done`);
@@ -179,7 +179,7 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
   if (!cs.pin || !/^[0-9a-f]{7,40}$/.test(cs.pin.commit || "")) err(`${at}: pin.commit missing: every code link goes to that commit`);
   else date(cs.pin.date, `${at}.pin.date`);
   for (const k of ["lede", "role", "readme"]) if (!cs[k]) err(`${at}: missing ${k}`);
-  // Plain's path line and Show's "The whole path" link to the case's #path
+  // Quick's path line and Cartoon's "The whole path" link to the case's #path
   if (w.learningPath && !cs.path) err(`${at}: missing path: ${w.id} has a learning path, and the landing links to its #path`);
   for (const k of Object.keys(cs)) if (/^[a-z]+$/.test(k) && !SECTIONS.includes(k) && !["id", "pin", "roots", "readme", "lede", "role", "stack", "libs", "video", "shots"].includes(k)) warn(`${at}: "${k}" is not a section the page draws`);
   // every file names a root the case has
@@ -252,7 +252,7 @@ for (const src of IMG.sourcesOf(data)) {
 // page copy
 const walk = (o, k) => typeof o === "string" ? tokens(o, k) : o && typeof o === "object" && Object.entries(o).forEach(([kk, v]) => walk(v, `${k}.${kk}`));
 const { case: caseCopy, ...pageCopy } = data.copy;
-// Plain's path line and the case's block tag fill their own blanks (tools/pages/plain.js, case.js): {done}, {now} and
+// Quick's path line and the case's block tag fill their own blanks (tools/pages/quick.js, case.js): {done}, {now} and
 // {total} count the learning path's blocks, {n} numbers one
 const { line: pathLine, lineNone, block: blockTag, ...pathCopy } = pageCopy.path || {};
 walk({ ...pageCopy, path: pathCopy }, "copy");

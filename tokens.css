@@ -1,5 +1,5 @@
 /* tokens.css: the design tokens of every page, as roles, not colors.
-   A page names its world and its theme on <html>: data-world="read" (Plain and the CV) or "show" (Show),
+   A page names its world and its theme on <html>: data-world="read" (Quick and the CV) or "cartoon" (Cartoon),
    data-theme="light" or "dark" (set before the first paint by the page's own script).
 
    Roles every world defines, so the shared rules in DESIGN.md hold whatever the palette:
@@ -13,10 +13,10 @@
 /* ---------- fonts ----------
    Served from the site (no Google Fonts): the Latin subset of each font, every weight of a variable one in one file. A
    face downloads only when a page uses it. Licenses (SIL OFL 1.1) next to the files. */
-/* read world: Plain and the CV */
+/* read world: Quick and the CV */
 @font-face{font-family:"Bricolage Grotesque";src:url("assets/fonts/bricolage-grotesque-latin.woff2") format("woff2");font-weight:200 800;font-display:swap}
 @font-face{font-family:"Figtree";src:url("assets/fonts/figtree-latin.woff2") format("woff2");font-weight:300 900;font-display:swap}
-/* show world: Show (Gochi Hand only letters the notepad prop) */
+/* show world: Cartoon (Gochi Hand only letters the notepad prop) */
 @font-face{font-family:"Titan One";src:url("assets/fonts/titan-one-latin.woff2") format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:"Bangers";src:url("assets/fonts/bangers-latin.woff2") format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:"Nunito";src:url("assets/fonts/nunito-latin.woff2") format("woff2");font-weight:200 1000;font-display:swap}
@@ -35,7 +35,7 @@
   :root{--t-quick:0s; --t:0s; --t-slow:0s; --t-swap:0s}
 }
 
-/* ---------- Plain (index.html) and the CV (src/cv.html) ----------
+/* ---------- Quick (index.html) and the CV (src/cv.html) ----------
    Light: a cobalt field with paper panels. Dark, "Noche azul": the cobalt band dims a little, the paper goes blue-black
    (it keeps the cool accents apart) and the Now building card rises above it as a lighter surface. */
 :root[data-world="read"]{
@@ -70,9 +70,9 @@
   color-scheme:dark;
 }
 
-/* ---------- Show (show.html) ----------
+/* ---------- Cartoon (cartoon.html) ----------
    A Saturday-morning cartoon: sky and sun, ink outlines with hard offset shadows, white cards, a dark room around the set. */
-:root[data-world="show"]{
+:root[data-world="cartoon"]{
   --ink:#111111; --paper:#FFFFFF; --cream:#FFF8E6;
   --sky:#2EC4F1; --sun:#FFD23F; --sunset:#FF9B3D;          /* the hero's sunburst, the finale's orange */
   --go:#EE4266;
@@ -110,7 +110,7 @@
 /* Dark, "Luna azul": the same program after sundown. The sky goes night blue with faint rays, a moon takes the sun's
    place, stars come out, the room turns blue-black, and the Skills band and the ending follow the night. Outlines stay
    ink and the cards stay white: they are the lit things. */
-:root[data-world="show"][data-theme="dark"]{
+:root[data-world="cartoon"][data-theme="dark"]{
   --stage:#172064; --stage-ray:#22308A; --stage-ink:#F4F1E6;
   --orb:#FFF1C2; --orb-mark:#EBD89A; --stars:1;
   --night:#0B0E22;
