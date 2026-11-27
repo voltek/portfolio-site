@@ -118,7 +118,7 @@ data.work.forEach((w, i) => {
     lp.blocks.forEach((b, j) => { const bat = `${at}.learningPath.blocks[${j}]`;
       if (!ST.includes(b.status)) err(`${bat}: status must be ${ST.join(", ")}`);
       if (b.n !== j + 1) err(`${bat}: n must be ${j + 1}, the blocks numbered in order`);
-      bi(b.title, `${bat}.title: needs { en, es }`); bi(b.note, `${bat}.note: needs { en, es }`); if (b.short) bi(b.short, `${bat}.short: needs { en, es }`);
+      bi(b.title, `${bat}.title: needs { en, es }`); bi(b.note, `${bat}.note: needs { en, es }`); bi(b.short, `${bat}.short: needs { en, es } (Show's map names each block by it)`);
       (b.steps || []).forEach(s => { const name = s[0] && s[0].en || s[0];
         // a step is proof of work done: what is still to come is the block's own status
         if (s[1] !== "done") err(`${bat}: step "${name}" has status "${s[1]}"; a step is only ever done`);

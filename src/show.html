@@ -278,9 +278,58 @@
   .pin b{position:absolute;left:28px;top:-2px;white-space:nowrap;background:var(--pin);color:var(--paper);border:2.5px solid var(--ink);border-radius:7px;padding:2px 7px 1px;font-family:var(--tag);font-weight:400;font-size:15px;letter-spacing:.05em;transform:rotate(-4deg)}
   /* a tight line (many steps): the pin's label goes to its left, clear of the goal */
   .rl.tight .pin b{left:auto;right:26px}
-  /* the learning path: several blocks can be in progress, so no pin and no fill; each one in progress is marked */
-  .rl.each .rfill{display:none}
-  .rl.each .stop.ok > svg{position:absolute;inset:0;margin:auto;width:13px;height:13px;color:var(--ink)}
+  /* the learning path as a level map (show.js → map): a cream road in ink; cleared = green with a check, playing = a
+     yellow tile with a play mark, locked = a padlock, the goal a castle. Each stop's name sits under it when the card is
+     wide (two rows that turn at the right) and beside it when narrow (one zigzag column). .ml is its own container, so
+     the map follows the width it gets, a whole row or half of the mid-width two-lane grid */
+  .ml{display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px;margin-top:6px;container-type:inline-size}
+  .ml > b{font-weight:800;font-size:13px;letter-spacing:.11em;text-transform:uppercase;padding-top:34px}
+  .map{position:relative;height:220px;margin:0 30px 16px 14px} /* the bottom row's names hang below the 220 px road */
+  .map ol{list-style:none;position:absolute;inset:0;z-index:1}
+  .mroad{position:absolute;inset:0;width:100%;height:100%;overflow:visible;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .mroad path{vector-effect:non-scaling-stroke}
+  .mroad .r1{stroke:var(--ink);stroke-width:17}
+  .mroad .r2{stroke:var(--cream);stroke-width:10}
+  .mroad .r3{stroke:color-mix(in srgb,var(--ink) 30%,transparent);stroke-width:2.5;stroke-dasharray:2 9}
+  .mroad.t{display:none}
+  .mn{position:absolute;left:var(--wx);top:var(--wy)}
+  .mn .dot{position:absolute;left:0;top:0;transform:translate(-50%,-50%);display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:3.5px solid var(--ink);color:var(--ink)}
+  .mn .dot svg{width:17px;height:17px}
+  .mn.s-done .dot{background:var(--done)}
+  .mn.s-now .dot{width:44px;height:44px;border-radius:12px;background:var(--sun);box-shadow:var(--shadow-s);animation:bob 1.6s ease-in-out infinite}
+  .mn.s-now .dot svg{width:19px;height:19px;margin-left:2px}
+  .mn.s-next .dot{width:30px;height:30px;background:var(--paper)}
+  .mn.s-next .dot svg{width:14px;height:14px}
+  .mn.s-goal .dot{width:64px;height:64px;border:0;border-radius:0;transform:translate(-50%,-78%)}
+  .mn.s-goal .dot svg{width:64px;height:64px}
+  @keyframes bob{50%{translate:0 -4px}}
+  .pname{position:absolute;left:0;top:26px;transform:translateX(-50%);width:max-content;max-width:150px;text-align:center;font-weight:800;font-size:14px;line-height:1.15;text-wrap:balance}
+  .pname small{display:block;font-size:11px;letter-spacing:.08em}
+  .s-now .pname{top:30px;background:var(--sun);color:var(--ink);border:2.5px solid var(--ink);border-radius:7px;padding:3px 7px 2px}
+  .s-next .pname{font-weight:700} /* the padlock says it, not a dimmer name: full contrast on the card's paint */
+  .s-goal .pname{top:18px;background:var(--paper);color:var(--ink);border:2.5px solid var(--ink);border-radius:8px;padding:3px 7px}
+  .s-goal .pname em{display:block;font-style:normal;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  @container (max-width:860px){
+    .ml{grid-template-columns:minmax(0,1fr);gap:14px;margin-top:14px}
+    .ml > b{padding-top:0}
+    /* one stop every 44 px, as the App lane's line: the stops shrink to fit */
+    .map{height:calc(var(--rows) * 44px);margin:0}
+    .mroad.w{display:none}
+    .mroad.t{display:block;width:100px;height:calc(var(--rows) * 44px)}
+    .mroad .r1{stroke-width:15} .mroad .r2{stroke-width:9}
+    .mn{left:var(--tx);top:var(--ty)}
+    .mn .dot{width:28px;height:28px;border-width:3px}
+    .mn .dot svg{width:14px;height:14px}
+    .mn.s-now .dot{width:34px;height:34px;border-radius:9px}
+    .mn.s-now .dot svg{width:15px;height:15px}
+    .mn.s-next .dot{width:24px;height:24px}
+    .mn.s-next .dot svg{width:11px;height:11px}
+    .mn.s-goal .dot{width:48px;height:48px;transform:translate(-50%,-62%)}
+    .mn.s-goal .dot svg{width:48px;height:48px}
+    .pname,.s-now .pname,.s-goal .pname{left:calc(110px - var(--tx));top:0;transform:translateY(-50%);text-align:left;max-width:calc(100cqw - 110px)}
+    .s-now .pname,.s-goal .pname{padding:2px 7px 1px}
+    .pname small{display:inline;margin-right:3px} /* plus the real space after it: "1 LLM basics" for a screen reader */
+  }
   .whole{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-weight:800;font-size:15px;color:inherit;text-decoration:underline;text-decoration-thickness:2.5px;text-underline-offset:4px}
   .whole:hover{text-decoration-thickness:3.5px}
   .whole svg{width:16px;height:16px}
@@ -596,7 +645,7 @@
   /* transitions already drop to 0s through the tokens; this block stops the loops and the hover lifts */
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
-    .rays g,.beam,.bulb,.card .stamp,.scribble,.sig,.swing,.coin,.tick{animation:none}
+    .rays g,.beam,.bulb,.card .stamp,.scribble,.sig,.swing,.coin,.tick,.mn.s-now .dot{animation:none}
     .sig,.tick{stroke-dashoffset:0}
     .btn:hover,.rb:hover,.frame:hover,.quick:hover,.cardlinks a:hover,.btn:active,.rb:active,.quick:active,.cardlinks a:active{transform:none}
     .shot:hover{transform:none} .shot:nth-child(1){transform:rotate(-6deg) translateY(6px)} .shot:nth-child(3){transform:rotate(6deg) translateY(6px)}

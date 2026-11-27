@@ -220,7 +220,8 @@
         goal: { en: "On Google Play", es: "En Google Play" }
       },
       // The learning path lives on the project it proves: the case study draws it whole, in its own section (#path);
-      // Plain's card counts its blocks, and Show's next episodes draw one stop per block, then the goal's short name.
+      // Plain's card counts its blocks, and Show's next episodes draw it as a level map: one stop per block, by its short
+      // name (every block has one: check-data), then the goal.
       // status: "done" · "now" · "next" · "goal". It is updated only when a block closes, so a "now" block shows only
       // what is done: no "next:" in its note and no "next" step (check-data). A step is [name, status, files]; a block
       // without steps carries its own files. Files use the case's roots (data/cases/gamestack.js).
@@ -228,35 +229,35 @@
         updated: "2026-11-26", // a fact, not a length: the day this path last changed
         lane: { en: "AI path", es: "Ruta IA" }, // Show: the label of its lane under the app's
         blocks: [
-          { n: 1, title: { en: "LLM foundations and AI-assisted research", es: "Fundamentos de LLM e investigación asistida por IA" }, status: "done",
+          { n: 1, title: { en: "LLM foundations and AI-assisted research", es: "Fundamentos de LLM e investigación asistida por IA" }, short: { en: "LLM basics", es: "Bases de LLM" }, status: "done",
             note: { en: "How large language models (LLMs) work, research with checked sources, and GameStack's first spec, later replaced by a living PRD", es: "Cómo funcionan los modelos de lenguaje (LLM), investigación con fuentes verificadas y la primera spec de GameStack, después reemplazada por un PRD vivo" },
             files: ["repo:docs/project/PRODUCT.md"] },
-          { n: 2, title: { en: "Prompting and context engineering", es: "Prompting e ingeniería de contexto" }, status: "done",
+          { n: 2, title: { en: "Prompting and context engineering", es: "Prompting e ingeniería de contexto" }, short: { en: "Prompts & context", es: "Prompts y contexto" }, status: "done",
             note: { en: "Prompting, CLAUDE.md and the first Skills", es: "Prompting, CLAUDE.md y las primeras Skills" },
             steps: [["CLAUDE.md", "done", ["repo:CLAUDE.md"]], [{ en: "Skills", es: "Skills" }, "done", ["repo:.claude/skills/"]]] },
-          { n: 3, title: { en: "Spec-Driven Development", es: "Spec-Driven Development" }, status: "now",
+          { n: 3, title: { en: "Spec-Driven Development", es: "Spec-Driven Development" }, short: { en: "Spec-driven", es: "Spec-driven" }, status: "now",
             note: { en: "A drift checklist and human in the loop, running in GameStack", es: "Un checklist de drift y human in the loop, funcionando en GameStack" },
             steps: [[{ en: "Drift checklist", es: "Checklist de drift" }, "done", ["repo:docs/project/DRIFT-CHECKLIST.md", "adr:0033-drift-is-a-commit-trailer.md"]],
               [{ en: "Human in the loop", es: "Human in the loop" }, "done", ["repo:CLAUDE.md", "repo:.claude/settings.json"]]],
             files: ["repo:openspec/", "adr:0041-product-behaviour-is-specified-spec-anchored.md"] },
-          { n: 4, title: { en: "AI-assisted UI design", es: "Diseño de UI asistido por IA" }, status: "done",
+          { n: 4, title: { en: "AI-assisted UI design", es: "Diseño de UI asistido por IA" }, short: { en: "UI design", es: "Diseño de UI" }, status: "done",
             note: { en: "Four screens and their states, designed and documented", es: "Cuatro pantallas y sus estados, diseñadas y documentadas" },
             files: ["repo:docs/project/DESIGN.md", "repo:docs/project/design/", "adr:0042-a-document-wins-over-a-mockup.md"] },
-          { n: 5, title: { en: "Harness engineering with Claude Code", es: "Ingeniería de harness con Claude Code" }, status: "now",
+          { n: 5, title: { en: "Harness engineering with Claude Code", es: "Ingeniería de harness con Claude Code" }, short: { en: "Harness", es: "Harness" }, status: "now",
             note: { en: "CI gate, ADRs, rules loaded by path, hooks and session handoffs, all running in GameStack", es: "Gate de CI, ADRs, reglas que se cargan por ruta, hooks y handoffs de sesión, todo funcionando en GameStack" },
             steps: [[{ en: "CI gate", es: "Gate de CI" }, "done", ["repo:.github/workflows/gate.yml", "repo:.github/workflows/commits.yml"]],
               [{ en: "ADRs", es: "ADRs" }, "done", ["repo:docs/project/decisions/"]],
               [{ en: "Rules by path", es: "Reglas por ruta" }, "done", ["repo:.claude/rules/", "adr:0051-rules-for-one-part-of-the-code-load-by-path.md", "adr:0055-claude-md-is-bounded-at-its-real-size.md"]],
               [{ en: "Hooks", es: "Hooks" }, "done", ["repo:.claude/hooks/", "adr:0045-the-session-handoff-is-kept-by-a-committed-skill-and-hook.md", "adr:0066-agent-memory-holds-only-what-is-personal.md"]],
               [{ en: "Session handoff", es: "Handoff de sesión" }, "done", ["repo:.claude/skills/checkpoint/", "adr:0065-a-session-starts-with-only-the-state-it-acts-on.md"]]] },
-          { n: 6, title: { en: "Supervising agents: review, subagents and loops", es: "Supervisar agentes: revisión, subagentes y loops" }, status: "now",
+          { n: 6, title: { en: "Supervising agents: review, subagents and loops", es: "Supervisar agentes: revisión, subagentes y loops" }, short: { en: "Supervising agents", es: "Supervisar agentes" }, status: "now",
             note: { en: "A capped AI review loop, every triage confirmed by me", es: "Un loop de revisión con IA con tope de rondas, y cada triage lo confirmo yo" },
             steps: [[{ en: "Review loop", es: "Loop de revisión" }, "done", ["repo:.claude/skills/review-round/", "adr:0049-review-rounds-are-capped-and-the-human-confirms-the-triage.md", "pr:139", "pr:190"]]] },
-          { n: 7, title: { en: "Other agents and Android tooling", es: "Otros agentes y herramientas de Android" }, status: "next",
+          { n: 7, title: { en: "Other agents and Android tooling", es: "Otros agentes y herramientas de Android" }, short: { en: "Other agents", es: "Otros agentes" }, status: "next",
             note: { en: "Claude, Codex and Gemini agents inside Android Studio and from the terminal, and the open standards that make a harness portable", es: "Agentes de Claude, Codex y Gemini dentro de Android Studio y desde la terminal, y los estándares abiertos que hacen portable un harness" } },
-          { n: 8, title: { en: "AI features inside apps", es: "Funciones de IA dentro de apps" }, status: "next",
+          { n: 8, title: { en: "AI features inside apps", es: "Funciones de IA dentro de apps" }, short: { en: "AI in apps", es: "IA en apps" }, status: "next",
             note: { en: "AI recommendations in GameStack, in the cloud and on device", es: "Recomendaciones con IA en GameStack, en la nube y en el dispositivo" } },
-          { n: 9, title: { en: "From idea to prototype", es: "De la idea al prototipo" }, status: "next",
+          { n: 9, title: { en: "From idea to prototype", es: "De la idea al prototipo" }, short: { en: "Prototyping", es: "Prototipado" }, status: "next",
             note: { en: "From an idea to a clickable prototype, fast", es: "De una idea a un prototipo clicable, rápido" } },
           { n: 10, title: { en: "Capstone: my own harness and loop", es: "Proyecto final: mi propio harness y loop" }, short: { en: "My own harness", es: "Mi propio harness" }, status: "goal",
             note: { en: "Where the whole path leads", es: "Adonde lleva toda la ruta" } }
