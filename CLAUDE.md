@@ -62,7 +62,7 @@ alternative before building it.
 ## Conventions
 
 - Commit and PR title: `type(scope): Imperative summary`, ≤ 72 chars. Types: `feat fix refactor docs chore perf ci`.
-  Scopes: `quick show case cv data build tokens assets harness repo deploy readme`. Commit body ≤ 6 lines, only the
+  Scopes: `quick cartoon case cv data build tokens assets harness repo deploy readme`. Commit body ≤ 6 lines, only the
   why. PR body: `## What changed`, `## Why`, `## Verification`, ≤ 6 lines of text under them (`checks` enforces it).
 - Public repo: branches `{type}/{kebab-name}` (GitHub only lets PRs into `main`). Claude commits, pushes its branch and
   opens the PR without asking; **merging needs a `/code-review` and Alan's explicit yes** (`close-session`; only a PR
