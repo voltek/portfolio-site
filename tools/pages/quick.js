@@ -24,9 +24,9 @@ module.exports = ctx => {
   const name = `<span><i>${esc(first)}</i></span><span><i>${esc(rest.join(" "))}</i></span>`;
   // the portrait (src/quick.html → the portrait): the cut-out, and .ink, a cream copy of the name and the role that the
   // cut-out masks on a phone. A photo that fails to load leaves the hero as text (the card stays, empty).
-  const cut = p.cutout && IMG.copiesOf(p.cutout.src, true);
-  const portrait = !cut ? "" : `<figure class="rise"><img class="cut" ${srcset(p.cutout.src, "(max-width: 900px) min(calc((100vw - 32px) * .84), 460px), 800px", true)} alt="${esc(p.photo.alt)}" onerror="this.remove()"></figure>
-      <div class="ink" aria-hidden="true" style="--cut:url('${esc(cut[480])}')">${name}<b class="ink-role">${esc(en(p.title))}</b></div>`;
+  const cut = IMG.copiesOf(p.cutout.src, true);
+  const portrait = `<figure class="rise"><img class="cut" ${srcset(p.cutout.src, "(max-width: 900px) min(calc((100vw - 32px) * .84), 460px), 800px", true)} alt="${esc(p.photo.alt)}" onerror="this.remove()"></figure>
+      <div class="ink" aria-hidden="true" style="--cut:image-set(url('${esc(cut[480])}') 1x, url('${esc(cut[960])}') 2x)">${name}<b class="ink-role">${esc(en(p.title))}</b></div>`;
 
   // now building: the build in progress, its proof and its links
   const nowBox = !live ? "" : `<aside class="now" id="now" aria-labelledby="now-h"><div class="bar"><h2 id="now-h">${esc(cp.nav.quick[0])}</h2>${chip("in-progress")}</div><div class="body">

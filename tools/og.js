@@ -39,7 +39,7 @@ const html = `<!doctype html>
 </style>
 </head>
 <body>
-  ${p.cutout ? `<img class="cut" src="${url(copiesOf(p.cutout.src, true).full)}" alt="">` : ""}
+  <img class="cut" src="${url(copiesOf(p.cutout.src, true).full)}" alt="">
   <h1>${esc(first)}<br>${esc(rest.join(" "))}</h1>
   <p class="role">${esc(p.title.en)}</p>
   <p class="ai"><em>${esc(p.aiLine.en)}</em></p>

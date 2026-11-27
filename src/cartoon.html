@@ -902,9 +902,9 @@
   addEventListener("pointerdown", e => { if (isOpen() && !bar.contains(e.target)) shut(false); });
   addEventListener("scroll", () => { if (isOpen() && Math.abs(scrollY - openedAt) > 24) shut(false); }, { passive:true });
   currentSection(links);
-  // the host's photo leaves the page if it fails to load: then the bar keeps the initials
-  const host = document.querySelector(".badge");
-  if (host) new IntersectionObserver(([en]) => bar.classList.toggle("face-on", !en.isIntersecting), { rootMargin:"-70px 0px 0px 0px" }).observe(host);
+  // the bar's photo shows once the name and the host under it have scrolled away. It watches the lockup, not the host:
+  // a host that fails to load leaves the page, and a watched element that leaves reads as scrolled away
+  new IntersectionObserver(([en]) => bar.classList.toggle("face-on", !en.isIntersecting), { rootMargin:"-70px 0px 0px 0px" }).observe(document.querySelector(".lockup"));
 
   // looping animations rest while their part of the page is off screen
   const still = new IntersectionObserver(entries => entries.forEach(en => en.target.classList.toggle("still", !en.isIntersecting)));

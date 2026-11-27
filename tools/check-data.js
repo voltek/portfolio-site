@@ -52,6 +52,8 @@ const tokens = (t, where, lapse = false) => {
 // profile and employers
 const p = data.profile;
 for (const k of ["name", "alternateName", "status", "email"]) if (!p[k]) err(`profile.${k}: missing`);
+// both heroes and the share image are drawn around the cut-out
+if (!(p.cutout && p.cutout.src)) err("profile.cutout.src: missing (both heroes and the share image use it)");
 bi(p.title, "profile.title"); bi(p.aiLine, "profile.aiLine"); bi(p.education.degree, "profile.education.degree");
 span(p.education, "profile.education");
 p.languages.forEach((l, i) => { bi(l.name, `profile.languages[${i}].name`); bi(l.level, `profile.languages[${i}].level`); });

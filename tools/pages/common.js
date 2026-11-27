@@ -137,10 +137,11 @@ const noObject = (file, html) => {
 // An image from the data as its light WebP copies (tools/images.js): `size` is how wide it shows, in CSS px, or a
 // sizes value when that changes with the screen ("(max-width: 900px) 30vw, 160px"), so the browser picks the 240 or
 // 480 copy for the screen. The original is never loaded. `big` is for a large image (the cut-out in the heroes): its
-// own copies instead (lib/images.js → LARGE).
+// own copies instead (lib/images.js → LARGE), and its width and height, so it holds its space before it loads.
 const srcset = (src, size, big) => {
-  const c = IMG.copiesOf(src, big), set = big ? [...IMG.LARGE.sizes.map(w => [c[w], w]), [c.full, IMG.fullWidth(src)]] : IMG.SIZES.map(w => [c[w], w]);
-  return `src="${esc(set[0][0])}" srcset="${set.map(([f, w]) => `${esc(f)} ${w}w`).join(", ")}" sizes="${typeof size === "number" ? `${size}px` : size}"`;
+  const c = IMG.copiesOf(src, big), full = big && IMG.fullSize(src);
+  const set = big ? [...IMG.LARGE.sizes.map(w => [c[w], w]), [c.full, full[0]]] : IMG.SIZES.map(w => [c[w], w]);
+  return `src="${esc(set[0][0])}" srcset="${set.map(([f, w]) => `${esc(f)} ${w}w`).join(", ")}" sizes="${typeof size === "number" ? `${size}px` : size}"${big ? ` width="${full[0]}" height="${full[1]}"` : ""}`;
 };
 
 // "Open to work · Mexico City (UTC−6) · …": it breaks between its phrases, never inside one; the "·" are drawn by the
