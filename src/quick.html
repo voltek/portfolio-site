@@ -71,13 +71,16 @@
   .ink span:nth-child(2) i{animation-delay:.08s}
   .ink-role{display:none}
   @media (min-width:901px){
-    .lead > :not(h1){max-width:min(560px,50%,calc(100% - 600px))}
-    .lead .deck{max-width:min(44ch,50%,calc(100% - 600px))}
+    /* the photo bleeds past the right edge below 1300 px, easing from -8vw at 1060 px to none, so it never jumps; the
+       text gains what the bleed frees */
+    .open{--bleed:min(0px, calc((100vw - 1300px) * .353))}
+    .lead > :not(h1){max-width:min(560px,50%,calc(100% - 600px - var(--bleed)))}
+    .lead .deck{max-width:min(44ch,50%,calc(100% - 600px - var(--bleed)))}
     .lead .stack{max-width:640px}
-    .rise .cut{position:absolute;right:var(--bleed,0px);bottom:0;height:calc(100% + 24px);width:auto;max-height:600px;max-width:800px;object-fit:contain;object-position:right bottom}
+    .rise .cut{position:absolute;right:var(--bleed);bottom:0;height:calc(100% + 24px);width:auto;max-height:600px;max-width:min(800px, calc(80vw - 60px));object-fit:contain;object-position:right bottom}
   }
   @media (min-width:901px) and (max-width:1060px){
-    .rise{--bleed:-8vw} .rise .cut{max-width:calc(80vw - 60px)}
+    .open{--bleed:-8vw}
     .lead > :not(h1){max-width:56%} .lead .deck{max-width:48%} .lead .stack{max-width:640px}
   }
   @media (max-width:900px){
