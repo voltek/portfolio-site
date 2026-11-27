@@ -28,12 +28,16 @@
       site: "https://alanhernandez.dev/" // canonical address, sitemap and share previews
     },
     // the phone lives only in the CV Alan sends himself, never in this public file (phase 7)
-    photo: { src: "assets/alan.jpg", alt: "Portrait of Alan Hernández" },
+    photo: { src: "assets/alan.png", alt: "Portrait of Alan Hernández" },
+    // the same shot cut out (transparent): Quick's hero and Cartoon's sticker. Its alpha under 8 is zeroed: faint specks
+    // that Cartoon's drop-shadows would turn black (tools/images.js keeps a zero alpha at zero)
+    cutout: { src: "assets/alan-cutout.png" },
     stack: ["Kotlin", "Jetpack Compose", "MVI", "MVVM", "Clean Architecture"],
     aiLine: { en: "AI agents inside a harness I designed", es: "agentes de IA dentro de un harness que yo diseñé" },
     lede: {
       quick: "{careerYears}+ years of Android client apps in banking, telecom and consumer products. In 2026 I wrote a modern Android app by hand; now I build the next one with **AI agents inside a harness I designed**: rules and checks they can't skip.",
-      cartoon: "Modern Android and AI-assisted development · {careerYears}+ years in banking, telecom and consumer apps"
+      // the lede's first idea; the AI pill under it carries the AI phrase
+      cartoon: { en: "{careerYears}+ years of Android client apps · banking, telecom and consumer products", es: "{careerYears}+ años de apps Android cliente · banca, telecom y productos de consumo" }
     },
     contact: {
       quick: "Let's talk.",

@@ -1,5 +1,6 @@
 // Quick (index.html): the parts of src/quick.html that come from the data. Each key fills a {{@key}} of the template.
 const { C, en, esc, skillName, skillRows, calc, matrix, text, calcData, stackHtml, head, srcset, status, ICON, cvMenu, pathCount } = require("./common.js");
+const IMG = require("../../lib/images.js");
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile;
@@ -18,9 +19,14 @@ module.exports = ctx => {
   const nav = SECTIONS.map((id, i) => [id, cp.nav.quick[i]]).filter(([id]) => live || id !== "now")
     .map(([id, label]) => `<a href="#${id}">${esc(label)}</a>`).join("");
 
-  // hero: the name around the portrait; the status breaks between its phrases, never inside one
+  // hero: the name on two lines, each rising; the status breaks between its phrases, never inside one
   const [first, ...rest] = p.name.split(" ");
-  const name = `<span><i>${esc(first)} <img class="portrait" ${srcset(p.photo.src, 68)} alt="${esc(p.photo.alt)}" onerror="this.replaceWith(Object.assign(document.createElement('b'),{className:'portrait',textContent:'${esc(first[0] + rest.join(" ")[0])}'}))"></i></span><span><i>${esc(rest.join(" "))}</i></span>`;
+  const name = `<span><i>${esc(first)}</i></span><span><i>${esc(rest.join(" "))}</i></span>`;
+  // the portrait (src/quick.html → the portrait): the cut-out, and .ink, a cream copy of the name and the role that the
+  // cut-out masks on a phone. A photo that fails to load leaves the hero as text (the card stays, empty).
+  const cut = p.cutout && IMG.copiesOf(p.cutout.src, true);
+  const portrait = !cut ? "" : `<figure class="rise"><img class="cut" ${srcset(p.cutout.src, "(max-width: 900px) 460px, 800px", true)} alt="${esc(p.photo.alt)}" onerror="this.remove()"></figure>
+      <div class="ink" aria-hidden="true" style="--cut:url('${esc(cut[480])}')">${name}<b class="ink-role">${esc(en(p.title))}</b></div>`;
 
   // now building: the build in progress, its proof and its links
   const nowBox = !live ? "" : `<aside class="now" id="now" aria-labelledby="now-h"><div class="bar"><h2 id="now-h">${esc(cp.nav.quick[0])}</h2>${chip("in-progress")}</div><div class="body">
@@ -84,7 +90,7 @@ module.exports = ctx => {
 
   return {
     head: head(ctx, { title: cp.page.title.quick, file: "index.html", themeColor: { light: "#1F3FBF", dark: "#1A35A3" } }),
-    nav, name, status: status(p), now: nowBox, tiers, detailHead, detail, jobs, education,
+    nav, name, portrait, status: status(p), now: nowBox, tiers, detailHead, detail, jobs, education,
     lede: text(ctx, p.lede.quick),
     stack: p.stack.map(s => `<li>${esc(s)}</li>`).join(" "),
     expIntro: text(ctx, cp.experience.intro.quick),

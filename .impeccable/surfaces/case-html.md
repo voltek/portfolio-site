@@ -49,4 +49,4 @@ FINISH: Lighthouse mobile and desktop, impeccable `audit` with the detector, `po
   The comp's "NEXT CASE" label stays above the name, an exception to
   the kicker ban accepted by Alan on 2026-10-28 (reviewers: do not flag it again).
 - Dark mode of the cases is reviewed with Quick's in phase 9 (diagram surfaces at 1.2–1.3:1).
-- A share image per case (today the landing's `og.png`).
+- A share image per case (today the landing's `og.jpg`).

@@ -236,16 +236,17 @@ for (const w of data.work.filter(x => x.links && x.links.caseStudy)) {
 // image copies (made by node tools/images.js): the pages load these, never the original
 const IMG = require(path.join(root, "lib", "images.js"));
 const lockFile = path.join(root, IMG.LOCK), lock = fs.existsSync(lockFile) ? JSON.parse(fs.readFileSync(lockFile, "utf8")) : {};
-for (const src of IMG.sourcesOf(data)) {
+for (const { src, large } of IMG.sourcesOf(data)) {
   const orig = path.join(root, src);
   if (!fs.existsSync(orig)) continue;
   const stale = lock[src] !== IMG.hashOf(orig);
-  for (const [k, c] of Object.entries(IMG.copiesOf(src))) {
+  for (const [k, c] of Object.entries(IMG.copiesOf(src, large))) {
     const f = path.join(root, c);
     if (!fs.existsSync(f)) { warn(`${src}: copy missing (${c}); run node tools/images.js`); continue; }
     if (stale) warn(`${c}: made from another version of its original; run node tools/images.js`);
     const kb = fs.statSync(f).size / 1024;
-    if (kb > IMG.BUDGET[k]) warn(`${c}: ${kb.toFixed(1)} KB, over its ${IMG.BUDGET[k]} KB budget`);
+    const budget = IMG.BUDGET[large && k === "full" ? "largeFull" : k];
+    if (kb > budget) warn(`${c}: ${kb.toFixed(1)} KB, over its ${budget} KB budget`);
   }
 }
 

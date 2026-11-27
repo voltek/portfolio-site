@@ -103,7 +103,7 @@
   .orb{fill:var(--orb)}
   /* sunburst: the rays pour out of the sun itself (the moon, by night) */
   .bd-a .rays{position:absolute;inset:-25%;width:150%;height:150%}
-  .title{overflow:hidden;background:var(--stage);color:var(--stage-ink);min-height:min(calc(100vh - 56px),960px);display:grid;place-items:center;padding:118px 20px 48px}
+  .title{overflow:hidden;background:var(--stage);color:var(--stage-ink);min-height:min(calc(100vh - 56px),960px);display:grid;place-items:center;align-content:center;padding:76px 20px 48px;--cover:28px}
   .rays{position:absolute;inset:-25%;z-index:-2;width:150%;height:150%}
   .rays g{transform-origin:0 0;animation:spin 140s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -116,7 +116,7 @@
   /* the anchor offset lives only in html's scroll-padding: a scroll-margin on top of it adds up twice */
   .mark{display:flex;align-items:center;gap:10px;font-family:var(--title);font-size:20px;text-decoration:none;margin-right:auto}
   /* the bar's photo only appears once the title card's photo has scrolled away */
-  .mark img,.mark i{flex:none;width:0;height:42px;margin-right:-10px;transform:scale(0);border-radius:50%;border:0 solid var(--ink);object-fit:cover;object-position:50% 18%;background:var(--sun);display:grid;place-items:center;font-style:normal;font-size:15px;color:var(--ink);transition:width var(--t-slow),margin var(--t-slow),transform var(--t-swap) var(--pop)}
+  .mark img,.mark i{flex:none;width:0;height:42px;margin-right:-10px;transform:scale(0);border-radius:50%;border:0 solid var(--ink);object-fit:cover;object-position:50% 38%;background:var(--sun);display:grid;place-items:center;font-style:normal;font-size:15px;color:var(--ink);transition:width var(--t-slow),margin var(--t-slow),transform var(--t-swap) var(--pop)}
   .face-on .mark img,.face-on .mark i{width:42px;margin-right:0;transform:none;border-width:3px}
   .mark .mono{display:none}
   .links{display:flex;gap:4px;align-items:center}
@@ -139,14 +139,19 @@
   .menu{display:none;height:46px;padding:0 14px;border:3px solid var(--ink);border-radius:12px;background:var(--paper);color:var(--ink);font-weight:800;font-size:16px;align-items:center;gap:8px}
   .menu svg{width:18px;height:18px}
 
-  .lockup{position:relative;width:min(900px,100%)}
+  /* the rows pack together, centred: the arched name, the host under it, then who he is */
+  .lockup{position:relative;width:min(720px,100%);display:flex;flex-direction:column;align-items:center}
   h1{margin:0}
+  .lockup h1{position:relative;z-index:2;width:100%}
   h1 svg{display:block;width:100%;height:auto;overflow:visible}
-  .badge{position:absolute;left:-2%;top:-8%;width:clamp(96px,15vw,170px);aspect-ratio:1;transform:rotate(-9deg)}
-  .badge .ring{position:absolute;inset:0;border-radius:50%;background:var(--paper);border:6px solid var(--ink);padding:7px}
-  .badge img,.badge span{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 18%;display:grid;place-items:center;background:var(--sun);font-family:var(--title);font-size:36px}
-  .badge svg{position:absolute;left:-46%;bottom:-6%;width:60%;height:auto}
-  .onair{position:relative;width:fit-content;margin:-4px auto 14px;transform:rotate(-2deg);background:var(--paper);color:var(--ink);border:4px solid var(--ink);border-radius:16px;padding:10px 16px;font-weight:800;font-size:16px;display:flex;align-items:center;gap:9px}
+  /* the host (DECISIONS → Portrait, comp A): the cut-out as a die-cut sticker (white edge, ink line, the world's hard
+     shadow) under the arched name. One size rule at every width, so the photo never gets smaller as the screen grows */
+  .badge{position:relative;z-index:1;--b:min(520px,88%);width:var(--b);margin:calc(var(--b) * -.2) auto 0}
+  .badge img{display:block;width:100%;height:auto;filter:drop-shadow(0 -5px 0 #fff) drop-shadow(0 5px 0 #fff) drop-shadow(5px 0 0 #fff) drop-shadow(-5px 0 0 #fff) drop-shadow(0 -3px 0 #111) drop-shadow(0 3px 0 #111) drop-shadow(3px 0 0 #111) drop-shadow(-3px 0 0 #111) drop-shadow(7px 7px 0 rgba(17,17,17,.9))}
+  .below{position:relative;z-index:3}
+  /* a photo that fails to load leaves the name over the lower third, clear of it */
+  .lockup:not(:has(.badge)) + .below .lower{margin-top:16px}
+  .onair{position:relative;width:fit-content;margin:14px auto 0;background:var(--paper);color:var(--ink);border:4px solid var(--ink);border-radius:16px;padding:10px 16px;font-weight:800;font-size:16px;display:flex;align-items:center;gap:9px}
   .onair i{flex:none;width:11px;height:11px;border-radius:50%;background:var(--done);border:2px solid var(--ink)}
   /* the line breaks between its parts, never inside one, and each line fills before the next (balanced lines left the pill wider than its text) */
   .onair .t > span{white-space:nowrap}
@@ -155,14 +160,18 @@
   .onair .t > span::before{content:"·";content:"·" / "";display:inline-block;width:.9em;text-align:center}
 
   .below{display:flex;flex-direction:column;align-items:center}
-  .lower{margin:4px auto 0;width:fit-content;max-width:100%;background:var(--ink);color:var(--paper);border-radius:14px;padding:14px 26px 16px;transform:rotate(-1.5deg);text-align:center}
+  /* the lower third, straight, covers the photo's straight bottom edge; "Open to work" hangs under it */
+  .lower{margin:calc(-1 * var(--cover)) auto 0;width:fit-content;max-width:100%;background:var(--ink);color:var(--paper);border-radius:14px;padding:14px 26px 16px;text-align:center}
   .lower strong{display:block;font-family:var(--tag);font-weight:400;font-size:clamp(28px,3.4vw,44px);letter-spacing:.05em;line-height:1}
   .lower > span{display:block;margin-top:6px;font-size:clamp(16px,1.5vw,19px);font-weight:600;color:var(--on-night)}
-  .stack{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:20px;list-style:none;max-width:820px}
+  .stack{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:22px;list-style:none;max-width:820px}
   .stack li{background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:10px;padding:5px 13px;font-weight:800;font-size:16px}
   .stack li.ai{background:var(--ink);color:var(--sun);display:inline-flex;align-items:center;gap:7px}
   .stack li.ai svg{width:19px;height:19px}
   .ctas{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:24px;flex-wrap:wrap}
+  /* the title card's buttons come right after who he is; the stack and the AI pill follow */
+  .below .ctas{margin-top:18px}
+  @media (max-width:640px){ .badge{--b:min(520px,96%)} .onair{margin-top:12px} }
   .btn{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 26px;border-radius:16px;border:4px solid var(--ink);font-weight:800;font-size:17px;text-decoration:none;color:var(--ink)}
 
   .btn svg{width:18px;height:18px}
@@ -569,7 +578,7 @@
   .shapes svg{display:block;width:100%;height:100%}
   .pose{position:relative;transform:rotate(-8deg)}
   .ring2{width:230px;aspect-ratio:1;border-radius:50%;background:var(--paper);border:6px solid var(--ink);padding:7px}
-  .ring2 img,.ring2 span{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 18%;display:grid;place-items:center;background:var(--sun);font-family:var(--title);font-size:52px}
+  .ring2 img,.ring2 span{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 38%;display:grid;place-items:center;background:var(--sun);font-family:var(--title);font-size:52px}
   .whoosh{position:absolute;right:88%;top:46%;width:150px}
   .spark{position:absolute;width:44px;z-index:-1}
   .spark.out{display:none}
@@ -610,11 +619,8 @@
     .tvset::after{width:38%;bottom:12px}
     .knob{width:22px;height:22px;bottom:11px} .knob.k1{right:24px} .knob.k2{right:56px} .led{left:24px;bottom:18px}
     .crt{border-radius:0 0 18px 18px}
-    .title{min-height:auto;padding:100px 12px 34px}
+    .title{min-height:auto;padding:76px 12px 34px;--cover:24px}
     .whoosh{display:none}
-    .badge{position:relative;left:auto;top:auto;margin:0 auto 6px;display:block}
-    .badge svg{display:none}
-    .onair{position:relative;right:auto;top:auto;width:fit-content;margin:0 auto clamp(24px,4vw,36px);transform:rotate(3deg)}
     .feature{grid-template-columns:minmax(0,1fr);gap:0}
     .feature > div:last-child{display:contents}
     .feature h3,.feature > div > .chip,.feature .lede{order:-1}
@@ -711,9 +717,9 @@
 
   <div class="lockup">
     <h1>
-      <svg viewBox="0 0 1000 460" role="img" aria-label="{{profile.name}}">
+      <svg viewBox="0 30 1000 430" role="img" aria-label="{{profile.name}}">
         <defs>
-          <path id="arc1" d="M210 205 Q500 70 790 205"/>
+          <path id="arc1" d="M210 235 Q500 100 790 235"/>
           <path id="arc2" d="M40 428 Q500 263 960 428"/>
           <g id="logo" font-family="'Titan One',sans-serif" text-anchor="middle">
             <text font-size="150"><textPath href="#arc1" startOffset="50%">{{@logoFirst}}</textPath></text>
@@ -724,20 +730,17 @@
         <use href="#logo" fill="#FFFFFF" stroke="#111" stroke-width="14" stroke-linejoin="round" paint-order="stroke"/>
       </svg>
     </h1>
-    <div class="badge">
-      <svg viewBox="0 0 120 80" aria-hidden="true"><path d="M110 18H38M116 40H20M110 62H46" stroke="#111" stroke-width="7" stroke-linecap="round"/></svg>
-      <div class="ring">{{@badgePhoto}}</div>
-    </div>
-    <span class="onair"><i aria-hidden="true"></i><span class="t">{{@status}}</span></span>
+    <div class="badge">{{@badgePhoto}}</div>
   </div>
 
   <div class="below">
     <p class="lower"><strong><svg class="droid" viewBox="0 0 60 72" aria-hidden="true"><g fill="#fff" stroke="#111" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"><path d="M18 13L12 4M42 13l6-9" fill="none"/><path d="M9 31a21 21 0 0 1 42 0z"/><rect x="9" y="34" width="42" height="26" rx="5"/><rect x="1.5" y="35" width="6" height="19" rx="3"/><rect x="52.5" y="35" width="6" height="19" rx="3"/><rect x="18" y="57" width="8" height="13" rx="4"/><rect x="34" y="57" width="8" height="13" rx="4"/></g><circle cx="22" cy="23" r="2.8" fill="#111"/><circle cx="38" cy="23" r="2.8" fill="#111"/></svg>{{profile.title.en}}</strong><span>{{@lede}}</span></p>
-    <ul class="stack" aria-label="{{copy.aria.stack}}">{{@stack}}</ul>
+    <span class="onair"><i aria-hidden="true"></i><span class="t">{{@status}}</span></span>
     <div class="ctas">
       <a class="btn go" href="#contact"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3.5h14v10H9.5L5 17v-3.5H3z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>{{copy.cta.contact}}</a>
       {{@cvMenu}}
     </div>
+    <ul class="stack" aria-label="{{copy.aria.stack}}">{{@stack}}</ul>
   </div>
       </div>
       <div class="line" aria-hidden="true"></div>
@@ -899,7 +902,9 @@
   addEventListener("pointerdown", e => { if (isOpen() && !bar.contains(e.target)) shut(false); });
   addEventListener("scroll", () => { if (isOpen() && Math.abs(scrollY - openedAt) > 24) shut(false); }, { passive:true });
   currentSection(links);
-  new IntersectionObserver(([en]) => bar.classList.toggle("face-on", !en.isIntersecting), { rootMargin:"-70px 0px 0px 0px" }).observe(document.querySelector(".badge"));
+  // the host's photo leaves the page if it fails to load: then the bar keeps the initials
+  const host = document.querySelector(".badge");
+  if (host) new IntersectionObserver(([en]) => bar.classList.toggle("face-on", !en.isIntersecting), { rootMargin:"-70px 0px 0px 0px" }).observe(host);
 
   // looping animations rest while their part of the page is off screen
   const still = new IntersectionObserver(entries => entries.forEach(en => en.target.classList.toggle("still", !en.isIntersecting)));
@@ -941,13 +946,13 @@
     const sky = () => {
       const box = bd.getBoundingClientRect(), w = bd.offsetWidth, h = bd.offsetHeight; if (!w || !h) return;
       const sx = box.width / w, sy = box.height / h, P = 20;
-      const rects = [...title.querySelectorAll(".badge .ring, .onair, .lower, .stack li, .ctas .btn")].map(el => { const r = el.getBoundingClientRect();
+      const rects = [...title.querySelectorAll(".badge img, .onair, .lower, .stack li, .ctas .btn")].map(el => { const r = el.getBoundingClientRect();
         return [(r.left - box.left) / sx - P, (r.top - box.top) / sy - P, (r.right - box.left) / sx + P, (r.bottom - box.top) / sy + P]; });
-      // the name: points along each arched line (the logo's viewBox is 1000 x 460, centred and fitted), with a radius
-      const logo = title.querySelector("h1 svg"), lr = logo.getBoundingClientRect(), lw = lr.width / sx, lh = lr.height / sy, k = Math.min(lw / 1000, lh / 460);
-      const ox = (lr.left - box.left) / sx + (lw - 1000 * k) / 2, oy = (lr.top - box.top) / sy + (lh - 460 * k) / 2, arcs = [];
-      [[210, 205, 500, 70, 790, 205, .2, .8], [40, 428, 500, 263, 960, 428, .06, .94]].forEach(([x0, y0, cx, cy, x2, y2, t0, t1]) => {
-        for (let t = t0; t <= t1 + 1e-9; t += .025) { const u = 1 - t; arcs.push([ox + k * (u * u * x0 + 2 * u * t * cx + t * t * x2), oy + k * (u * u * y0 + 2 * u * t * cy + t * t * y2 - 50)]); } });
+      // the name: points along each arched line (the logo's viewBox is 1000 x 430 from y 30, centred and fitted), with a radius
+      const logo = title.querySelector("h1 svg"), lr = logo.getBoundingClientRect(), lw = lr.width / sx, lh = lr.height / sy, k = Math.min(lw / 1000, lh / 430);
+      const ox = (lr.left - box.left) / sx + (lw - 1000 * k) / 2, oy = (lr.top - box.top) / sy + (lh - 430 * k) / 2, arcs = [];
+      [[210, 235, 500, 100, 790, 235, .2, .8], [40, 428, 500, 263, 960, 428, .06, .94]].forEach(([x0, y0, cx, cy, x2, y2, t0, t1]) => {
+        for (let t = t0; t <= t1 + 1e-9; t += .025) { const u = 1 - t; arcs.push([ox + k * (u * u * x0 + 2 * u * t * cx + t * t * x2), oy + k * (u * u * y0 + 2 * u * t * cy + t * t * y2 - 80)]); } });
       const rr = 80 * k + P, mr = Math.max(w, h) * .225 + 12;
       // the moon disc (as .bd-a::before: centred, max(w, h) * .45 across) stays clear of stars
       const free = (x, y, m) => y > 100 + m && y < h - 12 - m && x > m && x < w - m

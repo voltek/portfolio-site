@@ -1,5 +1,6 @@
 // The CV's body, one language at a time, from data/portfolio.js (its own copy is data.cv; copy deck §11). tools/cv.js prints it.
 const { C, esc, skillName, skillRows, md: mark, stackLine } = require("./common.js");
+const IMG = require("../../lib/images.js");
 
 const bare = u => u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 const link = (href, label = bare(href)) => `<a href="${esc(href)}">${esc(label)}</a>`;
@@ -22,7 +23,7 @@ module.exports = ({ data, now, careerYears }, lang, { phone, fullName } = {}) =>
     <p class="title">${esc(t(p.title))}</p>
     <p class="meta">${md(t(cv.status))}</p>
     <p class="meta">${contact}</p>
-  </div>${cv.photo.includes(lang) ? `\n  <img src="${esc(p.photo.src)}" alt="">` : ""}
+  </div>${cv.photo.includes(lang) ? `\n  <img src="${esc(IMG.copiesOf(p.photo.src)[480])}" alt="">` : ""}
 </header>
 <p class="summary">${md(t(cv.summary))}</p>
 <p class="overlap">${md(t(cv.overlap))}</p>`;

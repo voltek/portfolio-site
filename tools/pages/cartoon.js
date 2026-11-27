@@ -279,9 +279,11 @@ module.exports = ctx => {
     head: head(ctx, { title: cp.page.title.cartoon, file: "cartoon.html", themeColor: { light: "#2EC4F1", dark: "#131942" } }),
     nav, initials: esc(initials), rays: RAYS, bars: BARS,
     markPhoto: `<img ${srcset(p.photo.src, 42)} alt="" onerror="this.replaceWith(Object.assign(document.createElement('i'),{textContent:'${esc(initials)}'}))">`,
-    badgePhoto: photo("(max-width: 900px) 100px, 170px", p.photo.alt), finalePhoto: photo(230, "", true),
+    // the host under the name: the cut-out (src/cartoon.html → the host); if it fails, the badge leaves and the name sits on the lower third
+    badgePhoto: `<img ${srcset(p.cutout.src, "(max-width: 900px) 480px, 520px", true)} alt="${esc(p.photo.alt)}" onerror="this.parentNode.remove()">`,
+    finalePhoto: photo(230, "", true),
     logoFirst: esc(first.toUpperCase()), logoRest: esc(rest.join(" ").toUpperCase()),
-    status: status(p), lede: text(ctx, p.lede.cartoon),
+    status: status(p), lede: text(ctx, en(p.lede.cartoon)),
     stack: p.stack.map(s => `<li>${esc(s)}</li>`).join("") + `<li class="ai">${AI}${esc(p.aiLine.en)}</li>`,
     now: nowShowing, tiers, tlHead, timeline,
     matrixCols: `--jobs:${M.jobs.length};--builds:${M.builds.length}`,
