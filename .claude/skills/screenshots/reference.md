@@ -20,8 +20,8 @@ npx -y lighthouse@13.4.1 http://localhost:8181/<page>.html [--preset=desktop] \
 ```
 
 One run at a time, no `#` in the URL. Report the four scores, page weight, LCP, TBT and CLS from the JSON (extract them
-with `node -e`, never print the JSON). Known: Best practices is 77 everywhere, from two audits: `errors-in-console`
-(the missing favicon's 404, phase 9) and `is-on-https` (Kaspersky's script, so not the site's).
+with `node -e`, never print the JSON). Known: Best practices is 81 everywhere locally, from `is-on-https` alone
+(Kaspersky's script, so not the site's).
 
 ## Known limits of `shots.js`
 

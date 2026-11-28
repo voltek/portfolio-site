@@ -39,6 +39,7 @@ for (const p of PAGES) {
 const original = f => /\.(png|jpe?g)$/i.test(f) && fs.existsSync(f.replace(/\.(png|jpe?g)$/i, ".webp"));
 const copy = (from, to = from) => fs.cpSync(path.join(root, from), path.join(out, to), { recursive: true, filter: f => !f.endsWith("README.md") && !original(f) });
 copy("tokens.css"); copy("lib/calc.js"); copy("src/live.js", "live.js"); copy("assets");
+fs.renameSync(path.join(out, "assets/favicon.ico"), path.join(out, "favicon.ico"));   // browsers ask the root for it
 
 // 4) for search engines: the sitemap lists the pages, robots.txt points to it
 const site = data.profile.links.site, pad = n => String(n).padStart(2, "0");

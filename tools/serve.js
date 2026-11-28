@@ -7,7 +7,7 @@ const root = path.join(__dirname, "..", "_site");
 const port = +((process.argv.find(a => a.startsWith("--port=")) || "").split("=")[1] || 8080);
 const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json",
   ".xml": "application/xml", ".txt": "text/plain; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg",
-  ".webp": "image/webp", ".woff2": "font/woff2", ".pdf": "application/pdf" };
+  ".webp": "image/webp", ".woff2": "font/woff2", ".pdf": "application/pdf", ".ico": "image/x-icon" };
 
 if (!fs.existsSync(root)) { console.log("no _site/ yet: run node tools/build.js first"); process.exit(1); }
 http.createServer((req, res) => {
