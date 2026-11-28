@@ -38,7 +38,7 @@ for (const p of PAGES) {
 // with WebP copies (tools/images.js) stays out: the pages load the copies only.
 const original = f => /\.(png|jpe?g)$/i.test(f) && fs.existsSync(f.replace(/\.(png|jpe?g)$/i, ".webp"));
 const copy = (from, to = from) => fs.cpSync(path.join(root, from), path.join(out, to), { recursive: true, filter: f => !f.endsWith("README.md") && !original(f) });
-copy("tokens.css"); copy("lib/calc.js"); copy("src/live.js", "live.js"); copy("assets");
+copy("tokens.css"); copy("lib/calc.js"); copy("src/live.js", "live.js"); copy("assets"); copy("assets/favicon.ico", "favicon.ico");
 
 // 4) for search engines: the sitemap lists the pages, robots.txt points to it
 const site = data.profile.links.site, pad = n => String(n).padStart(2, "0");

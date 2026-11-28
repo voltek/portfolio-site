@@ -100,6 +100,11 @@ const head = (ctx, { title, file, themeColor, desc: own, type = "profile", perso
     `<meta name="description" content="${esc(desc)}">`,
     `<link rel="canonical" href="${url}">`,
     ...Object.entries(themeColor).map(([scheme, c]) => `<meta name="theme-color" content="${c}" media="(prefers-color-scheme: ${scheme})">`),
+    // the VK mark (tools/favicon.js): the SVG where the browser takes one, the .ico (at the root, where browsers look
+    // without being told) for the rest, and the icon a phone puts on its home screen
+    `<link rel="icon" href="favicon.ico" sizes="32x32">`,
+    `<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">`,
+    `<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">`,
     `<meta property="og:type" content="${type}">`,
     `<meta property="og:title" content="${esc(title)}">`,
     `<meta property="og:description" content="${esc(desc)}">`,

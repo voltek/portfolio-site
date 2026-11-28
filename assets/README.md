@@ -17,3 +17,4 @@ load (recipe: `DATA.md` → *New app screenshots*).
 | `projects/modernnotes/home.png` · `filters.png` · `detail.png` | Case study | |
 | `fonts/` | All pages (`tokens.css`) | Latin subset (WOFF2) of Bricolage Grotesque and Figtree (Quick, CV) and of Titan One, Bangers, Nunito, Pacifico and Gochi Hand (Cartoon), with their SIL OFL licenses |
 | `og.jpg` | Share previews (Open Graph) | 1200×630, made from the data by `node tools/og.js`: Quick's hero, the cut-out on the right |
+| `favicon.svg` · `favicon.ico` · `apple-touch-icon.png` | Every page's tab and a phone's home screen | The VK mark, made by `node tools/favicon.js`; the build copies the `.ico` to the site root |
