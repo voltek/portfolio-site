@@ -1,48 +1,35 @@
 // The VK mark (Voltek: the V's right arm is a lightning bolt), printed riso style: the letters twice, in two inks a
 // little out of register; where the inks cross they mix (multiply on light paper, screen on dark).
-//   node tools/favicon.js                    the site's icons into assets/ (the build copies favicon.ico to the root)
-//   node tools/favicon.js --masters=<dir>    also Alan's master copies (SVG + 2048 px PNG per palette), K at half size
+//   node tools/favicon.js    the site's icons into assets/ (the build copies favicon.ico to the root)
 // Plain Node, no npm: the PNGs are drawn by Edge headless from the same paths as the SVGs. Run by hand when the mark
 // changes; the build only copies what it wrote.
 const fs = require("fs"), path = require("path"), os = require("os"), { execFileSync } = require("child_process");
 const root = path.join(__dirname, "..");
-const masters = (process.argv.find(a => a.startsWith("--masters=")) || "").slice(10);
 
 // ---------- the letters, on a 100-unit box; every polygon clockwise, so one fill joins them ----------
 const V = [[8, 14], [31, 14], [51.6, 62.1], [58.5, 50], [52, 50], [67, 14], [92, 14], [79.5, 44], [88, 44], [61, 84], [50, 95], [39, 84]];
 const K = [[10, 14], [32, 14], [32, 44], [60, 14], [88, 14], [52, 52], [88, 95], [60, 95], [32, 62], [32, 95], [10, 95]];
-const V_W = 84, K_W = 78, H = 81, GAP = 7, HALF_AT = 77;
+const V_W = 84, K_W = 78, H = 81, GAP = 7;
 const r2 = n => Math.round(n * 100) / 100;
 const poly = (pts, minx, k, left, top) => "M" + pts.map(([x, y]) => `${r2(left + (x - minx) * k)} ${r2(top + (y - 14) * k)}`).join("L") + "Z";
-// "same": V and K side by side, equal height (the favicon: both letters must read at 16 px).
-// "half": the K at half height, tucked under the V's bolt arm (the masters: the V leads, the K follows).
-function letters(layout, { w, h, cx = 50, cy = 50, dx = 0, dy = 0 }) {
-  if (layout === "same") {
-    const W = V_W + GAP + K_W, k = Math.min(w / W, h / H), left = cx - W * k / 2 + dx, top = cy - H * k / 2 + dy;
-    return poly(V, 8, k, left, top) + poly(K, 10, k, left + (V_W + GAP) * k, top);
-  }
-  const W = HALF_AT + K_W / 2, k = Math.min(w / W, h / H), left = cx - W * k / 2 + dx, top = cy - H * k / 2 + dy;
-  return poly(V, 8, k, left, top) + poly(K, 10, k / 2, left + HALF_AT * k, top + H * k / 2);
+// V and K side by side at the same height, so both letters read at 16 px
+function letters({ w, h, cx = 50, cy = 50, dx = 0, dy = 0 }) {
+  const W = V_W + GAP + K_W, k = Math.min(w / W, h / H), left = cx - W * k / 2 + dx, top = cy - H * k / 2 + dy;
+  return poly(V, 8, k, left, top) + poly(K, 10, k, left + (V_W + GAP) * k, top);
 }
 
 // ---------- colour ----------
 const hex = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16) / 255);
 const toHex = v => "#" + v.map(x => Math.round(x * 255).toString(16).padStart(2, "0")).join("").toUpperCase();
 const mix = (a, b, mode) => toHex(hex(a).map((x, i) => { const y = hex(b)[i]; return mode === "multiply" ? x * y : 1 - (1 - x) * (1 - y); }));
-const PALETTES = {
-  "cobalt-coral": { bg: "#F7F8FC", a: "#1F3FBF", b: "#FF6F5E", mode: "multiply" },   // the site's (Quick's cobalt, og.jpg's coral)
-  "yellow-pink": { bg: "#F4EFE6", a: "#FFD23F", b: "#FF48B0", mode: "multiply" },
-  "blue-pink": { bg: "#F4EFE6", a: "#3A6FE0", b: "#FF48B0", mode: "multiply" },
-  "violet-cyan": { bg: "#0E1033", a: "#8A4DFF", b: "#33D6FF", mode: "screen" },
-};
-const SITE = "cobalt-coral";
+// Quick's cobalt and og.jpg's coral on light paper
+const P = { bg: "#F7F8FC", a: "#1F3FBF", b: "#FF6F5E", mode: "multiply" };
 
 // one drawing = a background and three layers: ink A, ink B, and where they cross, B clipped to A in the mixed colour
 // (drawn, not blended, so every viewer shows the same colour)
 const OFF = 3.125;   // each ink moves this far, so the two sit 6.25 units apart: whole pixels at 16 and 32 px
-function drawing(paletteName, layout, round, fit = layout === "same" ? { w: 86, h: 50 } : { w: 82, h: 74 }) {
-  const P = PALETTES[paletteName];
-  const a = letters(layout, { ...fit, dx: -OFF, dy: -OFF * .7 }), b = letters(layout, { ...fit, dx: OFF, dy: OFF * .7 });
+function drawing(round, fit) {
+  const a = letters({ ...fit, dx: -OFF, dy: -OFF * .7 }), b = letters({ ...fit, dx: OFF, dy: OFF * .7 });
   return { bg: P.bg, rx: round ? 22 : 0, layers: [{ d: a, fill: P.a }, { d: b, fill: P.b }, { d: b, fill: mix(P.a, P.b, P.mode), clip: a }] };
 }
 const svg = g => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">` +
@@ -87,19 +74,10 @@ function ico(pngs) {
 
 // ---------- the site: the SVG for browsers that take one, an .ico for the rest, the phone's home-screen icon ----------
 // the home-screen icon keeps a margin: phones round its corners and some crop it to a circle
-const tab = drawing(SITE, "same", true), touch = drawing(SITE, "same", false, { w: 70, h: 41 });
+const tab = drawing(true, { w: 86, h: 50 }), touch = drawing(false, { w: 70, h: 41 });
 const jobs = [16, 32, 48].map(size => ({ name: `ico${size}`, size, g: tab })).concat({ name: "touch", size: 180, g: touch });
-const mastersOut = [];
-if (masters) for (const name of Object.keys(PALETTES)) {
-  const g = drawing(name, "half", false);
-  mastersOut.push({ name, g }); jobs.push({ name: `master-${name}`, size: 2048, g });
-}
 const png = rasterize(jobs);
-const write = (f, data) => { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, data); console.log(`  ${path.relative(root, f).padEnd(40)} ${(data.length / 1024).toFixed(1)} KB`); };
+const write = (f, data) => { fs.writeFileSync(f, data); console.log(`  ${path.relative(root, f).padEnd(40)} ${(data.length / 1024).toFixed(1)} KB`); };
 write(path.join(root, "assets/favicon.svg"), svg(tab));
 write(path.join(root, "assets/favicon.ico"), ico([16, 32, 48].map(s => [s, png[`ico${s}`]])));
 write(path.join(root, "assets/apple-touch-icon.png"), png.touch);
-for (const m of mastersOut) {
-  write(path.join(masters, `vk-${m.name}.svg`), svg(m.g));
-  write(path.join(masters, `vk-${m.name}-2048.png`), png[`master-${m.name}`]);
-}
