@@ -22,7 +22,8 @@ its length and its skills' years follow.
 
 1. Add a `work` entry at the end: `id` (two letters, unique), `type: "project"`, `status: "in-progress"`, `start`,
    `end: null`, `what`, three `highlights`, `stack`, `links.repo`, and `cartoon.title` + `cartoon.prop` for its episode (an
-   unknown prop draws the generic one).
+   unknown prop draws the generic one). It takes "Now" on both landings from any older project in progress: ask Alan
+   whether that one is completed, and bring its `proof` rows (the `new-case` skill covers this).
 2. Screens are optional: `shots` with `label`, `alt` and `on` (`"quick"`, `"cartoon"`, `"case"`).
 3. Add its id to the `at` of every skill it uses.
 
