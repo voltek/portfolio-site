@@ -138,6 +138,7 @@ data.work.forEach((w, i) => {
 });
 const running = data.work.filter(w => w.status === "in-progress");
 if (!running.length) warn(`no project in progress: "Now building" shows its designed empty state`);
+if (running.length > 1) warn(`${running.length} projects in progress: "Now" shows only the newest, ${running.at(-1).id}`);
 const sorted = data.work.every((w, i, a) => !i || C.parse(a[i - 1].start) <= C.parse(w.start));
 if (!sorted) err("work: keep it oldest first (it is the episode order)");
 

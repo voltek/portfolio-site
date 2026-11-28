@@ -111,7 +111,8 @@ counts), say where they show with `on` (the CV takes Quick's) and name their evi
 
 ## New case study
 
-Every case is drawn by `src/case.html` and `tools/pages/case.js`; nothing is written in HTML.
+The `new-case` skill runs the whole flow (truth, copy, landings); this is its build part. Every case is drawn by
+`src/case.html` and `tools/pages/case.js`; nothing is written in HTML.
 
 1. Set `links.caseStudy` to the page's file name (`gamestack.html`); until step 2 exists the build fails on the
    links unless the page is in `PENDING` (`tools/build.js`), which lists them as "not there yet".
