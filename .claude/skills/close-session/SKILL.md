@@ -31,9 +31,11 @@ never scratch or temp copies; end every commit message with the attribution line
      `impeccable-finish-reviewer` agent ran on it (`.claude/rules/design.md`); if it did not, the report says why.
    - Wait for the checks (`gh pr checks <n> --watch`); fix and push until they pass. A
      `BLOCKED` PR whose newest `checks` run on the head is `cancelled` (a push and a body edit raced) needs `gh run
-     rerun <id>`, never `--admin`; a PR with no run at all, `gh pr close` and `reopen`. Tell Alan in two lines what the PR
-     changes and what the review found (with its level and why), then run `gh pr merge <n> --squash`:
-     the `ask` rule in `.claude/settings.json` stops it for his explicit yes. GitHub deletes the remote branch on merge
+     rerun <id>`, never `--admin`; a PR with no run at all, `gh pr close` and `reopen`. Before offering the merge, a pre-merge
+     note to Alan, then end the turn: what the PR changes (two lines), the review's level and why, and each finding with
+     what was done about it (fixed and how, done another way and why, or left for him with a recommendation); "(none)"
+     says so in one line. Only on his reply run `gh pr merge <n> --squash` (the `ask` rule in `.claude/settings.json`
+     also stops it for his explicit yes). GitHub deletes the remote branch on merge
      (repo setting); after it, `git switch main && git pull --ff-only && git fetch --prune`, and delete any local branch
      whose remote is gone (`git branch -vv`, `: gone]`;
      `-D`, since squash leaves it unmerged to git). If he declines, the PR stays open and the handoff says so.

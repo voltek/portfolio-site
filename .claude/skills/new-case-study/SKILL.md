@@ -1,5 +1,5 @@
 ---
-name: new-case
+name: new-case-study
 description: Add a case study to the portfolio, for a new project or one already on the site - its entry on both landings, its own case page, and the landing "Now" sections when it is the build in progress. Use when Alan asks for a new case study or a new project with one. Pass the project id from data/portfolio.js (or the repo, for a new project) as the argument.
 ---
 
