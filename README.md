@@ -11,11 +11,11 @@ in seconds; hiring managers audit it, following every claim into a case study an
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="docs/readme/quick.webp" alt="Quick: the name, the role, the stack and the project in progress on a cobalt field"><br>
+      <img src="docs/readme/quick.webp" alt="Quick: the name, the role, the stack and a portrait on a cobalt field"><br>
       <sub><b>Quick</b>, the quick read and the main door</sub>
     </td>
     <td align="center" width="50%">
-      <img src="docs/readme/cartoon.webp" alt="Cartoon: the same landing as a Saturday-morning cartoon title card, the name in big lettering over sun rays"><br>
+      <img src="docs/readme/cartoon.webp" alt="Cartoon: the same landing as a Saturday-morning cartoon title card, the name in big lettering and a portrait over sun rays"><br>
       <sub><b>Cartoon</b>, the same landing as a cartoon program</sub>
     </td>
   </tr>
