@@ -14,7 +14,8 @@ This only orders the work; each step lives where it points. Point to headings, n
 3. **Pick the sections** from the catalog in `tools/pages/case.js` (`SECTIONS`, fixed order): one enters only if its
    inventory row has backing and it says something the page has not. A section outside the catalog is code and
    Alan's call: stop and ask.
-4. **Copy stop, once:** the rows `sync-project` would propose plus every text the page needs, EN and ES, in `copy-deck.md` with its source; wait for Alan on each row.
+4. **Copy stop, once:** the rows `sync-project` would propose plus every text the page needs, EN and ES, in
+   `copy-deck.md` with its source; wait for Alan on each row.
    If the project is in progress, ask also for what "Now" draws (`proof` rows, `roadmap`, `learningPath`).
 5. **Landings:** not yet in `work` → `DATA.md` → *I started a project* (one entry feeds Quick and Cartoon). "Now
    building" and "Now showing" follow the newest project in progress on their own; if another one is still in progress,
