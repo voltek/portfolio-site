@@ -1,6 +1,6 @@
 // The VK mark (Voltek: the V's right arm is a lightning bolt), printed riso style: the letters twice, in two inks a
-// little out of register; where the inks cross they mix (multiply on light paper, screen on dark).
-//   node tools/favicon.js    the site's icons into assets/ (the build copies favicon.ico to the root)
+// little out of register; where the inks cross they mix (multiplied, as inks on light paper).
+//   node tools/favicon.js    the site's icons into assets/ (the build moves favicon.ico to the root)
 // Plain Node, no npm: the PNGs are drawn by Edge headless from the same paths as the SVGs. Run by hand when the mark
 // changes; the build only copies what it wrote.
 const fs = require("fs"), path = require("path"), os = require("os"), { execFileSync } = require("child_process");
@@ -21,16 +21,18 @@ function letters({ w, h, cx = 50, cy = 50, dx = 0, dy = 0 }) {
 // ---------- colour ----------
 const hex = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16) / 255);
 const toHex = v => "#" + v.map(x => Math.round(x * 255).toString(16).padStart(2, "0")).join("").toUpperCase();
-const mix = (a, b, mode) => toHex(hex(a).map((x, i) => { const y = hex(b)[i]; return mode === "multiply" ? x * y : 1 - (1 - x) * (1 - y); }));
+const multiply = (a, b) => toHex(hex(a).map((x, i) => x * hex(b)[i]));
 // Quick's cobalt and og.jpg's coral on light paper
-const P = { bg: "#F7F8FC", a: "#1F3FBF", b: "#FF6F5E", mode: "multiply" };
+const P = { bg: "#F7F8FC", a: "#1F3FBF", b: "#FF6F5E" };
 
 // one drawing = a background and three layers: ink A, ink B, and where they cross, B clipped to A in the mixed colour
 // (drawn, not blended, so every viewer shows the same colour)
-const OFF = 3.125;   // each ink moves this far, so the two sit 6.25 units apart: whole pixels at 16 and 32 px
+// each ink moves OFF sideways and 0.7 OFF up or down: the two sit 6.25 units apart across (whole pixels at 16 and
+// 32 px) and 4.375 down (a softer, antialiased step: the look Alan approved)
+const OFF = 3.125;
 function drawing(round, fit) {
   const a = letters({ ...fit, dx: -OFF, dy: -OFF * .7 }), b = letters({ ...fit, dx: OFF, dy: OFF * .7 });
-  return { bg: P.bg, rx: round ? 22 : 0, layers: [{ d: a, fill: P.a }, { d: b, fill: P.b }, { d: b, fill: mix(P.a, P.b, P.mode), clip: a }] };
+  return { bg: P.bg, rx: round ? 22 : 0, layers: [{ d: a, fill: P.a }, { d: b, fill: P.b }, { d: b, fill: multiply(P.a, P.b), clip: a }] };
 }
 const svg = g => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">` +
   `<defs><clipPath id="a"><path d="${g.layers[2].clip}"/></clipPath></defs>` +
@@ -55,10 +57,17 @@ for (const j of jobs) {
 }
 document.getElementById("out").textContent = JSON.stringify(out);
 </script>`);
-  const html = execFileSync(EDGE, ["--headless=new", "--disable-gpu", "--no-first-run", "--allow-file-access-from-files",
-    `--user-data-dir=${path.join(dir, "profile")}`, "--dump-dom", "file:///" + page.replace(/\\/g, "/")], { encoding: "utf8", maxBuffer: 64 << 20 });
-  fs.rmSync(dir, { recursive: true, force: true });
-  const json = html.match(/<pre id="out">([\s\S]*?)<\/pre>/)[1].replace(/&quot;/g, '"').replace(/&amp;/g, "&");
+  let html;
+  try {
+    html = execFileSync(EDGE, ["--headless=new", "--disable-gpu", "--no-first-run", "--allow-file-access-from-files",
+      `--user-data-dir=${path.join(dir, "profile")}`, "--dump-dom", "file:///" + page.replace(/\\/g, "/")], { encoding: "utf8", maxBuffer: 64 << 20 });
+  } finally {
+    // Edge may still hold its profile for a moment: retry, then leave the temp folder rather than stop
+    try { fs.rmSync(dir, { recursive: true, force: true, maxRetries: 5 }); } catch { console.warn(`  left ${dir}`); }
+  }
+  const found = html.match(/<pre id="out">([\s\S]+?)<\/pre>/);
+  if (!found) throw new Error(`Edge drew no icons (an old Edge without Path2D.roundRect?); its output began: ${html.slice(0, 300)}`);
+  const json = found[1].replace(/&quot;/g, '"').replace(/&amp;/g, "&");
   return Object.fromEntries(Object.entries(JSON.parse(json)).map(([k, v]) => [k, Buffer.from(v.split(",")[1], "base64")]));
 }
 // an .ico that holds PNGs (every current browser reads it): a 6-byte header, a 16-byte entry per image, then the images
