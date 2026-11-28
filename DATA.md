@@ -22,7 +22,8 @@ its length and its skills' years follow.
 
 1. Add a `work` entry at the end: `id` (two letters, unique), `type: "project"`, `status: "in-progress"`, `start`,
    `end: null`, `what`, three `highlights`, `stack`, `links.repo`, and `cartoon.title` + `cartoon.prop` for its episode (an
-   unknown prop draws the generic one).
+   unknown prop draws the generic one). It takes "Now" on both landings from any older project in progress: ask Alan
+   whether that one is completed, and bring its `proof` rows (the `new-case` skill covers this).
 2. Screens are optional: `shots` with `label`, `alt` and `on` (`"quick"`, `"cartoon"`, `"case"`).
 3. Add its id to the `at` of every skill it uses.
 
@@ -111,7 +112,8 @@ counts), say where they show with `on` (the CV takes Quick's) and name their evi
 
 ## New case study
 
-Every case is drawn by `src/case.html` and `tools/pages/case.js`; nothing is written in HTML.
+The `new-case` skill runs the whole flow (truth, copy, landings); this is its build part. Every case is drawn by
+`src/case.html` and `tools/pages/case.js`; nothing is written in HTML.
 
 1. Set `links.caseStudy` to the page's file name (`gamestack.html`); until step 2 exists the build fails on the
    links unless the page is in `PENDING` (`tools/build.js`), which lists them as "not there yet".

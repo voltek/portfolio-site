@@ -4,7 +4,7 @@ const IMG = require("../../lib/images.js");
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile;
-  const live = data.work.find(w => w.status === "in-progress"); // "Now building"; none = the box is not drawn
+  const live = data.work.findLast(w => w.status === "in-progress"); // "Now building": the newest build; none = the box is not drawn
   const quickShot = live && (live.shots || []).find(s => s.on.includes("quick"));
 
   const STATUS = { "in-progress": [cp.experience.kind["in-progress"], "var(--wip)"], completed: [cp.experience.kind.completed, "var(--done)"] };

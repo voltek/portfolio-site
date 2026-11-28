@@ -126,7 +126,7 @@ const AI = `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4Q7.5 11 1
 
 module.exports = ctx => {
   const { data, now } = ctx, cp = data.copy, p = data.profile, ui = cp.experience.cartoonUi;
-  const live = data.work.find(w => w.status === "in-progress"); // "Now showing"; none = the section and its link leave
+  const live = data.work.findLast(w => w.status === "in-progress"); // "Now showing": the newest build; none = the section and its link leave
   const [first, ...rest] = p.name.split(" ");
   const initials = first[0] + rest.join(" ")[0];
   const STATUS = { "in-progress": [cp.experience.kind["in-progress"], "var(--wip)"], completed: [cp.experience.kind.completed, "var(--done)"] };

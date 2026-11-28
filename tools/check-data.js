@@ -86,7 +86,7 @@ data.work.forEach((w, i) => {
     if (!STATUS.includes(w.status)) err(`${at}: status must be ${STATUS.join(" or ")}`);
     if (w.status === "completed" && w.end == null) err(`${at}: completed but has no end date`);
     if (w.status === "in-progress" && w.end != null) err(`${at}: in progress but has an end date`);
-    if (!w.links || !w.links.repo) warn(`${at}: no repo link`);
+    if (!w.links || !w.links.repo) (w.status === "in-progress" ? err : warn)(`${at}: no repo link${w.status === "in-progress" ? " (Now draws it on both landings)" : ""}`);
   }
   bi(w.what, `${at}.what`);
   if (w.lede) bi(w.lede, `${at}.lede`);
@@ -140,6 +140,7 @@ const running = data.work.filter(w => w.status === "in-progress");
 if (!running.length) warn(`no project in progress: "Now building" shows its designed empty state`);
 const sorted = data.work.every((w, i, a) => !i || C.parse(a[i - 1].start) <= C.parse(w.start));
 if (!sorted) err("work: keep it oldest first (it is the episode order)");
+else if (running.length > 1) warn(`${running.length} projects in progress: "Now" shows only the newest, ${running.at(-1).id}`);
 
 // skills
 const LEVELS = Object.keys(data.copy.skills.levels).filter(l => l !== "legacy" && l !== "ai"), names = new Set();
